@@ -90,6 +90,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.IZone.PLN
         private void LoadTabOneData()
         {
             // Add code to load data for tab one
+            // i want this only main, not production
         }
 
         private void LoadTabTwoData()
