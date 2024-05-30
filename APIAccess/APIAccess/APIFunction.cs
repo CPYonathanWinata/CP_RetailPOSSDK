@@ -132,6 +132,14 @@ namespace APIAccess
 		public string addItemMultiple(string _url, List<APIParameter.parmRequestAddItemMultiple> _listData)
 		{
 			string result= "";
+
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |
+                                           SecurityProtocolType.Tls11 |
+                                           SecurityProtocolType.Tls12;
+
+            System.Net.ServicePointManager.ServerCertificateValidationCallback = (senderX, certificate, chain, sslPolicyErrors) => { return true; };
+
 			HttpWebRequest httpRequest = (HttpWebRequest)WebRequest.Create(_url);
 			httpRequest.Method = "POST";
 			httpRequest.ContentType = "application/json";
@@ -139,7 +147,7 @@ namespace APIAccess
 			List<string> multiPack = new List<string>();
 			var packList = new List<parmRequest>();
 
-
+             
 
 			//var multiData = _listData; //MyJsonConverter.Serialize(packList);
 			var multiData = MyJsonConverter.Serialize(_listData);		 
@@ -167,11 +175,23 @@ namespace APIAccess
 
 		public string checkStockSO(string url, string parmItemId, string parmDataAreaId, string parmWareHouse, string parmTransId, string parmQuantityAx, string parmQuantityInput, string parmOrigin, string configId)
 		{
+
+
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |
+                                           SecurityProtocolType.Tls11 |
+                                           SecurityProtocolType.Tls12;
+
+            System.Net.ServicePointManager.ServerCertificateValidationCallback = (senderX, certificate, chain, sslPolicyErrors) => { return true; };
+
 			var httpRequest = (HttpWebRequest)WebRequest.Create(url);
 			string result = "";
 			httpRequest.Method = "POST";
 			httpRequest.ContentType = "application/json";
 			httpRequest.Headers.Add("Authorization", "PFM");
+
+             
+
 			var pack = new APIParameter.parmRequestStockSO()
 			{
 				DATAAREAID = parmDataAreaId,
@@ -212,13 +232,26 @@ namespace APIAccess
 		#region QRIS ShopeePay API
         public static void generateQRShopeePay(string url, decimal parmInput, string parmStoreId, string parmTerminalId, string parmTransId, out APIAccess.APIParameter.parmResponseShopeePay responseShopeePay, out APIAccess.APIParameter.ListResultData listData )
 		{
-			System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |
+                                           SecurityProtocolType.Tls11 |
+                                           SecurityProtocolType.Tls12;
+
+            System.Net.ServicePointManager.ServerCertificateValidationCallback = (senderX, certificate, chain, sslPolicyErrors) => { return true; };
 
 			var httpRequest = (HttpWebRequest)WebRequest.Create(url);
 			string result = "";
 			httpRequest.Method = "POST";
 			httpRequest.ContentType = "application/json";
 			httpRequest.Headers.Add("Authorization", "PFM");
+
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |
+                                           SecurityProtocolType.Tls11 |
+                                           SecurityProtocolType.Tls12;
+
+            System.Net.ServicePointManager.ServerCertificateValidationCallback = (senderX, certificate, chain, sslPolicyErrors) => { return true; };
+
 			var pack = new APIAccess.APIParameter.parmRequestShopeePay()
 			{
 				storeId = parmStoreId,
@@ -266,13 +299,26 @@ namespace APIAccess
 
         public static void inquiryStatusPaymentShopeePay(string url, decimal parmInput, string parmStoreId, string parmTerminalId, string parmTransId, out APIAccess.APIParameter.parmResponseShopeePay responseShopeePay, out APIAccess.APIParameter.ListResultDataInquiry listData)
 		{
-			System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.t;
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |
+                                           SecurityProtocolType.Tls11 |
+                                           SecurityProtocolType.Tls12;
+
+            System.Net.ServicePointManager.ServerCertificateValidationCallback = (senderX, certificate, chain, sslPolicyErrors) => { return true; };
 			
 			var httpRequest = (HttpWebRequest)WebRequest.Create(url);
 			string result = "";
 			httpRequest.Method = "POST";
 			httpRequest.ContentType = "application/json";
 			httpRequest.Headers.Add("Authorization", "PFM");
+
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |
+                                           SecurityProtocolType.Tls11 |
+                                           SecurityProtocolType.Tls12;
+
+            System.Net.ServicePointManager.ServerCertificateValidationCallback = (senderX, certificate, chain, sslPolicyErrors) => { return true; };
+
 			var pack = new APIAccess.APIParameter.parmRequestShopeePay()
 			{
 				storeId = parmStoreId,
@@ -319,13 +365,26 @@ namespace APIAccess
 
         public static void invalidateQRShopeePay(string url, string parmStoreId, string parmTerminalId, string parmTransId, out APIAccess.APIParameter.parmResponseShopeePay responseShopeePay )
         {
-            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |
+                                           SecurityProtocolType.Tls11 |
+                                           SecurityProtocolType.Tls12;
+
+            System.Net.ServicePointManager.ServerCertificateValidationCallback = (senderX, certificate, chain, sslPolicyErrors) => { return true; };
 
             var httpRequest = (HttpWebRequest)WebRequest.Create(url);
             string result = "";
             httpRequest.Method = "POST";
             httpRequest.ContentType = "application/json";
             httpRequest.Headers.Add("Authorization", "PFM");
+
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |
+                                           SecurityProtocolType.Tls11 |
+                                           SecurityProtocolType.Tls12;
+
+            System.Net.ServicePointManager.ServerCertificateValidationCallback = (senderX, certificate, chain, sslPolicyErrors) => { return true; };
+
             var pack = new APIAccess.APIParameter.parmRequestShopeePay()
             {
                 storeId = parmStoreId,
@@ -435,8 +494,11 @@ namespace APIAccess
                 url = _url; //APIClass.getURLAPIByFuncName(functionName);
                 APIAccess.APIParameter.ApiResponseGrabmart responseData;
                 ServicePointManager.Expect100Continue = true;
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |
+                                               SecurityProtocolType.Tls11 |
+                                               SecurityProtocolType.Tls12;
 
+                System.Net.ServicePointManager.ServerCertificateValidationCallback = (senderX, certificate, chain, sslPolicyErrors) => { return true; };
 
                 var httpRequest = (HttpWebRequest)WebRequest.Create(url);
                 string result = "";
@@ -490,12 +552,20 @@ namespace APIAccess
             {
                 string result = "";
                 APIAccess.APIParameter.ApiResponseGrabmart responseData;
+
+                ServicePointManager.Expect100Continue = true;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |
+                                               SecurityProtocolType.Tls11 |
+                                               SecurityProtocolType.Tls12;
+
+                System.Net.ServicePointManager.ServerCertificateValidationCallback = (senderX, certificate, chain, sslPolicyErrors) => { return true; };
+
                 var httpRequest = (HttpWebRequest)WebRequest.Create(_url);
 
                 httpRequest.Method = "POST";
                 httpRequest.ContentType = "application/json";
                 httpRequest.Headers.Add("Authorization", "PFM");
-
+                 
                 //initialize the required parameter before post to API
 
                 //parmRequestCashOut.DATAAREAID = EOD.InternalApplication.Settings.Database.DataAreaID;
