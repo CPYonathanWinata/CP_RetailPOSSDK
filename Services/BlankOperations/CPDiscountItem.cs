@@ -56,48 +56,50 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
             operationId = _operationId;
             isDev = true;
 
-            if(isDev == true)
-            {
+            //if(isDev == true)
+            //{
                 if (operationId == "23")
                 {
-                    LoadDataHeader();
-                    LoadData();
                     promoCode = "ED";  //"PDI"; //ED
                     commentCode = "PROMOED";  //"PROMOPDI";
                     lineCommentCode = "AddItem-ED";  //"AddItem-PDI";
                     lblHeader.Text = "Promo Discount Item";
+                    LoadDataHeader();
+                    LoadData();
+                   
                 }
                 else if(operationId == "25")
                 {
-                    LoadDataHeaderReceipt();
-                    LoadDataLineReceipt();
                     promoCode = "QS";  //"PDIS";
                     commentCode = "PROMORCPT"; // "PROMOPDIS";
                     lineCommentCode = "AddItem-QS";// "AddItem-PDIS"; 
                     lblHeader.Text = "Promo Discount Item per Struk";
-                }
-            }
-            else
-            {
-                if (operationId == "23")
-                {
-                    LoadDataHeader();
-                    LoadData();
-                    promoCode = "PDI";  //"PDI"; //ED
-                    commentCode = "PROMOPDI";  //"PROMOPDI";
-                    lineCommentCode = "AddItem-PDI";  //"AddItem-PDI";
-                    lblHeader.Text = "Promo Discount Item";
-                }
-                else if(operationId == "25")
-                {
                     LoadDataHeaderReceipt();
                     LoadDataLineReceipt();
-                    promoCode = "PDIS";  //"PDIS";
-                    commentCode = "PROMOPDIS"; // "PROMOPDIS";
-                    lineCommentCode = "AddItem-PDIS";// "AddItem-PDIS"; 
-                    lblHeader.Text = "Promo Discount Item per Struk";
+                    
                 }
-            }
+            //}
+            //else
+            //{
+            //    if (operationId == "23")
+            //    {
+            //        LoadDataHeader();
+            //        LoadData();
+            //        promoCode = "PDI";  //"PDI"; //ED
+            //        commentCode = "PROMOPDI";  //"PROMOPDI";
+            //        lineCommentCode = "AddItem-PDI";  //"AddItem-PDI";
+            //        lblHeader.Text = "Promo Discount Item";
+            //    }
+            //    else if(operationId == "25")
+            //    {
+            //        LoadDataHeaderReceipt();
+            //        LoadDataLineReceipt();
+            //        promoCode = "PDIS";  //"PDIS";
+            //        commentCode = "PROMOPDIS"; // "PROMOPDIS";
+            //        lineCommentCode = "AddItem-PDIS";// "AddItem-PDIS"; 
+            //        lblHeader.Text = "Promo Discount Item per Struk";
+            //    }
+            //}
             
 
 
