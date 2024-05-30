@@ -46,8 +46,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
         string merchantId = "";
         string nameCust, phoneCust = "";
         int exponent = 0;
-        //string gmTID = "19"; //DEV
-        string gmTID = "16"; //Prod
+        string gmTID = "19"; //DEV
+        //string gmTID = "16"; //Prod
         public CPGrabOrder(IPosTransaction _posTransaction, IApplication _application)
         {
             InitializeComponent(); 
