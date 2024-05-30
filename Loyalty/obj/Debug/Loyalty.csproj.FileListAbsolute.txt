@@ -1,0 +1,23 @@
+C:\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Extensions\Loyalty.dll
+C:\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Extensions\Loyalty.pdb
+C:\Users\it.application\Desktop\Retail POS\Extensions\Loyalty.dll
+C:\Users\it.application\Desktop\Retail POS\Extensions\Loyalty.pdb
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\Loyalty\obj\Debug\Loyalty.dll
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\Loyalty\obj\Debug\Loyalty.pdb
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\Loyalty\obj\Debug\Loyalty.csprojResolveAssemblyReference.cache
+C:\Desktop\Retail POS\Extensions\Loyalty.dll
+C:\Desktop\Retail POS\Extensions\Loyalty.pdb
+C:\Project POS SourceCode\Services\Loyalty\obj\Debug\Loyalty.csprojResolveAssemblyReference.cache
+C:\Project POS SourceCode\Services\Loyalty\obj\Debug\Loyalty.dll
+C:\Project POS SourceCode\Services\Loyalty\obj\Debug\Loyalty.pdb
+D:\Work\Retail SDK\Services\Loyalty\obj\Debug\Loyalty.csprojResolveAssemblyReference.cache
+D:\Work\Retail SDK\Services\Loyalty\obj\Debug\Loyalty.dll
+D:\Work\Retail SDK\Services\Loyalty\obj\Debug\Loyalty.pdb
+D:\Desktop\Retail POS\Extensions\Loyalty.dll
+D:\Desktop\Retail POS\Extensions\Loyalty.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Loyalty\obj\Debug\Loyalty.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Loyalty\obj\Debug\Loyalty.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Loyalty\obj\Debug\Loyalty.pdb
+C:\Users\Desktop\Retail POS\Extensions\Loyalty.dll
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Loyalty\obj\Debug\Loyalty.dll
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Loyalty\obj\Debug\Loyalty.pdb

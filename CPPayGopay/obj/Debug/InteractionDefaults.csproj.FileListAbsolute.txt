@@ -1,0 +1,38 @@
+C:\Users\it.application\Documents\Retail SDK CU9\POS Plug-ins\POS\bin\Debug\CPPayGoPay.dll
+C:\Users\it.application\Documents\Retail SDK CU9\POS Plug-ins\POS\bin\Debug\CPPayGoPay.pdb
+C:\Users\it.application\Documents\Retail SDK CU9\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.Properties.Resources.resources
+C:\Users\it.application\Documents\Retail SDK CU9\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCustomerAccount.resources
+C:\Users\it.application\Documents\Retail SDK CU9\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csproj.GenerateResource.Cache
+C:\Users\it.application\Documents\Retail SDK CU9\POS Plug-ins\Services\InteractionDefaults\obj\Debug\CPPayGoPay.dll
+C:\Users\it.application\Documents\Retail SDK CU9\POS Plug-ins\Services\InteractionDefaults\obj\Debug\CPPayGoPay.pdb
+C:\Users\it.application\Documents\Retail SDK CU9\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csprojResolveAssemblyReference.cache
+F:\POS Source Code\POS\bin\Debug\CPPayGoPay.dll
+F:\POS Source Code\POS\bin\Debug\CPPayGoPay.pdb
+F:\POS Source Code\NEWPAYMENTPOS CUSTOMIZATION\InteractionDefaults\obj\Debug\InteractionDefaults.csprojResolveAssemblyReference.cache
+F:\POS Source Code\NEWPAYMENTPOS CUSTOMIZATION\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.Properties.Resources.resources
+F:\POS Source Code\NEWPAYMENTPOS CUSTOMIZATION\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCustomerAccount.resources
+F:\POS Source Code\NEWPAYMENTPOS CUSTOMIZATION\InteractionDefaults\obj\Debug\InteractionDefaults.csproj.GenerateResource.Cache
+F:\POS Source Code\NEWPAYMENTPOS CUSTOMIZATION\InteractionDefaults\obj\Debug\CPPayGoPay.dll
+F:\POS Source Code\NEWPAYMENTPOS CUSTOMIZATION\InteractionDefaults\obj\Debug\CPPayGoPay.pdb
+C:\Project POS SourceCode\NEWPAYMENTPOS CUSTOMIZATION\InteractionDefaults\obj\Debug\InteractionDefaults.csprojResolveAssemblyReference.cache
+C:\Project POS SourceCode\NEWPAYMENTPOS CUSTOMIZATION\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.Properties.Resources.resources
+C:\Project POS SourceCode\NEWPAYMENTPOS CUSTOMIZATION\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCustomerAccount.resources
+C:\Project POS SourceCode\NEWPAYMENTPOS CUSTOMIZATION\InteractionDefaults\obj\Debug\InteractionDefaults.csproj.GenerateResource.Cache
+C:\Project POS SourceCode\POS\bin\Debug\CPPayGoPay.dll
+C:\Project POS SourceCode\POS\bin\Debug\CPPayGoPay.pdb
+C:\Project POS SourceCode\NEWPAYMENTPOS CUSTOMIZATION\InteractionDefaults\obj\Debug\CPPayGoPay.dll
+C:\Project POS SourceCode\NEWPAYMENTPOS CUSTOMIZATION\InteractionDefaults\obj\Debug\CPPayGoPay.pdb
+D:\Work\Retail SDK Collected\CPPayGopay\obj\Debug\InteractionDefaults.csprojResolveAssemblyReference.cache
+D:\Work\Retail SDK Collected\CPPayGopay\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.Properties.Resources.resources
+D:\Work\Retail SDK Collected\CPPayGopay\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCustomerAccount.resources
+D:\Work\Retail SDK Collected\CPPayGopay\obj\Debug\InteractionDefaults.csproj.GenerateResource.Cache
+D:\Work\Retail SDK Collected\CPPayGopay\obj\Debug\CPPayGoPay.dll
+D:\Work\Retail SDK Collected\CPPayGopay\obj\Debug\CPPayGoPay.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\CPPayGopay\obj\Debug\InteractionDefaults.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\CPPayGopay\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.Properties.Resources.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\CPPayGopay\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCustomerAccount.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\CPPayGopay\obj\Debug\InteractionDefaults.csproj.GenerateResource.Cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\CPPayGopay\obj\Debug\CPPayGoPay.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\CPPayGopay\obj\Debug\CPPayGoPay.pdb
+C:\Users\yonathan.winata\Documents\GitHub\POS\bin\Debug\CPPayGoPay.dll
+C:\Users\yonathan.winata\Documents\GitHub\POS\bin\Debug\CPPayGoPay.pdb

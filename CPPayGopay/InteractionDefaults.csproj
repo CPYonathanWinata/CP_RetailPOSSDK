@@ -1,0 +1,211 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\vs.settings" />
+  <PropertyGroup>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{67D7C10A-E270-4CDC-A9F9-E8F5E33F1A85}</ProjectGuid>
+    <SDKPath>..\..</SDKPath>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Microsoft.Dynamics.Retail.Pos.Interaction</RootNamespace>
+    <AssemblyName>CPPayGoPay</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>$(SDKOutputPath)\bin\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>$(SDKOutputPath)\bin\Release\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DevExpress.Data.v14.2, Version=14.2.107.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\DevExpress.Data.v14.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Printing.v16.2.Core, Version=16.2.15.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Sparkline.v16.2.Core, Version=16.2.15.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Utils.v14.2, Version=14.2.107.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Client\Bin\DevExpress.Utils.v14.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraEditors.v14.2, Version=14.2.107.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\DevExpress.XtraEditors.v14.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraGrid.v14.2">
+      <HintPath>..\..\..\Retail POS\DevExpress.XtraGrid.v14.2.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraLayout.v14.2">
+      <HintPath>..\..\..\Retail POS\DevExpress.XtraLayout.v14.2.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="GME_Custom">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Extensions\GME_Custom.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Dynamics.Retail.Diagnostics, Version=6.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Retail POS\Microsoft.Dynamics.Retail.Diagnostics.DLL</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Dynamics.Retail.Diagnostics.Sinks">
+      <HintPath>..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Microsoft.Dynamics.Retail.Diagnostics.Sinks.DLL</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Dynamics.Retail.MatrixPivotGrid">
+      <HintPath>..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Client\Bin\Microsoft.Dynamics.Retail.MatrixPivotGrid.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.Interactivity">
+      <HintPath>..\..\..\Retail POS\Microsoft.Practices.Prism.Interactivity.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controls\SplitButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ProductSearchAttributes\AttributeSearcher.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\POSReport.cs" />
+    <Compile Include="Reports\POSReportChart.cs" />
+    <Compile Include="Reports\POSReportParameter.cs" />
+    <Compile Include="FormResources.cs" />
+    <Compile Include="ViewModels\AffiliationViewModel.cs" />
+    <Compile Include="ViewModels\ProductSearchAttributesFilterViewModel.cs" />
+    <Compile Include="ViewModels\DimensionsViewModel.cs" />
+    <Compile Include="ViewModels\DisbursementSlipCreationViewModel.cs" />
+    <Compile Include="ViewModels\ExtendedLogOnViewModel.cs" />
+    <Compile Include="ViewModels\KitComponentSubstituteViewModel.cs" />
+    <Compile Include="ViewModels\LoyaltyCardFormViewModel.cs" />
+    <Compile Include="ViewModels\KitDisassemblyViewModel.cs" />
+    <Compile Include="ViewModels\PayCurrencyViewModel.cs" />
+    <Compile Include="ViewModels\PrintLabelReportViewModel.cs" />
+    <Compile Include="ViewModels\ProductDetailsViewModel.cs" />
+    <Compile Include="ViewModels\RedeemLoyaltyPointsViewModel.cs" />
+    <Compile Include="ViewModels\RegisterTimeFormViewModel.cs" />
+    <Compile Include="ViewModels\ReportViewModel.cs" />
+    <Compile Include="ViewModels\SaleRefundDetailsViewModel.cs" />
+    <Compile Include="ViewModels\ViewTimeClockEntriesViewModel.cs" />
+    <Compile Include="WinFormsTouch\frmPayCustomerAccount.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Dynamics.Retail.Notification.Contracts">
+      <HintPath>..\..\..\Retail POS\Microsoft.Dynamics.Retail.Notification.Contracts.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="BusinessLogic">
+      <HintPath>..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\BusinessLogic.DLL</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ButtonGrid">
+      <HintPath>..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\ButtonGrid.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Dynamics.Retail.Pos.Contracts">
+      <HintPath>..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Microsoft.Dynamics.Retail.Pos.Contracts.dll</HintPath>
+      <Private>False</Private>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="DataAccess">
+      <HintPath>..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\DataAccess.DLL</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Dynamics.Retail.Pos.DataEntity">
+      <HintPath>..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Microsoft.Dynamics.Retail.Pos.DataEntity.DLL</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Dynamics.Retail.Pos.DataManager">
+      <HintPath>..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Microsoft.Dynamics.Retail.Pos.DataManager.DLL</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="POSProcesses">
+      <HintPath>..\..\..\Heron\Dll\POSProcesses.DLL</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Dynamics.Retail.Pos.SystemCore">
+      <HintPath>..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Microsoft.Dynamics.Retail.Pos.SystemCore.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SystemSettings">
+      <HintPath>..\..\..\Heron\Dll\SystemSettings.DLL</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Transaction">
+      <HintPath>..\..\..\Retail POS\Transaction.DLL</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\frmPayCustomerAccount.resx">
+      <DependentUpon>frmPayCustomerAccount.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\DataSources\LoyaltyCardFormViewModel.datasource" />
+    <None Include="Properties\DataSources\DisbursementSlipCreationViewModel.datasource">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\DataSources\SaleRefundDetailsViewModel.datasource" />
+    <None Include="Resources\ProductUnavailable.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\search.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\remove.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\top.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\up.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bottom.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\down.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bar.png" />
+    <None Include="Resources\list.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\disabled.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ButtonGrid\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

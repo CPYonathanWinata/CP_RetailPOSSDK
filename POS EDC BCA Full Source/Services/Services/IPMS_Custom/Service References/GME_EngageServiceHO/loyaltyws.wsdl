@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://falsolutions.com/loyalty" targetNamespace="http://falsolutions.com/loyalty" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types>
+    <xsd:schema>
+      <xsd:import schemaLocation="http://192.168.0.85:8080/EngageAcctServices/loyaltyws?xsd=1" namespace="http://falsolutions.com/loyalty" />
+    </xsd:schema>
+  </types>
+  <message name="getIdentifier">
+    <part name="parameters" element="tns:getIdentifier" />
+  </message>
+  <message name="getIdentifierResponse">
+    <part name="parameters" element="tns:getIdentifierResponse" />
+  </message>
+  <message name="getBalances">
+    <part name="parameters" element="tns:getBalances" />
+  </message>
+  <message name="getBalancesResponse">
+    <part name="parameters" element="tns:getBalancesResponse" />
+  </message>
+  <message name="getVersionInfo">
+    <part name="parameters" element="tns:getVersionInfo" />
+  </message>
+  <message name="getVersionInfoResponse">
+    <part name="parameters" element="tns:getVersionInfoResponse" />
+  </message>
+  <message name="getCustomerHistory">
+    <part name="parameters" element="tns:getCustomerHistory" />
+  </message>
+  <message name="getCustomerHistoryResponse">
+    <part name="parameters" element="tns:getCustomerHistoryResponse" />
+  </message>
+  <message name="updateUserAccess">
+    <part name="parameters" element="tns:updateUserAccess" />
+  </message>
+  <message name="updateUserAccessResponse">
+    <part name="parameters" element="tns:updateUserAccessResponse" />
+  </message>
+  <message name="updateContactability">
+    <part name="parameters" element="tns:updateContactability" />
+  </message>
+  <message name="updateContactabilityResponse">
+    <part name="parameters" element="tns:updateContactabilityResponse" />
+  </message>
+  <message name="createIdentifier">
+    <part name="parameters" element="tns:createIdentifier" />
+  </message>
+  <message name="createIdentifierResponse">
+    <part name="parameters" element="tns:createIdentifierResponse" />
+  </message>
+  <message name="renameIdentifier">
+    <part name="parameters" element="tns:renameIdentifier" />
+  </message>
+  <message name="renameIdentifierResponse">
+    <part name="parameters" element="tns:renameIdentifierResponse" />
+  </message>
+  <message name="getContactability">
+    <part name="parameters" element="tns:getContactability" />
+  </message>
+  <message name="getContactabilityResponse">
+    <part name="parameters" element="tns:getContactabilityResponse" />
+  </message>
+  <message name="updateHouseHold">
+    <part name="parameters" element="tns:updateHouseHold" />
+  </message>
+  <message name="updateHouseHoldResponse">
+    <part name="parameters" element="tns:updateHouseHoldResponse" />
+  </message>
+  <message name="updateIdentifier">
+    <part name="parameters" element="tns:updateIdentifier" />
+  </message>
+  <message name="updateIdentifierResponse">
+    <part name="parameters" element="tns:updateIdentifierResponse" />
+  </message>
+  <message name="deleteIdentifier">
+    <part name="parameters" element="tns:deleteIdentifier" />
+  </message>
+  <message name="deleteIdentifierResponse">
+    <part name="parameters" element="tns:deleteIdentifierResponse" />
+  </message>
+  <message name="getTransactionHistoryHeader">
+    <part name="parameters" element="tns:getTransactionHistoryHeader" />
+  </message>
+  <message name="getTransactionHistoryHeaderResponse">
+    <part name="parameters" element="tns:getTransactionHistoryHeaderResponse" />
+  </message>
+  <message name="getTransactionDetails">
+    <part name="parameters" element="tns:getTransactionDetails" />
+  </message>
+  <message name="getTransactionDetailsResponse">
+    <part name="parameters" element="tns:getTransactionDetailsResponse" />
+  </message>
+  <message name="findHouseholdsByInfo">
+    <part name="parameters" element="tns:findHouseholdsByInfo" />
+  </message>
+  <message name="findHouseholdsByInfoResponse">
+    <part name="parameters" element="tns:findHouseholdsByInfoResponse" />
+  </message>
+  <message name="findPersonsByInfo">
+    <part name="parameters" element="tns:findPersonsByInfo" />
+  </message>
+  <message name="findPersonsByInfoResponse">
+    <part name="parameters" element="tns:findPersonsByInfoResponse" />
+  </message>
+  <message name="mergeHouseholds">
+    <part name="parameters" element="tns:mergeHouseholds" />
+  </message>
+  <message name="mergeHouseholdsResponse">
+    <part name="parameters" element="tns:mergeHouseholdsResponse" />
+  </message>
+  <message name="findIdentifiersByInfo">
+    <part name="parameters" element="tns:findIdentifiersByInfo" />
+  </message>
+  <message name="findIdentifiersByInfoResponse">
+    <part name="parameters" element="tns:findIdentifiersByInfoResponse" />
+  </message>
+  <message name="generateHouseHoldNumber">
+    <part name="parameters" element="tns:generateHouseHoldNumber" />
+  </message>
+  <message name="generateHouseHoldNumberResponse">
+    <part name="parameters" element="tns:generateHouseHoldNumberResponse" />
+  </message>
+  <message name="getValidVouchersForCard">
+    <part name="parameters" element="tns:getValidVouchersForCard" />
+  </message>
+  <message name="getValidVouchersForCardResponse">
+    <part name="parameters" element="tns:getValidVouchersForCardResponse" />
+  </message>
+  <message name="getHouseHold">
+    <part name="parameters" element="tns:getHouseHold" />
+  </message>
+  <message name="getHouseHoldResponse">
+    <part name="parameters" element="tns:getHouseHoldResponse" />
+  </message>
+  <message name="updatePerson">
+    <part name="parameters" element="tns:updatePerson" />
+  </message>
+  <message name="updatePersonResponse">
+    <part name="parameters" element="tns:updatePersonResponse" />
+  </message>
+  <message name="getPerson">
+    <part name="parameters" element="tns:getPerson" />
+  </message>
+  <message name="getPersonResponse">
+    <part name="parameters" element="tns:getPersonResponse" />
+  </message>
+  <message name="mergePersons">
+    <part name="parameters" element="tns:mergePersons" />
+  </message>
+  <message name="mergePersonsResponse">
+    <part name="parameters" element="tns:mergePersonsResponse" />
+  </message>
+  <message name="splitPerson">
+    <part name="parameters" element="tns:splitPerson" />
+  </message>
+  <message name="splitPersonResponse">
+    <part name="parameters" element="tns:splitPersonResponse" />
+  </message>
+  <portType name="AccountServices">
+    <operation name="getIdentifier">
+      <input message="tns:getIdentifier" />
+      <output message="tns:getIdentifierResponse" />
+    </operation>
+    <operation name="getBalances">
+      <input message="tns:getBalances" />
+      <output message="tns:getBalancesResponse" />
+    </operation>
+    <operation name="getVersionInfo">
+      <input message="tns:getVersionInfo" />
+      <output message="tns:getVersionInfoResponse" />
+    </operation>
+    <operation name="getCustomerHistory">
+      <input message="tns:getCustomerHistory" />
+      <output message="tns:getCustomerHistoryResponse" />
+    </operation>
+    <operation name="updateUserAccess">
+      <input message="tns:updateUserAccess" />
+      <output message="tns:updateUserAccessResponse" />
+    </operation>
+    <operation name="updateContactability">
+      <input message="tns:updateContactability" />
+      <output message="tns:updateContactabilityResponse" />
+    </operation>
+    <operation name="createIdentifier">
+      <input message="tns:createIdentifier" />
+      <output message="tns:createIdentifierResponse" />
+    </operation>
+    <operation name="renameIdentifier">
+      <input message="tns:renameIdentifier" />
+      <output message="tns:renameIdentifierResponse" />
+    </operation>
+    <operation name="getContactability">
+      <input message="tns:getContactability" />
+      <output message="tns:getContactabilityResponse" />
+    </operation>
+    <operation name="updateHouseHold">
+      <input message="tns:updateHouseHold" />
+      <output message="tns:updateHouseHoldResponse" />
+    </operation>
+    <operation name="updateIdentifier">
+      <input message="tns:updateIdentifier" />
+      <output message="tns:updateIdentifierResponse" />
+    </operation>
+    <operation name="deleteIdentifier">
+      <input message="tns:deleteIdentifier" />
+      <output message="tns:deleteIdentifierResponse" />
+    </operation>
+    <operation name="getTransactionHistoryHeader">
+      <input message="tns:getTransactionHistoryHeader" />
+      <output message="tns:getTransactionHistoryHeaderResponse" />
+    </operation>
+    <operation name="getTransactionDetails">
+      <input message="tns:getTransactionDetails" />
+      <output message="tns:getTransactionDetailsResponse" />
+    </operation>
+    <operation name="findHouseholdsByInfo">
+      <input message="tns:findHouseholdsByInfo" />
+      <output message="tns:findHouseholdsByInfoResponse" />
+    </operation>
+    <operation name="findPersonsByInfo">
+      <input message="tns:findPersonsByInfo" />
+      <output message="tns:findPersonsByInfoResponse" />
+    </operation>
+    <operation name="mergeHouseholds">
+      <input message="tns:mergeHouseholds" />
+      <output message="tns:mergeHouseholdsResponse" />
+    </operation>
+    <operation name="findIdentifiersByInfo">
+      <input message="tns:findIdentifiersByInfo" />
+      <output message="tns:findIdentifiersByInfoResponse" />
+    </operation>
+    <operation name="generateHouseHoldNumber">
+      <input message="tns:generateHouseHoldNumber" />
+      <output message="tns:generateHouseHoldNumberResponse" />
+    </operation>
+    <operation name="getValidVouchersForCard">
+      <input message="tns:getValidVouchersForCard" />
+      <output message="tns:getValidVouchersForCardResponse" />
+    </operation>
+    <operation name="getHouseHold">
+      <input message="tns:getHouseHold" />
+      <output message="tns:getHouseHoldResponse" />
+    </operation>
+    <operation name="updatePerson">
+      <input message="tns:updatePerson" />
+      <output message="tns:updatePersonResponse" />
+    </operation>
+    <operation name="getPerson">
+      <input message="tns:getPerson" />
+      <output message="tns:getPersonResponse" />
+    </operation>
+    <operation name="mergePersons">
+      <input message="tns:mergePersons" />
+      <output message="tns:mergePersonsResponse" />
+    </operation>
+    <operation name="splitPerson">
+      <input message="tns:splitPerson" />
+      <output message="tns:splitPersonResponse" />
+    </operation>
+  </portType>
+</definitions>

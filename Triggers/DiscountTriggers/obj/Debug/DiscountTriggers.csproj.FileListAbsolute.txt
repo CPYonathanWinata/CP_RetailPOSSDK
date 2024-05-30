@@ -1,0 +1,15 @@
+C:\WorkingFolderAX\Triggers\DiscountTriggers\obj\Debug\DiscountTriggers.csprojResolveAssemblyReference.cache
+C:\WorkingFolderAX\POS\bin\Debug\DiscountTriggers.dll
+C:\WorkingFolderAX\POS\bin\Debug\DiscountTriggers.pdb
+C:\WorkingFolderAX\Triggers\DiscountTriggers\obj\Debug\DiscountTriggers.dll
+C:\WorkingFolderAX\Triggers\DiscountTriggers\obj\Debug\DiscountTriggers.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\POS\bin\Debug\DiscountTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\POS\bin\Debug\DiscountTriggers.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Triggers\DiscountTriggers\obj\Debug\DiscountTriggers.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Triggers\DiscountTriggers\obj\Debug\DiscountTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Triggers\DiscountTriggers\obj\Debug\DiscountTriggers.pdb
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\POS\bin\Debug\DiscountTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\POS\bin\Debug\DiscountTriggers.pdb
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Triggers\DiscountTriggers\obj\Debug\DiscountTriggers.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Triggers\DiscountTriggers\obj\Debug\DiscountTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Triggers\DiscountTriggers\obj\Debug\DiscountTriggers.pdb

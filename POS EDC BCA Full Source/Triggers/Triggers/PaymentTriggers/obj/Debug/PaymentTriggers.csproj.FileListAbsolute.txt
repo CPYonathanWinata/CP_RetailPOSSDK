@@ -1,0 +1,34 @@
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.csprojResolveAssemblyReference.cache
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.pdb
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.csprojResolveAssemblyReference.cache
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.csproj.CoreCompileInputs.cache
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.dll
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.pdb
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.csprojResolveAssemblyReference.cache
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.csproj.CoreCompileInputs.cache
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.dll
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.pdb
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.csproj.CoreCompileInputs.cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.dll
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.pdb
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.csprojResolveAssemblyReference.cache
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.csproj.CoreCompileInputs.cache
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.dll
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.pdb
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.csproj.CoreCompileInputs.cache
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.dll
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.pdb
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.csprojResolveAssemblyReference.cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.csprojResolveAssemblyReference.cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.csproj.CoreCompileInputs.cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.dll
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.pdb
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.csproj.CoreCompileInputs.cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.dll
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.pdb
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.csprojResolveAssemblyReference.cache
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.csprojResolveAssemblyReference.cache
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.csproj.CoreCompileInputs.cache
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.dll
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.pdb

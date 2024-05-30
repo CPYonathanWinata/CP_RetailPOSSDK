@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\vs.settings" />
+  <PropertyGroup>
+    <ProjectGuid>{666E18AF-1330-4500-81A1-F01BAB87F448}</ProjectGuid><SDKPath>..\..</SDKPath>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Microsoft.Dynamics.Retail.Pos.QRCode</RootNamespace>
+    <AssemblyName>QRCode</AssemblyName>
+    <OutputPath>$(PosTargetFolder)\Services</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' "><OutputPath>$(SDKOutputPath)\bin\Debug\</OutputPath></PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' "><OutputPath>$(SDKOutputPath)\bin\Release\</OutputPath></PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="EncodingRegion.cs" />
+    <Compile Include="Module.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="BitInputStream.cs" />
+    <Compile Include="BitOutputStream.cs" />
+    <Compile Include="BlockView.cs" />
+    <Compile Include="ColumnView.cs" />
+    <Compile Include="DataCodewordEncoder.cs" />
+    <Compile Include="EightBitByteMode.cs" />
+    <Compile Include="Qrcode.cs" />
+    <Compile Include="ErrorCorrectionCodewords.cs" />
+    <Compile Include="FormatInformationWriter.cs" />
+    <Compile Include="FunctionPatternWriter.cs" />
+    <Compile Include="GaloisField.cs" />
+    <Compile Include="GeneratorPolynomials.cs" />
+    <Compile Include="ISymbol.cs" />
+    <Compile Include="MaskPattern.cs" />
+    <Compile Include="MaskPatternApplier.cs" />
+    <Compile Include="Mode.cs" />
+    <Compile Include="QrcodeException.cs" />
+    <Compile Include="ReedSolomon.cs" />
+    <Compile Include="Symbol.cs" />
+    <Compile Include="Version.cs" />
+    <Compile Include="VersionInformationWriter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Dynamics.Retail.Pos.Contracts"><HintPath>$(SDKPath)\Microsoft.Dynamics.Retail.Pos.Contracts.dll</HintPath><Private>False</Private><EmbedInteropTypes>True</EmbedInteropTypes></Reference>
+    <Reference Include="SystemSettings"><HintPath>$(PosInstallPath)\SystemSettings.dll</HintPath><Private>False</Private></Reference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

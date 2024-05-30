@@ -1,0 +1,250 @@
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\POS\bin\Debug\InteractionDefaults.dll
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\POS\bin\Debug\InteractionDefaults.pdb
+C:\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Extensions\InteractionDefaults.dll
+C:\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Extensions\InteractionDefaults.pdb
+C:\Users\it.application\Desktop\Retail POS\Extensions\InteractionDefaults.dll
+C:\Users\it.application\Desktop\Retail POS\Extensions\InteractionDefaults.pdb
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\InteractionDefaults\obj\Debug\LSRetailPosis.ButtonGrid.frmBarcodeSelect.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.Properties.Resources.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.DisbursementSlipCreationForm.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.AffiliationForm.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ExtendedLogOnForm.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ExtendedLogOnScanForm.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.KitComponentSubstituteForm.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyCardForm.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmKitDisassembly.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyIssueCardForm.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyPayForm.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ProductDetailsForm.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ProductInformationForm.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LogOnForm.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmBarcodeSelect.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmDimensions.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmInput.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\InteractionDefaults\obj\Debug\LSRetailPosis.POSProcesses.frmPayCash.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCurrency.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCustomerAccount.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmReturnTransaction.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ManagerAccessForm.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LogbookForm.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.RegisterTimeForm.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ReportForm.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.SaleRefundDetailForm.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.TaggedImageBoxControl.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ViewTimeClockEntriesForm.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csproj.GenerateResource.Cache
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.dll.licenses
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.dll
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.pdb
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.RedeemLoyaltyPointsForm.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csprojResolveAssemblyReference.cache
+C:\Heron\Dll\InteractionDefaults.dll
+C:\Heron\Dll\InteractionDefaults.pdb
+C:\Project POS SourceCode\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csprojResolveAssemblyReference.cache
+C:\Project POS SourceCode\Services\InteractionDefaults\obj\Debug\LSRetailPosis.ButtonGrid.frmBarcodeSelect.resources
+C:\Project POS SourceCode\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.Properties.Resources.resources
+C:\Project POS SourceCode\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.DisbursementSlipCreationForm.resources
+C:\Project POS SourceCode\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.AffiliationForm.resources
+C:\Project POS SourceCode\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ExtendedLogOnForm.resources
+C:\Project POS SourceCode\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ExtendedLogOnScanForm.resources
+C:\Project POS SourceCode\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.KitComponentSubstituteForm.resources
+C:\Project POS SourceCode\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyCardForm.resources
+C:\Project POS SourceCode\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmKitDisassembly.resources
+C:\Project POS SourceCode\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyIssueCardForm.resources
+C:\Project POS SourceCode\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyPayForm.resources
+C:\Project POS SourceCode\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ProductDetailsForm.resources
+C:\Project POS SourceCode\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ProductInformationForm.resources
+C:\Project POS SourceCode\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LogOnForm.resources
+C:\Project POS SourceCode\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmBarcodeSelect.resources
+C:\Project POS SourceCode\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmDimensions.resources
+C:\Project POS SourceCode\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmInput.resources
+C:\Project POS SourceCode\Services\InteractionDefaults\obj\Debug\LSRetailPosis.POSProcesses.frmPayCash.resources
+C:\Project POS SourceCode\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCurrency.resources
+C:\Project POS SourceCode\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCustomerAccount.resources
+C:\Project POS SourceCode\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmReturnTransaction.resources
+C:\Project POS SourceCode\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ManagerAccessForm.resources
+C:\Project POS SourceCode\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LogbookForm.resources
+C:\Project POS SourceCode\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.RedeemLoyaltyPointsForm.resources
+C:\Project POS SourceCode\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.RegisterTimeForm.resources
+C:\Project POS SourceCode\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ReportForm.resources
+C:\Project POS SourceCode\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.SaleRefundDetailForm.resources
+C:\Project POS SourceCode\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.TaggedImageBoxControl.resources
+C:\Project POS SourceCode\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ViewTimeClockEntriesForm.resources
+C:\Project POS SourceCode\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csproj.GenerateResource.Cache
+C:\Project POS SourceCode\Services\InteractionDefaults\obj\Debug\InteractionDefaults.dll.licenses
+C:\Project POS SourceCode\Services\InteractionDefaults\obj\Debug\InteractionDefaults.dll
+C:\Project POS SourceCode\Services\InteractionDefaults\obj\Debug\InteractionDefaults.pdb
+D:\GT\ID\InteractionDefaults\obj\Debug\InteractionDefaults.csprojResolveAssemblyReference.cache
+D:\GT\ID\InteractionDefaults\obj\Debug\LSRetailPosis.ButtonGrid.frmBarcodeSelect.resources
+D:\GT\ID\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.Properties.Resources.resources
+D:\GT\ID\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.DisbursementSlipCreationForm.resources
+D:\GT\ID\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.AffiliationForm.resources
+D:\GT\ID\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ExtendedLogOnForm.resources
+D:\GT\ID\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ExtendedLogOnScanForm.resources
+D:\GT\ID\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.KitComponentSubstituteForm.resources
+D:\GT\ID\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyCardForm.resources
+D:\GT\ID\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmKitDisassembly.resources
+D:\GT\ID\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyIssueCardForm.resources
+D:\GT\ID\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyPayForm.resources
+D:\GT\ID\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ProductDetailsForm.resources
+D:\GT\ID\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ProductInformationForm.resources
+D:\GT\ID\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LogOnForm.resources
+D:\GT\ID\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmBarcodeSelect.resources
+D:\GT\ID\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmDimensions.resources
+D:\GT\ID\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmInput.resources
+D:\GT\ID\InteractionDefaults\obj\Debug\LSRetailPosis.POSProcesses.frmPayCash.resources
+D:\GT\ID\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCurrency.resources
+D:\GT\ID\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCustomerAccount.resources
+D:\GT\ID\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmReturnTransaction.resources
+D:\GT\ID\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ManagerAccessForm.resources
+D:\GT\ID\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LogbookForm.resources
+D:\GT\ID\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.RedeemLoyaltyPointsForm.resources
+D:\GT\ID\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.RegisterTimeForm.resources
+D:\GT\ID\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ReportForm.resources
+D:\GT\ID\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.SaleRefundDetailForm.resources
+D:\GT\ID\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.TaggedImageBoxControl.resources
+D:\GT\ID\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ViewTimeClockEntriesForm.resources
+D:\GT\ID\InteractionDefaults\obj\Debug\InteractionDefaults.csproj.GenerateResource.Cache
+D:\GT\ID\InteractionDefaults\obj\Debug\InteractionDefaults.dll.licenses
+D:\GT\ID\InteractionDefaults\obj\Debug\InteractionDefaults.dll
+D:\GT\ID\InteractionDefaults\obj\Debug\InteractionDefaults.pdb
+D:\Work\GT\InteractionDefaults\InteractionDefaults\obj\Debug\LSRetailPosis.ButtonGrid.frmBarcodeSelect.resources
+D:\Work\GT\InteractionDefaults\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.DisbursementSlipCreationForm.resources
+D:\Work\GT\InteractionDefaults\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.AffiliationForm.resources
+D:\Work\GT\InteractionDefaults\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ExtendedLogOnForm.resources
+D:\Work\GT\InteractionDefaults\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ExtendedLogOnScanForm.resources
+D:\Work\GT\InteractionDefaults\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.KitComponentSubstituteForm.resources
+D:\Work\GT\InteractionDefaults\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyCardForm.resources
+D:\Work\GT\InteractionDefaults\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmKitDisassembly.resources
+D:\Work\GT\InteractionDefaults\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyIssueCardForm.resources
+D:\Work\GT\InteractionDefaults\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyPayForm.resources
+D:\Work\GT\InteractionDefaults\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ProductDetailsForm.resources
+D:\Work\GT\InteractionDefaults\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ProductInformationForm.resources
+D:\Work\GT\InteractionDefaults\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LogOnForm.resources
+D:\Work\GT\InteractionDefaults\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmBarcodeSelect.resources
+D:\Work\GT\InteractionDefaults\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmDimensions.resources
+D:\Work\GT\InteractionDefaults\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmInput.resources
+D:\Work\GT\InteractionDefaults\InteractionDefaults\obj\Debug\LSRetailPosis.POSProcesses.frmPayCash.resources
+D:\Work\GT\InteractionDefaults\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCurrency.resources
+D:\Work\GT\InteractionDefaults\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCustomerAccount.resources
+D:\Work\GT\InteractionDefaults\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmReturnTransaction.resources
+D:\Work\GT\InteractionDefaults\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ManagerAccessForm.resources
+D:\Work\GT\InteractionDefaults\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LogbookForm.resources
+D:\Work\GT\InteractionDefaults\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.RedeemLoyaltyPointsForm.resources
+D:\Work\GT\InteractionDefaults\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.RegisterTimeForm.resources
+D:\Work\GT\InteractionDefaults\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ReportForm.resources
+D:\Work\GT\InteractionDefaults\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.SaleRefundDetailForm.resources
+D:\Work\GT\InteractionDefaults\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.TaggedImageBoxControl.resources
+D:\Work\GT\InteractionDefaults\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ViewTimeClockEntriesForm.resources
+D:\Work\GT\InteractionDefaults\InteractionDefaults\obj\Debug\InteractionDefaults.csproj.GenerateResource.Cache
+D:\Work\GT\InteractionDefaults\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.Properties.Resources.resources
+D:\Work\GT\InteractionDefaults\InteractionDefaults\obj\Debug\InteractionDefaults.dll.licenses
+D:\Work\GT\InteractionDefaults\InteractionDefaults\obj\Debug\InteractionDefaults.dll
+D:\Work\GT\InteractionDefaults\InteractionDefaults\obj\Debug\InteractionDefaults.pdb
+D:\Work\GT\InteractionDefaults\InteractionDefaults\obj\Debug\InteractionDefaults.csprojResolveAssemblyReference.cache
+D:\Work\Retail SDK Collected\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csprojResolveAssemblyReference.cache
+D:\Work\Retail SDK Collected\Services\InteractionDefaults\obj\Debug\LSRetailPosis.ButtonGrid.frmBarcodeSelect.resources
+D:\Work\Retail SDK Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.Properties.Resources.resources
+D:\Work\Retail SDK Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.DisbursementSlipCreationForm.resources
+D:\Work\Retail SDK Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.AffiliationForm.resources
+D:\Work\Retail SDK Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ExtendedLogOnForm.resources
+D:\Work\Retail SDK Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ExtendedLogOnScanForm.resources
+D:\Work\Retail SDK Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.KitComponentSubstituteForm.resources
+D:\Work\Retail SDK Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyCardForm.resources
+D:\Work\Retail SDK Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmKitDisassembly.resources
+D:\Work\Retail SDK Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyIssueCardForm.resources
+D:\Work\Retail SDK Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyPayForm.resources
+D:\Work\Retail SDK Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ProductDetailsForm.resources
+D:\Work\Retail SDK Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ProductInformationForm.resources
+D:\Work\Retail SDK Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LogOnForm.resources
+D:\Work\Retail SDK Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmBarcodeSelect.resources
+D:\Work\Retail SDK Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmDimensions.resources
+D:\Work\Retail SDK Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmInput.resources
+D:\Work\Retail SDK Collected\Services\InteractionDefaults\obj\Debug\LSRetailPosis.POSProcesses.frmPayCash.resources
+D:\Work\Retail SDK Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCurrency.resources
+D:\Work\Retail SDK Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCustomerAccount.resources
+D:\Work\Retail SDK Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmReturnTransaction.resources
+D:\Work\Retail SDK Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ManagerAccessForm.resources
+D:\Work\Retail SDK Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LogbookForm.resources
+D:\Work\Retail SDK Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.RedeemLoyaltyPointsForm.resources
+D:\Work\Retail SDK Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.RegisterTimeForm.resources
+D:\Work\Retail SDK Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ReportForm.resources
+D:\Work\Retail SDK Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.SaleRefundDetailForm.resources
+D:\Work\Retail SDK Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.TaggedImageBoxControl.resources
+D:\Work\Retail SDK Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ViewTimeClockEntriesForm.resources
+D:\Work\Retail SDK Collected\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csproj.GenerateResource.Cache
+D:\Work\Retail SDK Collected\Services\InteractionDefaults\obj\Debug\InteractionDefaults.dll.licenses
+D:\Heron\Dll\InteractionDefaults.dll
+D:\Heron\Dll\InteractionDefaults.pdb
+D:\Work\Retail SDK Collected\Services\InteractionDefaults\obj\Debug\InteractionDefaults.dll
+D:\Work\Retail SDK Collected\Services\InteractionDefaults\obj\Debug\InteractionDefaults.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\LSRetailPosis.ButtonGrid.frmBarcodeSelect.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.Properties.Resources.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.DisbursementSlipCreationForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.AffiliationForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ExtendedLogOnForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ExtendedLogOnScanForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.KitComponentSubstituteForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyCardForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmKitDisassembly.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyIssueCardForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyPayForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ProductDetailsForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ProductInformationForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LogOnForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmBarcodeSelect.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmDimensions.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmInput.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\LSRetailPosis.POSProcesses.frmPayCash.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCurrency.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCustomerAccount.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmReturnTransaction.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ManagerAccessForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LogbookForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.RedeemLoyaltyPointsForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.RegisterTimeForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ReportForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.SaleRefundDetailForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.TaggedImageBoxControl.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ViewTimeClockEntriesForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csproj.GenerateResource.Cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\InteractionDefaults.dll.licenses
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\InteractionDefaults.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\InteractionDefaults.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.CP_frmWaitingRespond.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\LSRetailPosis.ButtonGrid.frmBarcodeSelect.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.Properties.Resources.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.CP_frmWaitingRespond.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.DisbursementSlipCreationForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.AffiliationForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ExtendedLogOnForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ExtendedLogOnScanForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.KitComponentSubstituteForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyCardForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmKitDisassembly.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyIssueCardForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyPayForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ProductDetailsForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ProductInformationForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LogOnForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmBarcodeSelect.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmDimensions.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmInput.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\LSRetailPosis.POSProcesses.frmPayCash.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCurrency.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCustomerAccount.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmReturnTransaction.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ManagerAccessForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LogbookForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.RedeemLoyaltyPointsForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.RegisterTimeForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ReportForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.SaleRefundDetailForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.TaggedImageBoxControl.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ViewTimeClockEntriesForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csproj.GenerateResource.Cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\InteractionDefaults.dll.licenses
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\InteractionDefaults.dll
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\InteractionDefaults\obj\Debug\InteractionDefaults.pdb

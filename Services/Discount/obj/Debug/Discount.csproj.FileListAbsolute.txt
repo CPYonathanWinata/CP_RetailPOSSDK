@@ -1,0 +1,11 @@
+C:\WorkingFolderAX\Services\Discount\obj\Debug\Discount.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Discount\obj\Debug\Discount.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\POS\bin\Debug\Discount.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\POS\bin\Debug\Discount.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Discount\obj\Debug\Discount.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Discount\obj\Debug\Discount.pdb
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\POS\bin\Debug\Discount.dll
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\POS\bin\Debug\Discount.pdb
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Discount\obj\Debug\Discount.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Discount\obj\Debug\Discount.dll
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Discount\obj\Debug\Discount.pdb

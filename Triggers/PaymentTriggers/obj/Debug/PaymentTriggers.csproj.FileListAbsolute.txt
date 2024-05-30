@@ -1,0 +1,40 @@
+C:\Users\it.application\Desktop\Retail POS\Extensions\PaymentTriggers.dll
+C:\Users\it.application\Desktop\Retail POS\Extensions\PaymentTriggers.pdb
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.dll
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.pdb
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.csprojResolveAssemblyReference.cache
+C:\Desktop\Retail POS\Extensions\PaymentTriggers.dll
+C:\Desktop\Retail POS\Extensions\PaymentTriggers.pdb
+C:\WorkingFolderAX\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.dll
+C:\WorkingFolderAX\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.pdb
+C:\WorkingFolderAX\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.csprojResolveAssemblyReference.cache
+C:\Users\it.application\Desktop\Retail POS\Extensions\New folder\PaymentTriggers.dll
+C:\Users\it.application\Desktop\Retail POS\Extensions\New folder\PaymentTriggers.pdb
+C:\Project POS SourceCode\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.CP_FormPayment.resources
+C:\Project POS SourceCode\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.csproj.GenerateResource.Cache
+C:\Project POS SourceCode\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.dll
+C:\Project POS SourceCode\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.pdb
+C:\Project POS SourceCode\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.csprojResolveAssemblyReference.cache
+D:\GT\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.csprojResolveAssemblyReference.cache
+D:\GT\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.CP_FormPayment.resources
+D:\GT\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.csproj.GenerateResource.Cache
+D:\GT\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.dll
+D:\GT\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.pdb
+D:\Work\GT\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.csprojResolveAssemblyReference.cache
+D:\Work\GT\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.CP_FormPayment.resources
+D:\Work\GT\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.csproj.GenerateResource.Cache
+D:\Work\GT\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.dll
+D:\Work\GT\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.CP_FormPayment.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.csproj.GenerateResource.Cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Users\it.application\Desktop\Retail POS\Extensions\New folder\PaymentTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\Users\it.application\Desktop\Retail POS\Extensions\New folder\PaymentTriggers.pdb
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.CP_FormPayment.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.Infolog.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.csproj.GenerateResource.Cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.pdb

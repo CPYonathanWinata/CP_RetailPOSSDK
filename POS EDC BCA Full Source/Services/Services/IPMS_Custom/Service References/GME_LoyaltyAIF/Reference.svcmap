@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="8cce40b4-a5d5-4e04-8e5f-335c3bb6fe39" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>false</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://192.168.0.39:8101/DynamicsAx/Services/TBS_AifLoyaltySvcGroup" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="TBS_AifLoyaltySvcGroup.xsd" MetadataType="Schema" ID="dd0bc702-cc90-4cec-9780-38c28d5bb5df" SourceId="1" SourceUrl="http://192.168.0.39:8101/DynamicsAx/Services/TBS_AifLoyaltySvcGroup?xsd=xsd2" />
+    <MetadataFile FileName="TBS_AifLoyaltySvcGroup.wsdl" MetadataType="Wsdl" ID="ffa23f32-399d-4df9-9350-29785a400d6b" SourceId="1" SourceUrl="http://192.168.0.39:8101/DynamicsAx/Services/TBS_AifLoyaltySvcGroup" />
+    <MetadataFile FileName="TBS_AifLoyaltySvcGroup1.xsd" MetadataType="Schema" ID="cb43aade-f5da-4177-9bdf-9b19c4e22c66" SourceId="1" SourceUrl="http://192.168.0.39:8101/DynamicsAx/Services/TBS_AifLoyaltySvcGroup?xsd=xsd5" />
+    <MetadataFile FileName="TBS_AifLoyaltySvcGroup2.xsd" MetadataType="Schema" ID="de37bb0d-7bed-4d83-a239-4db2b8ff687a" SourceId="1" SourceUrl="http://192.168.0.39:8101/DynamicsAx/Services/TBS_AifLoyaltySvcGroup?xsd=xsd1" />
+    <MetadataFile FileName="TBS_AifLoyaltySvcGroup1.wsdl" MetadataType="Wsdl" ID="0f76f902-b155-437e-be32-dae7c8c07a69" SourceId="1" SourceUrl="http://192.168.0.39:8101/DynamicsAx/Services/TBS_AifLoyaltySvcGroup?wsdl=wsdl0" />
+    <MetadataFile FileName="TBS_AifLoyaltySvcGroup3.xsd" MetadataType="Schema" ID="4cdba0db-3240-477b-a785-9800cb1269d8" SourceId="1" SourceUrl="http://192.168.0.39:8101/DynamicsAx/Services/TBS_AifLoyaltySvcGroup?xsd=xsd3" />
+    <MetadataFile FileName="TBS_AifLoyaltySvcGroup4.xsd" MetadataType="Schema" ID="e1216b9f-be71-4f9a-8253-62e154913eb9" SourceId="1" SourceUrl="http://192.168.0.39:8101/DynamicsAx/Services/TBS_AifLoyaltySvcGroup?xsd=xsd4" />
+    <MetadataFile FileName="TBS_AifLoyaltySvcGroup5.xsd" MetadataType="Schema" ID="59e4c131-c13f-486b-ba2c-c840574a8d23" SourceId="1" SourceUrl="http://192.168.0.39:8101/DynamicsAx/Services/TBS_AifLoyaltySvcGroup?xsd=xsd0" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

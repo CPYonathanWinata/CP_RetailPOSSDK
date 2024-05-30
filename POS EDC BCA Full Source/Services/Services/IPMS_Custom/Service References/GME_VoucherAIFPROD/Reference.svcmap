@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="f2532bb8-7356-444e-9dc2-fca46e0b1992" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>false</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://192.168.0.71:8102/DynamicsAx/Services/TBS_AifVoucherSvcGroup" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="TBS_AifVoucherSvcGroup8.xsd" MetadataType="Schema" ID="b24a6768-a367-42e8-9873-33e4efc7e0dd" SourceId="1" SourceUrl="http://192.168.0.71:8102/DynamicsAx/Services/TBS_AifVoucherSvcGroup?xsd=xsd6" />
+    <MetadataFile FileName="TBS_AifVoucherSvcGroup81.xsd" MetadataType="Schema" ID="49758bf1-a80c-4328-9e32-1885a380af15" SourceId="1" SourceUrl="http://192.168.0.71:8102/DynamicsAx/Services/TBS_AifVoucherSvcGroup?xsd=xsd3" />
+    <MetadataFile FileName="TBS_AifVoucherSvcGroup82.xsd" MetadataType="Schema" ID="1f2286bc-4a9d-4684-b31d-85a66bae124f" SourceId="1" SourceUrl="http://192.168.0.71:8102/DynamicsAx/Services/TBS_AifVoucherSvcGroup?xsd=xsd4" />
+    <MetadataFile FileName="TBS_AifVoucherSvcGroup83.xsd" MetadataType="Schema" ID="940903bd-6bf3-4429-a4d1-0797f782b864" SourceId="1" SourceUrl="http://192.168.0.71:8102/DynamicsAx/Services/TBS_AifVoucherSvcGroup?xsd=xsd1" />
+    <MetadataFile FileName="TBS_AifVoucherSvcGroup84.xsd" MetadataType="Schema" ID="dd47fd9a-f1a3-4d5c-9a3c-4e26b1eef6fb" SourceId="1" SourceUrl="http://192.168.0.71:8102/DynamicsAx/Services/TBS_AifVoucherSvcGroup?xsd=xsd7" />
+    <MetadataFile FileName="TBS_AifVoucherSvcGroup85.xsd" MetadataType="Schema" ID="1ded186b-c680-4ba9-a3f7-6c311122faa9" SourceId="1" SourceUrl="http://192.168.0.71:8102/DynamicsAx/Services/TBS_AifVoucherSvcGroup?xsd=xsd5" />
+    <MetadataFile FileName="TBS_AifVoucherSvcGroup86.xsd" MetadataType="Schema" ID="e15719ee-2d92-4bab-8f85-e71fed02f1cf" SourceId="1" SourceUrl="http://192.168.0.71:8102/DynamicsAx/Services/TBS_AifVoucherSvcGroup?xsd=xsd2" />
+    <MetadataFile FileName="TBS_AifVoucherSvcGroup2.wsdl" MetadataType="Wsdl" ID="17f6fabb-da53-46ac-9b26-95ff4f74c63c" SourceId="1" SourceUrl="http://192.168.0.71:8102/DynamicsAx/Services/TBS_AifVoucherSvcGroup?wsdl=wsdl0" />
+    <MetadataFile FileName="TBS_AifVoucherSvcGroup87.xsd" MetadataType="Schema" ID="603e8965-3d86-43db-80ef-163b3e8d4856" SourceId="1" SourceUrl="http://192.168.0.71:8102/DynamicsAx/Services/TBS_AifVoucherSvcGroup?xsd=xsd0" />
+    <MetadataFile FileName="TBS_AifVoucherSvcGroup21.wsdl" MetadataType="Wsdl" ID="d11e6035-b4f9-402c-b01d-b761088b8f9b" SourceId="1" SourceUrl="http://192.168.0.71:8102/DynamicsAx/Services/TBS_AifVoucherSvcGroup" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

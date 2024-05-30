@@ -1,0 +1,6 @@
+D:\Training AX\Retail SDK\POS Plug-ins\Services\BlankOperationCashierSales\obj\Debug\BlankOperationCashierSales.frmCashierTrans.resources
+D:\Training AX\Retail SDK\POS Plug-ins\Services\BlankOperationCashierSales\obj\Debug\BlankOperationCashierSales.csproj.GenerateResource.Cache
+D:\Training AX\Retail POS\Services\Extensions\BlankOperationCashierSales.dll
+D:\Training AX\Retail POS\Services\Extensions\BlankOperationCashierSales.pdb
+D:\Training AX\Retail SDK\POS Plug-ins\Services\BlankOperationCashierSales\obj\Debug\BlankOperationCashierSales.dll
+D:\Training AX\Retail SDK\POS Plug-ins\Services\BlankOperationCashierSales\obj\Debug\BlankOperationCashierSales.pdb

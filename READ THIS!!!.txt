@@ -1,0 +1,10 @@
+Semua codingan untuk Retail POS yang sudah dikumpulkan jadi 1. 
+- API Access untuk mengakses mysql dan query data URL untuk API
+- Services untuk custom code alur berjalannya Retail POS
+- Trigger untuk menyisipkan code pre / post pada alur proses Retail POS
+- String Encrypt Generator untuk generate password MySQL yang sudah di-encrypt untuk ditaruh di APIConfig.xml 
+- CPPAYGOPAY sebenarnya project InteractionDefault yang di-custom frmCustomerpay. Isinya pembayaran custom, salah satunya debit ECR BCA
+- GMEVar itu untuk custom EDC payment (C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\POS EDC BCA Full Source\Services\Services\IPMS_Custom)
+
+
+

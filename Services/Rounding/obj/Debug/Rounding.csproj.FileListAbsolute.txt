@@ -1,0 +1,11 @@
+C:\Project POS SourceCode\Valid Blank Operation 16 October 2019\POS Plug-ins\POS\bin\Debug\Rounding.dll
+C:\Project POS SourceCode\Valid Blank Operation 16 October 2019\POS Plug-ins\POS\bin\Debug\Rounding.pdb
+C:\Project POS SourceCode\Valid Blank Operation 16 October 2019\POS Plug-ins\Services\Rounding\obj\Debug\Rounding.csprojResolveAssemblyReference.cache
+C:\Project POS SourceCode\Valid Blank Operation 16 October 2019\POS Plug-ins\Services\Rounding\obj\Debug\Rounding.dll
+C:\Project POS SourceCode\Valid Blank Operation 16 October 2019\POS Plug-ins\Services\Rounding\obj\Debug\Rounding.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Rounding\obj\Debug\Rounding.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Rounding\obj\Debug\Rounding.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Rounding\obj\Debug\Rounding.pdb
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Rounding\obj\Debug\Rounding.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Rounding\obj\Debug\Rounding.dll
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Rounding\obj\Debug\Rounding.pdb

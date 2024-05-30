@@ -1,0 +1,25 @@
+C:\Project POS SourceCode\Valid Blank Operation 16 October 2019\POS Plug-ins\POS\bin\Debug\Barcode.dll
+C:\Project POS SourceCode\Valid Blank Operation 16 October 2019\POS Plug-ins\POS\bin\Debug\Barcode.pdb
+C:\Project POS SourceCode\Valid Blank Operation 16 October 2019\POS Plug-ins\Services\Barcodes\obj\Debug\Barcode.dll
+C:\Project POS SourceCode\Valid Blank Operation 16 October 2019\POS Plug-ins\Services\Barcodes\obj\Debug\Barcode.pdb
+C:\Project POS SourceCode\Valid Blank Operation 16 October 2019\POS Plug-ins\Services\Barcodes\obj\Debug\Barcode.csprojResolveAssemblyReference.cache
+D:\Retail SDK Source Code\Valid Blank Operation 16 October 2019\POS Plug-ins\POS\bin\Debug\Barcode.dll
+D:\Retail SDK Source Code\Valid Blank Operation 16 October 2019\POS Plug-ins\POS\bin\Debug\Barcode.pdb
+D:\Retail SDK Source Code\Valid Blank Operation 16 October 2019\POS Plug-ins\Services\Barcodes\obj\Debug\Barcode.csprojResolveAssemblyReference.cache
+D:\Retail SDK Source Code\Valid Blank Operation 16 October 2019\POS Plug-ins\Services\Barcodes\obj\Debug\Barcode.dll
+D:\Retail SDK Source Code\Valid Blank Operation 16 October 2019\POS Plug-ins\Services\Barcodes\obj\Debug\Barcode.pdb
+D:\GT\POS\bin\Debug\Barcode.dll
+D:\GT\POS\bin\Debug\Barcode.pdb
+D:\GT\Services\Barcodes\obj\Debug\Barcode.csprojResolveAssemblyReference.cache
+D:\GT\Services\Barcodes\obj\Debug\Barcode.dll
+D:\GT\Services\Barcodes\obj\Debug\Barcode.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\POS\bin\Debug\Barcode.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\POS\bin\Debug\Barcode.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Barcodes\obj\Debug\Barcode.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Barcodes\obj\Debug\Barcode.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Barcodes\obj\Debug\Barcode.pdb
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\POS\bin\Debug\Barcode.dll
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\POS\bin\Debug\Barcode.pdb
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Barcodes\obj\Debug\Barcode.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Barcodes\obj\Debug\Barcode.dll
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Barcodes\obj\Debug\Barcode.pdb

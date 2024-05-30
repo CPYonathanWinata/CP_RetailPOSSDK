@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configurationSnapshot xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="urn:schemas-microsoft-com:xml-wcfconfigurationsnapshot">
+  <behaviors />
+  <bindings>
+    <binding digest="System.ServiceModel.Configuration.NetTcpBindingElement, System.ServiceModel, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089:&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-16&quot;?&gt;&lt;Data name=&quot;NetTcpBinding_TBS_AifLoyaltySvc1&quot; /&gt;" bindingType="netTcpBinding" name="NetTcpBinding_TBS_AifLoyaltySvc1" />
+  </bindings>
+  <endpoints>
+    <endpoint normalizedDigest="&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-16&quot;?&gt;&lt;Data address=&quot;net.tcp://192.168.0.39:8201/DynamicsAx/Services/TBS_AifLoyaltySvcGroup&quot; binding=&quot;netTcpBinding&quot; bindingConfiguration=&quot;NetTcpBinding_TBS_AifLoyaltySvc1&quot; contract=&quot;GME_LoyaltyAIF.TBS_AifLoyaltySvc&quot; name=&quot;NetTcpBinding_TBS_AifLoyaltySvc&quot;&gt;&lt;identity&gt;&lt;userPrincipalName value=&quot;pos-dev@THEBODYSHOP.CO.ID&quot; /&gt;&lt;/identity&gt;&lt;/Data&gt;" digest="&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-16&quot;?&gt;&lt;Data address=&quot;net.tcp://192.168.0.39:8201/DynamicsAx/Services/TBS_AifLoyaltySvcGroup&quot; binding=&quot;netTcpBinding&quot; bindingConfiguration=&quot;NetTcpBinding_TBS_AifLoyaltySvc1&quot; contract=&quot;GME_LoyaltyAIF.TBS_AifLoyaltySvc&quot; name=&quot;NetTcpBinding_TBS_AifLoyaltySvc&quot;&gt;&lt;identity&gt;&lt;userPrincipalName value=&quot;pos-dev@THEBODYSHOP.CO.ID&quot; /&gt;&lt;/identity&gt;&lt;/Data&gt;" contractName="GME_LoyaltyAIF.TBS_AifLoyaltySvc" name="NetTcpBinding_TBS_AifLoyaltySvc" />
+  </endpoints>
+</configurationSnapshot>

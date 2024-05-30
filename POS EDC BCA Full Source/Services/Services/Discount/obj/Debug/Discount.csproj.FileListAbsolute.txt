@@ -1,0 +1,3 @@
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\Discount\obj\Debug\Discount.csprojResolveAssemblyReference.cache
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\Discount\obj\Debug\Discount.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\Discount\obj\Debug\Discount.pdb

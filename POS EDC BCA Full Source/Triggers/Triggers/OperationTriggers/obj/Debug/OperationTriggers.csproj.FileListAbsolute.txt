@@ -1,0 +1,3 @@
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Triggers\OperationTriggers\obj\Debug\OperationTriggers.csprojResolveAssemblyReference.cache
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Triggers\OperationTriggers\obj\Debug\OperationTriggers.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Triggers\OperationTriggers\obj\Debug\OperationTriggers.pdb

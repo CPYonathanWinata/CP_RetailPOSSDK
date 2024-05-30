@@ -1,0 +1,5 @@
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\POS\bin\Debug\EFT.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\POS\bin\Debug\EFT.pdb
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\EFT\obj\Debug\EFT.csprojResolveAssemblyReference.cache
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\EFT\obj\Debug\EFT.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\EFT\obj\Debug\EFT.pdb

@@ -1,0 +1,4 @@
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Triggers\DiscountTriggers\obj\Debug\DiscountTriggers.csprojResolveAssemblyReference.cache
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Triggers\DiscountTriggers\obj\Debug\DiscountTriggers.csproj.CoreCompileInputs.cache
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Triggers\DiscountTriggers\obj\Debug\DiscountTriggers.dll
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Triggers\DiscountTriggers\obj\Debug\DiscountTriggers.pdb

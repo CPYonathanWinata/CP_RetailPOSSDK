@@ -1,0 +1,5 @@
+C:\Project POS SourceCode\Valid Blank Operation 16 October 2019\POS Plug-ins\Services\Loyalty\obj\Debug\Loyalty.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Loyalty\obj\Debug\Loyalty.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Loyalty\obj\Debug\Loyalty.dll
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Loyalty\obj\Debug\Loyalty.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Loyalty\obj\Debug\Loyalty.dll

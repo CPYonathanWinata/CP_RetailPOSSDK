@@ -1,0 +1,14 @@
+D:\Retail SDK Source Code\Valid Blank Operation 16 October 2019\POS Plug-ins\Services\StockCount\obj\Debug\Microsoft.Dynamics.Retail.Pos.StockCount.frmStockCountJournals.resources
+D:\Retail SDK Source Code\Valid Blank Operation 16 October 2019\POS Plug-ins\Services\StockCount\obj\Debug\Microsoft.Dynamics.Retail.Pos.StockCount.frmStockCount.resources
+D:\Retail SDK Source Code\Valid Blank Operation 16 October 2019\POS Plug-ins\Services\StockCount\obj\Debug\StockCount.csproj.GenerateResource.Cache
+D:\Retail SDK Source Code\Valid Blank Operation 16 October 2019\POS Plug-ins\Services\StockCount\obj\Debug\StockCount.dll.licenses
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\StockCount\obj\Debug\StockCount.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\StockCount\obj\Debug\Microsoft.Dynamics.Retail.Pos.StockCount.frmStockCountJournals.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\StockCount\obj\Debug\Microsoft.Dynamics.Retail.Pos.StockCount.frmStockCount.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\StockCount\obj\Debug\StockCount.csproj.GenerateResource.Cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\StockCount\obj\Debug\StockCount.dll.licenses
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\StockCount\obj\Debug\StockCount.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\StockCount\obj\Debug\Microsoft.Dynamics.Retail.Pos.StockCount.frmStockCountJournals.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\StockCount\obj\Debug\Microsoft.Dynamics.Retail.Pos.StockCount.frmStockCount.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\StockCount\obj\Debug\StockCount.csproj.GenerateResource.Cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\StockCount\obj\Debug\StockCount.dll.licenses

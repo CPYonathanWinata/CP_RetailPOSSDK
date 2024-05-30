@@ -1,0 +1,3 @@
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\IPMS_Custom\obj\Debug\GME_Custom.csprojResolveAssemblyReference.cache
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\IPMS_Custom\obj\Debug\IPMS_Custom.dll
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\IPMS_Custom\obj\Debug\IPMS_Custom.pdb

@@ -1,0 +1,25 @@
+C:\WorkingFolderAX\Triggers\ApplicationTriggers\obj\Debug\ApplicationTriggers.csprojResolveAssemblyReference.cache
+C:\Project POS SourceCode\Triggers\ApplicationTriggers\obj\Debug\ApplicationTriggers.csprojResolveAssemblyReference.cache
+C:\Project POS SourceCode\POS\bin\Debug\ApplicationTriggers.dll
+C:\Project POS SourceCode\POS\bin\Debug\ApplicationTriggers.pdb
+C:\Project POS SourceCode\Triggers\ApplicationTriggers\obj\Debug\ApplicationTriggers.dll
+C:\Project POS SourceCode\Triggers\ApplicationTriggers\obj\Debug\ApplicationTriggers.pdb
+D:\Retail SDK Source Code\Valid Blank Operation 16 October 2019\POS\bin\Debug\ApplicationTriggers.dll
+D:\Retail SDK Source Code\Valid Blank Operation 16 October 2019\POS\bin\Debug\ApplicationTriggers.pdb
+D:\Retail SDK Source Code\Valid Blank Operation 16 October 2019\Triggers\ApplicationTriggers\obj\Debug\ApplicationTriggers.csprojResolveAssemblyReference.cache
+D:\Retail SDK Source Code\Valid Blank Operation 16 October 2019\Triggers\ApplicationTriggers\obj\Debug\ApplicationTriggers.dll
+D:\Retail SDK Source Code\Valid Blank Operation 16 October 2019\Triggers\ApplicationTriggers\obj\Debug\ApplicationTriggers.pdb
+D:\GT\POS\bin\Debug\ApplicationTriggers.dll
+D:\GT\POS\bin\Debug\ApplicationTriggers.pdb
+D:\GT\Triggers\ApplicationTriggers\obj\Debug\ApplicationTriggers.dll
+D:\GT\Triggers\ApplicationTriggers\obj\Debug\ApplicationTriggers.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\POS\bin\Debug\ApplicationTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\POS\bin\Debug\ApplicationTriggers.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Triggers\ApplicationTriggers\obj\Debug\ApplicationTriggers.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Triggers\ApplicationTriggers\obj\Debug\ApplicationTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Triggers\ApplicationTriggers\obj\Debug\ApplicationTriggers.pdb
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\POS\bin\Debug\ApplicationTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\POS\bin\Debug\ApplicationTriggers.pdb
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Triggers\ApplicationTriggers\obj\Debug\ApplicationTriggers.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Triggers\ApplicationTriggers\obj\Debug\ApplicationTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Triggers\ApplicationTriggers\obj\Debug\ApplicationTriggers.pdb

@@ -1,0 +1,8 @@
+C:\Services\LogOn.dll
+C:\Services\LogOn.pdb
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\LogOn\obj\Debug\LogOn.csprojResolveAssemblyReference.cache
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\LogOn\obj\Debug\LogOn.dll
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\LogOn\obj\Debug\LogOn.pdb
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\LogOn\obj\Debug\LogOn.csprojResolveAssemblyReference.cache
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\LogOn\obj\Debug\LogOn.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\LogOn\obj\Debug\LogOn.pdb

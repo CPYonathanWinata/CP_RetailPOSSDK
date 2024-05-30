@@ -1,0 +1,5 @@
+C:\Project POS SourceCode\Valid Blank Operation 16 October 2019\POS Plug-ins\Services\Application\obj\Debug\Application.csprojResolveAssemblyReference.cache
+D:\Retail SDK Source Code\Valid Blank Operation 16 October 2019\POS Plug-ins\Services\Application\obj\Debug\Application.csprojResolveAssemblyReference.cache
+D:\GT\Services\Application\obj\Debug\Application.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Application\obj\Debug\Application.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Application\obj\Debug\Application.csprojResolveAssemblyReference.cache

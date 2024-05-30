@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Dynamics.Ax.Application" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Dynamics.Ax.Application" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://192.168.0.39:8101/DynamicsAx/Services/TBS_AifVoucherSvcGroup?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Ax.Xpp" />
+  <xs:complexType name="TBS_Voucher">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Ax.Xpp" base="q1:XppObjectBase">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="responseCode" type="xs:decimal" />
+          <xs:element minOccurs="0" name="responseMessage" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="voucherAmount" type="xs:decimal" />
+          <xs:element minOccurs="0" name="voucherStatus" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="TBS_Voucher" nillable="true" type="tns:TBS_Voucher" />
+  <xs:complexType name="TBS_VoucherLineModel">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q2="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Ax.Xpp" base="q2:XppObjectBase">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="activationDate" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="expirationDate" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="kodeVoucherProgram" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="lineNum" type="xs:decimal" />
+          <xs:element minOccurs="0" name="siteCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="voucherCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="voucherValue" type="xs:decimal" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="TBS_VoucherLineModel" nillable="true" type="tns:TBS_VoucherLineModel" />
+  <xs:complexType name="TBS_VoucherModel">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q3="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Ax.Xpp" base="q3:XppObjectBase">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="kodeVoucherProgram" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="periodEnd" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="periodStart" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="publisherID" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="validityPeriod" type="xs:int" />
+          <xs:element minOccurs="0" name="voucherStatus" type="tns:TBS_VMS_Status" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="TBS_VoucherModel" nillable="true" type="tns:TBS_VoucherModel" />
+  <xs:simpleType name="TBS_VMS_Status">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Draft" />
+      <xs:enumeration value="Active" />
+      <xs:enumeration value="Blocked" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="TBS_VMS_Status" nillable="true" type="tns:TBS_VMS_Status" />
+  <xs:complexType name="ArrayOfTBS_Voucher">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TBS_Voucher" nillable="true" type="tns:TBS_Voucher" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTBS_Voucher" nillable="true" type="tns:ArrayOfTBS_Voucher" />
+  <xs:complexType name="ArrayOfTBS_VoucherLineModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TBS_VoucherLineModel" nillable="true" type="tns:TBS_VoucherLineModel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTBS_VoucherLineModel" nillable="true" type="tns:ArrayOfTBS_VoucherLineModel" />
+  <xs:complexType name="ArrayOfTBS_VoucherModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TBS_VoucherModel" nillable="true" type="tns:TBS_VoucherModel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTBS_VoucherModel" nillable="true" type="tns:ArrayOfTBS_VoucherModel" />
+</xs:schema>

@@ -1,0 +1,388 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\vs.settings" />
+  <PropertyGroup>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{47DE2389-921F-426B-A4AF-79C3A4E214AB}</ProjectGuid>
+    <SDKPath>..\..</SDKPath>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Microsoft.Dynamics.Retail.Pos.SalesOrder</RootNamespace>
+    <AssemblyName>SalesOrder</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>$(SDKOutputPath)\bin\Debug\</OutputPath>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>$(SDKOutputPath)\bin\Release\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="APIAccess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Extensions\APIAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="Customer, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Extensions\Customer.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Data.v14.2">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Utils.v14.2">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraEditors.v14.2">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraPrinting.v14.2">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraGrid.v14.2">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Dynamics.BusinessConnectorNet, Version=6.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Client\Bin\Microsoft.Dynamics.BusinessConnectorNet.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Dynamics.Retail.Diagnostics, Version=6.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Users\it.application\Desktop\Retail POS\Microsoft.Dynamics.Retail.Diagnostics.DLL</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Dynamics.Retail.Pos.SystemCore, Version=6.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Microsoft.Dynamics.Retail.Pos.SystemCore.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.Interactivity">
+      <HintPath>..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Microsoft.Practices.Prism.Interactivity.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Printing, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Extensions\Printing.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core">
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CustomerOrderParameters.cs" />
+    <Compile Include="CustomerOrderStatusFormatter.cs" />
+    <Compile Include="CustomerOrderTypeFormatter.cs" />
+    <Compile Include="Enums.cs" />
+    <Compile Include="ICustomCustOrderTransaction.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ReturnReasonCode.cs" />
+    <Compile Include="SalesOrder.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerializationHelper.cs" />
+    <Compile Include="WinFormsTouch\CP_frmPackingSlipDetail.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\CP_frmPackingSlipDetail.Designer.cs">
+      <DependentUpon>CP_frmPackingSlipDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\CP_frmPaymentInvoice.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\CP_frmPaymentInvoice.Designer.cs">
+      <DependentUpon>CP_frmPaymentInvoice.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\FlexibleMessageBox.cs" />
+    <Compile Include="WinFormsTouch\OrderDetailsPages\ViewModels\CustomerInformationViewModel.cs" />
+    <Compile Include="WinFormsTouch\OrderDetailsPages\ViewModels\LineLevelInformationViewModel.cs" />
+    <Compile Include="WinFormsTouch\OrderDetailsPages\ViewModels\ItemDetailsViewModel.cs" />
+    <Compile Include="WinFormsTouch\OrderDetailsPages\ViewModels\OrderDetailsViewModel.cs" />
+    <Compile Include="WinFormsTouch\OrderDetailsPages\ViewModels\OrderSummaryViewModel.cs" />
+    <Compile Include="WinFormsTouch\OrderDetailsPages\ViewModels\PageViewModel.cs" />
+    <Compile Include="WinFormsTouch\OrderDetailsPages\ViewModels\PaymentHistoryViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\OrderDetailsPages\ViewModels\PickupInformationViewModel.cs" />
+    <Compile Include="WinFormsTouch\OrderDetailsPages\ViewModels\ShippingInformationViewModel.cs" />
+    <Compile Include="WinFormsTouch\frmGetSalesInvoices.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\frmGetSalesInvoices.Designer.cs">
+      <DependentUpon>frmGetSalesInvoices.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\frmDeliveryMethod.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\frmDeliveryMethod.Designer.cs">
+      <DependentUpon>frmDeliveryMethod.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\frmOrderDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\frmOrderDetails.Designer.cs">
+      <DependentUpon>frmOrderDetails.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\frmOrderDetailsSelection.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\frmOrderDetailsSelection.Designer.cs">
+      <DependentUpon>frmOrderDetailsSelection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\frmGetSalesOrder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\frmGetSalesOrder.Designer.cs">
+      <DependentUpon>frmGetSalesOrder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\frmPickupInformation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\frmPickupInformation.Designer.cs">
+      <DependentUpon>frmPickupInformation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\frmSalesOrder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\frmSalesOrder.Designer.cs">
+      <DependentUpon>frmSalesOrder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\frmShippingInformation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\frmShippingInformation.Designer.cs">
+      <DependentUpon>frmShippingInformation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\OrderDetailsPages\CancellationChargePage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\OrderDetailsPages\CancellationChargePage.Designer.cs">
+      <DependentUpon>CancellationChargePage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\OrderDetailsPages\CustomerInformationPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\OrderDetailsPages\CustomerInformationPage.Designer.cs">
+      <DependentUpon>CustomerInformationPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\OrderDetailsPages\DeliveryInformationPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\OrderDetailsPages\DeliveryInformationPage.Designer.cs">
+      <DependentUpon>DeliveryInformationPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\OrderDetailsPages\ItemDetailsPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\OrderDetailsPages\ItemDetailsPage.Designer.cs">
+      <DependentUpon>ItemDetailsPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\OrderDetailsPages\OrderDetailsNavigationBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\OrderDetailsPages\OrderDetailsNavigationBar.Designer.cs">
+      <DependentUpon>OrderDetailsNavigationBar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\OrderDetailsPages\OrderDetailsPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\OrderDetailsPages\OrderDetailsPage.Designer.cs">
+      <DependentUpon>OrderDetailsPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\OrderDetailsPages\OrderInformationPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\OrderDetailsPages\OrderInformationPage.Designer.cs">
+      <DependentUpon>OrderInformationPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\OrderDetailsPages\OrderSummaryPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\OrderDetailsPages\OrderSummaryPage.Designer.cs">
+      <DependentUpon>OrderSummaryPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\OrderDetailsPages\OrderTypePopup.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\OrderDetailsPages\OrderTypePopup.Designer.cs">
+      <DependentUpon>OrderTypePopup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\OrderDetailsPages\PaymentHistoryPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\OrderDetailsPages\PaymentHistoryPage.Designer.cs">
+      <DependentUpon>PaymentHistoryPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\SalesOrderActions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Dynamics.Retail.Notification.Contracts">
+      <HintPath>$(PosInstallPath)\Microsoft.Dynamics.Retail.Notification.Contracts.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Dynamics.Retail.Pos.Contracts">
+      <HintPath>..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Microsoft.Dynamics.Retail.Pos.Contracts.dll</HintPath>
+      <Private>False</Private>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="DataAccess">
+      <HintPath>..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\DataAccess.DLL</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Dynamics.Retail.Pos.DataEntity">
+      <HintPath>..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Microsoft.Dynamics.Retail.Pos.DataEntity.DLL</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Dynamics.Retail.Pos.DataManager">
+      <HintPath>..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Microsoft.Dynamics.Retail.Pos.DataManager.DLL</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="POSControls">
+      <HintPath>..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\POSControls.DLL</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="POSProcesses">
+      <HintPath>..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\POSProcesses.DLL</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SystemSettings">
+      <HintPath>..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\SystemSettings.DLL</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Transaction">
+      <HintPath>..\..\..\Users\it.application\Desktop\Retail POS\Transaction.DLL</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\CP_frmPackingSlipDetail.resx">
+      <DependentUpon>CP_frmPackingSlipDetail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\CP_frmPaymentInvoice.resx">
+      <DependentUpon>CP_frmPaymentInvoice.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\frmGetSalesInvoices.resx">
+      <DependentUpon>frmGetSalesInvoices.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\frmDeliveryMethod.resx">
+      <DependentUpon>frmDeliveryMethod.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\frmGetSalesOrder.resx">
+      <DependentUpon>frmGetSalesOrder.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\frmOrderDetails.resx">
+      <DependentUpon>frmOrderDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\frmOrderDetailsSelection.resx">
+      <DependentUpon>frmOrderDetailsSelection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\frmPickupInformation.resx">
+      <DependentUpon>frmPickupInformation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\frmSalesOrder.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>frmSalesOrder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\frmShippingInformation.resx">
+      <DependentUpon>frmShippingInformation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\OrderDetailsPages\CancellationChargePage.resx">
+      <DependentUpon>CancellationChargePage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\OrderDetailsPages\CustomerInformationPage.resx">
+      <DependentUpon>CustomerInformationPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\OrderDetailsPages\DeliveryInformationPage.resx">
+      <DependentUpon>DeliveryInformationPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\OrderDetailsPages\ItemDetailsPage.resx">
+      <DependentUpon>ItemDetailsPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\OrderDetailsPages\OrderDetailsNavigationBar.resx">
+      <DependentUpon>OrderDetailsNavigationBar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\OrderDetailsPages\OrderDetailsPage.resx">
+      <DependentUpon>OrderDetailsPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\OrderDetailsPages\OrderInformationPage.resx">
+      <DependentUpon>OrderInformationPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\OrderDetailsPages\OrderSummaryPage.resx">
+      <DependentUpon>OrderSummaryPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\OrderDetailsPages\OrderTypePopup.resx">
+      <DependentUpon>OrderTypePopup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\OrderDetailsPages\PaymentHistoryPage.resx">
+      <DependentUpon>PaymentHistoryPage.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ItemGroup>
+    <None Include="Resources\down.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\DataSources\CustomerInformationViewModel.datasource" />
+    <None Include="Properties\DataSources\ItemDetailsViewModel.datasource" />
+    <None Include="Properties\DataSources\OrderDetailsViewModel.datasource" />
+    <None Include="Properties\DataSources\OrderSummaryViewModel.datasource" />
+    <None Include="Properties\DataSources\PaymentHistoryViewModel.datasource" />
+    <None Include="Properties\DataSources\PickupInformationViewModel.datasource" />
+    <None Include="Properties\DataSources\ShippingInformationViewModel.datasource" />
+    <None Include="Resources\DownArrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PageDownArrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PageUpArrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\UpArrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\top.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\up.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bottom.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\remove.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\search.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+</Project>

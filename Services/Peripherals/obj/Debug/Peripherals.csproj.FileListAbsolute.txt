@@ -1,0 +1,6 @@
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Peripherals\obj\Debug\Peripherals.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Peripherals\obj\Debug\Microsoft.Dynamics.Retail.Pos.Services.DualDisplayForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Peripherals\obj\Debug\Peripherals.csproj.GenerateResource.Cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Peripherals\obj\Debug\Peripherals.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Peripherals\obj\Debug\Microsoft.Dynamics.Retail.Pos.Services.DualDisplayForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Peripherals\obj\Debug\Peripherals.csproj.GenerateResource.Cache

@@ -1,0 +1,15 @@
+D:\Retail SDK\POS Plug-ins\POS\bin\Debug\Interaction.dll
+D:\Retail SDK\POS Plug-ins\POS\bin\Debug\Interaction.pdb
+D:\Retail SDK\POS Plug-ins\Services\Interaction\obj\Debug\Interaction.csprojResolveAssemblyReference.cache
+D:\Retail SDK\POS Plug-ins\Services\Interaction\obj\Debug\Interaction.dll
+D:\Retail SDK\POS Plug-ins\Services\Interaction\obj\Debug\Interaction.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\POS\bin\Debug\Interaction.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\POS\bin\Debug\Interaction.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Interaction\obj\Debug\Interaction.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Interaction\obj\Debug\Interaction.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Interaction\obj\Debug\Interaction.pdb
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\POS\bin\Debug\Interaction.dll
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\POS\bin\Debug\Interaction.pdb
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Interaction\obj\Debug\Interaction.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Interaction\obj\Debug\Interaction.dll
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Interaction\obj\Debug\Interaction.pdb

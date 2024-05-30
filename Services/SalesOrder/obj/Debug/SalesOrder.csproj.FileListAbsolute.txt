@@ -1,0 +1,108 @@
+C:\WorkingFolderAX\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.Properties.Resources.resources
+C:\WorkingFolderAX\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.frmGetSalesInvoices.resources
+C:\WorkingFolderAX\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.formDeliveryMethod.resources
+C:\WorkingFolderAX\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.frmGetSalesOrder.resources
+C:\WorkingFolderAX\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.formOrderDetails.resources
+C:\WorkingFolderAX\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.formOrderDetailsSelection.resources
+C:\WorkingFolderAX\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.formPickupInformation.resources
+C:\WorkingFolderAX\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.frmSalesOrder.resources
+C:\WorkingFolderAX\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.formShippingInformation.resources
+C:\WorkingFolderAX\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.CancellationChargePage.resources
+C:\WorkingFolderAX\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.CustomerInformationPage.resources
+C:\WorkingFolderAX\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.DeliveryInformationPage.resources
+C:\WorkingFolderAX\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.ItemDetailsPage.resources
+C:\WorkingFolderAX\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsNavigationBar.resources
+C:\WorkingFolderAX\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.OrderDetailsPage.resources
+C:\WorkingFolderAX\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.OrderInformationPage.resources
+C:\WorkingFolderAX\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.OrderSummaryPage.resources
+C:\WorkingFolderAX\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.OrderTypePopup.resources
+C:\WorkingFolderAX\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.PaymentHistoryPage.resources
+C:\WorkingFolderAX\Services\SalesOrder\obj\Debug\SalesOrder.csproj.GenerateResource.Cache
+C:\WorkingFolderAX\Services\SalesOrder\obj\Debug\SalesOrder.dll.licenses
+C:\WorkingFolderAX\POS\bin\Debug\SalesOrder.dll
+C:\WorkingFolderAX\POS\bin\Debug\SalesOrder.pdb
+C:\WorkingFolderAX\Services\SalesOrder\obj\Debug\SalesOrder.dll
+C:\WorkingFolderAX\Services\SalesOrder\obj\Debug\SalesOrder.pdb
+C:\WorkingFolderAX\Services\SalesOrder\obj\Debug\SalesOrder.csprojResolveAssemblyReference.cache
+C:\Project POS SourceCode\POS\bin\Debug\SalesOrder.dll
+C:\Project POS SourceCode\POS\bin\Debug\SalesOrder.pdb
+C:\Project POS SourceCode\Services\SalesOrder\obj\Debug\SalesOrder.csprojResolveAssemblyReference.cache
+C:\Project POS SourceCode\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.Properties.Resources.resources
+C:\Project POS SourceCode\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.frmGetSalesInvoices.resources
+C:\Project POS SourceCode\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.formDeliveryMethod.resources
+C:\Project POS SourceCode\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.frmGetSalesOrder.resources
+C:\Project POS SourceCode\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.formOrderDetails.resources
+C:\Project POS SourceCode\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.formOrderDetailsSelection.resources
+C:\Project POS SourceCode\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.formPickupInformation.resources
+C:\Project POS SourceCode\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.frmSalesOrder.resources
+C:\Project POS SourceCode\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.formShippingInformation.resources
+C:\Project POS SourceCode\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.CancellationChargePage.resources
+C:\Project POS SourceCode\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.CustomerInformationPage.resources
+C:\Project POS SourceCode\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.DeliveryInformationPage.resources
+C:\Project POS SourceCode\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.ItemDetailsPage.resources
+C:\Project POS SourceCode\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsNavigationBar.resources
+C:\Project POS SourceCode\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.OrderDetailsPage.resources
+C:\Project POS SourceCode\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.OrderInformationPage.resources
+C:\Project POS SourceCode\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.OrderSummaryPage.resources
+C:\Project POS SourceCode\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.OrderTypePopup.resources
+C:\Project POS SourceCode\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.PaymentHistoryPage.resources
+C:\Project POS SourceCode\Services\SalesOrder\obj\Debug\SalesOrder.csproj.GenerateResource.Cache
+C:\Project POS SourceCode\Services\SalesOrder\obj\Debug\SalesOrder.dll.licenses
+C:\Project POS SourceCode\Services\SalesOrder\obj\Debug\SalesOrder.dll
+C:\Project POS SourceCode\Services\SalesOrder\obj\Debug\SalesOrder.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\POS\bin\Debug\SalesOrder.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\POS\bin\Debug\SalesOrder.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\SalesOrder\obj\Debug\SalesOrder.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.Properties.Resources.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.frmGetSalesInvoices.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.formDeliveryMethod.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.frmGetSalesOrder.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.formOrderDetails.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.formOrderDetailsSelection.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.formPickupInformation.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.frmSalesOrder.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.formShippingInformation.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.CancellationChargePage.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.CustomerInformationPage.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.DeliveryInformationPage.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.ItemDetailsPage.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsNavigationBar.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.OrderDetailsPage.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.OrderInformationPage.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.OrderSummaryPage.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.OrderTypePopup.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.PaymentHistoryPage.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\SalesOrder\obj\Debug\SalesOrder.csproj.GenerateResource.Cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\SalesOrder\obj\Debug\SalesOrder.dll.licenses
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\SalesOrder\obj\Debug\SalesOrder.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\SalesOrder\obj\Debug\SalesOrder.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.CP_frmPackingSlipDetail.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.CP_frmPaymentInvoice.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\POS\bin\Debug\SalesOrder.dll
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\POS\bin\Debug\SalesOrder.pdb
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\SalesOrder\obj\Debug\SalesOrder.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.Properties.Resources.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.CP_frmPackingSlipDetail.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.CP_frmPaymentInvoice.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.frmGetSalesInvoices.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.formDeliveryMethod.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.frmGetSalesOrder.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.formOrderDetails.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.formOrderDetailsSelection.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.formPickupInformation.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.frmSalesOrder.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.formShippingInformation.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.CancellationChargePage.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.CustomerInformationPage.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.DeliveryInformationPage.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.ItemDetailsPage.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsNavigationBar.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.OrderDetailsPage.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.OrderInformationPage.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.OrderSummaryPage.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.OrderTypePopup.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.PaymentHistoryPage.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\SalesOrder\obj\Debug\SalesOrder.csproj.GenerateResource.Cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\SalesOrder\obj\Debug\SalesOrder.dll.licenses
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\SalesOrder\obj\Debug\SalesOrder.dll
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\SalesOrder\obj\Debug\SalesOrder.pdb

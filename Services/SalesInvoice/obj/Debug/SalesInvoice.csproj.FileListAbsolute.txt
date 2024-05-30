@@ -1,0 +1,3 @@
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\SalesInvoice\obj\Debug\SalesInvoice.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\SalesInvoice\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesInvoice.WinFormsTouch.frmGetSalesInvoice.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\SalesInvoice\obj\Debug\SalesInvoice.csproj.GenerateResource.Cache

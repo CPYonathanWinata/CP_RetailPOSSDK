@@ -1,0 +1,5 @@
+C:\Users\yonathan.winata\source\repos\StringEncyptGenerator\StringEncyptGenerator\bin\Release\net6.0-windows\publish\StringEncyptGenerator.exe
+C:\Users\yonathan.winata\source\repos\StringEncyptGenerator\StringEncyptGenerator\bin\Release\net6.0-windows\publish\StringEncyptGenerator.dll
+C:\Users\yonathan.winata\source\repos\StringEncyptGenerator\StringEncyptGenerator\bin\Release\net6.0-windows\publish\StringEncyptGenerator.deps.json
+C:\Users\yonathan.winata\source\repos\StringEncyptGenerator\StringEncyptGenerator\bin\Release\net6.0-windows\publish\StringEncyptGenerator.runtimeconfig.json
+C:\Users\yonathan.winata\source\repos\StringEncyptGenerator\StringEncyptGenerator\bin\Release\net6.0-windows\publish\StringEncyptGenerator.pdb

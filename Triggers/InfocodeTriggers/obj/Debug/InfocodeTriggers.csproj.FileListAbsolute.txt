@@ -1,0 +1,15 @@
+D:\GT\POS\bin\Debug\InfocodeTriggers.dll
+D:\GT\POS\bin\Debug\InfocodeTriggers.pdb
+D:\GT\Triggers\InfocodeTriggers\obj\Debug\InfocodeTriggers.csprojResolveAssemblyReference.cache
+D:\GT\Triggers\InfocodeTriggers\obj\Debug\InfocodeTriggers.dll
+D:\GT\Triggers\InfocodeTriggers\obj\Debug\InfocodeTriggers.pdb
+D:\Work\GT\POS\bin\Debug\InfocodeTriggers.dll
+D:\Work\GT\POS\bin\Debug\InfocodeTriggers.pdb
+D:\Work\GT\Triggers\InfocodeTriggers\obj\Debug\InfocodeTriggers.csprojResolveAssemblyReference.cache
+D:\Work\GT\Triggers\InfocodeTriggers\obj\Debug\InfocodeTriggers.dll
+D:\Work\GT\Triggers\InfocodeTriggers\obj\Debug\InfocodeTriggers.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\POS\bin\Debug\InfocodeTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\POS\bin\Debug\InfocodeTriggers.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Triggers\InfocodeTriggers\obj\Debug\InfocodeTriggers.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Triggers\InfocodeTriggers\obj\Debug\InfocodeTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Triggers\InfocodeTriggers\obj\Debug\InfocodeTriggers.pdb

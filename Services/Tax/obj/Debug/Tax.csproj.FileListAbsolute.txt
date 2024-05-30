@@ -1,0 +1,16 @@
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Tax\obj\Debug\Tax.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Tax\obj\Debug\Microsoft.Dynamics.Retail.Pos.TaxService.Properties.Resources.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Tax\obj\Debug\Tax.csproj.GenerateResource.Cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\POS\bin\Debug\Tax.dll.config
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\POS\bin\Debug\Tax.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\POS\bin\Debug\Tax.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Tax\obj\Debug\Tax.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Tax\obj\Debug\Tax.pdb
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\POS\bin\Debug\Tax.dll.config
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\POS\bin\Debug\Tax.dll
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\POS\bin\Debug\Tax.pdb
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Tax\obj\Debug\Tax.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Tax\obj\Debug\Microsoft.Dynamics.Retail.Pos.TaxService.Properties.Resources.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Tax\obj\Debug\Tax.csproj.GenerateResource.Cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Tax\obj\Debug\Tax.dll
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Tax\obj\Debug\Tax.pdb

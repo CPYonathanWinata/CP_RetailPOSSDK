@@ -1,0 +1,2 @@
+C:\Project POS SourceCode\Valid Blank Operation 16 October 2019\POS Plug-ins\Services\EFT\obj\Debug\EFT.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\EFT\obj\Debug\EFT.csprojResolveAssemblyReference.cache

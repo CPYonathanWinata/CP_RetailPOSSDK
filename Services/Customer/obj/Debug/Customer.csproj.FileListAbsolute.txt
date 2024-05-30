@@ -1,0 +1,68 @@
+C:\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Extensions\Customer.dll
+C:\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Extensions\Customer.pdb
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.frmReportList.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.Properties.Resources.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.AddressUserControl.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmNewShippingAddress.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmCustomerSearch.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmCustomerTransactions.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmNewCustomer.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmPrintSelection.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmShippingAddressSearch.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.ViewAddressUserControl.resources
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\Customer\obj\Debug\Customer.csproj.GenerateResource.Cache
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\Customer\obj\Debug\Customer.dll.licenses
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\Customer\obj\Debug\Customer.dll
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\Customer\obj\Debug\Customer.pdb
+C:\Users\it.application\Desktop\Retail POS\Extensions\Customer.dll
+C:\Users\it.application\Desktop\Retail POS\Extensions\Customer.pdb
+C:\Users\it.application\Documents\Retail SDK\POS Plug-ins\Services\Customer\obj\Debug\Customer.csprojResolveAssemblyReference.cache
+C:\Desktop\Retail POS\Extensions\Customer.dll
+C:\Desktop\Retail POS\Extensions\Customer.pdb
+C:\Project POS SourceCode\Services\Customer\obj\Debug\Customer.csprojResolveAssemblyReference.cache
+C:\Project POS SourceCode\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.frmReportList.resources
+C:\Project POS SourceCode\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.Properties.Resources.resources
+C:\Project POS SourceCode\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.AddressUserControl.resources
+C:\Project POS SourceCode\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmNewShippingAddress.resources
+C:\Project POS SourceCode\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmCustomerSearch.resources
+C:\Project POS SourceCode\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmCustomerTransactions.resources
+C:\Project POS SourceCode\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmNewCustomer.resources
+C:\Project POS SourceCode\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmPrintSelection.resources
+C:\Project POS SourceCode\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmShippingAddressSearch.resources
+C:\Project POS SourceCode\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.ViewAddressUserControl.resources
+C:\Project POS SourceCode\Services\Customer\obj\Debug\Customer.csproj.GenerateResource.Cache
+C:\Project POS SourceCode\Services\Customer\obj\Debug\Customer.dll.licenses
+C:\Project POS SourceCode\Services\Customer\obj\Debug\Customer.dll
+C:\Project POS SourceCode\Services\Customer\obj\Debug\Customer.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Customer\obj\Debug\Customer.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.frmReportList.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.Properties.Resources.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.AddressUserControl.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmNewShippingAddress.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmCustomerSearch.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmCustomerTransactions.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmNewCustomer.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmPrintSelection.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmShippingAddressSearch.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.ViewAddressUserControl.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Customer\obj\Debug\Customer.csproj.GenerateResource.Cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Customer\obj\Debug\Customer.dll.licenses
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Customer\obj\Debug\Customer.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Customer\obj\Debug\Customer.pdb
+C:\Users\yonathan.winata\Desktop\Retail POS\Extensions\Customer.dll
+C:\Users\yonathan.winata\Desktop\Retail POS\Extensions\Customer.pdb
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Customer\obj\Debug\Customer.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.frmReportList.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.Properties.Resources.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.AddressUserControl.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmNewShippingAddress.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmCustomerSearch.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmCustomerTransactions.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmNewCustomer.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmPrintSelection.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmShippingAddressSearch.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.ViewAddressUserControl.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Customer\obj\Debug\Customer.csproj.GenerateResource.Cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Customer\obj\Debug\Customer.dll.licenses
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Customer\obj\Debug\Customer.dll
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Customer\obj\Debug\Customer.pdb

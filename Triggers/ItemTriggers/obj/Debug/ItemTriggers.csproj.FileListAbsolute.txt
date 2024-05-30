@@ -1,0 +1,36 @@
+C:\Project POS SourceCode\POS\bin\Debug\ItemTriggers.dll
+C:\Project POS SourceCode\POS\bin\Debug\ItemTriggers.pdb
+C:\Project POS SourceCode\Triggers\ItemTriggers\obj\Debug\ItemTriggers.csprojResolveAssemblyReference.cache
+C:\Project POS SourceCode\Triggers\ItemTriggers\obj\Debug\ItemTriggers.dll
+C:\Project POS SourceCode\Triggers\ItemTriggers\obj\Debug\ItemTriggers.pdb
+C:\Project POS SourceCode\POS\bin\Debug\ItemTriggers.dll.config
+D:\Retail SDK Source Code\Valid Blank Operation 16 October 2019\Triggers\ItemTriggers\obj\Debug\ItemTriggers.csprojResolveAssemblyReference.cache
+D:\Retail SDK Source Code\Valid Blank Operation 16 October 2019\Triggers\ItemTriggers\obj\Debug\ItemTriggers.dll
+D:\Retail SDK Source Code\Valid Blank Operation 16 October 2019\POS\bin\Debug\ItemTriggers.dll.config
+D:\Retail SDK Source Code\Valid Blank Operation 16 October 2019\POS\bin\Debug\ItemTriggers.dll
+D:\Retail SDK Source Code\Valid Blank Operation 16 October 2019\POS\bin\Debug\ItemTriggers.pdb
+D:\Retail SDK Source Code\Valid Blank Operation 16 October 2019\Triggers\ItemTriggers\obj\Debug\ItemTriggers.pdb
+D:\GT\POS\bin\Debug\ItemTriggers.dll.config
+D:\GT\POS\bin\Debug\ItemTriggers.dll
+D:\GT\POS\bin\Debug\ItemTriggers.pdb
+D:\GT\Triggers\ItemTriggers\obj\Debug\ItemTriggers.csprojResolveAssemblyReference.cache
+D:\GT\Triggers\ItemTriggers\obj\Debug\ItemTriggers.dll
+D:\GT\Triggers\ItemTriggers\obj\Debug\ItemTriggers.pdb
+D:\Work\GT\POS\bin\Debug\ItemTriggers.dll.config
+D:\Work\GT\POS\bin\Debug\ItemTriggers.dll
+D:\Work\GT\POS\bin\Debug\ItemTriggers.pdb
+D:\Work\GT\Triggers\ItemTriggers\obj\Debug\ItemTriggers.csprojResolveAssemblyReference.cache
+D:\Work\GT\Triggers\ItemTriggers\obj\Debug\ItemTriggers.dll
+D:\Work\GT\Triggers\ItemTriggers\obj\Debug\ItemTriggers.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\POS\bin\Debug\ItemTriggers.dll.config
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\POS\bin\Debug\ItemTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\POS\bin\Debug\ItemTriggers.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Triggers\ItemTriggers\obj\Debug\ItemTriggers.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Triggers\ItemTriggers\obj\Debug\ItemTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Triggers\ItemTriggers\obj\Debug\ItemTriggers.pdb
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\POS\bin\Debug\ItemTriggers.dll.config
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\POS\bin\Debug\ItemTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\POS\bin\Debug\ItemTriggers.pdb
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Triggers\ItemTriggers\obj\Debug\ItemTriggers.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Triggers\ItemTriggers\obj\Debug\ItemTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Triggers\ItemTriggers\obj\Debug\ItemTriggers.pdb

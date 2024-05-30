@@ -1,0 +1,72 @@
+D:\Work\Project\CPI - On Progress\Visual Studio\Retail SDK Current CU10\Upgrade\POS Plug-ins\POS\bin\Debug\EOD.dll
+D:\Work\Project\CPI - On Progress\Visual Studio\Retail SDK Current CU10\Upgrade\POS Plug-ins\POS\bin\Debug\EOD.pdb
+D:\Work\Project\CPI - On Progress\Visual Studio\Retail SDK Current CU10\Upgrade\POS Plug-ins\Services\EOD\obj\Debug\EOD.csprojResolveAssemblyReference.cache
+D:\Work\Project\CPI - On Progress\Visual Studio\Retail SDK Current CU10\Upgrade\POS Plug-ins\Services\EOD\obj\Debug\Microsoft.Dynamics.Retail.Pos.EOD.BlindClosedShiftsForm.resources
+D:\Work\Project\CPI - On Progress\Visual Studio\Retail SDK Current CU10\Upgrade\POS Plug-ins\Services\EOD\obj\Debug\Microsoft.Dynamics.Retail.Pos.EOD.CashDrawerSelectionForm.resources
+D:\Work\Project\CPI - On Progress\Visual Studio\Retail SDK Current CU10\Upgrade\POS Plug-ins\Services\EOD\obj\Debug\Microsoft.Dynamics.Retail.Pos.EOD.ResumeShiftForm.resources
+D:\Work\Project\CPI - On Progress\Visual Studio\Retail SDK Current CU10\Upgrade\POS Plug-ins\Services\EOD\obj\Debug\Microsoft.Dynamics.Retail.Pos.EOD.ShiftActionForm.resources
+D:\Work\Project\CPI - On Progress\Visual Studio\Retail SDK Current CU10\Upgrade\POS Plug-ins\Services\EOD\obj\Debug\EOD.csproj.GenerateResource.Cache
+D:\Work\Project\CPI - On Progress\Visual Studio\Retail SDK Current CU10\Upgrade\POS Plug-ins\Services\EOD\obj\Debug\EOD.dll
+D:\Work\Project\CPI - On Progress\Visual Studio\Retail SDK Current CU10\Upgrade\POS Plug-ins\Services\EOD\obj\Debug\EOD.pdb
+C:\WorkingFolderAX\POS\bin\Debug\EOD.dll
+C:\WorkingFolderAX\POS\bin\Debug\EOD.pdb
+C:\WorkingFolderAX\EOD_POReceiving\EOD\obj\Debug\EOD.csprojResolveAssemblyReference.cache
+C:\WorkingFolderAX\EOD_POReceiving\EOD\obj\Debug\Microsoft.Dynamics.Retail.Pos.EOD.BlindClosedShiftsForm.resources
+C:\WorkingFolderAX\EOD_POReceiving\EOD\obj\Debug\Microsoft.Dynamics.Retail.Pos.EOD.CashDrawerSelectionForm.resources
+C:\WorkingFolderAX\EOD_POReceiving\EOD\obj\Debug\Microsoft.Dynamics.Retail.Pos.EOD.ResumeShiftForm.resources
+C:\WorkingFolderAX\EOD_POReceiving\EOD\obj\Debug\Microsoft.Dynamics.Retail.Pos.EOD.ShiftActionForm.resources
+C:\WorkingFolderAX\EOD_POReceiving\EOD\obj\Debug\EOD.csproj.GenerateResource.Cache
+C:\WorkingFolderAX\EOD_POReceiving\EOD\obj\Debug\EOD.dll
+C:\WorkingFolderAX\EOD_POReceiving\EOD\obj\Debug\EOD.pdb
+C:\Project POS SourceCode\POS\bin\Debug\EOD.dll
+C:\Project POS SourceCode\POS\bin\Debug\EOD.pdb
+C:\Project POS SourceCode\EOD_POReceiving\EOD\obj\Debug\EOD.csprojResolveAssemblyReference.cache
+C:\Project POS SourceCode\EOD_POReceiving\EOD\obj\Debug\Microsoft.Dynamics.Retail.Pos.EOD.BlindClosedShiftsForm.resources
+C:\Project POS SourceCode\EOD_POReceiving\EOD\obj\Debug\Microsoft.Dynamics.Retail.Pos.EOD.CashDrawerSelectionForm.resources
+C:\Project POS SourceCode\EOD_POReceiving\EOD\obj\Debug\Microsoft.Dynamics.Retail.Pos.EOD.ResumeShiftForm.resources
+C:\Project POS SourceCode\EOD_POReceiving\EOD\obj\Debug\Microsoft.Dynamics.Retail.Pos.EOD.ShiftActionForm.resources
+C:\Project POS SourceCode\EOD_POReceiving\EOD\obj\Debug\EOD.csproj.GenerateResource.Cache
+C:\Project POS SourceCode\EOD_POReceiving\EOD\obj\Debug\EOD.dll
+C:\Project POS SourceCode\EOD_POReceiving\EOD\obj\Debug\EOD.pdb
+D:\GT\POS\bin\Debug\EOD.dll
+D:\GT\POS\bin\Debug\EOD.pdb
+D:\GT\EOD_POReceiving\EOD\obj\Debug\EOD.csprojResolveAssemblyReference.cache
+D:\GT\EOD_POReceiving\EOD\obj\Debug\Microsoft.Dynamics.Retail.Pos.EOD.BlindClosedShiftsForm.resources
+D:\GT\EOD_POReceiving\EOD\obj\Debug\Microsoft.Dynamics.Retail.Pos.EOD.CashDrawerSelectionForm.resources
+D:\GT\EOD_POReceiving\EOD\obj\Debug\Microsoft.Dynamics.Retail.Pos.EOD.ResumeShiftForm.resources
+D:\GT\EOD_POReceiving\EOD\obj\Debug\Microsoft.Dynamics.Retail.Pos.EOD.ShiftActionForm.resources
+D:\GT\EOD_POReceiving\EOD\obj\Debug\EOD.csproj.GenerateResource.Cache
+D:\GT\EOD_POReceiving\EOD\obj\Debug\EOD.dll
+D:\GT\EOD_POReceiving\EOD\obj\Debug\EOD.pdb
+D:\Work\Retail SDK Collected\POS\bin\Debug\EOD.dll
+D:\Work\Retail SDK Collected\POS\bin\Debug\EOD.pdb
+D:\Work\Retail SDK Collected\Services\EOD\obj\Debug\EOD.csprojResolveAssemblyReference.cache
+D:\Work\Retail SDK Collected\Services\EOD\obj\Debug\Microsoft.Dynamics.Retail.Pos.EOD.BlindClosedShiftsForm.resources
+D:\Work\Retail SDK Collected\Services\EOD\obj\Debug\Microsoft.Dynamics.Retail.Pos.EOD.CashDrawerSelectionForm.resources
+D:\Work\Retail SDK Collected\Services\EOD\obj\Debug\Microsoft.Dynamics.Retail.Pos.EOD.ResumeShiftForm.resources
+D:\Work\Retail SDK Collected\Services\EOD\obj\Debug\Microsoft.Dynamics.Retail.Pos.EOD.ShiftActionForm.resources
+D:\Work\Retail SDK Collected\Services\EOD\obj\Debug\EOD.csproj.GenerateResource.Cache
+D:\Work\Retail SDK Collected\Services\EOD\obj\Debug\EOD.dll
+D:\Work\Retail SDK Collected\Services\EOD\obj\Debug\EOD.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\POS\bin\Debug\EOD.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\POS\bin\Debug\EOD.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\EOD\obj\Debug\EOD.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\EOD\obj\Debug\Microsoft.Dynamics.Retail.Pos.EOD.BlindClosedShiftsForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\EOD\obj\Debug\Microsoft.Dynamics.Retail.Pos.EOD.CashDrawerSelectionForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\EOD\obj\Debug\Microsoft.Dynamics.Retail.Pos.EOD.ResumeShiftForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\EOD\obj\Debug\Microsoft.Dynamics.Retail.Pos.EOD.ShiftActionForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\EOD\obj\Debug\EOD.csproj.GenerateResource.Cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\EOD\obj\Debug\EOD.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\EOD\obj\Debug\EOD.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\EOD\obj\Debug\EOD.dll.licenses
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\POS\bin\Debug\EOD.dll
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\POS\bin\Debug\EOD.pdb
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\EOD\obj\Debug\EOD.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\EOD\obj\Debug\Microsoft.Dynamics.Retail.Pos.EOD.BlindClosedShiftsForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\EOD\obj\Debug\Microsoft.Dynamics.Retail.Pos.EOD.CashDrawerSelectionForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\EOD\obj\Debug\Microsoft.Dynamics.Retail.Pos.EOD.ResumeShiftForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\EOD\obj\Debug\Microsoft.Dynamics.Retail.Pos.EOD.ShiftActionForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\EOD\obj\Debug\EOD.csproj.GenerateResource.Cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\EOD\obj\Debug\EOD.dll.licenses
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\EOD\obj\Debug\EOD.dll
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\EOD\obj\Debug\EOD.pdb

@@ -1,0 +1,35 @@
+﻿/*
+SAMPLE CODE NOTICE
+
+THIS SAMPLE CODE IS MADE AVAILABLE AS IS.  MICROSOFT MAKES NO WARRANTIES, WHETHER EXPRESS OR IMPLIED, 
+OF FITNESS FOR A PARTICULAR PURPOSE, OF ACCURACY OR COMPLETENESS OF RESPONSES, OF RESULTS, OR CONDITIONS OF MERCHANTABILITY.  
+THE ENTIRE RISK OF THE USE OR THE RESULTS FROM THE USE OF THIS SAMPLE CODE REMAINS WITH THE USER.  
+NO TECHNICAL SUPPORT IS PROVIDED.  YOU MAY NOT DISTRIBUTE THIS CODE UNLESS YOU HAVE A LICENSE AGREEMENT WITH MICROSOFT THAT ALLOWS YOU TO DO SO.
+*/
+
+
+namespace Microsoft.Dynamics.Retail.Pos.TaskRecorder.MessageHandling
+{
+    /// <summary>
+    /// Windows message type
+    /// </summary>
+    public enum MessageType : int
+    {
+        //Mouse messages
+        WM_LBUTTONDOWN = 0x201,
+        WM_RBUTTONDOWN = 0x0204,
+
+        //Keyboard messages
+        WM_KEYDOWN = 0x0100,
+        WM_KEYUP = 0x0101,
+        WM_CHAR = 0x0102,
+        VK_RETURN = 0x0D,
+        VK_TAB = 0x09,
+        VK_SPACE = 0x20,
+        VK_LEFT = 0x25,
+        VK_UP = 0x26,
+        VK_RIGHT = 0x27,
+        VK_DOWN = 0x28
+    }
+
+}

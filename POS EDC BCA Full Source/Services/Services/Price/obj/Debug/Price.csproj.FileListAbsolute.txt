@@ -1,0 +1,5 @@
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\POS\bin\Debug\Price.dll
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\POS\bin\Debug\Price.pdb
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\Price\obj\Debug\Price.csproj.CoreCompileInputs.cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\Price\obj\Debug\Price.dll
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\Price\obj\Debug\Price.pdb

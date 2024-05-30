@@ -1,0 +1,35 @@
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.csprojResolveAssemblyReference.cache
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.pdb
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.csprojResolveAssemblyReference.cache
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.csproj.CoreCompileInputs.cache
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.dll
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.pdb
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.csprojResolveAssemblyReference.cache
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.csproj.CoreCompileInputs.cache
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.dll
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.pdb
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.csprojResolveAssemblyReference.cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.csproj.CoreCompileInputs.cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.dll
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.pdb
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.csprojResolveAssemblyReference.cache
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.csproj.CoreCompileInputs.cache
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.dll
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.pdb
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.csprojResolveAssemblyReference.cache
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.csproj.CoreCompileInputs.cache
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.dll
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.pdb
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.csprojResolveAssemblyReference.cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.csproj.CoreCompileInputs.cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.dll
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.pdb
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.csprojResolveAssemblyReference.cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.csproj.CoreCompileInputs.cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.dll
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.pdb
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.csprojResolveAssemblyReference.cache
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.csproj.CoreCompileInputs.cache
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.dll
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.pdb

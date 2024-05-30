@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Microsoft.Dynamics.Retail.FiscalRegistrationServices.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="FiscalRegisterAssembly_SE" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">CleanCashFiscalRegister.dll</Value>
+    </Setting>
+    <Setting Name="FiscalRegisterClass_SE" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Microsoft.Dynamics.Retail.FiscalRegistrationServices.CleanCashFiscalRegister.CleanCashFiscalRegister</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

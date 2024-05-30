@@ -1,0 +1,6 @@
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\Item\obj\Debug\Item.csprojResolveAssemblyReference.cache
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\Item\obj\Debug\Microsoft.Dynamics.Retail.Pos.Item.WinFormsTouch.frmSerialIdSearch.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\Item\obj\Debug\Item.csproj.GenerateResource.Cache
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\Item\obj\Debug\Item.csproj.CoreCompileInputs.cache
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\Item\obj\Debug\Item.dll
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\Item\obj\Debug\Item.pdb

@@ -1,0 +1,4 @@
+C:\WorkingFolderAX\Triggers\FiscalPrinterTriggers\obj\Debug\FiscalPrinterTriggers.csprojResolveAssemblyReference.cache
+C:\Project POS SourceCode\Triggers\FiscalPrinterTriggers\obj\Debug\FiscalPrinterTriggers.csprojResolveAssemblyReference.cache
+D:\GT\Triggers\FiscalPrinterTriggers\obj\Debug\FiscalPrinterTriggers.csprojResolveAssemblyReference.cache
+D:\Work\GT\Triggers\FiscalPrinterTriggers\obj\Debug\FiscalPrinterTriggers.csprojResolveAssemblyReference.cache

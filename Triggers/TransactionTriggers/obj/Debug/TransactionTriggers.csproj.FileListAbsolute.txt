@@ -1,0 +1,30 @@
+C:\WorkingFolderAX\POS\bin\Debug\TransactionTriggers.dll
+C:\WorkingFolderAX\POS\bin\Debug\TransactionTriggers.pdb
+C:\WorkingFolderAX\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.dll
+C:\WorkingFolderAX\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.pdb
+C:\WorkingFolderAX\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.csprojResolveAssemblyReference.cache
+C:\Project POS SourceCode\POS\bin\Debug\TransactionTriggers.dll
+C:\Project POS SourceCode\POS\bin\Debug\TransactionTriggers.pdb
+C:\Project POS SourceCode\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.dll
+C:\Project POS SourceCode\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.pdb
+C:\Project POS SourceCode\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.csprojResolveAssemblyReference.cache
+D:\Retail SDK Source Code\Valid Blank Operation 16 October 2019\POS\bin\Debug\TransactionTriggers.dll
+D:\Retail SDK Source Code\Valid Blank Operation 16 October 2019\POS\bin\Debug\TransactionTriggers.pdb
+D:\Retail SDK Source Code\Valid Blank Operation 16 October 2019\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.csprojResolveAssemblyReference.cache
+D:\Retail SDK Source Code\Valid Blank Operation 16 October 2019\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.dll
+D:\Retail SDK Source Code\Valid Blank Operation 16 October 2019\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.pdb
+D:\GT\POS\bin\Debug\TransactionTriggers.dll
+D:\GT\POS\bin\Debug\TransactionTriggers.pdb
+D:\GT\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.csprojResolveAssemblyReference.cache
+D:\GT\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.dll
+D:\GT\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\POS\bin\Debug\TransactionTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\POS\bin\Debug\TransactionTriggers.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.pdb
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\POS\bin\Debug\TransactionTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\POS\bin\Debug\TransactionTriggers.pdb
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Triggers\TransactionTriggers\obj\Debug\TransactionTriggers.pdb

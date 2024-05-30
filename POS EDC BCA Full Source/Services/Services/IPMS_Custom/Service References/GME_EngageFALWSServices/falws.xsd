@@ -1,0 +1,1191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://impl.ws.fal.com/" targetNamespace="http://impl.ws.fal.com/" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="CardInfoResponse" type="tns:cardInfoDTO" />
+  <xs:element name="CardLookupResponse" type="tns:cardLookupResponse" />
+  <xs:element name="LookupRequest" type="tns:cardLookupRequest" />
+  <xs:element name="SVMessagesRequest" type="tns:SVMessagesRequest" />
+  <xs:element name="SVMessagesRequestResponse" type="tns:SVMessagesRequestResponse" />
+  <xs:element name="SVResponse" type="tns:svBaseLoyaltyResponse" />
+  <xs:element name="cardInfoRequest" type="tns:cardInfoRequest" />
+  <xs:element name="deleteBrand" type="tns:deleteBrand" />
+  <xs:element name="deleteBrandResponse" type="tns:deleteBrandResponse" />
+  <xs:element name="deleteCurrencyRate" type="tns:deleteCurrencyRate" />
+  <xs:element name="deleteCurrencyRateResponse" type="tns:deleteCurrencyRateResponse" />
+  <xs:element name="deleteFamilyByLevel" type="tns:deleteFamilyByLevel" />
+  <xs:element name="deleteFamilyByLevelResponse" type="tns:deleteFamilyByLevelResponse" />
+  <xs:element name="deleteFamilyByParent" type="tns:deleteFamilyByParent" />
+  <xs:element name="deleteFamilyByParentResponse" type="tns:deleteFamilyByParentResponse" />
+  <xs:element name="deleteProduct" type="tns:deleteProduct" />
+  <xs:element name="deleteProductResponse" type="tns:deleteProductResponse" />
+  <xs:element name="deleteTender" type="tns:deleteTender" />
+  <xs:element name="deleteTenderResponse" type="tns:deleteTenderResponse" />
+  <xs:element name="falInfoResponse" type="tns:falInfoResponse" />
+  <xs:element name="getCardInfo" type="tns:getCardInfo" />
+  <xs:element name="getCardInfoResponse" type="tns:getCardInfoResponse" />
+  <xs:element name="getMigrateCard" type="tns:getMigrateCard" />
+  <xs:element name="getMigrateCardResponse" type="tns:getMigrateCardResponse" />
+  <xs:element name="getPersonalRewards" type="tns:getPersonalRewards" />
+  <xs:element name="getPersonalRewardsResponse" type="tns:getPersonalRewardsResponse" />
+  <xs:element name="getVersionInfo" type="tns:getVersionInfo" />
+  <xs:element name="getVersionInfoResponse" type="tns:getVersionInfoResponse" />
+  <xs:element name="lineItem" type="tns:lineItem" />
+  <xs:element name="lineItems" type="tns:lineItems" />
+  <xs:element name="lookupCards" type="tns:lookupCards" />
+  <xs:element name="lookupCardsResponse" type="tns:lookupCardsResponse" />
+  <xs:element name="migrateCard" type="tns:migrateCardRequest" />
+  <xs:element name="requestRewards" type="tns:requestRewards" />
+  <xs:element name="requestRewardsResponse" type="tns:requestRewardsResponse" />
+  <xs:element name="rewardsRequest" type="tns:basketRequest" />
+  <xs:element name="rewardsResponse" type="tns:rewardsResponse" />
+  <xs:element name="saveBrand" type="tns:saveBrand" />
+  <xs:element name="saveBrandResponse" type="tns:saveBrandResponse" />
+  <xs:element name="saveCurrencyRate" type="tns:saveCurrencyRate" />
+  <xs:element name="saveCurrencyRateResponse" type="tns:saveCurrencyRateResponse" />
+  <xs:element name="saveFamily" type="tns:saveFamily" />
+  <xs:element name="saveFamilyResponse" type="tns:saveFamilyResponse" />
+  <xs:element name="saveProduct" type="tns:saveProduct" />
+  <xs:element name="saveProductPrice" type="tns:saveProductPrice" />
+  <xs:element name="saveProductPriceResponse" type="tns:saveProductPriceResponse" />
+  <xs:element name="saveProductResponse" type="tns:saveProductResponse" />
+  <xs:element name="saveTender" type="tns:saveTender" />
+  <xs:element name="saveTenderResponse" type="tns:saveTenderResponse" />
+  <xs:element name="suggestProductPromotions" type="tns:suggestProductPromotions" />
+  <xs:element name="suggestProductPromotionsResponse" type="tns:suggestProductPromotionsResponse" />
+  <xs:element name="validateCoupon" type="tns:validateCoupon" />
+  <xs:element name="validateCouponResponse" type="tns:validateCouponResponse" />
+  <xs:element name="voucher" type="tns:voucherDto" />
+  <xs:element name="vouchers" type="tns:vouchersDto" />
+  <xs:complexType name="SVMessagesRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="SVRequest" type="tns:svBaseLoyaltyRequest" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="svBaseLoyaltyRequest">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:baseLoyaltyRequest">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="transactionAmount" type="xs:string" />
+          <xs:element minOccurs="0" name="dateExpiration" type="xs:string" />
+          <xs:element minOccurs="0" name="transmissionDateTime" type="xs:string" />
+          <xs:element minOccurs="0" name="POSEntryMode" type="xs:string" />
+          <xs:element minOccurs="0" name="originalDataElements" type="xs:string" />
+          <xs:element minOccurs="0" name="amountSettlement" type="xs:string" />
+          <xs:element minOccurs="0" name="settlementDate" type="xs:string" />
+          <xs:element minOccurs="0" name="track2" type="xs:string" />
+          <xs:element minOccurs="0" name="track1" type="xs:string" />
+          <xs:element minOccurs="0" name="currencyCodeSettlement" type="xs:string" />
+          <xs:element minOccurs="0" name="additionalAmount" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="baseLoyaltyRequest">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element name="persist" type="xs:boolean" />
+          <xs:element name="PAN" type="xs:string" />
+          <xs:element name="functionID" type="xs:string" />
+          <xs:element name="processingCode" type="xs:string" />
+          <xs:element minOccurs="0" name="transactionNumber" type="xs:string" />
+          <xs:element minOccurs="0" name="transactionTime" type="xs:string" />
+          <xs:element minOccurs="0" name="transactionDate" type="xs:string" />
+          <xs:element minOccurs="0" name="terminalID" type="xs:string" />
+          <xs:element minOccurs="0" name="terminalType" type="xs:string" />
+          <xs:element minOccurs="0" name="cashierID" type="xs:string" />
+          <xs:element name="currencyCode" type="xs:string" />
+          <xs:element name="siteCode" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="falBaseDTO">
+    <xs:sequence />
+  </xs:complexType>
+  <xs:complexType name="SVMessagesRequestResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="SVResponse" type="tns:svBaseLoyaltyResponse" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="svBaseLoyaltyResponse">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:baseLoyaltyResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="additionalAmounts" type="xs:string" />
+          <xs:element minOccurs="0" name="additionalResponseData" type="xs:string" />
+          <xs:element minOccurs="0" name="authIdResponse" type="xs:string" />
+          <xs:element minOccurs="0" name="currencyCodeSettlement" type="xs:string" />
+          <xs:element minOccurs="0" name="functionID" type="xs:string" />
+          <xs:element minOccurs="0" name="retrievalReferenceNum" type="xs:string" />
+          <xs:element minOccurs="0" name="transactionAmount" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="baseLoyaltyResponse">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="cashierID" type="xs:string" />
+          <xs:element minOccurs="0" name="currencyCode" type="xs:string" />
+          <xs:element name="online" type="xs:boolean" />
+          <xs:element minOccurs="0" name="PAN" type="xs:string" />
+          <xs:element minOccurs="0" name="processingCode" type="xs:string" />
+          <xs:element minOccurs="0" name="responseCode" type="xs:string" />
+          <xs:element minOccurs="0" name="terminalID" type="xs:string" />
+          <xs:element minOccurs="0" name="transactionDate" type="xs:string" />
+          <xs:element minOccurs="0" name="transactionNumber" type="xs:string" />
+          <xs:element minOccurs="0" name="transactionTime" type="xs:string" />
+          <xs:element minOccurs="0" name="transmissionTimestamp" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="falBaseResponse">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="messages" type="tns:responseMessageDTO" />
+          <xs:element name="success" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="responseMessageDTO">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="message" nillable="true" type="tns:responseMessage" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="responseMessage">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="text" type="xs:string" />
+        </xs:sequence>
+        <xs:attribute name="messageLevel" type="tns:messageLevel" use="required" />
+        <xs:attribute name="errorCode" type="xs:int" use="required" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="saveTender">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Tender" type="tns:tender" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="tender">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="description" type="xs:string" />
+          <xs:element minOccurs="0" name="id" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="saveTenderResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ResponseMessage" type="tns:falBaseResponse" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getMigrateCard">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="migrateCard" type="tns:migrateCardRequest" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="migrateCardRequest">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element name="operation" type="xs:int" />
+          <xs:element minOccurs="0" name="oldCard" type="xs:string" />
+          <xs:element minOccurs="0" name="newCard" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="getMigrateCardResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CardInfoResponse" type="tns:cardInfoDTO" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="cardInfoDTO">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseResponse">
+        <xs:sequence>
+          <xs:element name="status" type="xs:short" />
+          <xs:element minOccurs="0" name="totals" type="tns:customerTotalsDTO" />
+          <xs:element minOccurs="0" name="cstMessages" type="tns:customerMessagesDTO" />
+          <xs:element name="allowEarn" type="xs:boolean" />
+          <xs:element name="allowBurn" type="xs:boolean" />
+          <xs:element minOccurs="0" name="burnOptions" type="tns:burnOptionsDTO" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="customerTotalsDTO">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="total" nillable="true" type="tns:customerTotalDTO" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="customerTotalDTO">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="date" type="xs:dateTime" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="expiration" nillable="true" type="tns:expirationDetailDTO" />
+          <xs:element minOccurs="0" name="key" type="xs:string" />
+          <xs:element name="value" type="xs:double" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="expirationDetailDTO">
+    <xs:sequence>
+      <xs:element name="amount" type="xs:double" />
+      <xs:element minOccurs="0" name="expirationDate" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="customerMessagesDTO">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="message" nillable="true" type="tns:customerMessageDTO" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="customerMessageDTO">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element name="msgId" type="xs:short" />
+          <xs:element minOccurs="0" name="text" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="burnOptionsDTO">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="burnOption" nillable="true" type="xs:double" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="lookupCards">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="LookupRequest" type="tns:cardLookupRequest" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="cardLookupRequest">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="cardNumber" type="xs:string" />
+          <xs:element minOccurs="0" name="firstName" type="xs:string" />
+          <xs:element minOccurs="0" name="lastName" type="xs:string" />
+          <xs:element minOccurs="0" name="phoneNumber" type="xs:string" />
+          <xs:element minOccurs="0" name="email" type="xs:string" />
+          <xs:element minOccurs="0" name="option1" type="xs:string" />
+          <xs:element minOccurs="0" name="option2" type="xs:string" />
+          <xs:element minOccurs="0" name="searchAll" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="lookupCardsResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CardLookupResponse" type="tns:cardLookupResponse" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="cardLookupResponse">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="cards" nillable="true" type="tns:cardData" />
+          <xs:element name="onlineMode" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="cardData">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="cardNumber" type="xs:string" />
+          <xs:element minOccurs="0" name="cardStatus" type="xs:string" />
+          <xs:element minOccurs="0" name="cardTypeDescription" type="xs:string" />
+          <xs:element minOccurs="0" name="customerNumber" type="xs:string" />
+          <xs:element minOccurs="0" name="email" type="xs:string" />
+          <xs:element minOccurs="0" name="expirationDate" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="firstName" type="xs:string" />
+          <xs:element minOccurs="0" name="lastName" type="xs:string" />
+          <xs:element minOccurs="0" name="option1" type="xs:string" />
+          <xs:element minOccurs="0" name="option2" type="xs:string" />
+          <xs:element minOccurs="0" name="personNumber" type="xs:string" />
+          <xs:element minOccurs="0" name="personStatus" type="xs:string" />
+          <xs:element minOccurs="0" name="phoneNumber" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="getPersonalRewards">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="identifier" type="xs:string" />
+      <xs:element minOccurs="0" name="siteCode" type="xs:string" />
+      <xs:element minOccurs="0" name="regionCode" type="xs:string" />
+      <xs:element minOccurs="0" name="transactionDate" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getPersonalRewardsResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="PersonalRewardsResponse" type="tns:personalRewardsResponse" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="personalRewardsResponse">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="cardDetails" type="tns:cardDetails" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="personalRewards" nillable="true" type="tns:personalReward" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="cardDetails">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="cardType" type="xs:string" />
+          <xs:element minOccurs="0" name="customerName" type="tns:customerName" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="customerName">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="firstName" type="xs:string" />
+          <xs:element minOccurs="0" name="lastName" type="xs:string" />
+          <xs:element minOccurs="0" name="lastUpdated" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="sex" type="xs:string" />
+          <xs:element minOccurs="0" name="title" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="personalReward">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element name="campaignId" type="xs:long" />
+          <xs:element minOccurs="0" name="categoryCode" type="xs:string" />
+          <xs:element minOccurs="0" name="condition" type="xs:string" />
+          <xs:element minOccurs="0" name="imageUrl" type="xs:string" />
+          <xs:element name="lingeringTime" type="xs:int" />
+          <xs:element minOccurs="0" name="message1" type="xs:string" />
+          <xs:element minOccurs="0" name="message2" type="xs:string" />
+          <xs:element minOccurs="0" name="productCode" type="xs:string" />
+          <xs:element name="proximity" type="xs:double" />
+          <xs:element name="redemptionLimit" type="xs:short" />
+          <xs:element name="rewardAmount" type="xs:double" />
+          <xs:element minOccurs="0" name="rewardDescription" type="xs:string" />
+          <xs:element name="rewardId" type="xs:long" />
+          <xs:element minOccurs="0" name="rewardTypeDescription" type="xs:string" />
+          <xs:element name="rewardsTypeId" type="xs:int" />
+          <xs:element minOccurs="0" name="timezone" type="tns:timeZone" />
+          <xs:element minOccurs="0" name="validFrom" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="validUntil" type="xs:dateTime" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="timeZone" abstract="true">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ID" type="xs:string" />
+      <xs:element name="rawOffset" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="saveProductPrice">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ProductPrice" type="tns:productPriceDTO" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="productPriceDTO">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element name="code" type="xs:string" />
+          <xs:element minOccurs="0" name="unitPrice" type="xs:double" />
+          <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="saveProductPriceResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ResponseMessage" type="tns:falBaseResponse" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="deleteFamilyByLevel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="FamilyCode" type="xs:string" />
+      <xs:element minOccurs="0" name="FamilyLevel" type="xs:short" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="deleteFamilyByLevelResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ResponseMessage" type="tns:falBaseResponse" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getVersionInfo">
+    <xs:sequence />
+  </xs:complexType>
+  <xs:complexType name="getVersionInfoResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="FalInfoResponse" type="tns:falInfoResponse" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="falInfoResponse">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="info" nillable="true" type="tns:keyValue" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="keyValue">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element name="key" type="xs:string" />
+          <xs:element name="value" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="deleteCurrencyRate">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CurrencyCodeFrom" type="xs:string" />
+      <xs:element minOccurs="0" name="CurrencyCodeTo" type="xs:string" />
+      <xs:element minOccurs="0" name="CurrencyRateDate" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="deleteCurrencyRateResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ResponseMessage" type="tns:falBaseResponse" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="deleteBrand">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="BrandCode" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="deleteBrandResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ResponseMessage" type="tns:falBaseResponse" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="deleteFamilyByParent">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="FamilyCode" type="xs:string" />
+      <xs:element minOccurs="0" name="ParentFamilyCode" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="deleteFamilyByParentResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ResponseMessage" type="tns:falBaseResponse" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="saveCurrencyRate">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CurrencyRate" type="tns:currencyRate" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="currencyRate">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="rateEndDate" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="rate" type="xs:double" />
+          <xs:element minOccurs="0" name="buyRate" type="xs:double" />
+          <xs:element minOccurs="0" name="sellRate" type="xs:double" />
+          <xs:element minOccurs="0" name="currencyCodeFrom" type="xs:string" />
+          <xs:element minOccurs="0" name="currencyCodeTo" type="xs:string" />
+          <xs:element minOccurs="0" name="rateStartDate" type="xs:dateTime" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="saveCurrencyRateResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ResponseMessage" type="tns:falBaseResponse" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="saveBrand">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Brand" type="tns:brandDTO" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="brandDTO">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element name="code" type="xs:string" />
+          <xs:element minOccurs="0" name="description" type="xs:string" />
+          <xs:element minOccurs="0" name="isHomeBrand" type="xs:boolean" />
+          <xs:element minOccurs="0" name="brandCategory" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="saveBrandResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ResponseMessage" type="tns:falBaseResponse" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="deleteTender">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="TenderCode" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="deleteTenderResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ResponseMessage" type="tns:falBaseResponse" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="suggestProductPromotions">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="identifier" type="xs:string" />
+      <xs:element minOccurs="0" name="siteCode" type="xs:string" />
+      <xs:element minOccurs="0" name="beaconCode" type="xs:string" />
+      <xs:element minOccurs="0" name="transactionDate" type="xs:dateTime" />
+      <xs:element name="numberOfProducts" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="suggestProductPromotionsResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:productPromotionResponse" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="productPromotionResponse">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="cardDetails" type="tns:cardDetails" />
+          <xs:element name="processingTime" type="xs:long" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="productPromotion" nillable="true" type="tns:productPromotion" />
+          <xs:element minOccurs="0" name="transmissionTimestamp" type="xs:dateTime" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="productPromotion">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="beaconTag" type="xs:string" />
+          <xs:element name="campaignId" type="xs:long" />
+          <xs:element minOccurs="0" name="categoryCode" type="xs:string" />
+          <xs:element minOccurs="0" name="condition" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="productSuggestions" nillable="true" type="tns:productInfo" />
+          <xs:element name="redemptionLimit" type="xs:short" />
+          <xs:element name="rewardAmount" type="xs:double" />
+          <xs:element minOccurs="0" name="rewardDescription" type="xs:string" />
+          <xs:element name="rewardId" type="xs:long" />
+          <xs:element minOccurs="0" name="rewardTypeDescription" type="xs:string" />
+          <xs:element name="rewardsTypeId" type="xs:int" />
+          <xs:element minOccurs="0" name="surveyCoupon" type="xs:string" />
+          <xs:element minOccurs="0" name="surveyLink" type="xs:string" />
+          <xs:element minOccurs="0" name="targetCoupon" type="xs:string" />
+          <xs:element minOccurs="0" name="targetItem" type="tns:productInfo" />
+          <xs:element minOccurs="0" name="timezone" type="tns:timeZone" />
+          <xs:element minOccurs="0" name="validFrom" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="validUntil" type="xs:dateTime" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="productInfo">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="imageUrl" type="xs:string" />
+          <xs:element minOccurs="0" name="productCode" type="xs:string" />
+          <xs:element minOccurs="0" name="productDescription" type="xs:string" />
+          <xs:element name="productPrice" type="xs:double" />
+          <xs:element minOccurs="0" name="productUrl" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="deleteProduct">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ProductCode" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="deleteProductResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ResponseMessage" type="tns:falBaseResponse" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="saveProduct">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Product" type="tns:productDTO" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="productDTO">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element name="code" type="xs:string" />
+          <xs:element minOccurs="0" name="familyCode" type="xs:string" />
+          <xs:element minOccurs="0" name="familyLevel" type="xs:short" />
+          <xs:element minOccurs="0" name="internalCode" type="xs:string" />
+          <xs:element minOccurs="0" name="vatId" type="xs:short" />
+          <xs:element minOccurs="0" name="supplierCode" type="xs:string" />
+          <xs:element minOccurs="0" name="description" type="xs:string" />
+          <xs:element minOccurs="0" name="brandCode" type="xs:string" />
+          <xs:element minOccurs="0" name="sellPrice" type="xs:double" />
+          <xs:element minOccurs="0" name="costPrice" type="xs:double" />
+          <xs:element minOccurs="0" name="dateCreated" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="dateUpdated" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="supInfos" type="tns:supInfos" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="supInfos">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="supInfo" nillable="true" type="tns:keyValue" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="saveProductResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ResponseMessage" type="tns:falBaseResponse" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="validateCoupon">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Basket" type="tns:basketRequest" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="basketRequest">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:baseLoyaltyRequest">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="paymentMethods" type="tns:paymentMethods" />
+          <xs:element minOccurs="0" name="voidedRewards" type="tns:voidedRewards" />
+          <xs:element minOccurs="0" name="giftRewards" type="tns:giftRewards" />
+          <xs:element minOccurs="0" name="ticket" type="tns:ticket" />
+          <xs:element minOccurs="0" name="transactionLimitations" type="tns:transactionLimitations" />
+          <xs:element minOccurs="0" name="rewardLimitations" type="tns:rewardLimitations" />
+          <xs:element minOccurs="0" name="tillInteractionAnswers" type="tns:tillInteractionAnswers" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="paymentMethods">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="auditNumber" type="xs:string" />
+          <xs:element name="newPointsBalance" type="xs:int" />
+          <xs:element name="newNumberIssuedCoupons" type="xs:int" />
+          <xs:element name="numberPrintedCoupons" type="xs:int" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="paymentMethod" nillable="true" type="tns:paymentMethod" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="paymentMethod">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="paymentMode" type="xs:string" />
+          <xs:element name="amount" type="xs:long" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="voidedRewards">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="voidedReward" nillable="true" type="tns:voidedReward" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="voidedReward">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="rewardID" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="giftRewards">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="giftReward" nillable="true" type="tns:giftReward" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="giftReward">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="productCode" type="xs:string" />
+          <xs:element name="lineItem" type="xs:int" />
+          <xs:element name="applyAsTender" type="xs:boolean" />
+          <xs:element name="tenderAmount" type="xs:double" />
+          <xs:element name="costs" type="xs:double" />
+          <xs:element minOccurs="0" name="counterCode" type="xs:string" />
+          <xs:element minOccurs="0" name="counterDesc" type="xs:string" />
+          <xs:element minOccurs="0" name="description" type="xs:string" />
+          <xs:element minOccurs="0" name="rewardId" type="xs:string" />
+          <xs:element name="availableQuantity" type="xs:int" />
+          <xs:element name="selectedQuantity" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ticket">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="ticketNumber" type="xs:string" />
+          <xs:element minOccurs="0" name="ticketDate" type="xs:string" />
+          <xs:element minOccurs="0" name="lineItems" type="tns:lineItems" />
+          <xs:element minOccurs="0" name="vouchers" type="tns:vouchersDto" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="lineItems">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="lineItem" nillable="true" type="tns:lineItem" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="lineItem">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element name="index" type="xs:int" />
+          <xs:element name="productType" type="xs:int" />
+          <xs:element minOccurs="0" name="productCode" type="xs:string" />
+          <xs:element minOccurs="0" name="familyCode" type="xs:string" />
+          <xs:element name="quantity" type="xs:double" />
+          <xs:element name="productPrice" type="xs:double" />
+          <xs:element name="nonDiscountable" type="xs:boolean" />
+          <xs:element name="rewardsExcluded" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="vouchersDto">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="voucher" nillable="true" type="tns:voucherDto" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="voucherDto">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="voucherCode" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="transactionLimitations">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="transactionLimitation" nillable="true" type="tns:transactionLimitation" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="transactionLimitation">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element name="category" type="xs:int" />
+          <xs:element name="limit" type="xs:double" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="rewardLimitations">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="rewardLimitation" nillable="true" type="tns:rewardLimitation" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="rewardLimitation">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="rewardID" type="xs:string" />
+          <xs:element name="limit" type="xs:double" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="tillInteractionAnswers">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="tillInteractionAnswer" nillable="true" type="tns:tillInteractionAnswer" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="tillInteractionAnswer">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="id" type="xs:string" />
+          <xs:element minOccurs="0" name="answer" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="validateCouponResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ResponseMessage" type="tns:baseLoyaltyResponse" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getCardInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="cardInfoRequest" type="tns:cardInfoRequest" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="cardInfoRequest">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="identifier" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="getCardInfoResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CardInfoResponse" type="tns:cardInfoDTO" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="requestRewards">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="RewardsRequest" type="tns:basketRequest" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="requestRewardsResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="RewardsResponse" type="tns:rewardsResponse" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="rewardsResponse">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:baseLoyaltyResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="rewardsGranted" type="tns:rewardsField" />
+          <xs:element minOccurs="0" name="giftRewards" type="tns:giftRewards" />
+          <xs:element minOccurs="0" name="coupons" type="tns:coupons" />
+          <xs:element minOccurs="0" name="ticketMessage" type="xs:string" />
+          <xs:element minOccurs="0" name="customerMessage" type="xs:string" />
+          <xs:element minOccurs="0" name="cashierMessage" type="xs:string" />
+          <xs:element minOccurs="0" name="optionalTicketMessage" type="xs:string" />
+          <xs:element minOccurs="0" name="ticketMessages" type="tns:ticketMessages" />
+          <xs:element minOccurs="0" name="customerDetails" type="tns:customerDetails" />
+          <xs:element minOccurs="0" name="nearMissMessages">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" name="nearMissMessage" type="tns:nearMissMessage" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element minOccurs="0" name="trxErrors" type="tns:trxErrors" />
+          <xs:element minOccurs="0" name="tillInteractions" type="tns:tillInteractions" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="rewardsField">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="auditNumber" type="xs:string" />
+          <xs:element name="numberGrantedCoupons" type="xs:int" />
+          <xs:element name="numberPointsConvertedIntoCoupons" type="xs:int" />
+          <xs:element name="pointsBalance" type="xs:int" />
+          <xs:element minOccurs="0" name="pointsBalanceTimestamp" type="xs:string" />
+          <xs:element name="pointsEarned" type="xs:double" />
+          <xs:element name="previouslyIssuedCoupons" type="xs:int" />
+          <xs:element minOccurs="0" name="rewards" type="tns:rewards" />
+          <xs:element name="tempPointsBalance" type="xs:int" />
+          <xs:element name="totalDiscountAmount" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="rewards">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="reward" nillable="true" type="tns:reward" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="reward">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element name="carrier" type="xs:int" />
+          <xs:element name="category" type="xs:int" />
+          <xs:element minOccurs="0" name="financingRef" type="xs:string" />
+          <xs:element name="index" type="xs:int" />
+          <xs:element minOccurs="0" name="productCode" type="xs:string" />
+          <xs:element minOccurs="0" name="productFamily" type="xs:string" />
+          <xs:element minOccurs="0" name="productTriggers" type="tns:productTriggers" />
+          <xs:element name="rewardAmount" type="xs:double" />
+          <xs:element minOccurs="0" name="rewardDescription" type="xs:string" />
+          <xs:element minOccurs="0" name="rewardID" type="xs:string" />
+          <xs:element minOccurs="0" name="rewardMessage" type="tns:rewardMessage" />
+          <xs:element name="rewardQuantity" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="productTriggers">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="productTrigger" nillable="true" type="tns:productTrigger" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="productTrigger">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element name="index" type="xs:int" />
+          <xs:element name="quantity" type="xs:double" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="rewardMessage">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="customerMessage" type="xs:string" />
+          <xs:element minOccurs="0" name="cashierMessage" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="ticketMessage" nillable="true" type="tns:ticketMessage" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ticketMessage">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element name="lineNr" type="xs:int" />
+          <xs:element minOccurs="0" name="message" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="coupons">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="coupon" nillable="true" type="tns:coupon" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="coupon">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="advantageId" type="xs:string" />
+          <xs:element minOccurs="0" name="amount" type="xs:float" />
+          <xs:element minOccurs="0" name="amountType" type="xs:int" />
+          <xs:element minOccurs="0" name="campaignId" type="xs:string" />
+          <xs:element minOccurs="0" name="counter" type="xs:string" />
+          <xs:element minOccurs="0" name="couponLPF" type="xs:string" />
+          <xs:element minOccurs="0" name="couponType" type="xs:int" />
+          <xs:element minOccurs="0" name="couponValue" type="xs:float" />
+          <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="format" type="xs:int" />
+          <xs:element minOccurs="0" name="id" type="xs:string" />
+          <xs:element minOccurs="0" name="messages" type="tns:couponMessages" />
+          <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="couponMessages">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="message" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ticketMessages">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="ticketMessage" nillable="true" type="tns:ticketMessage" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="customerDetails">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="balances" type="tns:balances" />
+          <xs:element minOccurs="0" name="customerName" type="tns:customerName" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="balances">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="balance" nillable="true" type="tns:balance" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="balance">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element name="amount" type="xs:double" />
+          <xs:element minOccurs="0" name="code" type="xs:string" />
+          <xs:element minOccurs="0" name="description" type="xs:string" />
+          <xs:element name="moneyValue" type="xs:double" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="nearMissMessage">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string" />
+      <xs:element minOccurs="0" name="amount" type="xs:double" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="trxErrors">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="transactionError" nillable="true" type="tns:trxError" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="trxError">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element name="amount" type="xs:double" />
+          <xs:element name="errorCode" type="xs:int" />
+          <xs:element minOccurs="0" name="errorDescription" type="xs:string" />
+          <xs:element minOccurs="0" name="itemCode" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="tillInteractions">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="tillInteraction" nillable="true" type="tns:tillInteractionDto" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="tillInteractionDto">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="customerMessage" type="xs:string" />
+          <xs:element minOccurs="0" name="defaultAnswer" type="xs:string" />
+          <xs:element minOccurs="0" name="formatCode" type="xs:string" />
+          <xs:element minOccurs="0" name="id" type="xs:string" />
+          <xs:element minOccurs="0" name="tillMessage" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="saveFamily">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Family" type="tns:familyDTO" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="familyDTO">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:falBaseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="code" type="xs:string" />
+          <xs:element minOccurs="0" name="description" type="xs:string" />
+          <xs:element minOccurs="0" name="level" type="xs:short" />
+          <xs:element minOccurs="0" name="parentCode" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="saveFamilyResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ResponseMessage" type="tns:falBaseResponse" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="messageLevel">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="FATAL" />
+      <xs:enumeration value="ERROR" />
+      <xs:enumeration value="WARN" />
+      <xs:enumeration value="INFO" />
+      <xs:enumeration value="DEBUG" />
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

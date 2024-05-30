@@ -1,0 +1,6 @@
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\POS\bin\Debug\Affiliation.dll
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\POS\bin\Debug\Affiliation.pdb
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\Affiliation\obj\Debug\Affiliation.csprojResolveAssemblyReference.cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\Affiliation\obj\Debug\Affiliation.csproj.CoreCompileInputs.cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\Affiliation\obj\Debug\Affiliation.dll
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\Affiliation\obj\Debug\Affiliation.pdb

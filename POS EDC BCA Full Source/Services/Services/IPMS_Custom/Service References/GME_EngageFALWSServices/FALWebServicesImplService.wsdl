@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://impl.ws.fal.com/" name="FALWebServicesImplService" targetNamespace="http://impl.ws.fal.com/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types>
+    <xsd:schema>
+      <xsd:import schemaLocation="http://172.16.30.20:8080/falws/falws?xsd=1" namespace="http://impl.ws.fal.com/" />
+    </xsd:schema>
+  </types>
+  <message name="getVersionInfo">
+    <part name="parameters" element="tns:getVersionInfo" />
+  </message>
+  <message name="getVersionInfoResponse">
+    <part name="parameters" element="tns:getVersionInfoResponse" />
+  </message>
+  <message name="lookupCards">
+    <part name="parameters" element="tns:lookupCards" />
+  </message>
+  <message name="lookupCardsResponse">
+    <part name="parameters" element="tns:lookupCardsResponse" />
+  </message>
+  <message name="saveCurrencyRate">
+    <part name="parameters" element="tns:saveCurrencyRate" />
+  </message>
+  <message name="saveCurrencyRateResponse">
+    <part name="parameters" element="tns:saveCurrencyRateResponse" />
+  </message>
+  <message name="saveProductPrice">
+    <part name="parameters" element="tns:saveProductPrice" />
+  </message>
+  <message name="saveProductPriceResponse">
+    <part name="parameters" element="tns:saveProductPriceResponse" />
+  </message>
+  <message name="SVMessagesRequest">
+    <part name="parameters" element="tns:SVMessagesRequest" />
+  </message>
+  <message name="SVMessagesRequestResponse">
+    <part name="parameters" element="tns:SVMessagesRequestResponse" />
+  </message>
+  <message name="getMigrateCard">
+    <part name="parameters" element="tns:getMigrateCard" />
+  </message>
+  <message name="getMigrateCardResponse">
+    <part name="parameters" element="tns:getMigrateCardResponse" />
+  </message>
+  <message name="deleteFamilyByLevel">
+    <part name="parameters" element="tns:deleteFamilyByLevel" />
+  </message>
+  <message name="deleteFamilyByLevelResponse">
+    <part name="parameters" element="tns:deleteFamilyByLevelResponse" />
+  </message>
+  <message name="requestRewards">
+    <part name="parameters" element="tns:requestRewards" />
+  </message>
+  <message name="requestRewardsResponse">
+    <part name="parameters" element="tns:requestRewardsResponse" />
+  </message>
+  <message name="validateCoupon">
+    <part name="parameters" element="tns:validateCoupon" />
+  </message>
+  <message name="validateCouponResponse">
+    <part name="parameters" element="tns:validateCouponResponse" />
+  </message>
+  <message name="deleteFamilyByParent">
+    <part name="parameters" element="tns:deleteFamilyByParent" />
+  </message>
+  <message name="deleteFamilyByParentResponse">
+    <part name="parameters" element="tns:deleteFamilyByParentResponse" />
+  </message>
+  <message name="deleteCurrencyRate">
+    <part name="parameters" element="tns:deleteCurrencyRate" />
+  </message>
+  <message name="deleteCurrencyRateResponse">
+    <part name="parameters" element="tns:deleteCurrencyRateResponse" />
+  </message>
+  <message name="getPersonalRewards">
+    <part name="parameters" element="tns:getPersonalRewards" />
+  </message>
+  <message name="getPersonalRewardsResponse">
+    <part name="parameters" element="tns:getPersonalRewardsResponse" />
+  </message>
+  <message name="getCardInfo">
+    <part name="parameters" element="tns:getCardInfo" />
+  </message>
+  <message name="getCardInfoResponse">
+    <part name="parameters" element="tns:getCardInfoResponse" />
+  </message>
+  <message name="deleteBrand">
+    <part name="parameters" element="tns:deleteBrand" />
+  </message>
+  <message name="deleteBrandResponse">
+    <part name="parameters" element="tns:deleteBrandResponse" />
+  </message>
+  <message name="deleteProduct">
+    <part name="parameters" element="tns:deleteProduct" />
+  </message>
+  <message name="deleteProductResponse">
+    <part name="parameters" element="tns:deleteProductResponse" />
+  </message>
+  <message name="deleteTender">
+    <part name="parameters" element="tns:deleteTender" />
+  </message>
+  <message name="deleteTenderResponse">
+    <part name="parameters" element="tns:deleteTenderResponse" />
+  </message>
+  <message name="saveTender">
+    <part name="parameters" element="tns:saveTender" />
+  </message>
+  <message name="saveTenderResponse">
+    <part name="parameters" element="tns:saveTenderResponse" />
+  </message>
+  <message name="saveBrand">
+    <part name="parameters" element="tns:saveBrand" />
+  </message>
+  <message name="saveBrandResponse">
+    <part name="parameters" element="tns:saveBrandResponse" />
+  </message>
+  <message name="saveProduct">
+    <part name="parameters" element="tns:saveProduct" />
+  </message>
+  <message name="saveProductResponse">
+    <part name="parameters" element="tns:saveProductResponse" />
+  </message>
+  <message name="saveFamily">
+    <part name="parameters" element="tns:saveFamily" />
+  </message>
+  <message name="saveFamilyResponse">
+    <part name="parameters" element="tns:saveFamilyResponse" />
+  </message>
+  <message name="suggestProductPromotions">
+    <part name="parameters" element="tns:suggestProductPromotions" />
+  </message>
+  <message name="suggestProductPromotionsResponse">
+    <part name="parameters" element="tns:suggestProductPromotionsResponse" />
+  </message>
+  <portType name="FALWebServicesImpl">
+    <operation name="getVersionInfo">
+      <input message="tns:getVersionInfo" />
+      <output message="tns:getVersionInfoResponse" />
+    </operation>
+    <operation name="lookupCards">
+      <input message="tns:lookupCards" />
+      <output message="tns:lookupCardsResponse" />
+    </operation>
+    <operation name="saveCurrencyRate">
+      <input message="tns:saveCurrencyRate" />
+      <output message="tns:saveCurrencyRateResponse" />
+    </operation>
+    <operation name="saveProductPrice">
+      <input message="tns:saveProductPrice" />
+      <output message="tns:saveProductPriceResponse" />
+    </operation>
+    <operation name="SVMessagesRequest">
+      <input message="tns:SVMessagesRequest" />
+      <output message="tns:SVMessagesRequestResponse" />
+    </operation>
+    <operation name="getMigrateCard">
+      <input message="tns:getMigrateCard" />
+      <output message="tns:getMigrateCardResponse" />
+    </operation>
+    <operation name="deleteFamilyByLevel">
+      <input message="tns:deleteFamilyByLevel" />
+      <output message="tns:deleteFamilyByLevelResponse" />
+    </operation>
+    <operation name="requestRewards">
+      <input message="tns:requestRewards" />
+      <output message="tns:requestRewardsResponse" />
+    </operation>
+    <operation name="validateCoupon">
+      <input message="tns:validateCoupon" />
+      <output message="tns:validateCouponResponse" />
+    </operation>
+    <operation name="deleteFamilyByParent">
+      <input message="tns:deleteFamilyByParent" />
+      <output message="tns:deleteFamilyByParentResponse" />
+    </operation>
+    <operation name="deleteCurrencyRate">
+      <input message="tns:deleteCurrencyRate" />
+      <output message="tns:deleteCurrencyRateResponse" />
+    </operation>
+    <operation name="getPersonalRewards">
+      <input message="tns:getPersonalRewards" />
+      <output message="tns:getPersonalRewardsResponse" />
+    </operation>
+    <operation name="getCardInfo">
+      <input message="tns:getCardInfo" />
+      <output message="tns:getCardInfoResponse" />
+    </operation>
+    <operation name="deleteBrand">
+      <input message="tns:deleteBrand" />
+      <output message="tns:deleteBrandResponse" />
+    </operation>
+    <operation name="deleteProduct">
+      <input message="tns:deleteProduct" />
+      <output message="tns:deleteProductResponse" />
+    </operation>
+    <operation name="deleteTender">
+      <input message="tns:deleteTender" />
+      <output message="tns:deleteTenderResponse" />
+    </operation>
+    <operation name="saveTender">
+      <input message="tns:saveTender" />
+      <output message="tns:saveTenderResponse" />
+    </operation>
+    <operation name="saveBrand">
+      <input message="tns:saveBrand" />
+      <output message="tns:saveBrandResponse" />
+    </operation>
+    <operation name="saveProduct">
+      <input message="tns:saveProduct" />
+      <output message="tns:saveProductResponse" />
+    </operation>
+    <operation name="saveFamily">
+      <input message="tns:saveFamily" />
+      <output message="tns:saveFamilyResponse" />
+    </operation>
+    <operation name="suggestProductPromotions">
+      <input message="tns:suggestProductPromotions" />
+      <output message="tns:suggestProductPromotionsResponse" />
+    </operation>
+  </portType>
+  <binding name="FALWebServicesImplPortBinding" type="tns:FALWebServicesImpl">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="getVersionInfo">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="lookupCards">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="saveCurrencyRate">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="saveProductPrice">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="SVMessagesRequest">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="getMigrateCard">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="deleteFamilyByLevel">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="requestRewards">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="validateCoupon">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="deleteFamilyByParent">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="deleteCurrencyRate">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="getPersonalRewards">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="getCardInfo">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="deleteBrand">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="deleteProduct">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="deleteTender">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="saveTender">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="saveBrand">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="saveProduct">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="saveFamily">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="suggestProductPromotions">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+  </binding>
+  <service name="FALWebServicesImplService">
+    <port name="FALWebServicesImplPort" binding="tns:FALWebServicesImplPortBinding">
+      <soap:address location="http://172.16.30.20:8080/falws/falws" />
+    </port>
+  </service>
+</definitions>

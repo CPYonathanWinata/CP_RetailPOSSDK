@@ -1,0 +1,26 @@
+C:\WorkingFolderAX\Triggers\CustomerTriggers\obj\Debug\CustomerTriggers.csprojResolveAssemblyReference.cache
+C:\Project POS SourceCode\POS\bin\Debug\CustomerTriggers.dll
+C:\Project POS SourceCode\POS\bin\Debug\CustomerTriggers.pdb
+C:\Project POS SourceCode\Triggers\CustomerTriggers\obj\Debug\CustomerTriggers.csprojResolveAssemblyReference.cache
+C:\Project POS SourceCode\Triggers\CustomerTriggers\obj\Debug\CustomerTriggers.dll
+C:\Project POS SourceCode\Triggers\CustomerTriggers\obj\Debug\CustomerTriggers.pdb
+D:\GT\POS\bin\Debug\CustomerTriggers.dll
+D:\GT\POS\bin\Debug\CustomerTriggers.pdb
+D:\GT\Triggers\CustomerTriggers\obj\Debug\CustomerTriggers.csprojResolveAssemblyReference.cache
+D:\GT\Triggers\CustomerTriggers\obj\Debug\CustomerTriggers.dll
+D:\GT\Triggers\CustomerTriggers\obj\Debug\CustomerTriggers.pdb
+D:\Work\GT\POS\bin\Debug\CustomerTriggers.dll
+D:\Work\GT\POS\bin\Debug\CustomerTriggers.pdb
+D:\Work\GT\Triggers\CustomerTriggers\obj\Debug\CustomerTriggers.csprojResolveAssemblyReference.cache
+D:\Work\GT\Triggers\CustomerTriggers\obj\Debug\CustomerTriggers.dll
+D:\Work\GT\Triggers\CustomerTriggers\obj\Debug\CustomerTriggers.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\POS\bin\Debug\CustomerTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\POS\bin\Debug\CustomerTriggers.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Triggers\CustomerTriggers\obj\Debug\CustomerTriggers.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Triggers\CustomerTriggers\obj\Debug\CustomerTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Triggers\CustomerTriggers\obj\Debug\CustomerTriggers.pdb
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\POS\bin\Debug\CustomerTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\POS\bin\Debug\CustomerTriggers.pdb
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Triggers\CustomerTriggers\obj\Debug\CustomerTriggers.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Triggers\CustomerTriggers\obj\Debug\CustomerTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Triggers\CustomerTriggers\obj\Debug\CustomerTriggers.pdb

@@ -1,0 +1,20 @@
+C:\Project POS SourceCode\POS\bin\Debug\StoreInventoryServices.dll
+C:\Project POS SourceCode\POS\bin\Debug\StoreInventoryServices.pdb
+C:\Project POS SourceCode\Services\RetailStoreInventoryService\obj\Debug\StoreInventoryServices.csprojResolveAssemblyReference.cache
+C:\Project POS SourceCode\Services\RetailStoreInventoryService\obj\Debug\StoreInventoryServices.dll
+C:\Project POS SourceCode\Services\RetailStoreInventoryService\obj\Debug\StoreInventoryServices.pdb
+D:\GT\POS\bin\Debug\StoreInventoryServices.dll
+D:\GT\POS\bin\Debug\StoreInventoryServices.pdb
+D:\GT\Services\RetailStoreInventoryService\obj\Debug\StoreInventoryServices.csprojResolveAssemblyReference.cache
+D:\GT\Services\RetailStoreInventoryService\obj\Debug\StoreInventoryServices.dll
+D:\GT\Services\RetailStoreInventoryService\obj\Debug\StoreInventoryServices.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\POS\bin\Debug\StoreInventoryServices.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\POS\bin\Debug\StoreInventoryServices.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\RetailStoreInventoryService\obj\Debug\StoreInventoryServices.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\RetailStoreInventoryService\obj\Debug\StoreInventoryServices.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\RetailStoreInventoryService\obj\Debug\StoreInventoryServices.pdb
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\POS\bin\Debug\StoreInventoryServices.dll
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\POS\bin\Debug\StoreInventoryServices.pdb
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\RetailStoreInventoryService\obj\Debug\StoreInventoryServices.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\RetailStoreInventoryService\obj\Debug\StoreInventoryServices.dll
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\RetailStoreInventoryService\obj\Debug\StoreInventoryServices.pdb

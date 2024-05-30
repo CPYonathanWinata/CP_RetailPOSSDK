@@ -1,0 +1,554 @@
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csprojResolveAssemblyReference.cache
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\LSRetailPosis.ButtonGrid.frmBarcodeSelect.resources
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.Properties.Resources.resources
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.DisbursementSlipCreationForm.resources
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.AffiliationForm.resources
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ExtendedLogOnForm.resources
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ExtendedLogOnScanForm.resources
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.FormTest.resources
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.frmIncomeExpenseAccounts.resources
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.KitComponentSubstituteForm.resources
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyCardForm.resources
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmKitDisassembly.resources
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyIssueCardForm.resources
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyPayForm.resources
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ProductDetailsForm.resources
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ProductInformationForm.resources
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LogOnForm.resources
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmBarcodeSelect.resources
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmDimensions.resources
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmInput.resources
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\LSRetailPosis.POSProcesses.frmPayCash.resources
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCurrency.resources
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCustomerAccount.resources
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmReturnTransaction.resources
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ManagerAccessForm.resources
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LogbookForm.resources
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.RegisterTimeForm.resources
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ReportForm.resources
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.SaleRefundDetailForm.resources
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.TaggedImageBoxControl.resources
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ViewTimeClockEntriesForm.resources
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csproj.GenerateResource.Cache
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.dll.licenses
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\POS\bin\Debug\InteractionDefaults.dll
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\POS\bin\Debug\InteractionDefaults.pdb
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.dll
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.pdb
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmCustomerInfo.resources
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\DevExpress.Data.v14.2.dll
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\DevExpress.Utils.v14.2.dll
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\DevExpress.XtraEditors.v14.2.dll
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\DevExpress.XtraGrid.v14.2.dll
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\DevExpress.XtraLayout.v14.2.dll
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\de\DevExpress.Data.v14.2.resources.dll
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\es\DevExpress.Data.v14.2.resources.dll
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\ja\DevExpress.Data.v14.2.resources.dll
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\ru\DevExpress.Data.v14.2.resources.dll
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\de\DevExpress.Utils.v14.2.resources.dll
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\es\DevExpress.Utils.v14.2.resources.dll
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\ja\DevExpress.Utils.v14.2.resources.dll
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\ru\DevExpress.Utils.v14.2.resources.dll
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\de\DevExpress.XtraEditors.v14.2.resources.dll
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\es\DevExpress.XtraEditors.v14.2.resources.dll
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\ja\DevExpress.XtraEditors.v14.2.resources.dll
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\ru\DevExpress.XtraEditors.v14.2.resources.dll
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\de\DevExpress.XtraGrid.v14.2.resources.dll
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\es\DevExpress.XtraGrid.v14.2.resources.dll
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\ja\DevExpress.XtraGrid.v14.2.resources.dll
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\ru\DevExpress.XtraGrid.v14.2.resources.dll
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\de\DevExpress.XtraLayout.v14.2.resources.dll
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\es\DevExpress.XtraLayout.v14.2.resources.dll
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\ja\DevExpress.XtraLayout.v14.2.resources.dll
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\ru\DevExpress.XtraLayout.v14.2.resources.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csprojResolveAssemblyReference.cache
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\LSRetailPosis.ButtonGrid.frmBarcodeSelect.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.Properties.Resources.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.DisbursementSlipCreationForm.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.AffiliationForm.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ExtendedLogOnForm.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ExtendedLogOnScanForm.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.frmIncomeExpenseAccounts.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmCustomerInfo.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.KitComponentSubstituteForm.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyCardForm.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmKitDisassembly.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyIssueCardForm.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyPayForm.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ProductDetailsForm.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ProductInformationForm.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LogOnForm.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmBarcodeSelect.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmDimensions.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmInput.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\LSRetailPosis.POSProcesses.frmPayCash.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCurrency.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCustomerAccount.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmReturnTransaction.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ManagerAccessForm.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LogbookForm.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.RegisterTimeForm.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ReportForm.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.SaleRefundDetailForm.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.TaggedImageBoxControl.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ViewTimeClockEntriesForm.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csproj.GenerateResource.Cache
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.dll.licenses
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.pdb
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\DevExpress.Data.v14.2.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\DevExpress.Utils.v14.2.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\DevExpress.XtraEditors.v14.2.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\DevExpress.XtraGrid.v14.2.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\DevExpress.XtraLayout.v14.2.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\de\DevExpress.Data.v14.2.resources.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\es\DevExpress.Data.v14.2.resources.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\ja\DevExpress.Data.v14.2.resources.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\ru\DevExpress.Data.v14.2.resources.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\de\DevExpress.Utils.v14.2.resources.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\es\DevExpress.Utils.v14.2.resources.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\ja\DevExpress.Utils.v14.2.resources.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\ru\DevExpress.Utils.v14.2.resources.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\de\DevExpress.XtraEditors.v14.2.resources.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\es\DevExpress.XtraEditors.v14.2.resources.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\ja\DevExpress.XtraEditors.v14.2.resources.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\ru\DevExpress.XtraEditors.v14.2.resources.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\de\DevExpress.XtraGrid.v14.2.resources.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\es\DevExpress.XtraGrid.v14.2.resources.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\ja\DevExpress.XtraGrid.v14.2.resources.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\ru\DevExpress.XtraGrid.v14.2.resources.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\de\DevExpress.XtraLayout.v14.2.resources.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\es\DevExpress.XtraLayout.v14.2.resources.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\ja\DevExpress.XtraLayout.v14.2.resources.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\ru\DevExpress.XtraLayout.v14.2.resources.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmCustomerType.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmBonManual.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmBringBackOurBottle.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmLYBCMember.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmPublic.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmPaymentCash.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmTest.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmEmployeePurchase.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmFamilyPurchase.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmFanBOBB.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmEnrollment.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmSalesPerson.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.FrmDonasi.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmUpdateCustomer.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmCardReplacement.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.FrmUnprintVoucher.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csprojResolveAssemblyReference.cache
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\LSRetailPosis.ButtonGrid.frmBarcodeSelect.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.Properties.Resources.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.DisbursementSlipCreationForm.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.AffiliationForm.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ExtendedLogOnForm.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ExtendedLogOnScanForm.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.frmIncomeExpenseAccounts.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmBonManual.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmBringBackOurBottle.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmCardReplacement.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmCustomerInfo.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmCustomerType.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.FrmDonasi.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmEmployeePurchase.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmEnrollment.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmFamilyPurchase.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmFanBOBB.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmLYBCMember.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmPayCardOfflineApproval.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmPaymentCash.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmPublic.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmSalesPerson.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmTest.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.FrmUnprintVoucher.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmUpdateCustomer.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.KitComponentSubstituteForm.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyCardForm.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmKitDisassembly.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyIssueCardForm.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyPayForm.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ProductDetailsForm.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ProductInformationForm.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LogOnForm.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmBarcodeSelect.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmDimensions.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmInput.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\LSRetailPosis.POSProcesses.frmPayCash.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCurrency.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCustomerAccount.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmReturnTransaction.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ManagerAccessForm.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LogbookForm.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.RegisterTimeForm.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ReportForm.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.SaleRefundDetailForm.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.TaggedImageBoxControl.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ViewTimeClockEntriesForm.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csproj.GenerateResource.Cache
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.dll
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.pdb
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csproj.CoreCompileInputs.cache
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmEnrollmentLYBC.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmItemVoucher.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmTBSIVoucherBaru.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmTBSIVoucherLama.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.dll.licenses
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csprojResolveAssemblyReference.cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\LSRetailPosis.ButtonGrid.frmBarcodeSelect.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.Properties.Resources.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.DisbursementSlipCreationForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.AffiliationForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ExtendedLogOnForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ExtendedLogOnScanForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.frmIncomeExpenseAccounts.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmBonManual.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmBringBackOurBottle.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.FrmCardReplacement.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmCustomerInfo.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmCustomerType.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.FrmDonasi.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmEmployeePurchase.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmEnrollmentLYBC.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmEnrollment.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmFamilyPurchase.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmFanBOBB.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmItemVoucher.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmLYBCMember.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmPayCardOfflineApproval.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmPaymentCash.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmPublic.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmSalesPerson.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmTBSIVoucherBaru.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmTBSIVoucherLama.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmTest.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.FrmUnprintVoucher.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmUpdateCustomer.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.KitComponentSubstituteForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyCardForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmKitDisassembly.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyIssueCardForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyPayForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ProductDetailsForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ProductInformationForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LogOnForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmBarcodeSelect.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmDimensions.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmInput.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\LSRetailPosis.POSProcesses.frmPayCash.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCurrency.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCustomerAccount.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmReturnTransaction.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ManagerAccessForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LogbookForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.RegisterTimeForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ReportForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.SaleRefundDetailForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.TaggedImageBoxControl.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ViewTimeClockEntriesForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csproj.GenerateResource.Cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.dll.licenses
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csproj.CoreCompileInputs.cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.dll
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.pdb
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmBirthdayVoucher.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmWelcomeVoucher.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csprojResolveAssemblyReference.cache
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\LSRetailPosis.ButtonGrid.frmBarcodeSelect.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.Properties.Resources.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.DisbursementSlipCreationForm.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.AffiliationForm.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ExtendedLogOnForm.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ExtendedLogOnScanForm.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.frmIncomeExpenseAccounts.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmBirthdayVoucher.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmBonManual.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmBringBackOurBottle.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.FrmCardReplacement.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmCustomerInfo.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmCustomerType.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.FrmDonasi.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmEmployeePurchase.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmEnrollmentLYBC.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmEnrollment.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmFamilyPurchase.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmFanBOBB.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmItemVoucher.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmLYBCMember.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmPayCardOfflineApproval.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmPaymentCash.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmPublic.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmSalesPerson.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmTBSIVoucherBaru.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmTBSIVoucherLama.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmTest.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.FrmUnprintVoucher.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmUpdateCustomer.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmWelcomeVoucher.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.KitComponentSubstituteForm.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyCardForm.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmKitDisassembly.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyIssueCardForm.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyPayForm.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ProductDetailsForm.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ProductInformationForm.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LogOnForm.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmBarcodeSelect.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmDimensions.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmInput.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\LSRetailPosis.POSProcesses.frmPayCash.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCurrency.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCustomerAccount.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmReturnTransaction.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ManagerAccessForm.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LogbookForm.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.RegisterTimeForm.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ReportForm.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.SaleRefundDetailForm.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.TaggedImageBoxControl.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ViewTimeClockEntriesForm.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csproj.GenerateResource.Cache
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.dll.licenses
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csproj.CoreCompileInputs.cache
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.dll
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\InteractionDefaults\obj\Debug\InteractionDefaults.pdb
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csprojResolveAssemblyReference.cache
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\LSRetailPosis.ButtonGrid.frmBarcodeSelect.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.Properties.Resources.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.DisbursementSlipCreationForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.AffiliationForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ExtendedLogOnForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ExtendedLogOnScanForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.frmIncomeExpenseAccounts.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmBirthdayVoucher.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmBonManual.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmBringBackOurBottle.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.FrmCardReplacement.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmCustomerInfo.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmCustomerType.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.FrmDonasi.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmEmployeePurchase.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmEnrollmentLYBC.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmEnrollment.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmFamilyPurchase.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmFanBOBB.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmItemVoucher.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmLYBCMember.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmPayCardOfflineApproval.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmPaymentCash.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmPublic.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmSalesPerson.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmTBSIVoucherBaru.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmTBSIVoucherLama.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmTest.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.FrmUnprintVoucher.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmUpdateCustomer.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmWelcomeVoucher.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.KitComponentSubstituteForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyCardForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmKitDisassembly.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyIssueCardForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyPayForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ProductDetailsForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ProductInformationForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LogOnForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmBarcodeSelect.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmDimensions.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmInput.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\LSRetailPosis.POSProcesses.frmPayCash.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCurrency.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCustomerAccount.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmReturnTransaction.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ManagerAccessForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LogbookForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.RegisterTimeForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ReportForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.SaleRefundDetailForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.TaggedImageBoxControl.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ViewTimeClockEntriesForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csproj.GenerateResource.Cache
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\InteractionDefaults.dll.licenses
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csproj.CoreCompileInputs.cache
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\InteractionDefaults.dll
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\InteractionDefaults\obj\Debug\InteractionDefaults.pdb
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csprojResolveAssemblyReference.cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\LSRetailPosis.ButtonGrid.frmBarcodeSelect.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.Properties.Resources.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.DisbursementSlipCreationForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.AffiliationForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ExtendedLogOnForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ExtendedLogOnScanForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.frmIncomeExpenseAccounts.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmBirthdayVoucher.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmBonManual.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmBringBackOurBottle.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.FrmCardReplacement.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmCustomerInfo.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmCustomerType.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.FrmDonasi.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmEmployeePurchase.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmEnrollmentLYBC.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmEnrollment.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmFamilyPurchase.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmFanBOBB.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmItemVoucher.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmLYBCMember.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmPayCardOfflineApproval.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmPaymentCash.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmPublic.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmSalesPerson.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmTBSIVoucherBaru.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmTBSIVoucherLama.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmTest.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.FrmUnprintVoucher.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmUpdateCustomer.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmWelcomeVoucher.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.KitComponentSubstituteForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyCardForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmKitDisassembly.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyIssueCardForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyPayForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ProductDetailsForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ProductInformationForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LogOnForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmBarcodeSelect.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmDimensions.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmInput.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\LSRetailPosis.POSProcesses.frmPayCash.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCurrency.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCustomerAccount.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmReturnTransaction.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ManagerAccessForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LogbookForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.RegisterTimeForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ReportForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.SaleRefundDetailForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.TaggedImageBoxControl.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ViewTimeClockEntriesForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csproj.GenerateResource.Cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\InteractionDefaults.dll.licenses
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csproj.CoreCompileInputs.cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\InteractionDefaults.dll
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\InteractionDefaults\obj\Debug\InteractionDefaults.pdb
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csprojResolveAssemblyReference.cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\LSRetailPosis.ButtonGrid.frmBarcodeSelect.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.Properties.Resources.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.DisbursementSlipCreationForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.AffiliationForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ExtendedLogOnForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ExtendedLogOnScanForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.frmIncomeExpenseAccounts.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmBirthdayVoucher.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmBonManual.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmBringBackOurBottle.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.FrmCardReplacement.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmCustomerInfo.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmCustomerType.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.FrmDonasi.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmEmployeePurchase.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmEnrollmentLYBC.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmEnrollment.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmFamilyPurchase.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmFanBOBB.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmItemVoucher.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmLYBCMember.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmPayCardOfflineApproval.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmPaymentCash.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmPublic.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmSalesPerson.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmSplash.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmTBSIVoucherBaru.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmTBSIVoucherLama.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmTest.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.FrmUnprintVoucher.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmUpdateCustomer.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmWelcomeVoucher.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.KitComponentSubstituteForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyCardForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmKitDisassembly.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyIssueCardForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyPayForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ProductDetailsForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ProductInformationForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LogOnForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmBarcodeSelect.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmDimensions.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmInput.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\LSRetailPosis.POSProcesses.frmPayCash.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCurrency.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCustomerAccount.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmReturnTransaction.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ManagerAccessForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LogbookForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.RedeemLoyaltyPointsForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.RegisterTimeForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ReportForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.SaleRefundDetailForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.TaggedImageBoxControl.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ViewTimeClockEntriesForm.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csproj.GenerateResource.Cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\InteractionDefaults.dll.licenses
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csproj.CoreCompileInputs.cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\InteractionDefaults.dll
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\InteractionDefaults\obj\Debug\InteractionDefaults.pdb
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csprojResolveAssemblyReference.cache
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\LSRetailPosis.ButtonGrid.frmBarcodeSelect.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.Properties.Resources.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.DisbursementSlipCreationForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.AffiliationForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ExtendedLogOnForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ExtendedLogOnScanForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.frmIncomeExpenseAccounts.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmBirthdayVoucher.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmBonManual.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmBringBackOurBottle.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.FrmCardReplacement.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmCustomerInfo.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmCustomerType.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.FrmDonasi.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmEmployeePurchase.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmEnrollmentLYBC.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmEnrollment.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmFamilyPurchase.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmFanBOBB.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmItemVoucher.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmLYBCMember.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmPayCardOfflineApproval.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmPaymentCash.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmPublic.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmSalesPerson.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmSplash.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmTBSIVoucherBaru.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmTBSIVoucherLama.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmTest.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.FrmUnprintVoucher.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmUpdateCustomer.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.GME.frmWelcomeVoucher.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.KitComponentSubstituteForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyCardForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmKitDisassembly.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyIssueCardForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LoyaltyPayForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ProductDetailsForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ProductInformationForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LogOnForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmBarcodeSelect.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmDimensions.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmInput.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\LSRetailPosis.POSProcesses.frmPayCash.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCurrency.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmPayCustomerAccount.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.frmReturnTransaction.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ManagerAccessForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.LogbookForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.RedeemLoyaltyPointsForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.RegisterTimeForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.ReportForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.SaleRefundDetailForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.TaggedImageBoxControl.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.ViewTimeClockEntriesForm.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csproj.GenerateResource.Cache
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\InteractionDefaults.dll.licenses
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csproj.CoreCompileInputs.cache
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\InteractionDefaults.dll
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\InteractionDefaults\obj\Debug\InteractionDefaults.pdb

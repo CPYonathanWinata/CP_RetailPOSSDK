@@ -1,0 +1,80 @@
+C:\Users\it.application\Documents\Retail SDK CU9\POS Plug-ins\POS\bin\Debug\Dialog.dll
+C:\Users\it.application\Documents\Retail SDK CU9\POS Plug-ins\POS\bin\Debug\Dialog.pdb
+C:\Users\it.application\Documents\Retail SDK CU9\POS Plug-ins\Services\Dialog\obj\Debug\Dialog.csprojResolveAssemblyReference.cache
+C:\Users\it.application\Documents\Retail SDK CU9\POS Plug-ins\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.Properties.Resources.resources
+C:\Users\it.application\Documents\Retail SDK CU9\POS Plug-ins\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmDenominations.resources
+C:\Users\it.application\Documents\Retail SDK CU9\POS Plug-ins\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmGenericLookup.resources
+C:\Users\it.application\Documents\Retail SDK CU9\POS Plug-ins\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmGenericSearch.resources
+C:\Users\it.application\Documents\Retail SDK CU9\POS Plug-ins\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.formInventoryLookup.resources
+C:\Users\it.application\Documents\Retail SDK CU9\POS Plug-ins\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmItemSearch.resources
+C:\Users\it.application\Documents\Retail SDK CU9\POS Plug-ins\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmJournal.resources
+C:\Users\it.application\Documents\Retail SDK CU9\POS Plug-ins\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmJournalSearchBrazil.resources
+C:\Users\it.application\Documents\Retail SDK CU9\POS Plug-ins\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmJournalSearch.resources
+C:\Users\it.application\Documents\Retail SDK CU9\POS Plug-ins\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmPriceCheck.resources
+C:\Users\it.application\Documents\Retail SDK CU9\POS Plug-ins\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmSmartSearch.resources
+C:\Users\it.application\Documents\Retail SDK CU9\POS Plug-ins\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmTaxOverrideSearch.resources
+C:\Users\it.application\Documents\Retail SDK CU9\POS Plug-ins\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmTenderCount.resources
+C:\Users\it.application\Documents\Retail SDK CU9\POS Plug-ins\Services\Dialog\obj\Debug\Dialog.csproj.GenerateResource.Cache
+C:\Users\it.application\Documents\Retail SDK CU9\POS Plug-ins\Services\Dialog\obj\Debug\Dialog.dll
+C:\Users\it.application\Documents\Retail SDK CU9\POS Plug-ins\Services\Dialog\obj\Debug\Dialog.pdb
+C:\Users\it.application\Documents\Retail SDK CU9\POS Plug-ins\Services\Dialog\obj\Debug\Dialog.dll.licenses
+D:\GT\Dialog\obj\Debug\Dialog.csprojResolveAssemblyReference.cache
+D:\GT\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.Properties.Resources.resources
+D:\GT\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmDenominations.resources
+D:\GT\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmGenericLookup.resources
+D:\GT\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmGenericSearch.resources
+D:\GT\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.formInventoryLookup.resources
+D:\GT\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmItemSearch.resources
+D:\GT\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmJournal.resources
+D:\GT\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmJournalSearch.resources
+D:\GT\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmJournalSearchBrazil.resources
+D:\GT\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmPriceCheck.resources
+D:\GT\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmSmartSearch.resources
+D:\GT\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmTaxOverrideSearch.resources
+D:\GT\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmTenderCount.resources
+D:\GT\Dialog\obj\Debug\Dialog.csproj.GenerateResource.Cache
+D:\GT\Dialog\obj\Debug\Dialog.dll.licenses
+D:\GT\Dialog\obj\Debug\Dialog.dll
+D:\GT\Dialog\obj\Debug\Dialog.pdb
+D:\POS\bin\Debug\Dialog.dll
+D:\POS\bin\Debug\Dialog.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\POS\bin\Debug\Dialog.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\POS\bin\Debug\Dialog.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Dialog\obj\Debug\Dialog.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.Properties.Resources.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmDenominations.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmGenericLookup.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmGenericSearch.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.formInventoryLookup.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmItemSearch.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmJournal.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmJournalSearch.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmJournalSearchBrazil.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmPriceCheck.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmSmartSearch.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmTaxOverrideSearch.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmTenderCount.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Dialog\obj\Debug\Dialog.csproj.GenerateResource.Cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Dialog\obj\Debug\Dialog.dll.licenses
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Dialog\obj\Debug\Dialog.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Dialog\obj\Debug\Dialog.pdb
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\POS\bin\Debug\Dialog.dll
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\POS\bin\Debug\Dialog.pdb
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Dialog\obj\Debug\Dialog.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.Properties.Resources.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmDenominations.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmGenericLookup.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmGenericSearch.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.formInventoryLookup.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmItemSearch.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmJournal.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmJournalSearch.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmJournalSearchBrazil.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmPriceCheck.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmSmartSearch.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmTaxOverrideSearch.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Dialog\obj\Debug\Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch.frmTenderCount.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Dialog\obj\Debug\Dialog.csproj.GenerateResource.Cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Dialog\obj\Debug\Dialog.dll.licenses
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Dialog\obj\Debug\Dialog.dll
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Dialog\obj\Debug\Dialog.pdb

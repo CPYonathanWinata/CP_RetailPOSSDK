@@ -1,0 +1,53 @@
+<?xml version="1.0" standalone="yes"?>
+<!--
+SAMPLE CODE NOTICE
+
+THIS SAMPLE CODE IS MADE AVAILABLE AS IS.  MICROSOFT MAKES NO WARRANTIES, WHETHER EXPRESS OR IMPLIED, 
+OF FITNESS FOR A PARTICULAR PURPOSE, OF ACCURACY OR COMPLETENESS OF RESPONSES, OF RESULTS, OR CONDITIONS OF MERCHANTABILITY.  
+THE ENTIRE RISK OF THE USE OR THE RESULTS FROM THE USE OF THIS SAMPLE CODE REMAINS WITH THE USER.  
+NO TECHNICAL SUPPORT IS PROVIDED.  YOU MAY NOT DISTRIBUTE THIS CODE UNLESS YOU HAVE A LICENSE AGREEMENT WITH MICROSOFT THAT ALLOWS YOU TO DO SO.
+-->
+
+<NewDataSet>
+  <xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:MainDataTable="POSISUPGRADES" msdata:UseCurrentLocale="true">
+      <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="POSISUPGRADES">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="UPGRADEVERSION">
+                  <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                      <xs:maxLength value="15" />
+                    </xs:restriction>
+                  </xs:simpleType>
+                </xs:element>
+                <xs:element name="UPGRADESCRIPT" minOccurs="0">
+                  <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                      <xs:maxLength value="2147483647" />
+                    </xs:restriction>
+                  </xs:simpleType>
+                </xs:element>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+
+  <!--  Upgrade Id : AppMajor.AppMinor.DbVersion.ReservedForPartners -->
+  <POSISUPGRADES>
+    <UPGRADEVERSION>6.3.0.0</UPGRADEVERSION>
+    <!--  No upgrade to 6.3.0.0 supported. DB must be redeployed -->
+    <UPGRADESCRIPT></UPGRADESCRIPT>
+  </POSISUPGRADES>
+
+  <POSISUPGRADES>
+    <UPGRADEVERSION>6.3.100.0</UPGRADEVERSION>
+    <UPGRADESCRIPT>Upgrade6.3.100.0.sql</UPGRADESCRIPT>
+  </POSISUPGRADES>
+
+</NewDataSet>

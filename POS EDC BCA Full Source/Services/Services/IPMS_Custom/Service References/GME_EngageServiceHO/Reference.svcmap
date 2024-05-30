@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="caf45afd-8f41-42c0-b31b-017f23aadfcb" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://192.168.0.85:8080/EngageAcctServices/loyaltyws?wsdl" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="loyaltyws.wsdl" MetadataType="Wsdl" ID="220b58bb-03c6-40ab-9efb-40d82a08ac98" SourceId="1" SourceUrl="http://192.168.0.85:8080/EngageAcctServices/loyaltyws?wsdl=1" />
+    <MetadataFile FileName="loyaltyws.xsd" MetadataType="Schema" ID="9c977b1a-b1f1-49fb-b8d3-017b0208f874" SourceId="1" SourceUrl="http://192.168.0.85:8080/EngageAcctServices/loyaltyws?xsd=1" />
+    <MetadataFile FileName="AccountServiceImplService.wsdl" MetadataType="Wsdl" ID="e63d770a-05cd-4191-ace3-0be2f837c176" SourceId="1" SourceUrl="http://192.168.0.85:8080/EngageAcctServices/loyaltyws?wsdl" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://tempuri.org" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://192.168.0.39:8101/DynamicsAx/Services/TBS_AifVoucherSvcGroup?xsd=xsd3" namespace="http://tempuri.org" />
+      <xsd:import schemaLocation="http://192.168.0.39:8101/DynamicsAx/Services/TBS_AifVoucherSvcGroup?xsd=xsd4" namespace="http://schemas.microsoft.com/dynamics/2010/01/datacontracts" />
+      <xsd:import schemaLocation="http://192.168.0.39:8101/DynamicsAx/Services/TBS_AifVoucherSvcGroup?xsd=xsd6" namespace="http://schemas.microsoft.com/dynamics/2008/01/documents/Fault" />
+      <xsd:import schemaLocation="http://192.168.0.39:8101/DynamicsAx/Services/TBS_AifVoucherSvcGroup?xsd=xsd0" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://192.168.0.39:8101/DynamicsAx/Services/TBS_AifVoucherSvcGroup?xsd=xsd1" namespace="http://schemas.datacontract.org/2004/07/Dynamics.Ax.Application" />
+      <xsd:import schemaLocation="http://192.168.0.39:8101/DynamicsAx/Services/TBS_AifVoucherSvcGroup?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Ax.Xpp" />
+      <xsd:import schemaLocation="http://192.168.0.39:8101/DynamicsAx/Services/TBS_AifVoucherSvcGroup?xsd=xsd5" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://192.168.0.39:8101/DynamicsAx/Services/TBS_AifVoucherSvcGroup?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.AX.Framework.Services" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="TBS_AifVoucherSvcLookupRequest">
+    <wsdl:part name="parameters" element="tns:TBS_AifVoucherSvcLookupRequest" />
+  </wsdl:message>
+  <wsdl:message name="TBS_AifVoucherSvcLookupRequest_Headers">
+    <wsdl:part xmlns:q1="http://schemas.microsoft.com/dynamics/2010/01/datacontracts" name="context" element="q1:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="TBS_AifVoucherSvcLookupResponse">
+    <wsdl:part name="parameters" element="tns:TBS_AifVoucherSvcLookupResponse" />
+  </wsdl:message>
+  <wsdl:message name="TBS_AifVoucherSvc_lookup_AifFaultFault_FaultMessage">
+    <wsdl:part xmlns:q2="http://schemas.microsoft.com/dynamics/2008/01/documents/Fault" name="detail" element="q2:AifFault" />
+  </wsdl:message>
+  <wsdl:message name="TBS_AifVoucherSvcRedeemRequest">
+    <wsdl:part name="parameters" element="tns:TBS_AifVoucherSvcRedeemRequest" />
+  </wsdl:message>
+  <wsdl:message name="TBS_AifVoucherSvcRedeemRequest_Headers">
+    <wsdl:part xmlns:q3="http://schemas.microsoft.com/dynamics/2010/01/datacontracts" name="context" element="q3:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="TBS_AifVoucherSvcRedeemResponse">
+    <wsdl:part name="parameters" element="tns:TBS_AifVoucherSvcRedeemResponse" />
+  </wsdl:message>
+  <wsdl:message name="TBS_AifVoucherSvc_redeem_AifFaultFault_FaultMessage">
+    <wsdl:part xmlns:q4="http://schemas.microsoft.com/dynamics/2008/01/documents/Fault" name="detail" element="q4:AifFault" />
+  </wsdl:message>
+  <wsdl:message name="TBS_AifVoucherSvcReadVoucherLineRequest">
+    <wsdl:part name="parameters" element="tns:TBS_AifVoucherSvcReadVoucherLineRequest" />
+  </wsdl:message>
+  <wsdl:message name="TBS_AifVoucherSvcReadVoucherLineRequest_Headers">
+    <wsdl:part xmlns:q5="http://schemas.microsoft.com/dynamics/2010/01/datacontracts" name="context" element="q5:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="TBS_AifVoucherSvcReadVoucherLineResponse">
+    <wsdl:part name="parameters" element="tns:TBS_AifVoucherSvcReadVoucherLineResponse" />
+  </wsdl:message>
+  <wsdl:message name="TBS_AifVoucherSvc_readVoucherLine_AifFaultFault_FaultMessage">
+    <wsdl:part xmlns:q6="http://schemas.microsoft.com/dynamics/2008/01/documents/Fault" name="detail" element="q6:AifFault" />
+  </wsdl:message>
+  <wsdl:message name="TBS_AifVoucherSvcReadVoucherTableRequest">
+    <wsdl:part name="parameters" element="tns:TBS_AifVoucherSvcReadVoucherTableRequest" />
+  </wsdl:message>
+  <wsdl:message name="TBS_AifVoucherSvcReadVoucherTableRequest_Headers">
+    <wsdl:part xmlns:q7="http://schemas.microsoft.com/dynamics/2010/01/datacontracts" name="context" element="q7:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="TBS_AifVoucherSvcReadVoucherTableResponse">
+    <wsdl:part name="parameters" element="tns:TBS_AifVoucherSvcReadVoucherTableResponse" />
+  </wsdl:message>
+  <wsdl:message name="TBS_AifVoucherSvc_readVoucherTable_AifFaultFault_FaultMessage">
+    <wsdl:part xmlns:q8="http://schemas.microsoft.com/dynamics/2008/01/documents/Fault" name="detail" element="q8:AifFault" />
+  </wsdl:message>
+  <wsdl:message name="TBS_AifVoucherSvcActivateRequest">
+    <wsdl:part name="parameters" element="tns:TBS_AifVoucherSvcActivateRequest" />
+  </wsdl:message>
+  <wsdl:message name="TBS_AifVoucherSvcActivateRequest_Headers">
+    <wsdl:part xmlns:q9="http://schemas.microsoft.com/dynamics/2010/01/datacontracts" name="context" element="q9:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="TBS_AifVoucherSvcActivateResponse">
+    <wsdl:part name="parameters" element="tns:TBS_AifVoucherSvcActivateResponse" />
+  </wsdl:message>
+  <wsdl:message name="TBS_AifVoucherSvc_activate_AifFaultFault_FaultMessage">
+    <wsdl:part xmlns:q10="http://schemas.microsoft.com/dynamics/2008/01/documents/Fault" name="detail" element="q10:AifFault" />
+  </wsdl:message>
+  <wsdl:portType name="TBS_AifVoucherSvc">
+    <wsdl:operation name="lookup">
+      <wsdl:input wsaw:Action="http://tempuri.org/TBS_AifVoucherSvc/lookup" name="TBS_AifVoucherSvcLookupRequest" message="tns:TBS_AifVoucherSvcLookupRequest" />
+      <wsdl:output wsaw:Action="http://tempuri.org/TBS_AifVoucherSvc/lookupResponse" name="TBS_AifVoucherSvcLookupResponse" message="tns:TBS_AifVoucherSvcLookupResponse" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/TBS_AifVoucherSvc/lookupAifFaultFault" name="AifFaultFault" message="tns:TBS_AifVoucherSvc_lookup_AifFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="redeem">
+      <wsdl:input wsaw:Action="http://tempuri.org/TBS_AifVoucherSvc/redeem" name="TBS_AifVoucherSvcRedeemRequest" message="tns:TBS_AifVoucherSvcRedeemRequest" />
+      <wsdl:output wsaw:Action="http://tempuri.org/TBS_AifVoucherSvc/redeemResponse" name="TBS_AifVoucherSvcRedeemResponse" message="tns:TBS_AifVoucherSvcRedeemResponse" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/TBS_AifVoucherSvc/redeemAifFaultFault" name="AifFaultFault" message="tns:TBS_AifVoucherSvc_redeem_AifFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="readVoucherLine">
+      <wsdl:input wsaw:Action="http://tempuri.org/TBS_AifVoucherSvc/readVoucherLine" name="TBS_AifVoucherSvcReadVoucherLineRequest" message="tns:TBS_AifVoucherSvcReadVoucherLineRequest" />
+      <wsdl:output wsaw:Action="http://tempuri.org/TBS_AifVoucherSvc/readVoucherLineResponse" name="TBS_AifVoucherSvcReadVoucherLineResponse" message="tns:TBS_AifVoucherSvcReadVoucherLineResponse" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/TBS_AifVoucherSvc/readVoucherLineAifFaultFault" name="AifFaultFault" message="tns:TBS_AifVoucherSvc_readVoucherLine_AifFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="readVoucherTable">
+      <wsdl:input wsaw:Action="http://tempuri.org/TBS_AifVoucherSvc/readVoucherTable" name="TBS_AifVoucherSvcReadVoucherTableRequest" message="tns:TBS_AifVoucherSvcReadVoucherTableRequest" />
+      <wsdl:output wsaw:Action="http://tempuri.org/TBS_AifVoucherSvc/readVoucherTableResponse" name="TBS_AifVoucherSvcReadVoucherTableResponse" message="tns:TBS_AifVoucherSvcReadVoucherTableResponse" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/TBS_AifVoucherSvc/readVoucherTableAifFaultFault" name="AifFaultFault" message="tns:TBS_AifVoucherSvc_readVoucherTable_AifFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="activate">
+      <wsdl:input wsaw:Action="http://tempuri.org/TBS_AifVoucherSvc/activate" name="TBS_AifVoucherSvcActivateRequest" message="tns:TBS_AifVoucherSvcActivateRequest" />
+      <wsdl:output wsaw:Action="http://tempuri.org/TBS_AifVoucherSvc/activateResponse" name="TBS_AifVoucherSvcActivateResponse" message="tns:TBS_AifVoucherSvcActivateResponse" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/TBS_AifVoucherSvc/activateAifFaultFault" name="AifFaultFault" message="tns:TBS_AifVoucherSvc_activate_AifFaultFault_FaultMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+</wsdl:definitions>

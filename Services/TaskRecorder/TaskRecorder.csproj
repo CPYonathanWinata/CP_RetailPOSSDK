@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\vs.settings" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{41238B71-79CA-48CC-84A0-C4375FF9206A}</ProjectGuid><SDKPath>..\..</SDKPath>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.Dynamics.Retail.Pos.TaskRecorder</RootNamespace>
+    <AssemblyName>TaskRecorder</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' "><OutputPath>$(SDKOutputPath)\bin\Debug\</OutputPath></PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' "><OutputPath>$(SDKOutputPath)\bin\Release\</OutputPath></PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Accessibility" />
+    <Reference Include="DevExpress.Data.v16.2"><Private>False</Private></Reference>
+    <Reference Include="DevExpress.Utils.v16.2"><Private>False</Private></Reference>
+    <Reference Include="DevExpress.XtraBars.v16.2"><Private>False</Private></Reference>
+    <Reference Include="DevExpress.XtraEditors.v16.2"><Private>False</Private></Reference>
+    <Reference Include="DevExpress.XtraPrinting.v16.2"><Private>False</Private></Reference>
+    <Reference Include="DevExpress.XtraGrid.v16.2"><Private>False</Private></Reference>
+    <Reference Include="Microsoft.Office.Interop.Word, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>$(RetailRoot)\Externals\Office\Microsoft.Office.Interop.Word.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    
+    <Compile Include="Localization\EnumLocalizedValueConverter.cs" />
+    <Compile Include="Localization\ILocalizedEnumObject.cs" />
+    <Compile Include="Localization\LocalizedSysModule.cs" />
+    <Compile Include="Localization\LocalizedSysTaskRecorderOperationGroup.cs" />
+    <Compile Include="Localization\LocalizedSysTaskRecorderUsageProfile.cs" />
+    <Compile Include="Controls\BindableTreeNodeComparer.cs" />
+    <Compile Include="MessageHandling\NativeMethods.cs" />
+    <Compile Include="Services\Reference.cs" />
+    <Compile Include="TaskRecorder.cs" />
+    <Compile Include="DocGeneration\WordDocGenerator.cs" />
+    <Compile Include="MessageHandling\EventType.cs" />
+    <Compile Include="MVVM\NotifyPropertyChangedBase.cs" />
+    <Compile Include="Common\RecorderStatus.cs" />
+    <Compile Include="MVVM\ViewModelErrorEventArgs.cs" />
+    <Compile Include="Services\TaskRecorderService.cs" />
+    <Compile Include="Common\Utils.cs" />
+    <Compile Include="Controls\BindableTreeView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\BindableTreeViewImagesKey.cs" />
+    <Compile Include="Controls\BindableTreeViewNode.cs" />
+    <Compile Include="DocGeneration\DocGeneratorFactory.cs" />
+    <Compile Include="DocGeneration\TaskStep\RecordingStep.cs" />
+    <Compile Include="DocGeneration\TaskStep\RecordingTask.cs" />
+    <Compile Include="DocGeneration\VideoRecordingGenerator.cs" />
+    <Compile Include="MessageHandling\ControlExtensions.cs" />
+    <Compile Include="MessageHandling\MessageFilter.cs" />
+    <Compile Include="MessageHandling\MessageType.cs" />
+    <Compile Include="MessageHandling\RelayEventMap.cs" />
+    <Compile Include="Common\MessageTextUtil.cs" />
+    <Compile Include="ViewModels\FrameworkLineViewModel.cs" />
+    <Compile Include="Models\MessageRecord.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\NewNodeViewModel.cs" />
+    <Compile Include="ViewModels\RecorderViewModel.cs" />
+    <Compile Include="Views\NewNodeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\NewNodeForm.Designer.cs">
+      <DependentUpon>NewNodeForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RecorderForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\RecorderForm.Designer.cs">
+      <DependentUpon>RecorderForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SetupForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\SetupForm.Designer.cs">
+      <DependentUpon>SetupForm.cs</DependentUpon>
+    </Compile>
+    
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\NewNodeForm.resx">
+      <DependentUpon>NewNodeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\RecorderForm.resx">
+      <DependentUpon>RecorderForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\SetupForm.resx">
+      <DependentUpon>SetupForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="Properties\DataSources\Microsoft.Dynamics.Retail.Pos.TaskRecorder.ViewModels.NewNodeViewModel.datasource" />
+    <None Include="Properties\DataSources\Microsoft.Dynamics.Retail.Pos.TaskRecorder.ViewModels.RecorderViewModel.datasource" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Dynamics.Retail.Pos.Contracts"><HintPath>$(SDKPath)\Microsoft.Dynamics.Retail.Pos.Contracts.dll</HintPath><Private>False</Private><EmbedInteropTypes>True</EmbedInteropTypes></Reference>
+    <Reference Include="Microsoft.Dynamics.Retail.Pos.DataEntity"><HintPath>$(PosInstallPath)\Microsoft.Dynamics.Retail.Pos.DataEntity.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="Microsoft.Dynamics.Retail.Pos.DataManager"><HintPath>$(PosInstallPath)\Microsoft.Dynamics.Retail.Pos.DataManager.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="POSControls"><HintPath>$(PosInstallPath)\POSControls.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="POSProcesses"><HintPath>$(PosInstallPath)\POSProcesses.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="POSResources"><HintPath>$(PosInstallPath)\POSResources.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="SystemSettings"><HintPath>$(PosInstallPath)\SystemSettings.dll</HintPath><Private>False</Private></Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\EmptyNode.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FilledNode.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

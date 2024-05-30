@@ -1,0 +1,32 @@
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\POS\bin\Debug\Interaction.dll
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\POS\bin\Debug\Interaction.pdb
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\Interaction\obj\Debug\Interaction.csprojResolveAssemblyReference.cache
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\Interaction\obj\Debug\Interaction.dll
+C:\Users\vpn-wcs3\Documents\Retail SDK CU8\POS Plug-ins\Services\Interaction\obj\Debug\Interaction.pdb
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\Interaction\obj\Debug\Interaction.csprojResolveAssemblyReference.cache
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\Interaction\obj\Debug\Interaction.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\Interaction\obj\Debug\Interaction.pdb
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\Interaction\obj\Debug\Interaction.csprojResolveAssemblyReference.cache
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\Interaction\obj\Debug\Interaction.csproj.CoreCompileInputs.cache
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\Interaction\obj\Debug\Interaction.dll
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\Interaction\obj\Debug\Interaction.pdb
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\Interaction\obj\Debug\Interaction.csprojResolveAssemblyReference.cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\Interaction\obj\Debug\Interaction.csproj.CoreCompileInputs.cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\Interaction\obj\Debug\Interaction.dll
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\Interaction\obj\Debug\Interaction.pdb
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\Interaction\obj\Debug\Interaction.csprojResolveAssemblyReference.cache
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\Interaction\obj\Debug\Interaction.csproj.CoreCompileInputs.cache
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\Interaction\obj\Debug\Interaction.dll
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\Interaction\obj\Debug\Interaction.pdb
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\Interaction\obj\Debug\Interaction.csprojResolveAssemblyReference.cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\Interaction\obj\Debug\Interaction.csproj.CoreCompileInputs.cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\Interaction\obj\Debug\Interaction.dll
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\Interaction\obj\Debug\Interaction.pdb
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\Interaction\obj\Debug\Interaction.csprojResolveAssemblyReference.cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\Interaction\obj\Debug\Interaction.csproj.CoreCompileInputs.cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\Interaction\obj\Debug\Interaction.dll
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\Interaction\obj\Debug\Interaction.pdb
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\Interaction\obj\Debug\Interaction.csprojResolveAssemblyReference.cache
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\Interaction\obj\Debug\Interaction.csproj.CoreCompileInputs.cache
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\Interaction\obj\Debug\Interaction.dll
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\Interaction\obj\Debug\Interaction.pdb

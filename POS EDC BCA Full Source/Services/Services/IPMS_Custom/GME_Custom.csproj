@@ -1,0 +1,806 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C2DCE3E0-3BBC-4162-9BEB-D2FEE8F1EB36}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GME_Custom</RootNamespace>
+    <AssemblyName>GME_Custom</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>obj\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <IntermediateOutputPath>C:\Users\YONATH~1.WIN\AppData\Local\Temp\vsD5B1.tmp\Debug\</IntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\..\..\..\..\..\..\Program Files %28x86%29\Microsoft Dynamics AX\60\Retail POS\Services\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <IntermediateOutputPath>C:\Users\YONATH~1.WIN\AppData\Local\Temp\vsD5B1.tmp\Release\</IntermediateOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ApplicationTriggers">
+      <HintPath>..\..\..\Triggers\Triggers\ApplicationTriggers\obj\Debug\ApplicationTriggers.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="BlankOperations">
+      <HintPath>..\BlankOperations\obj\Debug\BlankOperations.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Customer">
+      <HintPath>..\Customer\obj\Debug\Customer.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DataAccess">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\DataAccess.DLL</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Utils.v14.2">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\DevExpress.Utils.v14.2.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="InteractionDefaults">
+      <HintPath>..\InteractionDefaults\obj\Debug\InteractionDefaults.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Loyalty">
+      <HintPath>..\Loyalty\obj\Debug\Loyalty.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Dynamics.Retail.Pos.Contracts">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Microsoft.Dynamics.Retail.Pos.Contracts.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Dynamics.Retail.Pos.DataEntity">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Microsoft.Dynamics.Retail.Pos.DataEntity.DLL</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.PointOfService, Version=1.14.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>obj\Debug\Microsoft.PointOfService.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.PointOfService.WMI, Version=1.14.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\julius\POSEDC\Microsoft.PointOfService.WMI.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism">
+      <HintPath>G:\POS_RETAIL\Retail POS\Microsoft.Practices.Prism.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.Interactivity">
+      <HintPath>..\..\..\..\..\Heron\Dll\Microsoft.Practices.Prism.Interactivity.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="POSControls">
+      <HintPath>..\..\..\..\..\Heron\Dll\POSControls.DLL</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="POSProcesses">
+      <HintPath>..\..\..\..\..\Heron\Dll\POSProcesses.DLL</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="SystemSettings">
+      <HintPath>..\..\..\..\..\Heron\Dll\SystemSettings.DLL</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Transaction">
+      <HintPath>..\..\..\..\..\Heron\Dll\Transaction.DLL</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="GME_Data\ElectronicDataCaptureBCA.cs" />
+    <Compile Include="GME_Data\ElectronicDataCaptureMandiri.cs" />
+    <Compile Include="GME_Data\IntegrationService.cs" />
+    <Compile Include="GME_Data\queryData.cs" />
+    <Compile Include="GME_Data\queryDataOffline.cs" />
+    <Compile Include="GME_Data\updateCustomer.cs" />
+    <Compile Include="GME_Propesties\Connection.cs" />
+    <Compile Include="GME_Propesties\FrmBirthdayVoucherConfirm.cs" />
+    <Compile Include="GME_Propesties\frmBonManualConfirm.cs" />
+    <Compile Include="GME_Propesties\frmCardReplacementConfirm.cs" />
+    <Compile Include="GME_Propesties\frmCustInfoConfirm.cs" />
+    <Compile Include="GME_Propesties\frmCustTypeConfirm.cs" />
+    <Compile Include="GME_Propesties\frmDonasiConfirm.cs" />
+    <Compile Include="GME_Propesties\frmEmployeePurchaseConfirm.cs" />
+    <Compile Include="GME_Propesties\frmEnrollmentLYBCConfirm.cs" />
+    <Compile Include="GME_Propesties\frmEnrollmentConfirm.cs" />
+    <Compile Include="GME_Propesties\frmFamilyMemberConfirm.cs" />
+    <Compile Include="GME_Propesties\frmFamilyPurchaseConfirm.cs" />
+    <Compile Include="GME_Propesties\frmFanBOBBconfirm.cs" />
+    <Compile Include="GME_Propesties\frmItemVoucherConfirm.cs" />
+    <Compile Include="GME_Propesties\frmLYBCMemberConfirm.cs" />
+    <Compile Include="GME_Propesties\frmPayCardOfflineApprovalCode.cs" />
+    <Compile Include="GME_Propesties\frmPublicConfirm.cs" />
+    <Compile Include="GME_Propesties\frmSalesPersonConfirm.cs" />
+    <Compile Include="GME_Propesties\frmTBSIVoucherBaruConfirm.cs" />
+    <Compile Include="GME_Propesties\frmTBSIVoucherLamaConfirm.cs" />
+    <Compile Include="GME_Propesties\frmTestConfirm.cs" />
+    <Compile Include="GME_Propesties\frmTestConmfirm.cs" />
+    <Compile Include="GME_Propesties\frmUnprintVoucherConfirm.cs" />
+    <Compile Include="GME_Propesties\frmUpdateCustomerConfirm.cs" />
+    <Compile Include="GME_Propesties\frmWelcomeVoucherConfirm.cs" />
+    <Compile Include="GME_Propesties\GME_Method.cs" />
+    <Compile Include="GME_Propesties\GME_Var.cs" />
+    <Compile Include="GME_Propesties\voucher.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service References\GME_EngageFALWSServices\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\GME_EngageServiceHO\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\GME_EngageServices\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\GME_LoyaltyAIFPROD\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\GME_LoyaltyAIF\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\GME_VoucherAIFPROD\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\GME_VoucherAIF\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GME_EngageFALWSServices\FALWebServicesImplService.wsdl" />
+    <None Include="Service References\GME_EngageFALWSServices\falws.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GME_EngageFALWSServices\GME_Custom.GME_EngageFALWSServices.baseLoyaltyResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageFALWSServices\GME_Custom.GME_EngageFALWSServices.cardInfoDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageFALWSServices\GME_Custom.GME_EngageFALWSServices.cardLookupResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageFALWSServices\GME_Custom.GME_EngageFALWSServices.deleteBrandResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageFALWSServices\GME_Custom.GME_EngageFALWSServices.deleteCurrencyRateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageFALWSServices\GME_Custom.GME_EngageFALWSServices.deleteFamilyByLevelResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageFALWSServices\GME_Custom.GME_EngageFALWSServices.deleteFamilyByParentResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageFALWSServices\GME_Custom.GME_EngageFALWSServices.deleteProductResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageFALWSServices\GME_Custom.GME_EngageFALWSServices.deleteTenderResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageFALWSServices\GME_Custom.GME_EngageFALWSServices.falBaseResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageFALWSServices\GME_Custom.GME_EngageFALWSServices.falInfoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageFALWSServices\GME_Custom.GME_EngageFALWSServices.getCardInfoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageFALWSServices\GME_Custom.GME_EngageFALWSServices.getMigrateCardResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageFALWSServices\GME_Custom.GME_EngageFALWSServices.getPersonalRewardsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageFALWSServices\GME_Custom.GME_EngageFALWSServices.getVersionInfoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageFALWSServices\GME_Custom.GME_EngageFALWSServices.lookupCardsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageFALWSServices\GME_Custom.GME_EngageFALWSServices.personalRewardsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageFALWSServices\GME_Custom.GME_EngageFALWSServices.productPromotionResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageFALWSServices\GME_Custom.GME_EngageFALWSServices.requestRewardsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageFALWSServices\GME_Custom.GME_EngageFALWSServices.rewardsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageFALWSServices\GME_Custom.GME_EngageFALWSServices.saveBrandResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageFALWSServices\GME_Custom.GME_EngageFALWSServices.saveCurrencyRateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageFALWSServices\GME_Custom.GME_EngageFALWSServices.saveFamilyResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageFALWSServices\GME_Custom.GME_EngageFALWSServices.saveProductPriceResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageFALWSServices\GME_Custom.GME_EngageFALWSServices.saveProductResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageFALWSServices\GME_Custom.GME_EngageFALWSServices.saveTenderResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageFALWSServices\GME_Custom.GME_EngageFALWSServices.suggestProductPromotionsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageFALWSServices\GME_Custom.GME_EngageFALWSServices.svBaseLoyaltyResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageFALWSServices\GME_Custom.GME_EngageFALWSServices.SVMessagesRequestResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageFALWSServices\GME_Custom.GME_EngageFALWSServices.validateCouponResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\AccountServiceImplService.wsdl" />
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.balanceDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.baseResponseDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.contactabilityResponseDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.createIdentifierResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.createIdentifierResponseDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.customerHistoryDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.deleteIdentifierResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.findHouseholdsByInfoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.findIdentifiersByInfoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.findPersonsByInfoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.generateHouseHoldNumberResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.generateHouseHoldNumberResponseDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.getBalancesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.getContactabilityResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.getCustomerHistoryResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.getHouseHoldResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.getIdentifierResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.getPersonResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.getTransactionDetailsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.getTransactionHistoryHeaderResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.getValidVouchersForCardResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.getVersionInfoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.houseHoldResponseDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.houseHoldsResponseDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.identifierResponseDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.identifiersResponseDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.mergeHouseholdsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.mergePersonsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.personResponseDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.personsResponseDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.renameIdentifierResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.splitPersonResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.transactionDetailsResponseDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.transactionSummaryResponseDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.updateContactabilityResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.updateHouseHoldResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.updateIdentifierResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.updatePersonResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.updateUserAccessResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.versionResponseDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\GME_Custom.GME_EngageServiceHO.voucherCheckResponseDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServiceHO\loyaltyws.wsdl" />
+    <None Include="Service References\GME_EngageServiceHO\loyaltyws.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GME_EngageServices\AccountServiceImplService.wsdl" />
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.balanceDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.baseResponseDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.contactabilityResponseDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.createIdentifierResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.createIdentifierResponseDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.customerHistoryDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.deleteIdentifierResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.findHouseholdsByInfoResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.findIdentifiersByInfoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.findPersonsByInfoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.generateHouseHoldNumberResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.generateHouseHoldNumberResponseDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.getBalancesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.getContactabilityResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.getCustomerHistoryResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.getHouseHoldResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.getIdentifierResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.getPersonResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.getTransactionDetailsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.getTransactionHistoryHeaderResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.getValidVouchersForCardResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.getVersionInfoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.houseHoldResponseDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.houseHoldsResponseDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.identifierResponseDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.identifiersResponseDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.mergeHouseholdsResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.mergePersonsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.personResponseDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.personsResponseDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.renameIdentifierResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.splitPersonResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.transactionDetailsResponseDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.transactionSummaryResponseDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.updateContactabilityResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.updateHouseHoldResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.updateIdentifierResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.updatePersonResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.updateUserAccessResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.versionResponseDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\GME_Custom.GME_EngageServices.voucherCheckResponseDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_EngageServices\loyaltyws.wsdl" />
+    <None Include="Service References\GME_EngageServices\loyaltyws.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GME_LoyaltyAIFPROD\GME_Custom.GME_LoyaltyAIFPROD.TBS_AifLoyaltySvcGetLastPointResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_LoyaltyAIFPROD\GME_Custom.GME_LoyaltyAIFPROD.TBS_AifLoyaltySvcUpdateLoyaltyPointResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_LoyaltyAIFPROD\GME_Custom.GME_LoyaltyAIFPROD.TBS_AifLoyaltySvcUpdatePointResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_LoyaltyAIFPROD\TBS_AifLoyaltySvcGroup2.wsdl" />
+    <None Include="Service References\GME_LoyaltyAIFPROD\TBS_AifLoyaltySvcGroup21.wsdl" />
+    <None Include="Service References\GME_LoyaltyAIFPROD\TBS_AifLoyaltySvcGroup6.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GME_LoyaltyAIFPROD\TBS_AifLoyaltySvcGroup61.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GME_LoyaltyAIFPROD\TBS_AifLoyaltySvcGroup62.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GME_LoyaltyAIFPROD\TBS_AifLoyaltySvcGroup63.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GME_LoyaltyAIFPROD\TBS_AifLoyaltySvcGroup64.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GME_LoyaltyAIFPROD\TBS_AifLoyaltySvcGroup65.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GME_LoyaltyAIF\GME_Custom.GME_LoyaltyAIF.TBS_AifLoyaltySvcGetLastPointResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_LoyaltyAIF\GME_Custom.GME_LoyaltyAIF.TBS_AifLoyaltySvcUpdatePointResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_LoyaltyAIF\TBS_AifLoyaltySvcGroup.wsdl" />
+    <None Include="Service References\GME_LoyaltyAIF\TBS_AifLoyaltySvcGroup.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GME_LoyaltyAIF\TBS_AifLoyaltySvcGroup1.wsdl" />
+    <None Include="Service References\GME_LoyaltyAIF\TBS_AifLoyaltySvcGroup1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GME_LoyaltyAIF\TBS_AifLoyaltySvcGroup2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GME_LoyaltyAIF\TBS_AifLoyaltySvcGroup3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GME_LoyaltyAIF\TBS_AifLoyaltySvcGroup4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GME_LoyaltyAIF\TBS_AifLoyaltySvcGroup5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GME_VoucherAIFPROD\GME_Custom.GME_VoucherAIFPROD.TBS_AifVoucherSvcActivateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_VoucherAIFPROD\GME_Custom.GME_VoucherAIFPROD.TBS_AifVoucherSvcGetVoucherTypeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_VoucherAIFPROD\GME_Custom.GME_VoucherAIFPROD.TBS_AifVoucherSvcLookupResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_VoucherAIFPROD\GME_Custom.GME_VoucherAIFPROD.TBS_AifVoucherSvcReadVoucherLineResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_VoucherAIFPROD\GME_Custom.GME_VoucherAIFPROD.TBS_AifVoucherSvcReadVoucherTableResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_VoucherAIFPROD\GME_Custom.GME_VoucherAIFPROD.TBS_AifVoucherSvcRedeemResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_VoucherAIFPROD\GME_Custom.GME_VoucherAIFPROD.TBS_Voucher.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_VoucherAIFPROD\GME_Custom.GME_VoucherAIFPROD.TBS_VoucherLineModel.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_VoucherAIFPROD\GME_Custom.GME_VoucherAIFPROD.TBS_VoucherModel.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_VoucherAIFPROD\TBS_AifVoucherSvcGroup2.wsdl" />
+    <None Include="Service References\GME_VoucherAIFPROD\TBS_AifVoucherSvcGroup21.wsdl" />
+    <None Include="Service References\GME_VoucherAIFPROD\TBS_AifVoucherSvcGroup8.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GME_VoucherAIFPROD\TBS_AifVoucherSvcGroup81.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GME_VoucherAIFPROD\TBS_AifVoucherSvcGroup82.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GME_VoucherAIFPROD\TBS_AifVoucherSvcGroup83.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GME_VoucherAIFPROD\TBS_AifVoucherSvcGroup84.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GME_VoucherAIFPROD\TBS_AifVoucherSvcGroup85.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GME_VoucherAIFPROD\TBS_AifVoucherSvcGroup86.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GME_VoucherAIFPROD\TBS_AifVoucherSvcGroup87.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GME_VoucherAIF\GME_Custom.GME_VoucherAIF.TBS_AifVoucherSvcActivateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_VoucherAIF\GME_Custom.GME_VoucherAIF.TBS_AifVoucherSvcLookupResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_VoucherAIF\GME_Custom.GME_VoucherAIF.TBS_AifVoucherSvcReadVoucherLineResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_VoucherAIF\GME_Custom.GME_VoucherAIF.TBS_AifVoucherSvcReadVoucherTableResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_VoucherAIF\GME_Custom.GME_VoucherAIF.TBS_AifVoucherSvcRedeemResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_VoucherAIF\GME_Custom.GME_VoucherAIF.TBS_Voucher.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_VoucherAIF\GME_Custom.GME_VoucherAIF.TBS_VoucherLineModel.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_VoucherAIF\GME_Custom.GME_VoucherAIF.TBS_VoucherModel.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GME_VoucherAIF\TBS_AifVoucherSvcGroup2.wsdl" />
+    <None Include="Service References\GME_VoucherAIF\TBS_AifVoucherSvcGroup21.wsdl" />
+    <None Include="Service References\GME_VoucherAIF\TBS_AifVoucherSvcGroup8.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GME_VoucherAIF\TBS_AifVoucherSvcGroup81.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GME_VoucherAIF\TBS_AifVoucherSvcGroup82.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GME_VoucherAIF\TBS_AifVoucherSvcGroup83.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GME_VoucherAIF\TBS_AifVoucherSvcGroup84.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GME_VoucherAIF\TBS_AifVoucherSvcGroup85.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GME_VoucherAIF\TBS_AifVoucherSvcGroup86.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GME_VoucherAIF\TBS_AifVoucherSvcGroup87.xsd">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\GME_EngageFALWSServices\" />
+    <WCFMetadataStorage Include="Service References\GME_EngageServiceHO\" />
+    <WCFMetadataStorage Include="Service References\GME_EngageServices\" />
+    <WCFMetadataStorage Include="Service References\GME_LoyaltyAIFPROD\" />
+    <WCFMetadataStorage Include="Service References\GME_LoyaltyAIF\" />
+    <WCFMetadataStorage Include="Service References\GME_VoucherAIFPROD\" />
+    <WCFMetadataStorage Include="Service References\GME_VoucherAIF\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GME_EngageServices\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GME_EngageServices\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GME_EngageServices\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GME_VoucherAIF\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GME_VoucherAIF\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GME_VoucherAIF\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GME_LoyaltyAIF\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GME_LoyaltyAIF\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GME_LoyaltyAIF\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GME_EngageServiceHO\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GME_EngageServiceHO\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GME_EngageServiceHO\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GME_EngageFALWSServices\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GME_EngageFALWSServices\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GME_EngageFALWSServices\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GME_LoyaltyAIFPROD\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GME_LoyaltyAIFPROD\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GME_LoyaltyAIFPROD\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GME_VoucherAIFPROD\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GME_VoucherAIFPROD\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GME_VoucherAIFPROD\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

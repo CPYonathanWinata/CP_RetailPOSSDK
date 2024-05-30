@@ -1,0 +1,596 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using LSRetailPosis.POSControls.Touch;
+using System.Xml;
+using System.Collections.ObjectModel;
+using Microsoft.Dynamics.Retail.Pos.Contracts.DataEntity;
+using Microsoft.Dynamics.Retail.Pos.Contracts;
+using LSRetailPosis.Transaction;
+using Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch;
+
+using LSRetailPosis;
+
+using APIAccess;
+using LSRetailPosis.Settings;
+using System.Globalization;
+using System.Data.SqlClient;
+namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
+{
+	public partial class CP_frmPackingSlipDetail : frmTouchBase
+	{
+		private static string LogSource = typeof(CP_frmPackingSlipDetail).ToString();
+		public IApplication application;
+		public IPosTransaction posTransaction;
+		string salesID;
+		CustomerOrderTransaction transaction;
+
+		private List<LineItemViewModel> viewModels;
+		private ReadOnlyCollection<LineItemViewModel> lineItems;
+
+		protected void SetTransaction(CustomerOrderTransaction custTransaction)
+		{
+			this.transaction = custTransaction;
+		}
+		public CustomerOrderTransaction Transaction
+		{
+			get { return this.transaction; }
+			set
+			{
+				if (this.transaction != value)
+				{
+					SetTransaction(value);
+					//OnPropertyChanged("Transaction");
+				}
+			}
+		}
+		 
+		public CP_frmPackingSlipDetail(IApplication _application, string _salesId)
+		{
+			InitializeComponent();
+			txtSalesOrder.Text = _salesId;
+			salesID = _salesId;
+			application = _application;
+			//posTransaction = _posTransaction;
+			transaction = SalesOrderActions.GetCustomerOrder(salesID, LSRetailPosis.Transaction.CustomerOrderType.SalesOrder, LSRetailPosis.Transaction.CustomerOrderMode.Edit);
+			ItemDetailsViewModel(transaction);
+			loadTableData();
+			//Application = _application;
+		}
+		private void buttio1_Click(object sender, EventArgs e)
+		{
+			//CustomerOrderTransaction cot = SalesOrderActions.GetCustomerOrder(this.SelectedSalesOrderId, this.SelectedOrderType, LSRetailPosis.Transaction.CustomerOrderMode.Edit);
+
+		}
+		public void ItemDetailsViewModel(CustomerOrderTransaction customerOrderTransaction)
+		{
+
+			this.SetTransaction(customerOrderTransaction);
+			// Create a collection of LineItemViewModels from each SaleLineItem
+			viewModels = (from lineItem in this.Transaction.SaleItems.Where(i => !i.Voided)
+							select new LineItemViewModel(lineItem)).ToList<LineItemViewModel>();
+
+			this.lineItems = new ReadOnlyCollection<LineItemViewModel>(viewModels);
+		}
+
+		//public ReadOnlyCollection<LineItemViewModel> Items
+		//{
+		//    get { return lineItems; }
+		//}
+		//private void buttin1_Click(object sender, EventArgs e)
+		//{
+		//    public ItemDetailsViewModel(CustomerOrderTransaction customerOrderTransaction)
+		//    {
+		//        this.SetTransaction(customerOrderTransaction);
+
+		//        // Create a collection of LineItemViewModels from each SaleLineItem
+		//        viewModels = (from lineItem in this.Transaction.SaleItems.Where(i => !i.Voided)
+		//                      select new LineItemViewModel(lineItem)).ToList<LineItemViewModel>();
+
+		//        this.lineItems = new ReadOnlyCollection<LineItemViewModel>(viewModels);
+		//    }
+
+		//    public ReadOnlyCollection<LineItemViewModel> Items
+		//    {
+		//        get { return lineItems; }
+		//    }
+		//}
+		private void button1_Click(object sender, EventArgs e)
+		{
+			// The XML string returned from the API
+			//ReadOnlyCollection<object> containerArray = Application.TransactionServices.Invoke("getSalesOrderDetail", txtSalesOrder.Text, LSRetailPosis.Settings.ApplicationSettings.Terminal.StoreId);
+			//string xmlString = containerArray[3].ToString(); 
+			//"<?xml version=\"1.0\" encoding=\"utf-8\"?><SalesTable SalesId=\"SO/23/0000000286\" RecId=\"5637666603\" SalesName=\"CUST KANVAS\" CustAccount=\"C000000003\"><SalesLine RecId=\"5647976870\" ItemId=\"11310034\" InventDimId=\"D/22/000005241\" SalesQty=\"3.00\" SalesDeliverNow=\"0.00\" InventBatchId=\"\" wmsLocationId=\"\" wmsPalletId=\"\" InventSiteId=\"JKT\" InventLocationId=\"WH_KUJHUB5\" ConfigId=\"\" InventSizeId=\"\" InventColorId=\"\" InventStyleId=\"\" InventSerialId=\"\" Guid=\"{AE2D6F5A-68A4-4E53-AAF4-98D4CB8CD092}\" UpdatedInAx=\"false\" Message=\"\" /><SalesLine RecId=\"5647976871\" ItemId=\"13030502\" InventDimId=\"D/22/000005241\" SalesQty=\"1.00\" SalesDeliverNow=\"0.00\" InventBatchId=\"\" wmsLocationId=\"\" wmsPalletId=\"\" InventSiteId=\"JKT\" InventLocationId=\"WH_KUJHUB5\" ConfigId=\"\" InventSizeId=\"\" InventColorId=\"\" InventStyleId=\"\" InventSerialId=\"\" Guid=\"{8E4788A6-39DE-4EA5-9AAD-19B08200B629}\" UpdatedInAx=\"false\" Message=\"\" /><SalesLine RecId=\"5647976869\" ItemId=\"11310014\" InventDimId=\"D/22/000005241\" SalesQty=\"2.00\" SalesDeliverNow=\"0.00\" InventBatchId=\"\" wmsLocationId=\"\" wmsPalletId=\"\" InventSiteId=\"JKT\" InventLocationId=\"WH_KUJHUB5\" ConfigId=\"\" InventSizeId=\"\" InventColorId=\"\" InventStyleId=\"\" InventSerialId=\"\" Guid=\"{52F58EED-F517-4B88-842E-1DE3A5FC3963}\" UpdatedInAx=\"false\" Message=\"\" /></SalesTable>";
+			int numberLines = 0;
+			XmlDocument doc = new XmlDocument();
+			//doc.LoadXml(xmlString);
+
+			// Create a new DataTable with two columns: ItemId and SalesQty
+			DataTable table = new DataTable();
+
+			table.Columns.Add("NO.");
+			table.Columns.Add("ItemID");
+			table.Columns.Add("ItemName");
+			table.Columns.Add("Unit");
+			table.Columns.Add("QtySO");
+			table.Columns.Add("QtyRcv");
+
+			//// Loop through the SalesLine elements and extract the values of ItemId and SalesQty
+			//XmlNodeList salesLines = doc.GetElementsByTagName("SalesLine");
+			//foreach (XmlNode salesLine in salesLines)
+			//{
+			//    numberLines++;
+			//    string itemId = salesLine.Attributes["ItemId"].Value;
+			//    string salesQty = salesLine.Attributes["SalesQty"].Value;
+
+			//    // Add the pair of values to the DataTable
+			//    table.Rows.Add(numberLines, itemId, salesQty);
+			//}
+
+			foreach (var salesLine in this.lineItems)
+			{
+				numberLines++;
+				string itemId = salesLine.ItemId.ToString(); //salesLine.Attributes["ItemId"].Value;
+				string salesQty = salesLine.QuantityOrdered.ToString();//salesLine.Attributes["SalesQty"].Value;
+				string itemName = salesLine.Description.ToString();
+				// Add the pair of values to the DataTable
+				table.Rows.Add(numberLines, itemId, itemName, salesQty);
+			}
+			//foreach(var salesLine in this.transaction.lineitem)
+
+			// Bind the DataTable to the DataGridView
+			dataGridView1.DataSource = table; 
+			changeGridStyles();
+
+			lblSalesOrder.Text = txtSalesOrder.Text;
+			
+		}
+
+		private void loadTableData()
+		{
+		   int numberLines = 0;
+			XmlDocument doc = new XmlDocument();
+			
+			DataTable table = new DataTable();
+
+			table.Columns.Add("NO.");
+			table.Columns.Add("ItemId");
+			table.Columns.Add("ItemName");
+			table.Columns.Add("Unit");
+			table.Columns.Add("QtySO");
+			table.Columns.Add("QtyRcv");
+
+			
+			foreach (var salesLine in this.lineItems)
+			{
+				
+				//RetailTransaction retailTransaction = posTransaction as RetailTransaction;
+				
+				numberLines++;
+				string itemId = salesLine.ItemId.ToString(); //salesLine.Attributes["ItemId"].Value;
+				string salesQty = salesLine.QuantityOrdered.ToString();//salesLine.Attributes["SalesQty"].Value;
+				string itemName = salesLine.Description.ToString();
+				string unitItem = salesLine.lineItem.BackofficeSalesOrderUnitOfMeasure.ToString();
+				// Add the pair of values to the DataTable
+				table.Rows.Add(numberLines, itemId, itemName, unitItem, salesQty);
+			}
+		   
+
+			// Bind the DataTable to the DataGridView
+			dataGridView1.DataSource = table;
+			changeGridStyles();
+
+			lblSalesOrder.Text = txtSalesOrder.Text;
+		}
+		private void changeGridStyles()
+		{
+			dataGridView1.AllowUserToAddRows = false;
+		   
+			dataGridView1.Columns[0].Width = 55;
+			dataGridView1.Columns[0].ReadOnly = true;
+			dataGridView1.Columns[1].Width = 100;
+			dataGridView1.Columns[1].ReadOnly = true;
+			dataGridView1.Columns[2].Width = 550;
+			dataGridView1.Columns[2].ReadOnly = true;
+			dataGridView1.Columns[3].Width = 50;
+			dataGridView1.Columns[3].ReadOnly = true;
+			dataGridView1.Columns[4].Width = 100;
+			dataGridView1.Columns[4].ReadOnly = true;
+			dataGridView1.Columns[5].Width = 100;
+			//dataGridView1.Columns[4].ReadOnly = true;
+			this.dataGridView1.DefaultCellStyle.Font = new Font("Tahoma", 12);
+			this.dataGridView1.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			//this.dataGridView1.Columns["STOCKCOUNTINGADJUST"].HeaderText = "Stock Adjusted (+/-)";
+
+			//dataGridView1.Columns[0].Width = 90;
+		}
+
+
+		//private void getSalesOrderDetails()
+		//{
+		//    string salesId = txtSalesOrder.Text;
+		//    ReadOnlyCollection<object> containerArray = Application.TransactionServices.Invoke("getSalesOrderDetail", salesId, LSRetailPosis.Settings.ApplicationSettings.Terminal.StoreId);
+		//}
+
+		private void dataGridView1_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+		{
+			string valueDeliverNow = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+			decimal resultValue;
+			if (dataGridView1.Columns[e.ColumnIndex].Name == "QtyRcv")
+			{
+				if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null && decimal.TryParse(valueDeliverNow, out resultValue))
+				{
+					dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = resultValue.ToString("F4");
+				}
+			}
+		}
+
+
+		private string checkPositiveStatus(string _itemId)
+		{
+			string positiveStatus = "0";
+			SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+			try
+			{
+				//before checking the stock, check first whether this item type is service
+				//string queryString = @" SELECT DISPLAYPRODUCTNUMBER,PRODUCTTYPE  FROM ax.ECORESPRODUCT where DISPLAYPRODUCTNUMBER =@ITEMID";
+				string queryString = @"SELECT ITEMID,POSITIVESTATUS,DATAAREAID FROM ax.CPITEMONHANDSTATUS where ITEMID=@ITEMID";
+				using (SqlCommand command = new SqlCommand(queryString, connection))
+				{
+					command.Parameters.AddWithValue("@ITEMID", _itemId);
+
+					if (connection.State != ConnectionState.Open)
+					{
+						connection.Open();
+
+					}
+					using (SqlDataReader reader = command.ExecuteReader())
+					{
+						if (reader.Read())
+						{
+							positiveStatus = reader["POSITIVESTATUS"].ToString();
+
+						}
+
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+				throw;
+			}
+			finally
+			{
+				if (connection.State != ConnectionState.Closed)
+				{
+					connection.Close();
+				}
+			}
+
+			return positiveStatus;
+		}
+
+		
+		private void postBtn_Click(object sender, EventArgs e)
+		{
+			bool retValue;
+			string comment;
+			int flagError = 0;
+			string functionNameAX = "GetStockAX%";
+			string functionNameAPI = "GetItemAPI";
+			string functionNameAPIAddItem = "AddItemMultipleAPI";
+			string urlAX = "";
+			string urlAPI = "";
+			string itemIdStock = "";
+			decimal availQtyStock = 0;
+			decimal availQtyStockSO = 0;
+			decimal availQty = 0;
+			decimal remainQty = 0;
+            decimal qtyReceive = 0;
+            decimal qtySO = 0;
+			//decimal qtyReceive = 0;
+			string positiveStatus = "";
+			
+			string inventLocationId = ApplicationSettings.Terminal.InventLocationId;
+			string inventSiteId = getInventSite(inventLocationId); 
+
+			APIAccess.APIAccessClass APIClass = new APIAccess.APIAccessClass();
+			APIAccess.APIFunction APIFunction = new APIAccess.APIFunction();
+			using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Are you sure to post packing slip?\nMake sure the qty receive is correct", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+			{
+				LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+				if (dialog.DialogResult == DialogResult.Yes)
+				{
+					List<string> values = new List<string>();
+
+					XmlDocument xmlDoc = new XmlDocument();
+					// Create the XML declaration with version and encoding
+					XmlDeclaration xmlDeclaration = xmlDoc.CreateXmlDeclaration("1.0", "utf-8", null);
+					xmlDoc.InsertBefore(xmlDeclaration, xmlDoc.DocumentElement);
+					// Create a new root element called "SalesTable" and add it to the XmlDocument object
+					XmlElement root = xmlDoc.CreateElement("SalesTable");
+					root.SetAttribute("SalesId", txtSalesOrder.Text);
+					xmlDoc.AppendChild(root);                    
+					// Loop through the rows of the DataGridView and add a new SalesLine element for each row
+					foreach (DataGridViewRow row in dataGridView1.Rows)
+					{
+                        
+						//if (row.Cells["QtyRcv"].Value == null)
+						if (row.Cells["QtyRcv"].Value == null || row.Cells["QtyRcv"].Value == DBNull.Value || String.IsNullOrWhiteSpace(row.Cells["QtyRcv"].Value.ToString())) 
+						{
+							flagError = 2;
+							break;
+						}
+						else
+						{
+                            qtyReceive = Convert.ToDecimal(row.Cells["QtyRcv"].Value);
+                            qtySO = Convert.ToDecimal(row.Cells["QtySO"].Value);
+                            if (qtyReceive < 0)
+                            {
+                                flagError = 6;
+                            }
+                            //if (Convert.ToDecimal(row.Cells["QtyRcv"].Value) <= Convert.ToDecimal(row.Cells["QtySO"].Value))
+                            else
+                            {
+                                if (qtyReceive <= qtySO)
+                                {
+                                    // Get the ItemId, SalesQty, and DeliverNow values from the DataGridView row
+                                    string itemId = row.Cells["ItemId"].Value.ToString();
+                                    string itemName = row.Cells["ItemName"].Value.ToString();
+                                    string deliverNow = row.Cells["QtyRcv"].Value.ToString();
+
+                                    //check if this is stocked item
+                                    positiveStatus = checkPositiveStatus(itemId);
+                                    if (positiveStatus == "1")
+                                    {
+                                        //check stock before posting packing slip                                    
+                                        urlAX = APIClass.getURLAPIByFuncName(functionNameAX);
+                                        urlAPI = APIClass.getURLAPIByFuncName(functionNameAPI);
+
+                                        //check stock from AX
+                                        ReadOnlyCollection<object> conResult = APIFunction.checkStockOnHand(SalesOrder.InternalApplication, urlAX, SalesOrder.InternalApplication.Settings.Database.DataAreaID, inventSiteId, inventLocationId, itemId, "", "", "");
+                                        if (conResult.Count == 1)
+                                        {
+                                            flagError = 3;
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            if (conResult[5] != "0")
+                                            {
+                                                availQtyStock = Convert.ToDecimal(conResult[5]);
+                                            }
+                                            else
+                                            {
+                                                flagError = 4;
+                                                break;
+                                            }
+                                            availQtyStock = Convert.ToDecimal(conResult[5] != "" ? conResult[5] : 0);
+                                        }
+                                        //check stock from daily transaction through API
+                                        string resultCheckStockSO = APIFunction.checkStockSO(urlAPI, itemId, SalesOrder.InternalApplication.Settings.Database.DataAreaID, ApplicationSettings.Terminal.InventLocationId, "", "0", "0", "", "");
+                                        APIParameter.parmResponseStockSO responseCheckStockSO = APIFunction.MyJsonConverter.Deserialize<APIParameter.parmResponseStockSO>(resultCheckStockSO);
+                                        availQtyStockSO = decimal.Parse(responseCheckStockSO.response_data, CultureInfo.InvariantCulture);
+
+                                        availQty = availQtyStock + availQtyStockSO; //
+                                        remainQty = availQty - Convert.ToDecimal(row.Cells["QtyRcv"].Value);
+                                        if (remainQty < 0)
+                                        {
+                                            flagError = 5;
+                                            itemIdStock += itemIdStock == "" ? string.Format("Itemid-ProductName-Stok\n{0} - {1} - (Qty {2})\n", itemId, itemName, availQty.ToString()) : string.Format("{0} - {1} - Qty {2}\n", itemId, itemName, availQty.ToString());
+
+                                        }
+                                        else
+                                        {
+
+                                            XmlElement salesLine = xmlDoc.CreateElement("SalesLine");
+                                            salesLine.SetAttribute("ItemId", itemId);
+                                            salesLine.SetAttribute("QtyRcv", deliverNow);
+                                            root.AppendChild(salesLine);
+
+                                        }
+                                    }
+                                    else
+                                    {
+                                        XmlElement salesLine = xmlDoc.CreateElement("SalesLine");
+                                        salesLine.SetAttribute("ItemId", itemId);
+                                        salesLine.SetAttribute("QtyRcv", deliverNow);
+                                        root.AppendChild(salesLine);
+                                    }
+                                }
+                                else
+                                {
+                                    flagError = 1;
+                                    break;
+                                }
+                            } 
+                            
+                            
+						}
+					}
+
+					if (flagError == 0)
+					{
+						// Save the modified XML document to a string
+						string updatedXmlString = xmlDoc.OuterXml;
+
+						try
+						{                            
+							CreatePackingSlip(out retValue, out comment, salesID, updatedXmlString);
+							if (retValue == false)
+							{
+								SalesOrder.InternalApplication.Services.Dialog.ShowMessage(comment, MessageBoxButtons.OK, MessageBoxIcon.Error);
+							}
+							else
+							{
+								SalesOrder.InternalApplication.Services.Dialog.ShowMessage(56120, MessageBoxButtons.OK, MessageBoxIcon.Information);
+								//add to trigger
+								var packList = new List<APIParameter.parmRequestAddItemMultiple>();                                 
+								foreach (DataGridViewRow row in dataGridView1.Rows)
+								{
+									//parmRequest pack = new parmRequest()
+									var pack = new APIParameter.parmRequestAddItemMultiple()
+									{
+										ITEMID = row.Cells["ItemId"].Value.ToString(),
+										QTY = (Convert.ToDecimal(row.Cells["QtyRcv"].Value) * -1).ToString().Replace(",", "."), //lines.QuantityOrdered.ToString(),
+										UNITID = row.Cells["Unit"].Value.ToString(),
+										DATAAREAID = SalesOrder.InternalApplication.Settings.Database.DataAreaID,
+										WAREHOUSE = ApplicationSettings.Terminal.InventLocationId,
+										TYPE = "2",
+										REFERENCESNUMBER = salesID,
+										RETAILVARIANTID = ""
+									};
+									//var data = MyJsonConverter.Serialize(pack);
+									packList.Add(pack);
+								}
+								urlAPI = APIClass.getURLAPIByFuncName(functionNameAPIAddItem);
+								string resultAPI = APIFunction.addItemMultiple(urlAPI, packList);
+								//application.Services.Printing.PrintReceipt(Microsoft.Dynamics.Retail.Pos.Contracts.Services.FormType.SalesOrderReceipt, posTransaction, true);
+								SalesOrderActions.TryPrintPackSlip(LSRetailPosis.Transaction.SalesStatus.Delivered, salesID);
+							}
+						
+							this.Close();
+						}
+						catch (Exception x)
+						{
+							ApplicationExceptionHandler.HandleException(CP_frmPackingSlipDetail.LogSource, x);
+							// "Error creating the packing slip."
+							SalesOrder.InternalApplication.Services.Dialog.ShowMessage(56220, MessageBoxButtons.OK, MessageBoxIcon.Error);
+						}
+
+					}
+					else if( flagError == 1)
+					{
+						SalesOrder.InternalApplication.Services.Dialog.ShowMessage("QtyRcv tidak boleh lebih besar dari QtySo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					}
+					else if(flagError == 2)
+					{
+						SalesOrder.InternalApplication.Services.Dialog.ShowMessage("Belum input QtyRcv.\nApabila tidak di-receive, ketik 0 pada QtyRcv", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					}
+                    else if (flagError == 3 || flagError == 4 || flagError == 5)
+                    {
+                        FlexibleMessageBox.FONT = new Font("Segoe", 16, FontStyle.Regular);
+                        //itemIdStock += "Itemid-ProductName-Stok\n";
+                        itemIdStock += string.Format("\nStok item diatas no SO: {0} tidak mencukupi", salesID);
+                        var result = FlexibleMessageBox.Show(itemIdStock, "Infolog Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        //SalesOrder.InternalApplication.Services.Dialog.ShowMessage(string.Format("Stock item tidak cukup\nTidak bisa melakukan packing slip\nItem Id : {0}",itemIdStock), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else if (flagError == 6)
+                    {
+                        SalesOrder.InternalApplication.Services.Dialog.ShowMessage("QtyRcv tidak boleh minus / negatif", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+				}
+			}
+		}
+
+		private string getInventSite(string inventLocationId)
+		{
+			string inventSite = "";
+			string storeId = "";
+			SqlConnection connection = ApplicationSettings.Database.LocalConnection;
+			storeId = ApplicationSettings.Terminal.StoreId;
+			//var retailTransaction = posTransaction as RetailTransaction;
+			try
+			{
+				string queryString = @" SELECT A.INVENTLOCATION, A.INVENTLOCATIONDATAAREAID, C.INVENTSITEID 
+							FROM ax.RETAILCHANNELTABLE A, ax.RETAILSTORETABLE B, ax.INVENTLOCATION C
+							WHERE A.RECID=B.RECID AND C.INVENTLOCATIONID=A.INVENTLOCATION AND B.STORENUMBER=@STOREID";
+
+				using (SqlCommand command = new SqlCommand(queryString, connection))
+				{
+					command.Parameters.AddWithValue("@STOREID", storeId);
+
+					if (connection.State != ConnectionState.Open)
+					{
+						connection.Open();
+					}
+					using (SqlDataReader reader = command.ExecuteReader())
+					{
+						if (reader.Read())
+						{
+
+							inventSite = reader["INVENTSITEID"].ToString();
+						}
+
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+				throw;
+			}
+			finally
+			{
+				if (connection.State != ConnectionState.Closed)
+				{
+					connection.Close();
+				}
+			}
+			return inventSite;
+		}
+
+		public void CreatePackingSlip(
+			out bool retValue,
+			out string comment,
+			string salesId, string _xmlString)
+		{
+			try
+			{
+				object[] parameterList = new object[] 
+							{
+								txtSalesOrder.Text.ToString(),
+								_xmlString
+								
+							};
+
+
+				ReadOnlyCollection<object> containerArray = application.TransactionServices.InvokeExtension("postPackingSlip", parameterList);
+				retValue = (bool)containerArray[1];
+				comment = containerArray[2].ToString();
+
+				if (containerArray.Count > 3)
+				{
+					string errorDetail = containerArray[3].ToString();
+
+					if (!string.IsNullOrWhiteSpace(errorDetail))
+					{
+						comment += errorDetail;
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+				throw;
+			}
+		}
+
+		private void closeBtn_Click(object sender, EventArgs e)
+		{
+			this.Close();
+		}
+
+        private void lblSalesOrder_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void header_Click(object sender, EventArgs e)
+        {
+
+        }
+	}
+}

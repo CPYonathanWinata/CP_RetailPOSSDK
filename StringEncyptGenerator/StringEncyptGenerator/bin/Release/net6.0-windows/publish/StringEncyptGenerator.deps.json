@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v5.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v5.0": {
+      "StringEncyptGenerator/1.0.0": {
+        "runtime": {
+          "StringEncyptGenerator.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "StringEncyptGenerator/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

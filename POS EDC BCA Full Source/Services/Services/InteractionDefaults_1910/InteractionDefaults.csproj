@@ -1,0 +1,584 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\vs.settings" />
+  <PropertyGroup>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{67D7C10A-E270-4CDC-A9F9-E8F5E33F1A85}</ProjectGuid>
+    <SDKPath>..\..</SDKPath>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Microsoft.Dynamics.Retail.Pos.Interaction</RootNamespace>
+    <AssemblyName>InteractionDefaults</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>obj\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>$(SDKOutputPath)\bin\Release\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ApplicationTriggers">
+      <HintPath>..\..\Triggers\ApplicationTriggers\obj\Debug\ApplicationTriggers.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="BlankOperations, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\BlankOperations\obj\Debug\BlankOperations.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Data.v14.2">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\DevExpress.Data.v14.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Utils.v14.2">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\DevExpress.Utils.v14.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraEditors.v14.2">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\DevExpress.XtraEditors.v14.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraGrid.v14.2">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\DevExpress.XtraGrid.v14.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraLayout.v14.2">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\DevExpress.XtraLayout.v14.2.dll</HintPath>
+    </Reference>
+    <Reference Include="GME_Custom, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\IPMS_Custom\obj\Debug\GME_Custom.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Dynamics.Retail.Pos.Contracts">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Microsoft.Dynamics.Retail.Pos.Contracts.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.Interactivity">
+      <HintPath>$(PosInstallPath)\Microsoft.Practices.Prism.Interactivity.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ButtonGrid\frmBarcodeSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ButtonGrid\frmBarcodeSelect.designer.cs">
+      <DependentUpon>frmBarcodeSelect.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SplitButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ProductSearchAttributes\AttributeSearcher.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\POSReport.cs" />
+    <Compile Include="Reports\POSReportChart.cs" />
+    <Compile Include="Reports\POSReportParameter.cs" />
+    <Compile Include="ViewModels\AffiliationViewModel.cs" />
+    <Compile Include="ViewModels\ProductSearchAttributesFilterViewModel.cs" />
+    <Compile Include="ViewModels\DimensionsViewModel.cs" />
+    <Compile Include="ViewModels\DisbursementSlipCreationViewModel.cs" />
+    <Compile Include="ViewModels\ExtendedLogOnViewModel.cs" />
+    <Compile Include="ViewModels\KitComponentSubstituteViewModel.cs" />
+    <Compile Include="ViewModels\LoyaltyCardFormViewModel.cs" />
+    <Compile Include="ViewModels\KitDisassemblyViewModel.cs" />
+    <Compile Include="ViewModels\PayCurrencyViewModel.cs" />
+    <Compile Include="ViewModels\PrintLabelReportViewModel.cs" />
+    <Compile Include="ViewModels\ProductDetailsViewModel.cs" />
+    <Compile Include="ViewModels\RedeemLoyaltyPointsViewModel.cs" />
+    <Compile Include="ViewModels\RegisterTimeFormViewModel.cs" />
+    <Compile Include="ViewModels\ReportViewModel.cs" />
+    <Compile Include="ViewModels\SaleRefundDetailsViewModel.cs" />
+    <Compile Include="ViewModels\ViewTimeClockEntriesViewModel.cs" />
+    <Compile Include="WinFormsTouch\DisbursementSlipCreationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\DisbursementSlipCreationForm.designer.cs">
+      <DependentUpon>DisbursementSlipCreationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\AffiliationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\AffiliationForm.Designer.cs">
+      <DependentUpon>AffiliationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\ExtendedLogOnForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\ExtendedLogOnForm.designer.cs">
+      <DependentUpon>ExtendedLogOnForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\ExtendedLogOnScanForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\ExtendedLogOnScanForm.designer.cs">
+      <DependentUpon>ExtendedLogOnScanForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\frmIncomeExpenseAccounts.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\frmIncomeExpenseAccounts.Designer.cs">
+      <DependentUpon>frmIncomeExpenseAccounts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\frmProductSearchAttributesFilter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\frmProductSearchAttributesFilter.Designer.cs">
+      <DependentUpon>frmProductSearchAttributesFilter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\GME\frmBonManual.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\GME\frmBonManual.Designer.cs">
+      <DependentUpon>frmBonManual.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\GME\frmBringBackOurBottle.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\GME\frmBringBackOurBottle.Designer.cs">
+      <DependentUpon>frmBringBackOurBottle.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\GME\frmCustomerInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\GME\frmCustomerInfo.Designer.cs">
+      <DependentUpon>frmCustomerInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\GME\frmDonasi.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\GME\frmDonasi.Designer.cs">
+      <DependentUpon>frmDonasi.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\GME\frmEmployeePurchase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\GME\frmEmployeePurchase.Designer.cs">
+      <DependentUpon>frmEmployeePurchase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\GME\frmEnrollment.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\GME\frmEnrollment.Designer.cs">
+      <DependentUpon>frmEnrollment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\GME\frmFamilyPurchase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\GME\frmFamilyPurchase.Designer.cs">
+      <DependentUpon>frmFamilyPurchase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\GME\frmFanBOBB.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\GME\frmFanBOBB.Designer.cs">
+      <DependentUpon>frmFanBOBB.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\GME\frmLYBCMember.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\GME\frmLYBCMember.Designer.cs">
+      <DependentUpon>frmLYBCMember.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\GME\frmPaymentCash.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\GME\frmPaymentCash.Designer.cs">
+      <DependentUpon>frmPaymentCash.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\GME\frmPublic.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\GME\frmPublic.Designer.cs">
+      <DependentUpon>frmPublic.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\GME\frmCustomerType.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\GME\frmCustomerType.Designer.cs">
+      <DependentUpon>frmCustomerType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\GME\frmSalesPerson.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\GME\frmSalesPerson.Designer.cs">
+      <DependentUpon>frmSalesPerson.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\GME\frmTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\GME\frmTest.Designer.cs">
+      <DependentUpon>frmTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\GME\GME_FormCaller.cs" />
+    <Compile Include="WinFormsTouch\KitComponentSubstituteForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\KitComponentSubstituteForm.Designer.cs">
+      <DependentUpon>KitComponentSubstituteForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\LoyaltyCardForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\LoyaltyCardForm.designer.cs">
+      <DependentUpon>LoyaltyCardForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\frmKitDisassembly.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\frmKitDisassembly.Designer.cs">
+      <DependentUpon>frmKitDisassembly.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\LoyaltyIssueCardForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\LoyaltyIssueCardForm.designer.cs">
+      <DependentUpon>LoyaltyIssueCardForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\LoyaltyPayForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\LoyaltyPayForm.designer.cs">
+      <DependentUpon>LoyaltyPayForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\PrintLabelReportForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\PrintLabelReportForm.Designer.cs">
+      <DependentUpon>PrintLabelReportForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\ProductDetailsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\ProductDetailsForm.Designer.cs">
+      <DependentUpon>ProductDetailsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\ProductInformationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\ProductInformationForm.Designer.cs">
+      <DependentUpon>ProductInformationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\LogOnForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\frmBarcodeSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\frmBarcodeSelect.designer.cs">
+      <DependentUpon>frmBarcodeSelect.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\frmDimensions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\frmDimensions.Designer.cs">
+      <DependentUpon>frmDimensions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\frmInput.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\frmPayCash.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\frmPayCurrency.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\frmPayCustomerAccount.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\frmReturnTransaction.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\frmReturnTransaction.designer.cs">
+      <DependentUpon>frmReturnTransaction.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\ManagerAccessForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\LogbookForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\LogbookForm.designer.cs">
+      <DependentUpon>LogbookForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\RedeemLoyaltyPointsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\RedeemLoyaltyPointsForm.Designer.cs">
+      <DependentUpon>RedeemLoyaltyPointsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\RegisterTimeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\RegisterTimeForm.Designer.cs">
+      <DependentUpon>RegisterTimeForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\ReportForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\ReportForm.Designer.cs">
+      <DependentUpon>ReportForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\SaleRefundDetailForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\SaleRefundDetailForm.Designer.cs">
+      <DependentUpon>SaleRefundDetailForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\TaggedImageBoxControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\TaggedImageBoxControl.Designer.cs">
+      <DependentUpon>TaggedImageBoxControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinFormsTouch\ViewTimeClockEntriesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\ViewTimeClockEntriesForm.Designer.cs">
+      <DependentUpon>ViewTimeClockEntriesForm.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Diagnostics">
+      <HintPath>$(PosInstallPath)\Microsoft.Dynamics.Retail.Diagnostics.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Dynamics.Retail.Notification.Contracts">
+      <HintPath>$(PosInstallPath)\Microsoft.Dynamics.Retail.Notification.Contracts.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="BusinessLogic">
+      <HintPath>$(PosInstallPath)\BusinessLogic.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ButtonGrid">
+      <HintPath>$(PosInstallPath)\ButtonGrid.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DataAccess">
+      <HintPath>$(PosInstallPath)\DataAccess.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Dynamics.Retail.Pos.DataEntity">
+      <HintPath>$(PosInstallPath)\Microsoft.Dynamics.Retail.Pos.DataEntity.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Dynamics.Retail.Pos.DataManager">
+      <HintPath>$(PosInstallPath)\Microsoft.Dynamics.Retail.Pos.DataManager.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="POSProcesses">
+      <HintPath>$(PosInstallPath)\POSProcesses.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Dynamics.Retail.Pos.SystemCore">
+      <HintPath>$(PosInstallPath)\Microsoft.Dynamics.Retail.Pos.SystemCore.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SystemSettings">
+      <HintPath>$(PosInstallPath)\SystemSettings.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Transaction">
+      <HintPath>$(PosInstallPath)\Transaction.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ButtonGrid\frmBarcodeSelect.resx">
+      <DependentUpon>frmBarcodeSelect.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\DisbursementSlipCreationForm.resx">
+      <DependentUpon>DisbursementSlipCreationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\AffiliationForm.resx">
+      <DependentUpon>AffiliationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\ExtendedLogOnForm.resx">
+      <DependentUpon>ExtendedLogOnForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\ExtendedLogOnScanForm.resx">
+      <DependentUpon>ExtendedLogOnScanForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\frmIncomeExpenseAccounts.resx">
+      <DependentUpon>frmIncomeExpenseAccounts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\GME\frmBonManual.resx">
+      <DependentUpon>frmBonManual.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\GME\frmBringBackOurBottle.resx">
+      <DependentUpon>frmBringBackOurBottle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\GME\frmCustomerInfo.resx">
+      <DependentUpon>frmCustomerInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\GME\frmCustomerType.resx">
+      <DependentUpon>frmCustomerType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\GME\frmDonasi.resx">
+      <DependentUpon>frmDonasi.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\GME\frmEmployeePurchase.resx">
+      <DependentUpon>frmEmployeePurchase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\GME\frmEnrollment.resx">
+      <DependentUpon>frmEnrollment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\GME\frmFamilyPurchase.resx">
+      <DependentUpon>frmFamilyPurchase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\GME\frmFanBOBB.resx">
+      <DependentUpon>frmFanBOBB.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\GME\frmLYBCMember.resx">
+      <DependentUpon>frmLYBCMember.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\GME\frmPaymentCash.resx">
+      <DependentUpon>frmPaymentCash.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\GME\frmPublic.resx">
+      <DependentUpon>frmPublic.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\GME\frmSalesPerson.resx">
+      <DependentUpon>frmSalesPerson.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\GME\frmTest.resx">
+      <DependentUpon>frmTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\KitComponentSubstituteForm.resx">
+      <DependentUpon>KitComponentSubstituteForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\LoyaltyCardForm.resx">
+      <DependentUpon>LoyaltyCardForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\frmKitDisassembly.resx">
+      <DependentUpon>frmKitDisassembly.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\LoyaltyIssueCardForm.resx">
+      <DependentUpon>LoyaltyIssueCardForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\LoyaltyPayForm.resx">
+      <DependentUpon>LoyaltyPayForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\ProductDetailsForm.resx">
+      <DependentUpon>ProductDetailsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\ProductInformationForm.resx">
+      <DependentUpon>ProductInformationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\LogOnForm.resx">
+      <DependentUpon>LogOnForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\frmBarcodeSelect.resx">
+      <DependentUpon>frmBarcodeSelect.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\frmDimensions.resx">
+      <DependentUpon>frmDimensions.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\frmInput.resx">
+      <DependentUpon>frmInput.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\frmPayCash.resx">
+      <DependentUpon>frmPayCash.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\frmPayCurrency.resx">
+      <DependentUpon>frmPayCurrency.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\frmPayCustomerAccount.resx">
+      <DependentUpon>frmPayCustomerAccount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\frmReturnTransaction.resx">
+      <DependentUpon>frmReturnTransaction.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\ManagerAccessForm.resx">
+      <DependentUpon>ManagerAccessForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\LogbookForm.resx">
+      <DependentUpon>LogbookForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\RegisterTimeForm.resx">
+      <DependentUpon>RegisterTimeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\ReportForm.resx">
+      <DependentUpon>ReportForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\SaleRefundDetailForm.resx">
+      <DependentUpon>SaleRefundDetailForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\TaggedImageBoxControl.resx">
+      <DependentUpon>TaggedImageBoxControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\ViewTimeClockEntriesForm.resx">
+      <DependentUpon>ViewTimeClockEntriesForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\DataSources\LoyaltyCardFormViewModel.datasource" />
+    <None Include="Properties\DataSources\DisbursementSlipCreationViewModel.datasource">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\DataSources\SaleRefundDetailsViewModel.datasource" />
+    <None Include="Resources\ProductUnavailable.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\search.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\remove.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\top.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\up.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bottom.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\down.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bar.png" />
+    <None Include="Resources\list.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\disabled.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Customer\Customer.csproj">
+      <Project>{7D317DB1-7C7B-41B0-AC36-C03C03CCBBB0}</Project>
+      <Name>Customer</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

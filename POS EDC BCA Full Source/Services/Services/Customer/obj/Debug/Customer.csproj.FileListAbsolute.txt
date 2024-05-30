@@ -1,0 +1,127 @@
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Customer.csprojResolveAssemblyReference.cache
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.frmReportList.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.Properties.Resources.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.AddressUserControl.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmNewShippingAddress.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmCustomerSearch.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmCustomerTransactions.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmNewCustomer.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmPrintSelection.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmShippingAddressSearch.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.ViewAddressUserControl.resources
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Customer.csproj.GenerateResource.Cache
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Customer.dll
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Customer.pdb
+C:\Users\pos-dev\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Customer.dll.licenses
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Customer.csprojResolveAssemblyReference.cache
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.frmReportList.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.Properties.Resources.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.AddressUserControl.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmNewShippingAddress.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmCustomerSearch.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmCustomerTransactions.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmNewCustomer.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmPrintSelection.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmShippingAddressSearch.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.ViewAddressUserControl.resources
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Customer.csproj.GenerateResource.Cache
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Customer.dll.licenses
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Customer.csproj.CoreCompileInputs.cache
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Customer.dll
+C:\Users\bisadmin\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Customer.pdb
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.frmReportList.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.Properties.Resources.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.AddressUserControl.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmNewShippingAddress.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmCustomerSearch.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmCustomerTransactions.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmNewCustomer.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmPrintSelection.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmShippingAddressSearch.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.ViewAddressUserControl.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Customer.csproj.GenerateResource.Cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Customer.dll.licenses
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Customer.csproj.CoreCompileInputs.cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Customer.dll
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Customer.pdb
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Customer.csprojResolveAssemblyReference.cache
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.frmReportList.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.Properties.Resources.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.AddressUserControl.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmNewShippingAddress.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmCustomerSearch.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmCustomerTransactions.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmNewCustomer.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmPrintSelection.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmShippingAddressSearch.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.ViewAddressUserControl.resources
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Customer.csproj.GenerateResource.Cache
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Customer.dll.licenses
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Customer.csproj.CoreCompileInputs.cache
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Customer.dll
+C:\Users\Adhi Wicaksono\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Customer.pdb
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\Customer\obj\Debug\Customer.csprojResolveAssemblyReference.cache
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.frmReportList.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.Properties.Resources.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.AddressUserControl.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmNewShippingAddress.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmCustomerSearch.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmCustomerTransactions.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmNewCustomer.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmPrintSelection.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmShippingAddressSearch.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.ViewAddressUserControl.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\Customer\obj\Debug\Customer.csproj.GenerateResource.Cache
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\Customer\obj\Debug\Customer.dll.licenses
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\Customer\obj\Debug\Customer.csproj.CoreCompileInputs.cache
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\Customer\obj\Debug\Customer.dll
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_27012018\Services\Customer\obj\Debug\Customer.pdb
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins\Services\Customer\obj\Debug\Customer.csprojResolveAssemblyReference.cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\Customer\obj\Debug\Customer.csprojResolveAssemblyReference.cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.frmReportList.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.Properties.Resources.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.AddressUserControl.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmNewShippingAddress.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmCustomerSearch.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmCustomerTransactions.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmNewCustomer.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmPrintSelection.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmShippingAddressSearch.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.ViewAddressUserControl.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\Customer\obj\Debug\Customer.csproj.GenerateResource.Cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\Customer\obj\Debug\Customer.dll.licenses
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\Customer\obj\Debug\Customer.csproj.CoreCompileInputs.cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\Customer\obj\Debug\Customer.dll
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_07022018\Services\Customer\obj\Debug\Customer.pdb
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.frmReportList.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.Properties.Resources.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.AddressUserControl.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmNewShippingAddress.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmCustomerSearch.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmCustomerTransactions.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmNewCustomer.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmPrintSelection.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmShippingAddressSearch.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.ViewAddressUserControl.resources
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\Customer\obj\Debug\Customer.csproj.GenerateResource.Cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\Customer\obj\Debug\Customer.dll.licenses
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\Customer\obj\Debug\Customer.csproj.CoreCompileInputs.cache
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\Customer\obj\Debug\Customer.dll
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\Customer\obj\Debug\Customer.pdb
+C:\Users\DAX-Fiant\Documents\Retail SDK CU8\POS Plug-ins_New\Services\Customer\obj\Debug\Customer.csprojResolveAssemblyReference.cache
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\Customer\obj\Debug\Customer.csprojResolveAssemblyReference.cache
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.frmReportList.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.Properties.Resources.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.AddressUserControl.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmNewShippingAddress.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmCustomerSearch.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmCustomerTransactions.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmNewCustomer.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmPrintSelection.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.frmShippingAddressSearch.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\Customer\obj\Debug\Microsoft.Dynamics.Retail.Pos.Customer.WinFormsTouch.ViewAddressUserControl.resources
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\Customer\obj\Debug\Customer.csproj.GenerateResource.Cache
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\Customer\obj\Debug\Customer.dll.licenses
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\Customer\obj\Debug\Customer.csproj.CoreCompileInputs.cache
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\Customer\obj\Debug\Customer.dll
+C:\Users\rizki_dev\Documents\Retail SDK CU8\POS Plug-ins_03032018\Services\Customer\obj\Debug\Customer.pdb
