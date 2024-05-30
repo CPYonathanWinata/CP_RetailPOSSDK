@@ -83,6 +83,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.IZone.PLN
             btnBack.BackColor = Color.DarkGray;
             btnFinish.Enabled = false;
             btnFinish.BackColor = Color.DarkGray;
+            //i want this on main and production too
         }
 
         private void LoadTabOneData()
