@@ -704,7 +704,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                                     foreach (var discountLines in lineItem.PeriodicDiscountLines)
                                     {
                                         PeriodicDiscountItem periodDiscItem = discountLines as PeriodicDiscountItem;
-                                        if (periodDiscItem.OfferId.StartsWith("ED") || periodDiscItem.OfferId.StartsWith("QS")) //if (periodDiscItem.OfferId.StartsWith("PDI") || periodDiscItem.OfferId.StartsWith("PDIS"))
+                                        if (periodDiscItem.OfferId.StartsWith("ED") || periodDiscItem.OfferId.StartsWith("QS")) //if (periodDiscItem.OfferId.StartsWith("PDI") || periodDiscItem.OfferId.StartsWith("PDIS"))  //
                                         {
                                             using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Tidak bisa akses ke menu ini karena sudah mendapat diskon", MessageBoxButtons.OK, MessageBoxIcon.Stop))
                                             {
@@ -773,7 +773,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                                     {
                                         PeriodicDiscountItem periodDiscItem = discountLines as PeriodicDiscountItem;
 
-                                        if (periodDiscItem.OfferId.StartsWith("ED")) //if (periodDiscItem.OfferId.StartsWith("PDI"))
+                                        if (periodDiscItem.OfferId.StartsWith("ED")) //if (periodDiscItem.OfferId.StartsWith("PDI")) //
                                         {
                                              promoID = periodDiscItem.OfferId;
                                         }
@@ -809,11 +809,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                         }
                         else
                         {
-                            using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Please add item first", MessageBoxButtons.OK, MessageBoxIcon.Stop))
-                            {
-                                LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
-                                return;
-                            }
+                            //using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Please add item first", MessageBoxButtons.OK, MessageBoxIcon.Stop))
+                            //{
+                            //    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                            //    return;
+                            //}
                         }
                         
                         Application.RunOperation(PosisOperations.DisplayTotal, "");
@@ -868,7 +868,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                                         //{
                                         //    promoID = periodDiscItem.OfferId;
                                         //}
-                                        if (periodDiscItem.OfferId.StartsWith("QS")) //if (periodDiscItem.OfferId.StartsWith("PDIS")) 
+                                        if (periodDiscItem.OfferId.StartsWith("QS")) //if (periodDiscItem.OfferId.StartsWith("PDIS")) //
                                         {
                                             promoID = periodDiscItem.OfferId;
                                         }
@@ -902,11 +902,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                         }
                         else
                         {
-                            using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Please add item first", MessageBoxButtons.OK, MessageBoxIcon.Stop))
-                            {
-                                LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
-                                return;
-                            }
+                            //using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Please add item first", MessageBoxButtons.OK, MessageBoxIcon.Stop))
+                            //{
+                            //    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                            //    return;
+                            //}
                         }
 
                         Application.RunOperation(PosisOperations.DisplayTotal, "");
