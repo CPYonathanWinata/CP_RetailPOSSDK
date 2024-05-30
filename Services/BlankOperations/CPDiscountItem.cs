@@ -81,21 +81,23 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
             //{
                 if (operationId == "23")
                 {
-                    LoadDataHeader();
-                    LoadData();
                     promoCode = "PDI";  //"PDI"; //ED
                     commentCode = "PROMOPDI";  //"PROMOPDI";
                     lineCommentCode = "AddItem-PDI";  //"AddItem-PDI";
                     lblHeader.Text = "Promo Discount Item";
+                    LoadDataHeader();
+                    LoadData();
+                    
                 }
                 else if(operationId == "25")
                 {
-                    LoadDataHeaderReceipt();
-                    LoadDataLineReceipt();
                     promoCode = "PDIS";  //"PDIS";
                     commentCode = "PROMOPDIS"; // "PROMOPDIS";
                     lineCommentCode = "AddItem-PDIS";// "AddItem-PDIS"; 
                     lblHeader.Text = "Promo Discount Item per Struk";
+                    LoadDataHeaderReceipt();
+                    LoadDataLineReceipt();
+                   
                 }
             //}
             
