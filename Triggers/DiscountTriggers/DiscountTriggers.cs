@@ -118,7 +118,7 @@ namespace Microsoft.Dynamics.Retail.Pos.DiscountTriggers
             retailTransaction.Comment = "PAYMENTDISCOUNT";
 
             //change for production
-            //test
+            //test123123123
         }
 
         private bool checkDiscPayment(IPosTransaction posTransaction)
