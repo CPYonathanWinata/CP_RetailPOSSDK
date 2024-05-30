@@ -116,6 +116,8 @@ namespace Microsoft.Dynamics.Retail.Pos.DiscountTriggers
             };
             retailTransaction.InfoCodeLines.AddLast(infocodeLines);
             retailTransaction.Comment = "PAYMENTDISCOUNT";
+
+            //change for production
         }
 
         private bool checkDiscPayment(IPosTransaction posTransaction)
