@@ -35,7 +35,9 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.IZone.PLN
         IPosTransaction posTransaction;
         IApplication application;
         IBlankOperationInfo operationInfo;
-
+        private Dictionary<string, string> itemDictionary = new Dictionary<string, string>();
+        string selectedName;
+        string selectedItemId  ;
         private void SetCurrentTab(int currentIndex)
         {
             if (currentPanelIndex > -1) //remove all old controls back to tabcontrol
@@ -95,7 +97,50 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.IZone.PLN
 
         private void LoadTabTwoData()
         {
-            ReadOnlyCollection<object> containerArray = application.TransactionServices.InvokeExtension("getItemList", "APLN");
+            nominalBox.Items.Clear();
+            ReadOnlyCollection<object> containerArray = application.TransactionServices.InvokeExtension("getItemList", "APPLN");
+            string xmlString = containerArray[3].ToString();
+
+             // Load the XML string into an XmlDocument
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xmlString);
+
+            // Select all CPIZONEITEMMAP nodes
+            XmlNodeList nodes = doc.SelectNodes("//CPIZONEITEMMAP");
+
+            // Add each Name and ItemId to the ComboBox
+            foreach (XmlNode node in nodes)
+            {
+                string itemId = node.Attributes["ItemId"].Value;
+                string name = node.Attributes["Name"].Value;
+
+                // Add a new ComboBoxItem to the ComboBox
+                nominalBox.Items.Add(new ComboBoxItem(name, itemId));
+            }
+
+            // Add event handler for SelectedIndexChanged
+            nominalBox.SelectedIndexChanged += NominalBox_SelectedIndexChanged;
+        }
+
+        private void NominalBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComboBoxItem selectedItem = null; // Declare selectedItem outside the if statement
+
+            if (nominalBox.SelectedItem is ComboBoxItem)
+            {
+                // If the selected item is a ComboBoxItem, assign it to selectedItem
+                selectedItem = (ComboBoxItem)nominalBox.SelectedItem;
+            }
+
+            // Now you can access selectedItem outside the if statement
+            if (selectedItem != null)
+            {
+                // Retrieve the Name and ItemId
+                  selectedName = selectedItem.Name;
+                  selectedItemId = selectedItem.ItemId;
+
+            }
+
         }
 
         public CPPLNPrabayar(IBlankOperationInfo _operationInfo, IPosTransaction _posTransaction, IApplication _application)
@@ -189,7 +234,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.IZone.PLN
             SaleLineItem saleLineItem;
 
             decimal priceToOverride = 213000;
-            string itemID = "80000012";
+            string itemID = selectedItemId;
 
             if (itemID != "")
             {
@@ -211,4 +256,22 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.IZone.PLN
 
         }
     }
+
+    public class ComboBoxItem
+    {
+        public string Name { get; set; }
+        public string ItemId { get; set; }
+
+        public ComboBoxItem(string name, string itemId)
+        {
+            Name = name;
+            ItemId = itemId;
+        }
+
+        public override string ToString()
+        {
+            return Name; // This is what will be displayed in the ComboBox
+        }
+    }
+
 }
