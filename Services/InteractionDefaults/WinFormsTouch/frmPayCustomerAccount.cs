@@ -356,7 +356,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 					using (frmMessage dialog = new frmMessage("Please Choose Customer for Tender " + this.tenderInfo.TenderName, MessageBoxButtons.OK, MessageBoxIcon.Stop))
 					{
 						POSFormsManager.ShowPOSForm(dialog);
-						Close();
+						Close(); 
 					}
 				}
 				#endregion
