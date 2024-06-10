@@ -2690,6 +2690,13 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 								string invoiceNumber = GME_Var.invoiceNumberBCA;
 								int transAmount = int.Parse(GME_Var.amountBCA.Substring(0, GME_Var.amountBCA.Length - 2));
 								int otherAmount = int.Parse(GME_Var.otherAmountBCA.Substring(0, GME_Var.otherAmountBCA.Length - 2));
+
+                                //add Adm fee by Yonathan 10/06/2024
+                                //get ADM fee
+                                decimal admFee = GetAdmFee();                                
+                                otherAmount = otherAmount - (int)admFee;
+                                //end
+
 								string pan = GME_Var.panBCA;
 								pan = pan.Replace(" ", "");
 								//if (pan != "" && pan != null)
@@ -3867,6 +3874,48 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 		}
 
 		#endregion
+
+        //additional for adm fee by Yonathan 10/06/2024
+        public decimal GetAdmFee()
+        {
+            decimal admFee = 0;
+
+
+            DateTime today = DateTime.Today;
+
+
+            SqlConnection connectionString = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+
+            // Query untuk mendapatkan nilai ADMFEE
+            string query = @"
+            SELECT TOP 1 ADMFEE 
+            FROM CPBANKADM 
+            WHERE TENDERTYPEID = 32 
+                AND @today >= FROMDATE 
+                AND @today <= TODATE";
+
+            using (SqlCommand command = new SqlCommand(query, connectionString))
+            {
+
+                command.Parameters.AddWithValue("@today", today);
+
+                try
+                {
+                    connectionString.Open();
+                    object result = command.ExecuteScalar();
+                    if (result != null)
+                    {
+                        admFee = (decimal)result;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error: " + ex.Message);
+                }
+            }
+
+            return admFee;
+        }
 	}
 
     class Printer
@@ -4004,6 +4053,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
             }
         }
 
+       
 
         private void printDocument_PrintPage(object sender, PrintPageEventArgs e)
         {
