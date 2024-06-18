@@ -1,6 +1,24 @@
-C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Peripherals\obj\Debug\Peripherals.csprojResolveAssemblyReference.cache
-C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Peripherals\obj\Debug\Microsoft.Dynamics.Retail.Pos.Services.DualDisplayForm.resources
-C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\Peripherals\obj\Debug\Peripherals.csproj.GenerateResource.Cache
-C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Peripherals\obj\Debug\Peripherals.csprojResolveAssemblyReference.cache
-C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Peripherals\obj\Debug\Microsoft.Dynamics.Retail.Pos.Services.DualDisplayForm.resources
-C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Peripherals\obj\Debug\Peripherals.csproj.GenerateResource.Cache
+D:\Work\Project\CPI - On Progress\Visual Studio\Upgrade\Upgrade\POS Plug-ins\POS\bin\Debug\services\Peripherals.dll
+D:\Work\Project\CPI - On Progress\Visual Studio\Upgrade\Upgrade\POS Plug-ins\POS\bin\Debug\services\Peripherals.pdb
+D:\Work\Project\CPI - On Progress\Visual Studio\Upgrade\Upgrade\POS Plug-ins\Services\Peripherals\obj\Debug\Peripherals.csprojResolveAssemblyReference.cache
+D:\Work\Project\CPI - On Progress\Visual Studio\Upgrade\Upgrade\POS Plug-ins\Services\Peripherals\obj\Debug\Microsoft.Dynamics.Retail.Pos.Services.DualDisplayForm.resources
+D:\Work\Project\CPI - On Progress\Visual Studio\Upgrade\Upgrade\POS Plug-ins\Services\Peripherals\obj\Debug\Peripherals.csproj.GenerateResource.Cache
+D:\Work\Project\CPI - On Progress\Visual Studio\Upgrade\Upgrade\POS Plug-ins\Services\Peripherals\obj\Debug\Peripherals.dll
+D:\Work\Project\CPI - On Progress\Visual Studio\Upgrade\Upgrade\POS Plug-ins\Services\Peripherals\obj\Debug\Peripherals.pdb
+D:\Work\Project\CPI - On Progress\Visual Studio\Retail SDK Current CU10\Upgrade\POS Plug-ins\Services\Peripherals\obj\Debug\Peripherals.csprojResolveAssemblyReference.cache
+D:\Work\Project\CPI - On Progress\Visual Studio\Retail SDK Current CU10\Upgrade\POS Plug-ins\Services\Peripherals\obj\Debug\Microsoft.Dynamics.Retail.Pos.Services.DualDisplayForm.resources
+D:\Work\Project\CPI - On Progress\Visual Studio\Retail SDK Current CU10\Upgrade\POS Plug-ins\Services\Peripherals\obj\Debug\Peripherals.csproj.GenerateResource.Cache
+D:\Work\Project\CPI - On Progress\Visual Studio\Retail SDK Current CU10\Upgrade\POS Plug-ins\Services\Peripherals\obj\Debug\Peripherals.dll
+D:\Work\Project\CPI - On Progress\Visual Studio\Retail SDK Current CU10\Upgrade\POS Plug-ins\Services\Peripherals\obj\Debug\Peripherals.pdb
+D:\OLD\Work\Work\Project\CPI - On Progress\Visual Studio\Retail SDK Current CU10\Upgrade\POS Plug-ins\POS\bin\Debug\services\Peripherals.dll
+D:\OLD\Work\Work\Project\CPI - On Progress\Visual Studio\Retail SDK Current CU10\Upgrade\POS Plug-ins\POS\bin\Debug\services\Peripherals.pdb
+D:\OLD\Work\Work\Project\CPI - On Progress\Visual Studio\Retail SDK Current CU10\Upgrade\POS Plug-ins\Services\Peripherals\obj\Debug\Peripherals.csprojResolveAssemblyReference.cache
+D:\OLD\Work\Work\Project\CPI - On Progress\Visual Studio\Retail SDK Current CU10\Upgrade\POS Plug-ins\Services\Peripherals\obj\Debug\Microsoft.Dynamics.Retail.Pos.Services.DualDisplayForm.resources
+D:\OLD\Work\Work\Project\CPI - On Progress\Visual Studio\Retail SDK Current CU10\Upgrade\POS Plug-ins\Services\Peripherals\obj\Debug\Peripherals.csproj.GenerateResource.Cache
+D:\OLD\Work\Work\Project\CPI - On Progress\Visual Studio\Retail SDK Current CU10\Upgrade\POS Plug-ins\Services\Peripherals\obj\Debug\Peripherals.dll
+D:\OLD\Work\Work\Project\CPI - On Progress\Visual Studio\Retail SDK Current CU10\Upgrade\POS Plug-ins\Services\Peripherals\obj\Debug\Peripherals.pdb
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\Peripherals\obj\Debug\Peripherals.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\Peripherals\obj\Debug\Microsoft.Dynamics.Retail.Pos.Services.DualDisplayForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\Peripherals\obj\Debug\Peripherals.csproj.GenerateResource.Cache
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\Peripherals\obj\Debug\Peripherals.dll
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\Peripherals\obj\Debug\Peripherals.pdb

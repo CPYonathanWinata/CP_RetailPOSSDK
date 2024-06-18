@@ -19,7 +19,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Services
     /// <summary>
     /// Encapsulates the barcode Code 39 string encoding
     /// </summary>
-    internal sealed class BarcodeCode39 : Barcode
+    public sealed class BarcodeCode39 : Barcode
     {
 
         #region Fields

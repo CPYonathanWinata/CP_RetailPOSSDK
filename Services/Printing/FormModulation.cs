@@ -81,6 +81,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
         #region CPECRBCA
         //decimal totalDibebaskan = 0; //declare variable to store amount
         decimal amountAmbilTunai = 0; //declare ambilTunai variable
+        decimal amountAdmFee = 0;//add adm fee Yonathan 13/06/2024 //CPIADMFEE
         #endregion
 
         #endregion
@@ -186,6 +187,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
 
                     #region CPECRBCA
                     getAmbilTunai(theTransaction); //call function to get AmbilTunai Amount
+                    //getAdmTunai(theTransaction);
                     #endregion
 
                     /*case "CUSTORDERSALES" :
@@ -898,7 +900,12 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                             return amountAmbilTunai <= 0 ? "" : "Ambil Tunai";
                             //return "Ambil Tunai";
                         case "AMOUNTAMBILTUNAI":
-                            return amountAmbilTunai <= 0 ? "" : String.Format("{0,0}", amountAmbilTunai);
+                            return amountAmbilTunai <= 0 ? "" : Printing.InternalApplication.Services.Rounding.Round(amountAmbilTunai, false); //String.Format("{0,0}", amountAmbilTunai);
+                        case "LABELTUNAIFEE": // add by Yonathan 10/06/2024 //CPIADMFEE
+                            return amountAmbilTunai <= 0 ? "" : "Biaya Tarik Tunai";
+                        //return "Ambil Tunai";
+                        case "AMOUNTTUNAIFEE":
+                            return amountAmbilTunai <= 0 ? "" : Printing.InternalApplication.Services.Rounding.Round(amountAdmFee, false); //CPIADMFEE
                         #endregion
                     }
 
@@ -3485,7 +3492,8 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
             try
             {
                 string queryString = @"select 
-	                                        CAST(AMOUNT AS DECIMAL(18,0)) AS amountTunai
+	                                        CAST(AMOUNT AS DECIMAL(18,0)) AS amountTunai,
+                                            CAST(ADMFEE AS DECIMAL(18,0)) AS amountAdmFee
                                         from ax.CPAMBILTUNAI
                                         WHERE 
 	                                        TRANSACTIONID = @TRANSACTIONID
@@ -3505,6 +3513,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                         if (reader.Read())
                         {
                             amountAmbilTunai = (decimal)reader["amountTunai"];
+                            amountAdmFee = (decimal)reader["amountAdmFee"];
                             amountFound = 1;
                         }
                     }
@@ -3534,7 +3543,8 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                                             WHERE TRANSACTIONID =  @TRANSACTIONID  ";*/
 
                     string queryString = @"select 
-	                                        CAST(AMOUNT AS DECIMAL(18,0)) AS amountTunai
+	                                        CAST(AMOUNT AS DECIMAL(18,0)) AS amountTunai,
+                                            CAST(ADMFEE AS DECIMAL(18,0)) AS amountAdmFee
                                         from ax.CPAMBILTUNAITEMP
                                         WHERE 
 	                                        TRANSACTIONID = @TRANSACTIONID
@@ -3554,6 +3564,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                             if (reader.Read())
                             {
                                 amountAmbilTunai = (decimal)reader["amountTunai"];
+                                amountAdmFee = (decimal)reader["amountAdmFee"];
                             }
                         }
                     }
@@ -3570,10 +3581,109 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                         connection.Close();
                     }
                 }
+
+
             }
         }
         #endregion
+        private void getAdmTunai(RetailTransaction theTransaction)
+        {
+            int amountFound = 0;
+            SqlConnection con = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
 
+            try
+            {
+                string queryString = @"SELECT 	
+	                                    TENDERTYPEID,
+	                                    FROMDATE,
+	                                    TODATE,
+	                                    CAST(ADMFEE AS DECIMAL(18,0)) AS amountFee
+                                    from ax.CPBANKADM
+                                    WHERE 
+	                                    [TENDERTYPEID] = @TENDERTYPEID
+                                     AND FROMDATE <= CAST(GETDATE() AS date) AND TODATE >= CAST(GETDATE() AS date)";
+
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+                    //command.Parameters.AddWithValue("@TENDERTYPEID", theTransaction.);
+                     
+
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+                    }
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            amountAmbilTunai = (decimal)reader["amountTunai"];
+                            amountFound = 1;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+                }
+            }
+
+//            if (amountFound == 0)
+//            {
+//                con = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+
+//                try
+//                {
+
+//                    /*string queryString = @" SELECT PurchaserName, NAMEORDER FROM [CPOrderTable]
+//                                            WHERE TRANSACTIONID =  @TRANSACTIONID  ";*/
+
+//                    string queryString = @"select 
+//	                                        CAST(AMOUNT AS DECIMAL(18,0)) AS amountTunai
+//                                        from ax.CPAMBILTUNAITEMP
+//                                        WHERE 
+//	                                        TRANSACTIONID = @TRANSACTIONID
+//	                                        AND DATAAREAID = @DATAAREAID";
+
+//                    using (SqlCommand command = new SqlCommand(queryString, connection))
+//                    {
+//                        command.Parameters.AddWithValue("@TRANSACTIONID", theTransaction.TransactionId);
+//                        command.Parameters.AddWithValue("@DATAAREAID", LSRetailPosis.Settings.ApplicationSettings.Database.DATAAREAID);
+
+//                        if (connection.State != ConnectionState.Open)
+//                        {
+//                            connection.Open();
+//                        }
+//                        using (SqlDataReader reader = command.ExecuteReader())
+//                        {
+//                            if (reader.Read())
+//                            {
+//                                amountAmbilTunai = (decimal)reader["amountTunai"];
+//                            }
+//                        }
+//                    }
+//                }
+//                catch (Exception ex)
+//                {
+//                    LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+//                    throw;
+//                }
+//                finally
+//                {
+//                    if (connection.State != ConnectionState.Closed)
+//                    {
+//                        connection.Close();
+//                    }
+//                }
+//            }
+        }
 
         //Customize Ezeelink
   /*      private void getEzeelink(RetailTransaction theTransaction)

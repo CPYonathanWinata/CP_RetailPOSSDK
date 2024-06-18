@@ -160,6 +160,11 @@ namespace Microsoft.Dynamics.Retail.Pos.Services
         /// </summary>
         public void OpenDrawer()
         {
+            if (LSRetailPosis.Settings.ApplicationSettings.Terminal.TrainingMode)
+            {
+                return;
+            }
+
             if (Peripherals.InternalApplication.Services.Peripherals.FiscalPrinter.FiscalPrinterEnabled())
             {
                 Peripherals.InternalApplication.Services.Peripherals.FiscalPrinter.OpenDrawer();

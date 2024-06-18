@@ -230,7 +230,9 @@ namespace Microsoft.Dynamics.Retail.Pos.Services
 
                 if (!string.IsNullOrWhiteSpace(logOnKey))
                 {
-                    staffID = logonData.GetStaffIDWithLogOnKey(logOnKey, captureData.LogOnType);
+                    // Create a logon key hash 
+                    string logonKeyHash = LSRetailPosis.DataAccess.LogonData.ComputePasswordHash(((int)captureData.LogOnType).ToString(), logOnKey, ApplicationSettings.Terminal.StaffPasswordHashName);
+                    staffID = logonData.GetStaffIDWithLogOnKey(logonKeyHash, captureData.LogOnType);
                 }
             }
 

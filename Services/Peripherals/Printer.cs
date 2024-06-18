@@ -9,9 +9,11 @@ NO TECHNICAL SUPPORT IS PROVIDED.  YOU MAY NOT DISTRIBUTE THIS CODE UNLESS YOU H
 
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.IO;
@@ -24,39 +26,77 @@ using LSRetailPosis;
 using LSRetailPosis.POSControls;
 using LSRetailPosis.POSControls.Touch;
 using LSRetailPosis.Settings;
+using LSRetailPosis.Settings.FunctionalityProfiles;
 using LSRetailPosis.Settings.HardwareProfiles;
 using Microsoft.Dynamics.Retail.Diagnostics;
+using Microsoft.Dynamics.Retail.Pos.Contracts.BusinessLogic;
 using Microsoft.Dynamics.Retail.Pos.Contracts.Services;
 
 namespace Microsoft.Dynamics.Retail.Pos.Services
 {
-	/// <summary>
-	/// Class implements IPrinter interface.
-	/// </summary>
+    /// <summary>
+    /// Class implements IPrinter interface.
+    /// </summary>
     [Export(typeof(IPrinter))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
+    [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Design")]
     public sealed class Printer : IPrinter
-	{
+    {
 
-		#region Fields
+        #region Fields
 
-		private OPOSPOSPrinterClass oposPrinter;
+        private OPOSPOSPrinterClass oposPrinter;
 
-		private readonly int characterSet = Convert.ToInt32(LSRetailPosis.Settings.HardwareProfiles.Printer.Characaterset);
+        private readonly int characterSet = Convert.ToInt32(LSRetailPosis.Settings.HardwareProfiles.Printer.Characaterset);
 
-		private const string barCodeRegEx = "<B: (.+?)>";
-        private const string logoRegEx = @"<L:\s*(?<imageId>\d+)\s*>";
-		private const int totalNumberOfLines = 40;
+        internal const string barCodeRegEx = "<B: (.+?)>";
+        internal const string logoRegEx = @"<L:\s*(?<imageId>\d+)\s*>";
+        internal const string qrCodeRegEx = "<Q: (.+?)>";
+
+        private const float defaultFontCharWidth = 6;
+        // Begin modify NEC 
+        private const string defaultFontName = "Calibri";
+        private const float defaultFontSize = 8;
+        // End modify NEC
+        private const float defaultLineHeight = 10;
+        private const int defaultPageBreakMargin = 30;
+        private const int totalNumberOfLines = 40;
+
+        private const int defaultQrcodeCellSize = 2;
+        private const QrcodeEncoding defaultQrcodeEncoding = QrcodeEncoding.Iso88591;
+        private const ErrorCorrectionLevel defaultQrcodeErrorCorrectionLevel = ErrorCorrectionLevel.Low;
+        private const int defaultQrcodeVersion = 0;
+
+        private const int TEXT_MARKER_SIZE = 3;
+        private const int textMarkerWidth = 3;
         private const string NORMAL_TEXT_MARKER = "|1C";
         private const string BOLD_TEXT_MARKER = "|2C";
+        private const string DOUBLESIZE_TEXT_MARKER = "|3C";
+        private const string DOUBLESIZE_BOLD_TEXT_MARKER = "|4C";
         private const string ESC_CHARACTER = "\x1B";
+
+        //Begin add yonathan for fixing height printing
+        private const int minTextLength = 28;
+        private const int minOffset = 22;
+        private string textFix = "";
+        private int offset = 0;
+        //End add
+
+	    /// Currently specific to Brazil
+        private const float defaultFontCharWidthForThermalPrinter = 6.9f;
+        private const string defaultFontNameForThermalPrinter = "Lucida Console";
+        private const float defaultFontSizeForThermalPrinter = 8;
+        private const int defaultPageBoundsWidthForThermalPrinter = 41;
+        private const int defaultPageMarginBottonForThermalPrinter = 0;
+        private const int defaultPageMarginLeftForThermalPrinter = 0;
+        private const int defaultPageMarginTopForThermalPrinter = 20;
 
         private Barcode barCode = new BarcodeCode39();
         private string[] printText;
         private int printTextLine;
-		private frmMessage dialog;
-		private int linesLeftOnCurrentPage;
-		private string[] headerLines;
+        private frmMessage dialog;
+        private int linesLeftOnCurrentPage;
+        private string[] headerLines;
 
         private DeviceTypes deviceType;
 
@@ -93,91 +133,90 @@ namespace Microsoft.Dynamics.Retail.Pos.Services
 
         #endregion
 
+        #region Public Methods
 
-		#region Public Methods
+        /// <summary>
+        /// Load the device.
+        /// </summary>
+        /// <exception cref="IOException"></exception>
+        public void Load()
+        {
+            if (this.deviceType == DeviceTypes.None)
+                return;
 
-		/// <summary>
-		/// Load the device.
-		/// </summary>
-		/// <exception cref="IOException"></exception>
-		public void Load()
-		{
-			if (this.deviceType == DeviceTypes.None)
-				return;
-
-			if (this.deviceType == DeviceTypes.OPOS)
-			{
+            if (this.deviceType == DeviceTypes.OPOS)
+            {
                 NetTracer.Information("Peripheral [CashDrawer] - OPOS device loading: {0}", this.DeviceName ?? "<Undefined>");
 
                 oposPrinter = new OPOSPOSPrinterClass();
 
-				// Open
-				oposPrinter.Open(this.DeviceName);
-				Peripherals.CheckResultCode(this, oposPrinter.ResultCode);
+                // Open
+                oposPrinter.Open(this.DeviceName);
+                Peripherals.CheckResultCode(this, oposPrinter.ResultCode);
 
-				// Claim
-				oposPrinter.ClaimDevice(Peripherals.ClaimTimeOut);
-				Peripherals.CheckResultCode(this, oposPrinter.ResultCode);
+                // Claim
+                oposPrinter.ClaimDevice(Peripherals.ClaimTimeOut);
+                Peripherals.CheckResultCode(this, oposPrinter.ResultCode);
 
-				// Enable/Configure
-				oposPrinter.DeviceEnabled = true;
-				oposPrinter.AsyncMode = false;
-				oposPrinter.CharacterSet = characterSet;
-				oposPrinter.RecLineChars = 56;
-				oposPrinter.SlpLineChars = 60;
+                // Enable/Configure
+                oposPrinter.DeviceEnabled = true;
+                oposPrinter.AsyncMode = false;
+                oposPrinter.CharacterSet = characterSet;
+                oposPrinter.RecLineChars = 56;
+                oposPrinter.SlpLineChars = 60;
 
-				// Loading a bitmap for the printer
-				string logoFile = Path.Combine(ApplicationSettings.GetAppPath(), "RetailPOSLogo.bmp");
+                // Loading a bitmap for the printer
+                string logoFile = Path.Combine(ApplicationSettings.GetAppPath(), "RetailPOSLogo.bmp");
 
-				if (File.Exists(logoFile))
-				{
+                if (File.Exists(logoFile))
+                {
                     NetTracer.Information("Peripheral [Printer] - OPOS printer bitmap load");
                     oposPrinter.SetBitmap(1, (int)OPOSPOSPrinterConstants.PTR_S_RECEIPT, logoFile, (int)OPOSPOSPrinterConstants.PTR_BM_ASIS, (int)OPOSPOSPrinterConstants.PTR_BM_CENTER);
-				}
+                }
             }
 
             IsActive = true;
-		}
+        }
 
-		/// <summary>
-		/// Unload the device.
-		/// </summary>
-		public void Unload()
-		{
-			if (IsActive && oposPrinter != null)
-			{
+        /// <summary>
+        /// Unload the device.
+        /// </summary>
+        public void Unload()
+        {
+            if (IsActive && oposPrinter != null)
+            {
                 NetTracer.Information("Peripheral [Printer] - Device Released");
 
-				oposPrinter.ReleaseDevice();
-				oposPrinter.Close();
-				IsActive = true;
-			}
-		}
+                oposPrinter.ReleaseDevice();
+                oposPrinter.Close();
+                IsActive = true;
+            }
+        }
 
-		/// <summary>
-		/// Print text on the OPOS printer.
-		/// </summary>
-		/// <param name="text"></param>
-		public void PrintReceipt(string text)
-		{
-			if (Peripherals.InternalApplication.Services.Peripherals.FiscalPrinter.FiscalPrinterEnabled())
-			{
-        	    if (Peripherals.InternalApplication.Services.Peripherals.FiscalPrinter.SupportPrintingReceiptInNonFiscalMode(false))
-		        {
+        /// <summary>
+        /// Print text on the OPOS printer.
+        /// </summary>
+        /// <param name="text"></param>
+        public void PrintReceipt(string text)
+        {
+            if (Peripherals.InternalApplication.Services.Peripherals.FiscalPrinter.FiscalPrinterEnabled())
+            {
+                if (Peripherals.InternalApplication.Services.Peripherals.FiscalPrinter.SupportPrintingReceiptInNonFiscalMode(false))
+                {
                     Peripherals.InternalApplication.Services.Peripherals.FiscalPrinter.PrintReceipt(text);
-		        }
-	
-        	    if (Peripherals.InternalApplication.Services.Peripherals.FiscalPrinter.ProhibitPrintingReceiptOnNonFiscalPrinters(false))
-		        {
+                }
+
+                if (Peripherals.InternalApplication.Services.Peripherals.FiscalPrinter.ProhibitPrintingReceiptOnNonFiscalPrinters(false))
+                {
                     return;
-		        }
-			}
+                }
+            }
 
             // Always print to text file if test hook is enabled
-			PrinterTestHook(text, "Receipt");
+            PrinterTestHook(text, "Receipt");
 
-			if (!IsActive)
-				return;
+            if (!IsActive)
+                return;
 
             try
             {
@@ -201,33 +240,33 @@ namespace Microsoft.Dynamics.Retail.Pos.Services
                 ApplicationExceptionHandler.HandleException(this.ToString(), ex);
                 Peripherals.InternalApplication.Services.Dialog.ShowMessage(6212);
             }
-		}
+        }
 
-		/// <summary>
-		/// Print text on the OPOS printer as slip.
-		/// </summary>
-		/// <param name="text"></param>
-		public void PrintSlip(string text)
-		{
-			PrintSlip(text, string.Empty, string.Empty);
-		}
+        /// <summary>
+        /// Print text on the OPOS printer as slip.
+        /// </summary>
+        /// <param name="text"></param>
+        public void PrintSlip(string text)
+        {
+            PrintSlip(text, string.Empty, string.Empty);
+        }
 
-		/// <summary>
-		/// Prints a slip containing the text in the textToPrint parameter
-		/// </summary>
-		/// <param name="header"></param>
-		/// <param name="details"></param>
-		/// <param name="footer"></param>
-		public void PrintSlip(string header, string details, string footer)
-		{
-			if (Peripherals.InternalApplication.Services.Peripherals.FiscalPrinter.FiscalPrinterEnabled())
-			{
-				Peripherals.InternalApplication.Services.Peripherals.FiscalPrinter.PrintSlip(header, details, footer);
-				return;
-			}
+        /// <summary>
+        /// Prints a slip containing the text in the textToPrint parameter
+        /// </summary>
+        /// <param name="header"></param>
+        /// <param name="details"></param>
+        /// <param name="footer"></param>
+        public void PrintSlip(string header, string details, string footer)
+        {
+            if (Peripherals.InternalApplication.Services.Peripherals.FiscalPrinter.FiscalPrinterEnabled())
+            {
+                Peripherals.InternalApplication.Services.Peripherals.FiscalPrinter.PrintSlip(header, details, footer);
+                return;
+            }
 
-		    if (!IsActive)
-				return;
+            if (!IsActive)
+                return;
 
             NetTracer.Information("Peripheral [Printer] - Print Slip");
 
@@ -263,60 +302,89 @@ namespace Microsoft.Dynamics.Retail.Pos.Services
                 PrintReceipt(header + details + footer);
             }
 
-		}
+        }
 
-		/// <summary>
-		/// Print a receipt on the windows printer.
-		/// </summary>
-		/// <param name="textToPrint"></param>
-		/// <param name="printerName"></param>
-		public void WindowsPrinting(string textToPrint, string printerName)
-		{
+        /// <summary>
+        /// Print a receipt on the windows printer.
+        /// </summary>
+        /// <param name="textToPrint"></param>
+        /// <param name="printerName"></param>
+        public void WindowsPrinting(string textToPrint, string printerName)
+        {
             if (!string.IsNullOrWhiteSpace(textToPrint))
             {
                 using (PrintDocument printDoc = new PrintDocument())
                 {
+                    //Begin add line NEC
+                    PrintDialog pd = new PrintDialog();
                     printDoc.PrinterSettings.PrinterName = printerName;
+
                     string subString = textToPrint.Replace(ESC_CHARACTER, string.Empty);
                     printText = subString.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
                     printTextLine = 0;
+                    // Begin add NEC
+                    int printLength = printText.Length;
+                    PaperSize psize = new PaperSize("Custom", 100, ((printLength * 10) + 236));
+                    pd.Document = printDoc;
+                    pd.Document.DefaultPageSettings.PaperSize = psize;
+                    printDoc.DefaultPageSettings.PaperSize.Width = 400;
+                    //End add NEC
+                    if (SupportedCountryRegion.BR == Functions.CountryRegion)
+                    {
+                        printDoc.BeginPrint += new System.Drawing.Printing.PrintEventHandler(printDoc_BeginPrintBR);
+                        printDoc.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(printDoc_PrintPageByWords);
+                    }
+                    else
+                    {
+                        printDoc.BeginPrint += new System.Drawing.Printing.PrintEventHandler(printDoc_BeginPrint);
+                        printDoc.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(printDoc_PrintPage);
+                    }
 
-                    printDoc.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(printDoc_PrintPage);
                     printDoc.Print();
                 }
             }
-		}
+        }
 
-		#endregion
+        #endregion
 
-		#region Private Methods
+        //Begin add NEC Yonathan for fixing height
+        public int setYPaperSize(int printTextLength)
+        {
+            int Result = 0;
+            Result = printTextLength * (minOffset - (printTextLength - minTextLength));
+            return Result;
 
-		/// <summary>
-		/// Print a receipt containing the text to the OPOS Printer.
-		/// </summary>
-		/// <param name="textToPrint"> The text to print on the receipt</param>
-		private void OPOSPrinting(string textToPrint)
-		{
-			Match barCodeMarkerMatch = Regex.Match(textToPrint, barCodeRegEx, RegexOptions.Compiled | RegexOptions.IgnoreCase);
-			bool printBarcode = false;
-			string receiptId = string.Empty;
+        }
+        //End add NEC
 
-			if (barCodeMarkerMatch.Success)
-			{
-				printBarcode = true;
+        #region Private Methods
 
-				// Get the receiptId
-				receiptId = barCodeMarkerMatch.Groups[1].ToString();
+        /// <summary>
+        /// Print a receipt containing the text to the OPOS Printer.
+        /// </summary>
+        /// <param name="textToPrint"> The text to print on the receipt</param>
+        private void OPOSPrinting(string textToPrint)
+        {
+            Match barCodeMarkerMatch = Regex.Match(textToPrint, barCodeRegEx, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            bool printBarcode = false;
+            string receiptId = string.Empty;
 
-				// Delete the barcode marker from the printed string
-				textToPrint = textToPrint.Remove(barCodeMarkerMatch.Index, barCodeMarkerMatch.Length);
-			}
+            if (barCodeMarkerMatch.Success)
+            {
+                printBarcode = true;
 
-			// replace ESC with Char(27) and add a CRLF to the end
-			textToPrint = textToPrint.Replace("ESC", ((char)27).ToString());
+                // Get the receiptId
+                receiptId = barCodeMarkerMatch.Groups[1].ToString();
+
+                // Delete the barcode marker from the printed string
+                textToPrint = textToPrint.Remove(barCodeMarkerMatch.Index, barCodeMarkerMatch.Length);
+            }
+
+            // replace ESC with Char(27) and add a CRLF to the end
+            textToPrint = textToPrint.Replace("ESC", ((char)27).ToString());
 
             // Format for default logo unchanged 
-			textToPrint = textToPrint.Replace("<L>", "\x1B|1B\x1B|bC");
+            textToPrint = textToPrint.Replace("<L>", "\x1B|1B\x1B|bC");
 
             // Logos configured in AX will have <L:id> format - we need to parse
             // these and print these logos
@@ -369,182 +437,182 @@ namespace Microsoft.Dynamics.Retail.Pos.Services
                 }
             }
 
-			// Check if we should print the receipt id as a barcode on the receipt
-			if (printBarcode == true)
-			{
-				oposPrinter.PrintBarCode((int)OPOSPOSPrinterConstants.PTR_S_RECEIPT, receiptId, (int)OPOSPOSPrinterConstants.PTR_BCS_Code128,
-						80, 80, (int)OPOSPOSPrinterConstants.PTR_BC_CENTER, (int)OPOSPOSPrinterConstants.PTR_BC_TEXT_BELOW);
-				oposPrinter.PrintNormal((int)OPOSPOSPrinterConstants.PTR_S_RECEIPT, "\r\n\r\n\r\n\r\n");
-			}
+            // Check if we should print the receipt id as a barcode on the receipt
+            if (printBarcode == true)
+            {
+                oposPrinter.PrintBarCode((int)OPOSPOSPrinterConstants.PTR_S_RECEIPT, receiptId, (int)OPOSPOSPrinterConstants.PTR_BCS_Code128,
+                        80, 80, (int)OPOSPOSPrinterConstants.PTR_BC_CENTER, (int)OPOSPOSPrinterConstants.PTR_BC_TEXT_BELOW);
+                oposPrinter.PrintNormal((int)OPOSPOSPrinterConstants.PTR_S_RECEIPT, "\r\n\r\n\r\n\r\n");
+            }
 
-			oposPrinter.CutPaper(100);
-		}
+            oposPrinter.CutPaper(100);
+        }
 
-		private void NewStatusWindow(int stringId)
-		{
-			CloseExistingMessageWindow();
-			dialog = new frmMessage(stringId, LSPosMessageTypeButton.NoButtons, MessageBoxIcon.Information);
-			POSFormsManager.ShowPOSFormModeless(dialog);
-		}
+        private void NewStatusWindow(int stringId)
+        {
+            CloseExistingMessageWindow();
+            dialog = new frmMessage(stringId, LSPosMessageTypeButton.NoButtons, MessageBoxIcon.Information);
+            POSFormsManager.ShowPOSFormModeless(dialog);
+        }
 
-		private void CloseExistingMessageWindow()
-		{
-			if (dialog != null)
-			{
-				dialog.Dispose();
-			}
-		}
+        private void CloseExistingMessageWindow()
+        {
+            if (dialog != null)
+            {
+                dialog.Dispose();
+            }
+        }
 
-		private static string[] GetStringArray(string text)
-		{
-			string[] sep = new string[] { Environment.NewLine };
-			if (text.EndsWith(Environment.NewLine))
-				text = text.Substring(0, text.Length - 2);
-			return text.Split(sep, StringSplitOptions.None);
-		}
+        private static string[] GetStringArray(string text)
+        {
+            string[] sep = new string[] { Environment.NewLine };
+            if (text.EndsWith(Environment.NewLine))
+                text = text.Substring(0, text.Length - 2);
+            return text.Split(sep, StringSplitOptions.None);
+        }
 
-		private void PrintArray(string[] array)
-		{
-			NewStatusWindow(99);
+        private void PrintArray(string[] array)
+        {
+            NewStatusWindow(99);
 
-			string textToPrint = string.Empty;
+            string textToPrint = string.Empty;
 
-			foreach (string text in array)
-			{
-				if ((linesLeftOnCurrentPage == 0) && (!LoadNextSlipPaper(false)))
-					return;
+            foreach (string text in array)
+            {
+                if ((linesLeftOnCurrentPage == 0) && (!LoadNextSlipPaper(false)))
+                    return;
 
-				textToPrint = text;
+                textToPrint = text;
 
-				if (LSRetailPosis.Settings.HardwareProfiles.Printer.BinaryConversion == true)
-				{
-					oposPrinter.BinaryConversion = 2;  // OposBcDecimal
-					textToPrint = Peripherals.ConvertToBCD(text + Environment.NewLine, this.characterSet);
-				}
+                if (LSRetailPosis.Settings.HardwareProfiles.Printer.BinaryConversion == true)
+                {
+                    oposPrinter.BinaryConversion = 2;  // OposBcDecimal
+                    textToPrint = Peripherals.ConvertToBCD(text + Environment.NewLine, this.characterSet);
+                }
 
-				oposPrinter.PrintNormal((int)OPOSPOSPrinterConstants.PTR_S_SLIP, textToPrint);
-				oposPrinter.BinaryConversion = 0;  // OposBcNone
-				linesLeftOnCurrentPage--;
-			}
-		}
+                oposPrinter.PrintNormal((int)OPOSPOSPrinterConstants.PTR_S_SLIP, textToPrint);
+                oposPrinter.BinaryConversion = 0;  // OposBcNone
+                linesLeftOnCurrentPage--;
+            }
+        }
 
-		private bool LoadNextSlipPaper(bool firstSlip)
-		{
-			bool result = true;
-			bool tryAgain;
+        private bool LoadNextSlipPaper(bool firstSlip)
+        {
+            bool result = true;
+            bool tryAgain;
 
             NetTracer.Information("Peripheral [Printer] - Load next slip paper");
 
-			if (!firstSlip)
-				RemoveSlipPaper();
+            if (!firstSlip)
+                RemoveSlipPaper();
 
-			do
-			{
-                
+            do
+            {
+
                 tryAgain = false;
-				NewStatusWindow(98);
-				oposPrinter.BeginInsertion(LSRetailPosis.Settings.HardwareProfiles.Printer.DocInsertRemovalTimeout * 1000);
+                NewStatusWindow(98);
+                oposPrinter.BeginInsertion(LSRetailPosis.Settings.HardwareProfiles.Printer.DocInsertRemovalTimeout * 1000);
 
-				if (oposPrinter.ResultCode == (int)OPOS_Constants.OPOS_SUCCESS)
-				{
-					NewStatusWindow(99);
-					oposPrinter.EndInsertion();
-					linesLeftOnCurrentPage = totalNumberOfLines;
-					PrintArray(headerLines);
-				}
-				else
-				{
-					CloseExistingMessageWindow();
-					using (frmMessage errDialog = new frmMessage(13051, MessageBoxButtons.YesNo, MessageBoxIcon.Question))
-					{
-						POSFormsManager.ShowPOSForm(errDialog);
-						if (errDialog.DialogResult == DialogResult.Yes)
-							tryAgain = true;
-						else
-							result = false;
-					}
-				}
-			} while (tryAgain);
+                if (oposPrinter.ResultCode == (int)OPOS_Constants.OPOS_SUCCESS)
+                {
+                    NewStatusWindow(99);
+                    oposPrinter.EndInsertion();
+                    linesLeftOnCurrentPage = totalNumberOfLines;
+                    PrintArray(headerLines);
+                }
+                else
+                {
+                    CloseExistingMessageWindow();
+                    using (frmMessage errDialog = new frmMessage(13051, MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+                    {
+                        POSFormsManager.ShowPOSForm(errDialog);
+                        if (errDialog.DialogResult == DialogResult.Yes)
+                            tryAgain = true;
+                        else
+                            result = false;
+                    }
+                }
+            } while (tryAgain);
 
-			return result;
-		}
+            return result;
+        }
 
-		private void RemoveSlipPaper()
-		{
-			bool tryAgain;
+        private void RemoveSlipPaper()
+        {
+            bool tryAgain;
 
             NetTracer.Information("Peripheral [Printer] - Remove slip paper");
 
-			do
-			{
-				tryAgain = false;
-				NewStatusWindow(100);
-				oposPrinter.BeginRemoval(LSRetailPosis.Settings.HardwareProfiles.Printer.DocInsertRemovalTimeout * 1000);
+            do
+            {
+                tryAgain = false;
+                NewStatusWindow(100);
+                oposPrinter.BeginRemoval(LSRetailPosis.Settings.HardwareProfiles.Printer.DocInsertRemovalTimeout * 1000);
 
-				if (oposPrinter.ResultCode == (int)OPOS_Constants.OPOS_SUCCESS)
-				{
-					oposPrinter.EndRemoval();
-				}
-				else if (oposPrinter.ResultCode == (int)OPOS_Constants.OPOS_E_TIMEOUT)
-				{
-					CloseExistingMessageWindow();
-					using (frmMessage errDialog = new frmMessage(13052, MessageBoxButtons.OKCancel, MessageBoxIcon.Information))
-					{
-						POSFormsManager.ShowPOSForm(errDialog);
-						if (errDialog.DialogResult == DialogResult.OK)
-							tryAgain = true;
-					}
-				}
-			} while (tryAgain);
-		}
+                if (oposPrinter.ResultCode == (int)OPOS_Constants.OPOS_SUCCESS)
+                {
+                    oposPrinter.EndRemoval();
+                }
+                else if (oposPrinter.ResultCode == (int)OPOS_Constants.OPOS_E_TIMEOUT)
+                {
+                    CloseExistingMessageWindow();
+                    using (frmMessage errDialog = new frmMessage(13052, MessageBoxButtons.OKCancel, MessageBoxIcon.Information))
+                    {
+                        POSFormsManager.ShowPOSForm(errDialog);
+                        if (errDialog.DialogResult == DialogResult.OK)
+                            tryAgain = true;
+                    }
+                }
+            } while (tryAgain);
+        }
 
-		/// <summary>
-		/// Prints given text to sequential file in %TEMP% if printer hook is enabled
-		/// </summary>
-		/// <param name="text">Text to print</param>
-		static private void PrinterTestHook(string text, string filePrefix)
-		{
-			if (ApplicationSettings.PrintToDisk)
-			{
-				string directory = Environment.GetEnvironmentVariable("TEMP", EnvironmentVariableTarget.Machine);
-				string fileName = NextFileNameForPrinterHook(directory, filePrefix);
-				fileName = Path.Combine(directory, fileName);
-				using (TextWriter printedFile = new StreamWriter(fileName))
-				{
-					text = text.Replace(NORMAL_TEXT_MARKER, string.Empty).Replace(BOLD_TEXT_MARKER, string.Empty).Replace(ESC_CHARACTER, string.Empty);
-					printedFile.Write(text);
-				}
-			}
-		}
+        /// <summary>
+        /// Prints given text to sequential file in %TEMP% if printer hook is enabled
+        /// </summary>
+        /// <param name="text">Text to print</param>
+        static private void PrinterTestHook(string text, string filePrefix)
+        {
+            if (ApplicationSettings.PrintToDisk)
+            {
+                string directory = Environment.GetEnvironmentVariable("TEMP", EnvironmentVariableTarget.Machine);
+                string fileName = NextFileNameForPrinterHook(directory, filePrefix);
+                fileName = Path.Combine(directory, fileName);
+                using (TextWriter printedFile = new StreamWriter(fileName))
+                {
+                    text = text.Replace(NORMAL_TEXT_MARKER, string.Empty).Replace(BOLD_TEXT_MARKER, string.Empty).Replace(DOUBLESIZE_TEXT_MARKER, string.Empty).Replace(DOUBLESIZE_BOLD_TEXT_MARKER, string.Empty).Replace(ESC_CHARACTER, string.Empty);
+                    printedFile.Write(text);
+                }
+            }
+        }
 
-		/// <summary>
-		/// Creates sequential files of format prefix_######.txt in the given directory.
-		/// </summary>
-		/// <param name="directory">Directory where files are stored/searched</param>
-		/// <param name="prefix">What the beginning of the file should be named</param>
-		/// <returns>Next sequential file name</returns>
-		static private string NextFileNameForPrinterHook(string directory, string prefix)
-		{
-			DirectoryInfo di = new DirectoryInfo(directory);
-			FileInfo[] files = di.GetFiles(prefix + "_*.txt");
-			int max = 0;
+        /// <summary>
+        /// Creates sequential files of format prefix_######.txt in the given directory.
+        /// </summary>
+        /// <param name="directory">Directory where files are stored/searched</param>
+        /// <param name="prefix">What the beginning of the file should be named</param>
+        /// <returns>Next sequential file name</returns>
+        static private string NextFileNameForPrinterHook(string directory, string prefix)
+        {
+            DirectoryInfo di = new DirectoryInfo(directory);
+            FileInfo[] files = di.GetFiles(prefix + "_*.txt");
+            int max = 0;
 
-			foreach (FileInfo file in files)
-			{
-				string fileName = file.Name;
-				string[] pieces = fileName.Split(new char[] { '_', '.' });
-				int fileNumber = Int32.Parse(pieces[1]);
-				if (fileNumber > max)
-				{
-					max = fileNumber;
-				}
-			}
+            foreach (FileInfo file in files)
+            {
+                string fileName = file.Name;
+                string[] pieces = fileName.Split(new char[] { '_', '.' });
+                int fileNumber = Int32.Parse(pieces[1]);
+                if (fileNumber > max)
+                {
+                    max = fileNumber;
+                }
+            }
 
-			string nextNumber = (max + 1).ToString().PadLeft(6, '0');
-			string nextName = string.Format("{0}_{1}.txt", prefix, nextNumber);
+            string nextNumber = (max + 1).ToString().PadLeft(6, '0');
+            string nextName = string.Format("{0}_{1}.txt", prefix, nextNumber);
 
-			return nextName;
-		}
+            return nextName;
+        }
 
         /// <summary>
         /// Get Image from image table by image id stored in the print text. 
@@ -592,10 +660,175 @@ namespace Microsoft.Dynamics.Retail.Pos.Services
             return imageLogo;
         }
 
+        #endregion
 
-		#endregion
+        #region Events
+        private void printDoc_BeginPrint(object sender, PrintEventArgs e)
+        {
+            TextFontName = defaultFontName;
+            TextFontSize = defaultFontSize;
+            TextFontCharWidth = defaultFontCharWidth;
+        }
 
-		#region Events
+        private void printDoc_BeginPrintBR(object sender, PrintEventArgs e)
+        {
+            var printDocument = sender as PrintDocument;
+
+            if (printDocument != null)
+            {
+                printDocument.DefaultPageSettings.Margins.Bottom = defaultPageMarginBottonForThermalPrinter;
+                printDocument.DefaultPageSettings.Margins.Left = defaultPageMarginLeftForThermalPrinter;
+                printDocument.DefaultPageSettings.Margins.Top = defaultPageMarginTopForThermalPrinter;
+            }
+
+            TextFontName = defaultFontNameForThermalPrinter;
+            TextFontSize = defaultFontSizeForThermalPrinter;
+            TextFontCharWidth = defaultFontCharWidthForThermalPrinter;
+
+            printText = PrinterHelper.WrapLinesByEnviromentNewLine(printText, NORMAL_TEXT_MARKER);
+            printText = PrinterHelper.WrapLinesByPageWidth(printText, defaultPageBoundsWidthForThermalPrinter, NORMAL_TEXT_MARKER);
+        }
+
+        /// <summary>
+        /// Prints a page. The supported content types are: pure text, images, QRCodes and barcodes.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e">The print page event args</param>
+        private void printDoc_PrintPageByWords(object sender, PrintPageEventArgs e)
+        {
+            try
+            {
+                var currentPageHeight = 0f;
+                var dpiXRatio = e.Graphics.DpiX / 96f; // 96dpi = 100%
+                var dpiYRatio = e.Graphics.DpiY / 96f; // 96dpi = 100%
+                var printTextWidth = PrinterHelper.GetTextWidthInHundredthsOfAnInch(printText, TextFontCharWidth);
+
+                e.HasMorePages = false;
+
+                while (printTextLine < printText.Length)
+                {
+                    var currentLineWidth = 0f;
+                    var lastMarker = NORMAL_TEXT_MARKER;
+
+                    var line = printText[printTextLine];
+                    var cleanLine = PrinterHelper.RemoveTextMarkers(line);
+
+                    if (currentPageHeight + defaultLineHeight + defaultPageBreakMargin >= e.PageBounds.Height)
+                    {
+                        // No more room - advance to next page
+                        e.HasMorePages = true;
+                        return;
+                    }
+
+                    // QRCODE
+                    var qrCodeMarkerMatch = Regex.Match(cleanLine, qrCodeRegEx, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+                    if (qrCodeMarkerMatch.Success)
+                    {
+                        var qrCodeMarkerMatchString = qrCodeMarkerMatch.ToString();
+                        line = line.Replace(qrCodeMarkerMatchString, new string(' ', qrCodeMarkerMatchString.Length));
+
+                        // Get the QrCode
+                        var qrCodeString = qrCodeMarkerMatch.Groups[1].ToString();
+                        var qrcodeInfo = Utility.CreateQrcodeInfo(defaultQrcodeCellSize, defaultQrcodeErrorCorrectionLevel, defaultQrcodeVersion, defaultQrcodeEncoding);
+
+                        using (var qrCodeImage = Peripherals.InternalApplication.Services.Qrcode.Encode(qrCodeString, qrcodeInfo))
+                        {
+                            if (qrCodeImage != null)
+                            {
+                                if (currentPageHeight + qrCodeImage.Height + defaultPageBreakMargin >= e.PageBounds.Height)
+                                {   // No more room - advance to next page
+                                    e.HasMorePages = true;
+                                    return;
+                                }
+
+                                // Render qrcode in the center of the text.
+                                var qrcodePoint = (printTextWidth - qrCodeImage.Width) / 2;
+                                e.Graphics.DrawImage(qrCodeImage, e.MarginBounds.Left + qrcodePoint, e.MarginBounds.Top + currentPageHeight);
+                                currentPageHeight += qrCodeImage.Height;
+                            }
+                        }
+                    }
+
+                    // BARCODE
+                    var barCodeMarkerMatch = Regex.Match(cleanLine, barCodeRegEx, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+                    if (barCodeMarkerMatch.Success)
+                    {
+                        var barCodeMarkerMatchString = barCodeMarkerMatch.ToString();
+                        line = line.Replace(barCodeMarkerMatchString, new string(' ', barCodeMarkerMatchString.Length));
+
+                        // Get the receiptId
+                        var barcodeString = barCodeMarkerMatch.Groups[1].ToString();
+
+                        using (var barcodeImage = barCode.Create(barcodeString, e.Graphics.DpiX, e.Graphics.DpiY))
+                        {
+                            if (barcodeImage != null)
+                            {
+                                var barcodeHeight = (barcodeImage.Height / dpiYRatio);
+
+                                if (currentPageHeight + barcodeHeight + defaultPageBreakMargin >= e.PageBounds.Height)
+                                {   // No more room - advance to next page
+                                    e.HasMorePages = true;
+                                    return;
+                                }
+
+                                // Render barcode in the center of the text.
+                                var barcodePoint = (printTextWidth - (barcodeImage.Width / dpiXRatio)) / 2;
+                                e.Graphics.DrawImage(barcodeImage, e.MarginBounds.Left + barcodePoint, e.MarginBounds.Top + currentPageHeight);
+                                currentPageHeight += barcodeHeight;
+                            }
+                        }
+                    }
+
+                    // Text and other images
+                    var words = PrinterHelper.SplitWordsByMarkers(line);
+
+                    foreach (var word in words)
+                    {
+                        var logoMatch = Regex.Match(word, logoRegEx);
+
+                        if (logoMatch.Success)
+                        {
+                            var imageId = Convert.ToInt32(logoMatch.Groups["imageId"].Value);
+                            var image = PrinterHelper.GetRetailImage(imageId);
+
+                            if (currentPageHeight + image.Height + defaultPageBreakMargin >= e.PageBounds.Height)
+                            {   // No more room - advance to next page
+                                e.HasMorePages = true;
+                                return;
+                            }
+
+                            e.Graphics.DrawImage(image, e.MarginBounds.Left + currentLineWidth, e.MarginBounds.Top + currentPageHeight);
+                            currentLineWidth += image.Width;
+                            currentPageHeight += image.Height;
+                        }
+                        else
+                        {
+                            var cleanTextToPrint = PrinterHelper.RemoveTextMarkers(word);
+                            lastMarker = AllTextMarkers.Contains(word) ? word : lastMarker;
+
+                            if (!string.IsNullOrEmpty(cleanTextToPrint))
+                            {
+                                var linePartFont = CreateFontForMarker(lastMarker, TextFontName, TextFontSize);
+
+                                e.Graphics.DrawString(cleanTextToPrint, linePartFont, Brushes.Black, e.MarginBounds.Left + currentLineWidth, e.MarginBounds.Top + currentPageHeight);
+                                currentLineWidth += cleanTextToPrint.Length * TextFontCharWidth; 
+                            }
+                        }
+                    }
+
+                    currentPageHeight += defaultLineHeight;
+                    printTextLine++;
+                }
+            }
+            catch (Exception ex)
+            {
+                NetTracer.Warning("Peripheral [Printer] - Exception in print page");
+
+                ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+            }
+        }
 
         /// <summary>
         /// Prints the selected page
@@ -604,70 +837,73 @@ namespace Microsoft.Dynamics.Retail.Pos.Services
         /// <param name="e"></param>
         private void printDoc_PrintPage(object sender, PrintPageEventArgs e)
         {
-            const int LineHeight = 10;
-
             try
             {
-                const string textFontName = "Courier New";
-                const int textFontSize = 7;
-
                 e.HasMorePages = false;
-                using (Font textFont = new Font(textFontName, textFontSize, FontStyle.Regular))
-                using (Font textFontBold = new Font(textFontName, textFontSize, FontStyle.Bold))
+                using (Font textFontRegular = new Font(TextFontName, TextFontSize, FontStyle.Regular))
                 {
-                    string temp = string.Empty;
-                    float x = 0, y = 0;
+                    float xCaretPos = 0, yCaretPos = 0;
                     float dpiXRatio = e.Graphics.DpiX / 96f; // 96dpi = 100%
                     float dpiYRatio = e.Graphics.DpiY / 96f; // 96dpi = 100%
-                    float contentWidth = printText.Max(str => str.Replace(NORMAL_TEXT_MARKER, string.Empty).Replace(BOLD_TEXT_MARKER, string.Empty).Length) * dpiXRatio; // Line with max length = content width
+                    float contentWidth = printText.Max(str => str.Replace(NORMAL_TEXT_MARKER, string.Empty).Replace(BOLD_TEXT_MARKER, string.Empty).Replace(DOUBLESIZE_TEXT_MARKER, string.Empty).Replace(DOUBLESIZE_BOLD_TEXT_MARKER, string.Empty).Length) * dpiXRatio; // Line with max length = content width
 
                     while (this.printTextLine < printText.Length)
                     {
-                        string subString;
-                        int index, index2;
-
-                        if (y + LineHeight >= e.MarginBounds.Height)
+                        string printingLine;
+                        var heightStep = IsStringContainAnyOfMarkers(printText[this.printTextLine], DOUBLESIZE_TEXT_MARKER, DOUBLESIZE_BOLD_TEXT_MARKER) ? 2 * defaultLineHeight : defaultLineHeight;
+                        // Begin modify line NEC
+                        if (yCaretPos + heightStep >= 1100)
                         {   // No more room - advance to next page
                             e.HasMorePages = true;
                             return;
                         }
 
-                        index = printText[this.printTextLine].IndexOf(BOLD_TEXT_MARKER);
-
-                        if (index >= 0)
+                        if (IsStringContainAnyOfMarkers(printText[this.printTextLine], BOLD_TEXT_MARKER, DOUBLESIZE_TEXT_MARKER, DOUBLESIZE_BOLD_TEXT_MARKER))
                         {
-                            // Text line printing with bold Text in it.
+                            // Text line printing with bold or double size Text in it.
+                            xCaretPos = 0;
 
-                            x = 0;
-
-                            subString = printText[this.printTextLine];
-
-                            while (subString.Length > 0)
+                            printingLine = printText[this.printTextLine];
+                            while (printingLine.Length > 0)
                             {
-                                index2 = subString.IndexOf(BOLD_TEXT_MARKER);
-
-                                if (index2 >= 0)
+                                if (IsStringContainAnyOfMarkers(printingLine, BOLD_TEXT_MARKER, DOUBLESIZE_TEXT_MARKER, DOUBLESIZE_BOLD_TEXT_MARKER))
                                 {
-                                    temp = subString.Substring(0, index2).Replace(NORMAL_TEXT_MARKER, string.Empty).Replace(BOLD_TEXT_MARKER, string.Empty);
-                                    e.Graphics.DrawString(temp, textFont, Brushes.Black, x + e.MarginBounds.Left, y + e.MarginBounds.Top);
-                                    x = x + (temp.Length * 6);
+                                    string firstTextMarker = GetFirstTextMarker(printingLine, NORMAL_TEXT_MARKER, BOLD_TEXT_MARKER,
+                                        DOUBLESIZE_TEXT_MARKER, DOUBLESIZE_BOLD_TEXT_MARKER);
 
-                                    index2 = index2 + 3;
-                                    subString = subString.Substring(index2, subString.Length - index2);
-                                    index2 = subString.IndexOf(NORMAL_TEXT_MARKER);
+                                    using (var textFontForPrint = CreateFontForMarker(firstTextMarker, TextFontName, TextFontSize))
+                                    {
+                                        int firstMarkerIndex = printingLine.IndexOf(firstTextMarker);
+                                        printingLine = printingLine.Remove(firstMarkerIndex, textMarkerWidth);
+                                        string textToPrint = printingLine.Substring(0, printingLine.IndexOf(NORMAL_TEXT_MARKER));
 
-                                    temp = subString.Substring(0, index2).Replace(NORMAL_TEXT_MARKER, string.Empty).Replace(BOLD_TEXT_MARKER, string.Empty);
-                                    e.Graphics.DrawString(temp, textFontBold, Brushes.Black, x + e.MarginBounds.Left, y + e.MarginBounds.Top);
-                                    x = x + (temp.Length * 6);
+                                        string textBeforeFirstMarker = textToPrint.Substring(0, firstMarkerIndex);
+                                        //Begin modify line NEC
+                                        e.Graphics.DrawString(textBeforeFirstMarker, textFontRegular, Brushes.Black,
+                                            xCaretPos + e.MarginBounds.Left, yCaretPos);
+                                        xCaretPos += textBeforeFirstMarker.Length * TextFontCharWidth;
+                                        //Begin modify line NEC
+                                        e.Graphics.DrawString(textToPrint.Substring(firstMarkerIndex),
+                                            textFontForPrint, Brushes.Black, xCaretPos + e.MarginBounds.Left, yCaretPos);
+                                        xCaretPos += textToPrint.Substring(firstMarkerIndex).Length * TextFontCharWidth;
 
-                                    subString = subString.Substring(index2, subString.Length - index2);
-                                    subString = subString.Insert(subString.IndexOf(NORMAL_TEXT_MARKER) + NORMAL_TEXT_MARKER.Length, new string(' ', temp.Length));
+                                        if (new[] { DOUBLESIZE_TEXT_MARKER, DOUBLESIZE_BOLD_TEXT_MARKER, BOLD_TEXT_MARKER }.Contains(firstTextMarker))
+                                        {
+                                            printingLine = printingLine.Insert(printingLine.IndexOf(NORMAL_TEXT_MARKER) == -1 ?
+                                                0 : printingLine.IndexOf(NORMAL_TEXT_MARKER) + NORMAL_TEXT_MARKER.Length,
+                                                new string(' ', textToPrint.Substring(firstMarkerIndex).Length));
+                                        }
+
+                                        printingLine = printingLine.Substring(printingLine.IndexOf(NORMAL_TEXT_MARKER) == -1 ?
+                                            0 : printingLine.IndexOf(NORMAL_TEXT_MARKER) + NORMAL_TEXT_MARKER.Length);
+                                    }
                                 }
                                 else
                                 {
-                                    subString = subString.Replace(NORMAL_TEXT_MARKER, string.Empty).Replace(BOLD_TEXT_MARKER, string.Empty);
-                                    e.Graphics.DrawString(subString, textFont, Brushes.Black, x + e.MarginBounds.Left, y + e.MarginBounds.Top);
-                                    subString = string.Empty;
+                                    printingLine = printingLine.Replace(NORMAL_TEXT_MARKER, string.Empty);
+                                    // Begin modify line NEC
+                                    e.Graphics.DrawString(printingLine, textFontRegular, Brushes.Black, xCaretPos + e.MarginBounds.Left, yCaretPos);
+                                    printingLine = string.Empty;
                                 }
                             }
                         }
@@ -675,39 +911,41 @@ namespace Microsoft.Dynamics.Retail.Pos.Services
                         {
                             // Text line printing with no bold Text in it.
 
-                            subString = printText[this.printTextLine].Replace(NORMAL_TEXT_MARKER, string.Empty);
+                            printingLine = printText[this.printTextLine].Replace(NORMAL_TEXT_MARKER, string.Empty);
 
-                            Match barCodeMarkerMatch = Regex.Match(subString, barCodeRegEx, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                            Match barCodeMarkerMatch = Regex.Match(printingLine, barCodeRegEx, RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
                             if (barCodeMarkerMatch.Success)
                             {
                                 // Get the receiptId
-                                subString = barCodeMarkerMatch.Groups[1].ToString();
+                                printingLine = barCodeMarkerMatch.Groups[1].ToString();
 
-                                using (Image barcodeImage = barCode.Create(subString, e.Graphics.DpiX, e.Graphics.DpiY))
+                                using (Image barcodeImage = barCode.Create(printingLine, e.Graphics.DpiX, e.Graphics.DpiY))
                                 {
                                     if (barcodeImage != null)
                                     {
                                         float barcodeHeight = (barcodeImage.Height / dpiYRatio);
 
-                                        if (y + barcodeHeight >= e.MarginBounds.Height)
+                                        if (yCaretPos + barcodeHeight >= e.MarginBounds.Height)
                                         {   // No more room - advance to next page
                                             e.HasMorePages = true;
                                             return;
                                         }
 
                                         // Render barcode in the center of receipt.
-                                        e.Graphics.DrawImage(barcodeImage, ((contentWidth - (barcodeImage.Width / dpiXRatio)) / 2) + e.MarginBounds.Left, y + e.MarginBounds.Top);
-                                        y += barcodeHeight;
+                                        //Begin modify line NEC
+                                        e.Graphics.DrawImage(barcodeImage, ((contentWidth - (barcodeImage.Width / dpiXRatio)) / 2) + e.MarginBounds.Left, yCaretPos);
+                                        yCaretPos += barcodeHeight;
                                     }
                                 }
                             }
                             else
                             {
-                                e.Graphics.DrawString(subString, textFont, Brushes.Black, e.MarginBounds.Left, y + e.MarginBounds.Top);
+                                // Begin modify line NEC
+                                e.Graphics.DrawString(printingLine, textFontRegular, Brushes.Black, e.MarginBounds.Left, yCaretPos);
                             }
                         }
-                        y = y + LineHeight;
+                        yCaretPos = yCaretPos + heightStep;
 
                         printTextLine += 1;
 
@@ -722,7 +960,54 @@ namespace Microsoft.Dynamics.Retail.Pos.Services
             }
         }
 
-		#endregion
+        private string GetFirstTextMarker(string subString, params string[] allTextMarkers)
+        {
+            int minIndex = subString.Length;
+            string retVal = string.Empty;
+
+            foreach (var textMarker in allTextMarkers)
+            {
+                int ind = subString.IndexOf(textMarker);
+                if (ind != -1 && minIndex > ind)
+                {
+                    retVal = textMarker;
+                    minIndex = ind;
+                }
+            }
+
+            return retVal;
+        }
+
+        private Font CreateFontForMarker(string fontMarker, string textFontName, float textFontSize)
+        {
+            const int fontSizeFactor = 2;
+            Font retVal;
+
+            switch (fontMarker)
+            {
+                case BOLD_TEXT_MARKER:
+                    retVal = new Font(textFontName, textFontSize, FontStyle.Bold);
+                    break;
+                case DOUBLESIZE_TEXT_MARKER:
+                    retVal = new Font(textFontName, textFontSize * fontSizeFactor, FontStyle.Regular);
+                    break;
+                case DOUBLESIZE_BOLD_TEXT_MARKER:
+                    retVal = new Font(textFontName, textFontSize * fontSizeFactor, FontStyle.Bold);
+                    break;
+                default:
+                    retVal = new Font(textFontName, textFontSize, FontStyle.Regular);
+                    break;
+            }
+
+            return retVal;
+        }
+
+        private bool IsStringContainAnyOfMarkers(string source, params string[] markers)
+        {
+            return markers.Any(source.Contains);
+        }
+
+        #endregion
 
         /// <summary>
         /// Gets a value indicating whether this instance is active.
@@ -732,23 +1017,69 @@ namespace Microsoft.Dynamics.Retail.Pos.Services
         /// </value>
         public bool IsActive
         {
-            get; private set;
+            get;
+            private set;
         }
 
         /// <summary>
         /// Device Name (may be null or empty)
         /// </summary>
-        public string DeviceName 
-        { 
-            get; private set;  
+        public string DeviceName
+        {
+            get;
+            private set;
         }
 
         /// <summary>
         /// Device Description (may be null or empty)
         /// </summary>
-        public string DeviceDescription 
-        { 
-            get; private set; 
+        public string DeviceDescription
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// List of text markers used to format the printed text
+        /// </summary>
+        public static IEnumerable<string> AllTextMarkers
+        {
+            get { return new[] { NORMAL_TEXT_MARKER, BOLD_TEXT_MARKER, DOUBLESIZE_TEXT_MARKER, DOUBLESIZE_BOLD_TEXT_MARKER }; }
+        }
+
+        /// <summary>
+        /// Text marker size
+        /// </summary>
+        public static int TextMarkerSize
+        {
+            get { return TEXT_MARKER_SIZE; }
+        }
+
+        private static IUtility Utility
+        {
+
+            get { return Peripherals.InternalApplication.BusinessLogic.Utility; }
+        }
+
+        /// <summary>
+        /// Text font char width in hundredths of an inch.
+        /// </summary>
+        private float TextFontCharWidth
+        {
+            get;
+            set;
+        }
+
+        private string TextFontName
+        {
+            get;
+            set;
+        }
+
+        private float TextFontSize
+        {
+            get;
+            set;
         }
     }
 }

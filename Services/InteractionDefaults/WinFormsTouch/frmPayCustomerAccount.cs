@@ -420,7 +420,9 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 
 				//set Unused field to Invisible
 				lblCustName.Visible = false;
-				txtCustName.Visible = false;
+                //lblCustName.Text = "Biaya Tarik Tunai";
+                txtCustName.Visible = false; //set true for bank adm fee 10/06/2024 Yonathan //CPIADMFEE
+                
 				//custom by Yonathan 2 Dec 2022 custom QRIS 
 				btnInquiry.Visible = false;
 				//btnQRIS.Visible = false;
@@ -2690,11 +2692,29 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 								string invoiceNumber = GME_Var.invoiceNumberBCA;
 								int transAmount = int.Parse(GME_Var.amountBCA.Substring(0, GME_Var.amountBCA.Length - 2));
 								int otherAmount = int.Parse(GME_Var.otherAmountBCA.Substring(0, GME_Var.otherAmountBCA.Length - 2));
-
-                                //add Adm fee by Yonathan 10/06/2024
+                                decimal admFee = 0;
+                                //add Adm fee by Yonathan 10/06/2024 //CPIADMFEE
                                 //get ADM fee
-                                decimal admFee = GetAdmFee();                                
-                                otherAmount = otherAmount - (int)admFee;
+                                if (otherAmount != 0)
+                                {
+                                    admFee = GetAdmFee(int.Parse(this.tenderInfo.TenderID));
+                                    decimal admFeeText;
+                                    otherAmount = admFee != 0 ? otherAmount - (int)admFee : otherAmount;
+
+                                    admFeeText = admFee;
+                                    lblCustName.Visible = true;
+                                    lblCustName.Text = "Biaya Tarik Tunai";
+                                    txtCustName.Visible = true;
+                                    txtCustName.ReadOnly = true;
+                                    txtCustName.Text = PosApplication.Instance.Services.Rounding.Round(admFeeText, false); //admFee.ToString();
+                                }
+                                else
+                                {
+                                    lblCustName.Visible = false;
+                                    txtCustName.ReadOnly = false;
+                                    txtCustName.Visible = false; 
+                                }
+                                
                                 //end
 
 								string pan = GME_Var.panBCA;
@@ -2719,7 +2739,8 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 								 * add value to field
 								 * set button enabled/disabled
 								 */
-								txtPhone.Text = otherAmount + "";
+
+								txtPhone.Text = PosApplication.Instance.Services.Rounding.Round(otherAmount, false); // otherAmount + "";
 								txtReff.Text = pan; //must be changed to masking
 							   
 								
@@ -2749,7 +2770,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 
 									//insert into AX.CPAMBILTUNAI
 									SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
-
+                                    //add ADM FEE //CPIADMFEE
 									try
 									{
 										string queryString = @"
@@ -2764,6 +2785,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 																			STORE,
 																			TRANSDATE,
 																			TRANSACTIONSTATUS,
+                                                                            ADMFEE,
 																			[DATAAREAID],
 																			[PARTITION]
 																			)
@@ -2778,6 +2800,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 													@STORE, 
 													@TRANSDATE,
 													@TRANSACTIONSTATUS,
+                                                    @ADMFEE,
 													@DATAAREAID,
 													@PARTITION
 													)";
@@ -2794,6 +2817,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 											command.Parameters.AddWithValue("@Store", this.posTransaction.StoreId);
 											command.Parameters.AddWithValue("@TRANSDATE", DateTime.Now);
 											command.Parameters.AddWithValue("@TRANSACTIONSTATUS", 0);
+                                            command.Parameters.AddWithValue("@ADMFEE", admFee);
 											command.Parameters.AddWithValue("@DATAAREAID", LSRetailPosis.Settings.ApplicationSettings.Database.DATAAREAID);
 											command.Parameters.AddWithValue("@PARTITION", 1);
 
@@ -3875,46 +3899,53 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 
 		#endregion
 
-        //additional for adm fee by Yonathan 10/06/2024
-        public decimal GetAdmFee()
+        //additional for adm fee by Yonathan 10/06/2024 //CPIADMFEE
+        public decimal GetAdmFee(int _tenderId)
         {
-            decimal admFee = 0;
-
-
-            DateTime today = DateTime.Today;
-
-
-            SqlConnection connectionString = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
-
-            // Query untuk mendapatkan nilai ADMFEE
-            string query = @"
-            SELECT TOP 1 ADMFEE 
-            FROM CPBANKADM 
-            WHERE TENDERTYPEID = 32 
-                AND @today >= FROMDATE 
-                AND @today <= TODATE";
-
-            using (SqlCommand command = new SqlCommand(query, connectionString))
+            string admFee = "";
+            decimal amountAdmFee = 0;
+            SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+            try
             {
+                string queryString = @"SELECT ADMFEE 
+                                        FROM ax.CPBANKADM 
+                                        WHERE TENDERTYPEID = @TENDERID 
+                                        AND FROMDATE <= CAST(GETDATE() AS date) AND TODATE >= CAST(GETDATE() AS date)";
 
-                command.Parameters.AddWithValue("@today", today);
-
-                try
+                using (SqlCommand command = new SqlCommand(queryString, connection))
                 {
-                    connectionString.Open();
-                    object result = command.ExecuteScalar();
-                    if (result != null)
+                    command.Parameters.AddWithValue("@TENDERID", _tenderId);
+
+                    if (connection.State != ConnectionState.Open)
                     {
-                        admFee = (decimal)result;
+                        connection.Open();
+                    }
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            admFee = reader[0].ToString();
+
+                        }
+
                     }
                 }
-                catch (Exception ex)
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
                 {
-                    Console.WriteLine("Error: " + ex.Message);
+                    connection.Close();
                 }
             }
 
-            return admFee;
+            amountAdmFee = (Math.Truncate(Convert.ToDecimal(admFee) * 1000m) / 1000m);
+            return amountAdmFee;
         }
 	}
 
@@ -3944,7 +3975,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
         public void printQR(Image image)
         {
             // print here
-            // Begin add NEC Hmz to custom print
+             
             int Offset = 0;
             string s = "QRIS";
             int offset = 0;

@@ -864,6 +864,55 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 			
 		}*/
 
+        //CPIADMFEE
+        public decimal GetAdmFee(int _tenderId)
+        {
+            string admFee = "";
+            decimal amountAdmFee = 0;
+            SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+            try
+            {
+                string queryString = @"SELECT ADMFEE 
+                                        FROM ax.CPBANKADM 
+                                        WHERE TENDERTYPEID = @TENDERID 
+                                        AND FROMDATE <= CAST(GETDATE() AS date) AND TODATE >= CAST(GETDATE() AS date)";
+
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+                    command.Parameters.AddWithValue("@TENDERID", _tenderId);
+
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+                    }
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            admFee = reader[0].ToString();
+                             
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+                }
+            }
+
+            amountAdmFee = (Math.Truncate(Convert.ToDecimal(admFee) * 1000m) / 1000m);
+            return amountAdmFee;
+        }
+	
 
 		private void CPNEWPAYMENTPOS()
 		{
@@ -947,6 +996,9 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 			}
 
 			#region CPECRBCA
+
+
+
 			/*
 			 * Move data from AX.CPAMBILTUNAITEMP to AX.CPAMBILTUNAI
 			 * after that, delete data from AX.CPAMBILTUNAITEMP
@@ -965,8 +1017,8 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 				string trxIdECR = "";
 				string dataAreaIdECR = "";
 				string partitionECR = "";
-
-				try
+                string admFeeECR = ""; //add admfee for fee tarik tunai by yonathan //CPIADMFEE
+				try 
 				{
 					string queryString = @"
 											SELECT
@@ -981,6 +1033,7 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 												TRANSDATE,
 												TRXIDEDC,
 												DATAAREAID,
+                                                ADMFEE,
 												PARTITION
 											FROM
 												AX.CPAMBILTUNAITEMP
@@ -1012,6 +1065,7 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 								transDateECR = reader[8] + "";
 								trxIdECR = reader[9] + "";
 								dataAreaIdECR = reader[10] + "";
+                                admFeeECR = reader[11] + "";
 							}
 						}
 					}
@@ -1033,6 +1087,9 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 				{
 					try
 					{
+                        //decimal admFee = 0;
+                        //admFee = GetAdmFee(TenderID);
+                        //ADD ADMFEE FOR INSERT BY YONATHAN 13/06/2024 //CPIADMFEE
 						string queryString = @"
 											INSERT INTO AX.CPAMBILTUNAI (
 																			TRANSACTIONID, 
@@ -1046,6 +1103,8 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 																			STORE,
 																			TRANSDATE,
 																			TRANSACTIONSTATUS,
+                                                                            ADMFEE,
+                                                                            FEE,
 																			[DATAAREAID],
 																			[PARTITION]
 																			)
@@ -1061,6 +1120,8 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 													@STORE, 
 													@TRANSDATE,
 													@TRANSACTIONSTATUS,
+                                                    @ADMFEE,
+                                                    @FEE,
 													@DATAAREAID,
 													@PARTITION
 													)";
@@ -1078,8 +1139,11 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 							command.Parameters.AddWithValue("@Store", storeECR);
 							command.Parameters.AddWithValue("@TRANSDATE", Convert.ToDateTime(transDateECR).ToString("yyyy-MM-dd")); //convertdate YYYY-MM-DD 
 							command.Parameters.AddWithValue("@TRANSACTIONSTATUS", transactionStatusECR);
+                            command.Parameters.AddWithValue("@ADMFEE", admFeeECR);
+                            command.Parameters.AddWithValue("@FEE", admFeeECR);
 							command.Parameters.AddWithValue("@DATAAREAID", dataAreaIdECR);
 							command.Parameters.AddWithValue("@PARTITION", partitionECR);
+                            //command.Parameters.AddWithValue("@PARTITION", partitionECR);
 
 							if (connection.State != ConnectionState.Open)
 							{

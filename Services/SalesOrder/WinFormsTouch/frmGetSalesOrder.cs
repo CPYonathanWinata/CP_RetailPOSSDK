@@ -473,8 +473,8 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 enableInvoice = true;
 
                 //disable invoice & payment feature right now
-                enableInvoice = false;
-                enableReturn = false;
+                //enableInvoice = false;
+                //enableReturn = false;
             }
             else if (this.selectedOrderDocumentStatus == SalesStatus.Invoiced)
             {
@@ -486,8 +486,8 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 enablePickup = false;
 
                 //disable invoice & payment feature right now
-                enableInvoice = false;
-                enableReturn = false;
+                //enableInvoice = false;
+                //enableReturn = false;
             }
 
             //add by Yonathan 26/06/2023 to prevent pickup when there is no result SO
