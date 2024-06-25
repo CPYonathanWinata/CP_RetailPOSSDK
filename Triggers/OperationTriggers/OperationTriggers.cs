@@ -62,7 +62,7 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
             {
                 RetailTransaction transaction = posTransaction as RetailTransaction;
 
-                if (transaction.Comment == "PAYMENTDISCOUNT" || transaction.Comment == "PROMOED" || transaction.Comment == "PROMORCPT") //if (transaction.Comment == "PAYMENTDISCOUNT"  || transaction.Comment == "PROMOPDI" || transaction.Comment == "PROMOPDIS")                                  
+                if (transaction.Comment == "PAYMENTDISCOUNT" || transaction.Comment == "PROMOPDI" || transaction.Comment == "PROMOPDIS") //if (transaction.Comment == "PAYMENTDISCOUNT"  || transaction.Comment == "PROMOPDI" || transaction.Comment == "PROMOPDIS")                                  
                 {
 
                     /*
