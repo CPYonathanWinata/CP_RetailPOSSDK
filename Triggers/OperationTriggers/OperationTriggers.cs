@@ -234,6 +234,12 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
             APIAccess.APIAccessClass.itemToRemove = new List<string>();
 			//string custId = APIAccess.APIAccessClass.custId.ToString();
 
+            //let's rework the price adjustment
+
+
+            //
+
+            
             /*
             //add by Yonathan for Applying the Customer B2B Price Group (25/07/2023)
             

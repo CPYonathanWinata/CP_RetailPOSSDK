@@ -2693,26 +2693,32 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 								int transAmount = int.Parse(GME_Var.amountBCA.Substring(0, GME_Var.amountBCA.Length - 2));
 								int otherAmount = int.Parse(GME_Var.otherAmountBCA.Substring(0, GME_Var.otherAmountBCA.Length - 2));
                                 decimal admFee = 0;
+                                decimal admFeeText = 0;
                                 //add Adm fee by Yonathan 10/06/2024 //CPIADMFEE
                                 //get ADM fee
                                 if (otherAmount != 0)
                                 {
                                     admFee = GetAdmFee(int.Parse(this.tenderInfo.TenderID));
-                                    decimal admFeeText;
+                                    
                                     otherAmount = admFee != 0 ? otherAmount - (int)admFee : otherAmount;
 
                                     admFeeText = admFee;
                                     lblCustName.Visible = true;
-                                    lblCustName.Text = "Biaya Tarik Tunai";
+                                    lblCustName.Text = "Biaya Admin";
                                     txtCustName.Visible = true;
                                     txtCustName.ReadOnly = true;
                                     txtCustName.Text = PosApplication.Instance.Services.Rounding.Round(admFeeText, false); //admFee.ToString();
                                 }
                                 else
                                 {
-                                    lblCustName.Visible = false;
-                                    txtCustName.ReadOnly = false;
-                                    txtCustName.Visible = false; 
+                                    lblCustName.Visible = true;
+                                    lblCustName.Text = "Biaya Admin";
+                                    txtCustName.Visible = true;
+                                    txtCustName.ReadOnly = true;
+                                    txtCustName.Text = PosApplication.Instance.Services.Rounding.Round(admFeeText, false);
+                                    //lblCustName.Visible = false;
+                                    //txtCustName.ReadOnly = false;
+                                    //txtCustName.Visible = false; 
                                 }
                                 
                                 //end
@@ -3902,7 +3908,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
         //additional for adm fee by Yonathan 10/06/2024 //CPIADMFEE
         public decimal GetAdmFee(int _tenderId)
         {
-            string admFee = "";
+            string admFee = "0";
             decimal amountAdmFee = 0;
             SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
             try
@@ -3910,12 +3916,13 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
                 string queryString = @"SELECT ADMFEE 
                                         FROM ax.CPBANKADM 
                                         WHERE TENDERTYPEID = @TENDERID 
+                                        AND DATAAREAID = @DATAAREAID
                                         AND FROMDATE <= CAST(GETDATE() AS date) AND TODATE >= CAST(GETDATE() AS date)";
 
                 using (SqlCommand command = new SqlCommand(queryString, connection))
                 {
                     command.Parameters.AddWithValue("@TENDERID", _tenderId);
-
+                    command.Parameters.AddWithValue("@DATAAREAID", LSRetailPosis.Settings.ApplicationSettings.Database.DATAAREAID);
                     if (connection.State != ConnectionState.Open)
                     {
                         connection.Open();

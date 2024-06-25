@@ -93,7 +93,7 @@ namespace Microsoft.Dynamics.Retail.Pos.CustomerTriggers
                     ReadOnlyCollection<object> containerArray = Application.TransactionServices.InvokeExtension("getB2bRetailParam", transaction.Customer.CustomerId.ToString());
                     //APIAccess.APIAccessClass.userID = "";
                     APIAccess.APIAccessClass.custId = transaction.Customer.CustomerId.ToString();
-                    APIAccess.APIAccessClass.isB2b = containerArray[3].ToString();
+                    APIAccess.APIAccessClass.isB2b = containerArray[6].ToString(); //containerArray[3].ToString(); //change to index 6 because to get if its canvas or b2b
                     APIAccess.APIAccessClass.priceGroup = containerArray[4].ToString();
                     APIAccess.APIAccessClass.lineDiscGroup = containerArray[5].ToString();
                 }

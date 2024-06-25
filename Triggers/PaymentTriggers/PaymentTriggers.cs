@@ -142,7 +142,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
             string messageBoxString;
 
             //add by Yonathan 13/05/2024 to check B2B Cust cannot pay unless creat a customer order first
-            if (APIAccess.APIAccessClass.isB2b == "1" && posTransaction.ToString() == "LSRetailPosis.Transaction.RetailTransaction")
+            if ((APIAccess.APIAccessClass.isB2b == "1" || APIAccess.APIAccessClass.isB2b == "2") && posTransaction.ToString() == "LSRetailPosis.Transaction.RetailTransaction")
             {
                 using (frmMessage dialog = new frmMessage("Customer B2B diharuskan membuat Customer Order\nterlebih dahulu untuk bisa melakukan pembayaran.", MessageBoxButtons.OK, MessageBoxIcon.Stop))
                 {
