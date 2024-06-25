@@ -902,7 +902,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                         case "AMOUNTAMBILTUNAI":
                             return amountAmbilTunai <= 0 ? "" : Printing.InternalApplication.Services.Rounding.Round(amountAmbilTunai, false); //String.Format("{0,0}", amountAmbilTunai);
                         case "LABELTUNAIFEE": // add by Yonathan 10/06/2024 //CPIADMFEE
-                            return amountAmbilTunai <= 0 ? "" : "Biaya Tarik Tunai";
+                            return amountAmbilTunai <= 0 ? "" : "Biaya Admin";
                         //return "Ambil Tunai";
                         case "AMOUNTTUNAIFEE":
                             return amountAmbilTunai <= 0 ? "" : Printing.InternalApplication.Services.Rounding.Round(amountAdmFee, false); //CPIADMFEE
