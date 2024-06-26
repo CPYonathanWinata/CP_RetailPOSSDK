@@ -904,7 +904,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                         case "LABELTUNAIFEE": // add by Yonathan 10/06/2024 //CPIADMFEE
                             return amountAmbilTunai <= 0 ? "" : "Biaya Admin";
                         //return "Ambil Tunai";
-                        case "AMOUNTTUNAIFEE":
+                        case "AMOUNTTUNAIFEE": 
                             return amountAmbilTunai <= 0 ? "" : Printing.InternalApplication.Services.Rounding.Round(amountAdmFee, false); //CPIADMFEE
                         #endregion
                     }
