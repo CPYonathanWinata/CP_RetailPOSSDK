@@ -818,7 +818,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                         try
                         {
                             containerArray = SalesOrder.InternalApplication.TransactionServices.InvokeExtension("getB2bRetailParam", cot.Customer.CustomerId.ToString());
-                            isB2bCust = containerArray[3].ToString();
+                            isB2bCust = containerArray[6].ToString();
 
 
                         }
@@ -830,7 +830,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                     }
 
                     //Check to validate B2B or Regular customer
-                    if (isB2bCust == "1" && hasSO == false) //if B2B but no SO yet
+                    if ((isB2bCust == "1" || isB2bCust == "2") && hasSO == false) //if B2B but no SO yet
                     {
                         // Update the editing mode of the order.
                         UpdateCustomerOrderMode(cot, selectionMode);
@@ -853,7 +853,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                             SalesOrder.InternalApplication.Services.Dialog.ShowMessage(56139, MessageBoxButtons.OK, MessageBoxIcon.Information);    //"No deposit has been applied to this pickup. To apply a deposit, use the ""Deposit override"" operation."
                         }
                     }
-                    else if (isB2bCust == "1" && hasSO == true) //if B2B but no SO yet
+                    else if ((isB2bCust == "1" || isB2bCust == "2") && hasSO == true) //if B2B but no SO yet
                     {
                         //if not, then only save the changes
                         CustomerOrderInfo parameters = SerializationHelper.GetInfoFromTransaction(cot);

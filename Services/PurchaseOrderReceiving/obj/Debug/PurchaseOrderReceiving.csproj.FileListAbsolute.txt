@@ -69,20 +69,39 @@ D:\GT\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.csproj.GenerateRes
 D:\GT\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.dll.licenses
 D:\GT\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.dll
 D:\GT\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.pdb
+D:\Work\GT\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.csprojResolveAssemblyReference.cache
+D:\Work\GT\PurchaseOrderReceiving\obj\Debug\Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.frmPurchaseOrderReceiving.resources
+D:\Work\GT\PurchaseOrderReceiving\obj\Debug\Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.Properties.Resources.resources
+D:\Work\GT\PurchaseOrderReceiving\obj\Debug\Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch.frmPurchaseOrderReceiptSearch.resources
+D:\Work\GT\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.csproj.GenerateResource.Cache
+D:\Work\GT\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.dll.licenses
+D:\Work\GT\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.dll
+D:\Work\GT\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.pdb
+C:\Users\yonathan.winata\Documents\Users\it.application\Desktop\Retail POS\Extensions\PurchaseOrderReceiving.dll
+C:\Users\yonathan.winata\Documents\Users\it.application\Desktop\Retail POS\Extensions\PurchaseOrderReceiving.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\PurchaseOrderReceiving\obj\Debug\Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.frmPurchaseOrderReceiving.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\PurchaseOrderReceiving\obj\Debug\Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.Properties.Resources.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\PurchaseOrderReceiving\obj\Debug\Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch.frmPurchaseOrderReceiptSearch.resources
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.csproj.GenerateResource.Cache
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.dll.licenses
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.dll
+C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.pdb
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\PurchaseOrderReceiving\obj\Debug\Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.frmPurchaseOrderReceiving.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\PurchaseOrderReceiving\obj\Debug\Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.Properties.Resources.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\PurchaseOrderReceiving\obj\Debug\Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch.frmPurchaseOrderReceiptSearch.resources
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.csproj.GenerateResource.Cache
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.dll.licenses
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.dll
+C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.pdb
 C:\Users\yonathan.winata\Documents\GitHub\Users\it.application\Desktop\Retail POS\Extensions\PurchaseOrderReceiving.dll
 C:\Users\yonathan.winata\Documents\GitHub\Users\it.application\Desktop\Retail POS\Extensions\PurchaseOrderReceiving.pdb
-C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.csprojResolveAssemblyReference.cache
-C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\PurchaseOrderReceiving\obj\Debug\Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.frmPurchaseOrderReceiving.resources
-C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\PurchaseOrderReceiving\obj\Debug\Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.Properties.Resources.resources
-C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\PurchaseOrderReceiving\obj\Debug\Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch.frmPurchaseOrderReceiptSearch.resources
-C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.csproj.GenerateResource.Cache
-C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.dll.licenses
-C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.dll
-C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.pdb
-C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.csprojResolveAssemblyReference.cache
-C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\PurchaseOrderReceiving\obj\Debug\Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.frmPurchaseOrderReceiving.resources
-C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\PurchaseOrderReceiving\obj\Debug\Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.Properties.Resources.resources
-C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\PurchaseOrderReceiving\obj\Debug\Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch.frmPurchaseOrderReceiptSearch.resources
-C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.csproj.GenerateResource.Cache
-C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.dll.licenses
-C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.dll
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\PurchaseOrderReceiving\obj\Debug\Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.frmPurchaseOrderReceiving.resources
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\PurchaseOrderReceiving\obj\Debug\Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.Properties.Resources.resources
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\PurchaseOrderReceiving\obj\Debug\Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch.frmPurchaseOrderReceiptSearch.resources
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.csproj.GenerateResource.Cache
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.dll.licenses
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.dll
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.pdb

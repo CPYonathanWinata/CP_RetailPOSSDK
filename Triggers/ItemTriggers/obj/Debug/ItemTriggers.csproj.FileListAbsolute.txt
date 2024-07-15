@@ -34,3 +34,9 @@ C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\POS\bin\Debug\Ite
 C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Triggers\ItemTriggers\obj\Debug\ItemTriggers.csprojResolveAssemblyReference.cache
 C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Triggers\ItemTriggers\obj\Debug\ItemTriggers.dll
 C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Triggers\ItemTriggers\obj\Debug\ItemTriggers.pdb
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\POS\bin\Debug\ItemTriggers.dll.config
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\POS\bin\Debug\ItemTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\POS\bin\Debug\ItemTriggers.pdb
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Triggers\ItemTriggers\obj\Debug\ItemTriggers.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Triggers\ItemTriggers\obj\Debug\ItemTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Triggers\ItemTriggers\obj\Debug\ItemTriggers.pdb

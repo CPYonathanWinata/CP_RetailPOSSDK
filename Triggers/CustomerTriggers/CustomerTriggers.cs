@@ -62,6 +62,11 @@ namespace Microsoft.Dynamics.Retail.Pos.CustomerTriggers
         public void PostCustomerClear(IPosTransaction posTransaction)
         {
             LSRetailPosis.ApplicationLog.Log("ICustomerTriggersV1.PostCustomerClear", "After clearing a customer from the transaction.", LSRetailPosis.LogTraceLevel.Trace);
+            APIAccess.APIAccessClass.isB2b = null;
+            APIAccess.APIAccessClass.priceGroup = null;
+            APIAccess.APIAccessClass.lineDiscGroup = null;
+            APIAccess.APIAccessClass.ppnValidation = null;
+            APIAccess.APIAccessClass.custId = null;
         }
 
         #endregion
@@ -96,6 +101,7 @@ namespace Microsoft.Dynamics.Retail.Pos.CustomerTriggers
                     APIAccess.APIAccessClass.isB2b = containerArray[6].ToString(); //containerArray[3].ToString(); //change to index 6 because to get if its canvas or b2b
                     APIAccess.APIAccessClass.priceGroup = containerArray[4].ToString();
                     APIAccess.APIAccessClass.lineDiscGroup = containerArray[5].ToString();
+                    APIAccess.APIAccessClass.ppnValidation = containerArray[7].ToString(); 
                 }
                 catch (Exception ex)
                 {
@@ -103,6 +109,12 @@ namespace Microsoft.Dynamics.Retail.Pos.CustomerTriggers
                     throw;
                 }
             }  
+
+            ////check if already add item first before adding the customer canvas or b2b 
+            //if ( ( APIAccess.APIAccessClass.isB2b  == "1" || APIAccess.APIAccessClass.isB2b  == "2") && ( transaction.SaleItems.Count != 0 || transaction.SaleItems != null))
+            //{
+            //    MessageBox.Show("Untuk customer Canvas / B2B, silakan Add Customer terlebih dahulu baru kemudian Add Item", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+            //}
             //containerArray[2].ToString(); //3,4,5
             //string userIDFromClass = APIAccess.APIAccessClass.userID;
 
@@ -191,6 +203,35 @@ namespace Microsoft.Dynamics.Retail.Pos.CustomerTriggers
                 DE customer = ((RetailTransaction)posTransaction).Customer;
                 if(customer.CustomerId != null)
                 oldCustId = customer.CustomerId.ToString();
+            }
+
+            RetailTransaction transaction = posTransaction as RetailTransaction;
+            if (Application.TransactionServices.CheckConnection())
+            {
+                try
+                {
+                    ReadOnlyCollection<object> containerArray = Application.TransactionServices.InvokeExtension("getB2bRetailParam", customerId.ToString());
+                    //APIAccess.APIAccessClass.userID = "";
+                    //APIAccess.APIAccessClass.custId = transaction.Customer.CustomerId.ToString();
+                    APIAccess.APIAccessClass.isB2b = containerArray[6].ToString(); //containerArray[3].ToString(); //change to index 6 because to get if its canvas or b2b
+                    //APIAccess.APIAccessClass.priceGroup = containerArray[4].ToString();
+                    //APIAccess.APIAccessClass.lineDiscGroup = containerArray[5].ToString();
+                    //APIAccess.APIAccessClass.ppnValidation = containerArray[7].ToString();
+                }
+                catch (Exception ex)
+                {
+                    LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                    throw;
+                }
+            }
+
+            //check if already add item first before adding the customer canvas or b2b 
+            if ((APIAccess.APIAccessClass.isB2b == "1" || APIAccess.APIAccessClass.isB2b == "2") && transaction.SaleItems.Count != 0 )//|| transaction.SaleItems != null))
+            {
+
+                
+                MessageBox.Show("Untuk customer dengan tipe Canvas/B2B, silakan Void transaksi ini. Add Customer terlebih dahulu baru kemudian Add Item.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                posTransaction.OperationCancelled = true;
             }
 
 

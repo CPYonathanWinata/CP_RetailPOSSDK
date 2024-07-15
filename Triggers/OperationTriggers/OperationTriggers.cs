@@ -45,7 +45,7 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
 		}
 
 		#endregion
-
+        bool foundOperationCancelled = false;
 		#region IOperationTriggersV1 Members
 
 		/// <summary>
@@ -229,6 +229,8 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
             string taxGroup1="";
             string taxGroup2 ="";
             bool foundDifferentTaxGroup = false;
+            
+
             //string[] listItemToRemove;
             List<string> listItemToRemove = new List<string>();
             APIAccess.APIAccessClass.itemToRemove = new List<string>();
@@ -238,309 +240,334 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
 
 
             //
-
+            if (posTransaction.OperationCancelled == true)
+            {
+                foundOperationCancelled = true;
+            }
             
-            /*
+            
+            
             //add by Yonathan for Applying the Customer B2B Price Group (25/07/2023)
-            
-                if (posTransaction.ToString() == "LSRetailPosis.Transaction.RetailTransaction" || posTransaction.ToString() == "LSRetailPosis.Transaction.CustomerOrderTransaction")
+
+            if ((posTransaction.ToString() == "LSRetailPosis.Transaction.RetailTransaction" || posTransaction.ToString() == "LSRetailPosis.Transaction.CustomerOrderTransaction") && foundOperationCancelled == false)
+            {
+                RetailTransaction transaction = posTransaction as RetailTransaction;
+                if (transaction.CalculableSalesLines.Count != 0)
                 {
-                    RetailTransaction transaction = posTransaction as RetailTransaction;
-                    if (transaction.CalculableSalesLines.Count != 0)
+                    bool isEmptyCustomer = transaction.Customer.IsEmptyCustomer();
+
+                    if (isEmptyCustomer == false)
                     {
-                        bool isEmptyCustomer = transaction.Customer.IsEmptyCustomer();
+                        isB2bCust = APIAccess.APIAccessClass.isB2b;
+                        priceGroup = APIAccess.APIAccessClass.priceGroup;//.ToString();
+                        lineDiscGroup = APIAccess.APIAccessClass.lineDiscGroup;//.ToString();
 
-                        if (isEmptyCustomer == false)
+                        if (isB2bCust == null)
                         {
-                            isB2bCust = APIAccess.APIAccessClass.isB2b;
-                            priceGroup = APIAccess.APIAccessClass.priceGroup;//.ToString();
-                            lineDiscGroup = APIAccess.APIAccessClass.lineDiscGroup;//.ToString();
-
-                            if (isB2bCust == null)
+                            try
                             {
-                                try
-                                {
-                                    ReadOnlyCollection<object> containerArray = Application.TransactionServices.InvokeExtension("getB2bRetailParam", transaction.Customer.CustomerId.ToString());
-                                    //APIAccess.APIAccessClass.userID = "";
-                                    APIAccess.APIAccessClass.custId = transaction.Customer.CustomerId.ToString();
-                                    APIAccess.APIAccessClass.isB2b = containerArray[3].ToString();
-                                    APIAccess.APIAccessClass.priceGroup = containerArray[4].ToString();
-                                    APIAccess.APIAccessClass.lineDiscGroup = containerArray[5].ToString();
-                                }
-                                catch (Exception ex)
-                                {
-                                    LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
-                                    throw;
-                                }
+                                ReadOnlyCollection<object> containerArray = Application.TransactionServices.InvokeExtension("getB2bRetailParam", transaction.Customer.CustomerId.ToString());
+                                //APIAccess.APIAccessClass.userID = "";
+                                APIAccess.APIAccessClass.custId = transaction.Customer.CustomerId.ToString();
+                                APIAccess.APIAccessClass.isB2b = containerArray[6].ToString();
+                                APIAccess.APIAccessClass.priceGroup = containerArray[4].ToString();
+                                APIAccess.APIAccessClass.lineDiscGroup = containerArray[5].ToString();
                             }
-                            //if yes, query the item                          
-
-                            if (isB2bCust == "1")
+                            catch (Exception ex)
                             {
-                                //get customer group ppnValidation
-                                ReadOnlyCollection<object> containerArray = Application.TransactionServices.InvokeExtension("getPPNValidate", transaction.Customer.CustomerId.ToString());
-                                ppnValidate = containerArray[3].ToString();
+                                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                                throw;
+                            }
+                        }
+                        //if yes, query the item                          
 
-                                custId = transaction.Customer.CustomerId;
-                                //List<string> itemIds = transaction.CalculableSalesLines.Select(salesLine => salesLine.ItemId).ToList();
-                                //List<string> unitIds = transaction.CalculableSalesLines.Select(salesLine => salesLine.BackofficeSalesOrderUnitOfMeasure).ToList();
-                                //List<string> result = findPriceAgreement(posTransaction, transaction.ChannelId, itemIds, priceGroup);//, salesLine.BackofficeSalesOrderUnitOfMeasure);
-                                //calculatePriceDiscFromTA(itemIds,transaction,priceGroup);
-                                //Dictionary<string, Tuple<decimal, decimal, decimal, decimal>> priceAndDiscountMap = CalculatePriceAndDiscount(transaction, Application.Settings.Database.DataAreaID, transaction.ChannelId, itemIds, priceGroup, lineDiscGroup, unitIds);
+                        if (isB2bCust == "1" || isB2bCust == "2")
+                        {
+                            //get customer group ppnValidation
+                            ReadOnlyCollection<object> containerArray = Application.TransactionServices.InvokeExtension("getPPNValidate", transaction.Customer.CustomerId.ToString());
+                            ppnValidate = containerArray[3].ToString();
 
-                                if (posisOperation == PosisOperations.ProcessInput || posisOperation == PosisOperations.BlankOperation || posisOperation == PosisOperations.Customer || posisOperation == PosisOperations.CustomerSearch || posisOperation == PosisOperations.SetQty)
+                            custId = transaction.Customer.CustomerId;
+                            //List<string> itemIds = transaction.CalculableSalesLines.Select(salesLine => salesLine.ItemId).ToList();
+                            //List<string> unitIds = transaction.CalculableSalesLines.Select(salesLine => salesLine.BackofficeSalesOrderUnitOfMeasure).ToList();
+                            //List<string> result = findPriceAgreement(posTransaction, transaction.ChannelId, itemIds, priceGroup);//, salesLine.BackofficeSalesOrderUnitOfMeasure);
+                            //calculatePriceDiscFromTA(itemIds,transaction,priceGroup);
+                            //Dictionary<string, Tuple<decimal, decimal, decimal, decimal>> priceAndDiscountMap = CalculatePriceAndDiscount(transaction, Application.Settings.Database.DataAreaID, transaction.ChannelId, itemIds, priceGroup, lineDiscGroup, unitIds);
+
+                            if (posisOperation == PosisOperations.ProcessInput || posisOperation == PosisOperations.BlankOperation || posisOperation == PosisOperations.Customer || posisOperation == PosisOperations.CustomerSearch || posisOperation == PosisOperations.SetQty || posisOperation == PosisOperations.ConvertCustomerOrder)
+                            {
+
+
+
+
+
+                                foreach (var salesLine in transaction.CalculableSalesLines)
                                 {
+                                    //find the pricegroup that specified for the applied customer first yonathan 12/07/2024
 
-                                    foreach (var salesLine in transaction.CalculableSalesLines)
+                                    List<string> result = findPriceAgreement(posTransaction, transaction.ChannelId, salesLine.ItemId, transaction.Customer.CustomerId, salesLine.BackofficeSalesOrderUnitOfMeasure);
+
+                                    //if not found, check the pricegroup that exist in the customers master data
+                                    //calculate the pricegroup 
+                                    //List<string> 
+                                    if (result.Count == 0)
                                     {
-
-                                        //calculate the pricegroup 
-                                        List<string> result = findPriceAgreement(posTransaction, transaction.ChannelId, salesLine.ItemId, priceGroup, salesLine.BackofficeSalesOrderUnitOfMeasure);
-                                        //calculate the discount                             
-                                        List<string> resultDisc = findDiscountAgreement(posTransaction, Application.Settings.Database.DataAreaID, salesLine.ItemId, lineDiscGroup, salesLine.BackofficeSalesOrderUnitOfMeasure);
-                                        //query the B2B price from TA
-
-                                        if (result != null && result.Count > 0)
-                                        {
-                                            amountTA = Convert.ToDecimal(result[0]);
-                                            //do the price override based on the TA
-                                            salesLine.CustomerPrice = amountTA;
-                                            salesLine.GrossAmount = amountTA;
-                                            salesLine.OriginalPrice = amountTA;
-                                            salesLine.Price = amountTA;
-                                            //salesLine.PriceOverridden = true;
-                                            salesLine.TradeAgreementPriceGroup = result[1];
-                                            salesLine.TradeAgreementPrice = amountTA;
-
-
-                                            //check taxgroup
-                                            if (ppnValidate == "True")
-                                            {
-                                                if (taxGroup1 == "")
-                                                {
-                                                    foundDifferentTaxGroup = false;
-                                                }
-                                                else if (taxGroup1 == salesLine.TaxGroupId)
-                                                {
-                                                    foundDifferentTaxGroup = false;
-                                                }
-                                                else
-                                                {
-                                                    foundDifferentTaxGroup = true;
-
-
-                                                }
-
-                                            }
-                                            taxGroup1 = salesLine.TaxGroupId;
-                                            //remove all discount
-                                            //var lastSaleItem = transaction.SaleItems.Last.Value;
-
-
-
-                                            foreach (var discountLine in salesLine.DiscountLines.ToList())
-                                            {
-                                                salesLine.DiscountLines.Remove(discountLine);
-                                            }
-
-                                            //add discount Line based on customer master
-                                            LSRetailPosis.Transaction.Line.Discount.CustomerDiscountItem custDiscountManual = new LSRetailPosis.Transaction.Line.Discount.CustomerDiscountItem();
-
-                                            //check the resultDisc count
-                                            if (resultDisc != null && resultDisc.Count > 0)
-                                            {
-                                                custDiscountManual.Amount = Convert.ToDecimal(resultDisc[1]);
-                                                custDiscountManual.Percentage = Convert.ToDecimal(resultDisc[2]);
-                                                //custDiscountManual.EffectiveAmount = 
-                                                //SetEffectiveAmountForAmountOff
-                                                Application.Services.Discount.AddDiscountLine(salesLine, custDiscountManual);
-                                            }
-
-                                            //add discount line
-                                            
-                                            //if (salesLine.DiscountLines.Count == 0)
-                                            ////if (transaction.RecalledOrder == true && salesLine.DiscountLines.Count == 0)
-                                            //{
-                                            //    //Microsoft.Dynamics.Retail.Pos.DiscountService.Discount disc = new Microsoft.Dynamics.Retail.Pos.DiscountService.Discount();
-                                            //    //disc.CalcCustomerDiscount(transaction);
-                                            //    //Application.Services.Discount.AddDiscountLine(IDiscountItem//.GetLineDiscountLines()
-                                            //    LSRetailPosis.Transaction.Line.Discount.CustomerDiscountItem custDiscountManual = new LSRetailPosis.Transaction.Line.Discount.CustomerDiscountItem();
-
-                                            //    //check the resultDisc count
-                                            //    if (resultDisc != null && resultDisc.Count > 0)
-                                            //    {
-                                            //        custDiscountManual.Amount = Convert.ToDecimal(resultDisc[1]);
-                                            //        custDiscountManual.Percentage = Convert.ToDecimal(resultDisc[2]);
-                                            //        //custDiscountManual.EffectiveAmount = 
-                                            //        //SetEffectiveAmountForAmountOff
-                                            //        Application.Services.Discount.AddDiscountLine(salesLine, custDiscountManual);
-                                            //    }
-                                            //}
-                                            ////else if (transaction.RecalledOrder == true && salesLine.DiscountLines.Count > 0)
-                                            //else if (salesLine.DiscountLines.Count > 0)
-                                            //{
-                                            //    //remove retail discount
-                                            //    var lastSaleItem = transaction.SaleItems.Last.Value;
-
-                                        
-
-                                            //    foreach (var discountLine in lastSaleItem.DiscountLines.ToList())
-                                            //    {
-                                            //        lastSaleItem.DiscountLines.Remove(discountLine);
-                                            //    }
-
-                                            //    //Microsoft.Dynamics.Retail.Pos.DiscountService.Discount disc = new Microsoft.Dynamics.Retail.Pos.DiscountService.Discount();
-                                            //    //disc.CalcCustomerDiscount(transaction);
-                                            //    //Application.Services.Discount.AddDiscountLine(IDiscountItem//.GetLineDiscountLines()
-                                            //    LSRetailPosis.Transaction.Line.Discount.CustomerDiscountItem custDiscountManual = new LSRetailPosis.Transaction.Line.Discount.CustomerDiscountItem();
-
-                                            //    //check the resultDisc count
-                                            //    if (resultDisc != null && resultDisc.Count > 0)
-                                            //    {
-                                            //        custDiscountManual.Amount = Convert.ToDecimal(resultDisc[1]);
-                                            //        custDiscountManual.Percentage = Convert.ToDecimal(resultDisc[2]);
-                                            //        //custDiscountManual.EffectiveAmount = 
-                                            //        //SetEffectiveAmountForAmountOff
-                                            //        Application.Services.Discount.AddDiscountLine(salesLine, custDiscountManual);
-                                            //    }
-                                            //}
-
-                                            //if it has a discount that has an offer ID
-                                            //foreach (var discountLine in salesLine.DiscountLines.ToList())
-                                            //{
-                                            //    if (discountLine is PeriodicDiscountItem)
-                                            //    {
-                                            //         Convert discountLine to PeriodicDiscountItem
-                                            //        PeriodicDiscountItem periodicLines = (PeriodicDiscountItem)discountLine;
-
-                                            //         Check if the OfferId is not null or empty
-                                            //        if (!string.IsNullOrEmpty(periodicLines.OfferId))
-                                            //        {
-                                            //             Remove the discountLine from the DiscountLines list
-                                            //            salesLine.DiscountLines.Remove(discountLine);
-                                            //        }
-                                            //    }
-                                            //}
-
-
-                                            Application.Services.Tax.CalculateTax(salesLine, transaction);
-
-                                            //POSFormsManager.ShowPOSStatusPanelText("Change price to B2B Price" );
-
-
-                                        }
-                                        else
-                                        {
-                                            if (posisOperation == PosisOperations.ProcessInput || posisOperation == PosisOperations.BlankOperation)
-                                            {
-
-                                                using (frmMessage dialog = new frmMessage(string.Format("Item {0} - {1} ini tidak bisa dijual untuk cust {2}, karena tidak ada di setup harga B2B", salesLine.ItemId, salesLine.Description, transaction.Customer.CustomerId), MessageBoxButtons.OK, MessageBoxIcon.Error))
-                                                {
-                                                    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
-                                                    posTransaction.OperationCancelled = true;
-                                                    LSRetailPosis.POSControls.POSFormsManager.ShowPOSStatusPanelText(string.Empty);
-                                                    //Application.RunOperation(PosisOperations.VoidItem, salesLine.ItemId);
-                                                    return;
-                                                    //Application.RunOperation(PosisOperations.SetQty, itemIdRemove);
-                                                    //Application.RunOperation(PosisOperations.SetQty,itemIdRemove, posTransaction);
-
-                                                }
-                                                //cancel the process input item
-                                            }
-                                            else if (posisOperation == PosisOperations.Customer || posisOperation == PosisOperations.CustomerSearch)
-                                            {
-                                                //APIAccess.APIAccessClass.itemToRemove.Add(salesLine.ItemId);
-                                                //removeItems = true;                                            
-
-                                                using (frmMessage dialog = new frmMessage("Untuk customer B2B, silakan lakukan langkah di bawah ini :\n1. Void transaksi ini\n2. Add customer B2B\n3. Scan ulang barang yang dibeli", MessageBoxButtons.OK, MessageBoxIcon.Error))
-                                                {
-                                                    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
-                                                    posTransaction.OperationCancelled = true;
-                                                    LSRetailPosis.POSControls.POSFormsManager.ShowPOSStatusPanelText(string.Empty);
-                                                    //Application.RunOperation(PosisOperations.VoidItem, salesLine.ItemId);
-                                                    return;
-                                                    //Application.RunOperation(PosisOperations.SetQty, itemIdRemove);
-                                                    //Application.RunOperation(PosisOperations.SetQty,itemIdRemove, posTransaction);
-                                                     
-                                                }
-                                            }
-                                        }
-                                        indexString++;
+                                        result = findPriceAgreement(posTransaction, transaction.ChannelId, salesLine.ItemId, priceGroup, salesLine.BackofficeSalesOrderUnitOfMeasure);
                                     }
+                                    //calculate the discount                             
+                                    List<string> resultDisc = findDiscountAgreement(posTransaction, Application.Settings.Database.DataAreaID, salesLine.ItemId, lineDiscGroup, salesLine.BackofficeSalesOrderUnitOfMeasure);
+                                    //query the B2B price from TA
+
+                                    if (result != null && result.Count > 0)
+                                    {
+                                        amountTA = Convert.ToDecimal(result[0]);
+                                        //do the price override based on the TA
+                                        salesLine.CustomerPrice = amountTA;
+                                        salesLine.GrossAmount = amountTA;
+                                        salesLine.OriginalPrice = amountTA;
+                                        salesLine.Price = amountTA;
+                                        //salesLine.PriceOverridden = true;
+                                        salesLine.TradeAgreementPriceGroup = result[1];
+                                        salesLine.TradeAgreementPrice = amountTA;
+
+
+                                        //check taxgroup
+                                        if (ppnValidate == "True")
+                                        {
+                                            if (taxGroup1 == "")
+                                            {
+                                                foundDifferentTaxGroup = false;
+                                            }
+                                            else if (taxGroup1 == salesLine.TaxGroupId)
+                                            {
+                                                foundDifferentTaxGroup = false;
+                                            }
+                                            else
+                                            {
+                                                foundDifferentTaxGroup = true;
+
+
+                                            }
+
+                                        }
+                                        taxGroup1 = salesLine.TaxGroupId;
+                                        //remove all discount
+                                        //var lastSaleItem = transaction.SaleItems.Last.Value;
+
+
+
+                                        foreach (var discountLine in salesLine.DiscountLines.ToList())
+                                        {
+                                            salesLine.DiscountLines.Remove(discountLine);
+                                        }
+
+                                        //add discount Line based on customer master
+                                        LSRetailPosis.Transaction.Line.Discount.CustomerDiscountItem custDiscountManual = new LSRetailPosis.Transaction.Line.Discount.CustomerDiscountItem();
+
+                                        //check the resultDisc count
+                                        if (resultDisc != null && resultDisc.Count > 0)
+                                        {
+                                            custDiscountManual.Amount = Convert.ToDecimal(resultDisc[1]);
+                                            custDiscountManual.Percentage = Convert.ToDecimal(resultDisc[2]);
+                                            //custDiscountManual.EffectiveAmount = 
+                                            //SetEffectiveAmountForAmountOff
+                                            Application.Services.Discount.AddDiscountLine(salesLine, custDiscountManual);
+                                        }
+
+                                        //add discount line
+
+                                        //if (salesLine.DiscountLines.Count == 0)
+                                        ////if (transaction.RecalledOrder == true && salesLine.DiscountLines.Count == 0)
+                                        //{
+                                        //    //Microsoft.Dynamics.Retail.Pos.DiscountService.Discount disc = new Microsoft.Dynamics.Retail.Pos.DiscountService.Discount();
+                                        //    //disc.CalcCustomerDiscount(transaction);
+                                        //    //Application.Services.Discount.AddDiscountLine(IDiscountItem//.GetLineDiscountLines()
+                                        //    LSRetailPosis.Transaction.Line.Discount.CustomerDiscountItem custDiscountManual = new LSRetailPosis.Transaction.Line.Discount.CustomerDiscountItem();
+
+                                        //    //check the resultDisc count
+                                        //    if (resultDisc != null && resultDisc.Count > 0)
+                                        //    {
+                                        //        custDiscountManual.Amount = Convert.ToDecimal(resultDisc[1]);
+                                        //        custDiscountManual.Percentage = Convert.ToDecimal(resultDisc[2]);
+                                        //        //custDiscountManual.EffectiveAmount = 
+                                        //        //SetEffectiveAmountForAmountOff
+                                        //        Application.Services.Discount.AddDiscountLine(salesLine, custDiscountManual);
+                                        //    }
+                                        //}
+                                        ////else if (transaction.RecalledOrder == true && salesLine.DiscountLines.Count > 0)
+                                        //else if (salesLine.DiscountLines.Count > 0)
+                                        //{
+                                        //    //remove retail discount
+                                        //    var lastSaleItem = transaction.SaleItems.Last.Value;
+
+
+
+                                        //    foreach (var discountLine in lastSaleItem.DiscountLines.ToList())
+                                        //    {
+                                        //        lastSaleItem.DiscountLines.Remove(discountLine);
+                                        //    }
+
+                                        //    //Microsoft.Dynamics.Retail.Pos.DiscountService.Discount disc = new Microsoft.Dynamics.Retail.Pos.DiscountService.Discount();
+                                        //    //disc.CalcCustomerDiscount(transaction);
+                                        //    //Application.Services.Discount.AddDiscountLine(IDiscountItem//.GetLineDiscountLines()
+                                        //    LSRetailPosis.Transaction.Line.Discount.CustomerDiscountItem custDiscountManual = new LSRetailPosis.Transaction.Line.Discount.CustomerDiscountItem();
+
+                                        //    //check the resultDisc count
+                                        //    if (resultDisc != null && resultDisc.Count > 0)
+                                        //    {
+                                        //        custDiscountManual.Amount = Convert.ToDecimal(resultDisc[1]);
+                                        //        custDiscountManual.Percentage = Convert.ToDecimal(resultDisc[2]);
+                                        //        //custDiscountManual.EffectiveAmount = 
+                                        //        //SetEffectiveAmountForAmountOff
+                                        //        Application.Services.Discount.AddDiscountLine(salesLine, custDiscountManual);
+                                        //    }
+                                        //}
+
+                                        //if it has a discount that has an offer ID
+                                        //foreach (var discountLine in salesLine.DiscountLines.ToList())
+                                        //{
+                                        //    if (discountLine is PeriodicDiscountItem)
+                                        //    {
+                                        //         Convert discountLine to PeriodicDiscountItem
+                                        //        PeriodicDiscountItem periodicLines = (PeriodicDiscountItem)discountLine;
+
+                                        //         Check if the OfferId is not null or empty
+                                        //        if (!string.IsNullOrEmpty(periodicLines.OfferId))
+                                        //        {
+                                        //             Remove the discountLine from the DiscountLines list
+                                        //            salesLine.DiscountLines.Remove(discountLine);
+                                        //        }
+                                        //    }
+                                        //}
+
+
+                                        Application.Services.Tax.CalculateTax(salesLine, transaction);
+
+                                        //POSFormsManager.ShowPOSStatusPanelText("Change price to B2B Price" );
+
+
+                                    }
+                                    else
+                                    {
+                                        string custType = isB2bCust == "1" ? "Canvas" : "B2B";
+                                        if (posisOperation == PosisOperations.ProcessInput || posisOperation == PosisOperations.BlankOperation)
+                                        {
+
+                                            using (frmMessage dialog = new frmMessage(string.Format("Item {0} - {1} ini tidak bisa dijual untuk cust {2}, karena tidak ada di setup harga cust {3}", salesLine.ItemId, salesLine.Description, transaction.Customer.CustomerId, custType), MessageBoxButtons.OK, MessageBoxIcon.Error))
+                                            {
+                                                LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                                                posTransaction.OperationCancelled = true;
+                                                LSRetailPosis.POSControls.POSFormsManager.ShowPOSStatusPanelText(string.Empty);
+                                                //Application.RunOperation(PosisOperations.VoidItem, salesLine.ItemId);
+                                                return;
+                                                //Application.RunOperation(PosisOperations.SetQty, itemIdRemove);
+                                                //Application.RunOperation(PosisOperations.SetQty,itemIdRemove, posTransaction);
+
+                                            }
+                                            //cancel the process input item
+                                        }
+                                        //else if (posisOperation == PosisOperations.Customer || posisOperation == PosisOperations.CustomerSearch)
+                                        //{
+                                        //    //APIAccess.APIAccessClass.itemToRemove.Add(salesLine.ItemId);
+                                        //    //removeItems = true;                                            
+
+                                        //using (frmMessage dialog = new frmMessage("Untuk customer B2B/Canvas, silakan lakukan langkah di bawah ini :\n1. Void transaksi ini\n2. Add customer B2B/Canvas\n3. Kemudian scan ulang barang yang dibeli", MessageBoxButtons.OK, MessageBoxIcon.Error))
+                                        //{
+                                        //    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                                        //    posTransaction.OperationCancelled = true;
+                                        //    LSRetailPosis.POSControls.POSFormsManager.ShowPOSStatusPanelText(string.Empty);
+                                        //    //Application.RunOperation(PosisOperations.VoidItem, salesLine.ItemId);
+                                        //    return;
+                                        //    //Application.RunOperation(PosisOperations.SetQty, itemIdRemove);
+                                        //    //Application.RunOperation(PosisOperations.SetQty,itemIdRemove, posTransaction);
+
+                                        //}
+                                        //}
+                                    }
+                                    indexString++;
                                 }
-
-
-
-                                //Application.BusinessLogic.ItemSystem.CalculatePriceTaxDiscount(transaction);
-                                //Application.BusinessLogic.ItemSystem.RecalcPriceTaxDiscount(transaction, true);
-                                //Application.BusinessLogic.ItemSystem.RecalcPriceTaxDiscount(transaction, false);
-
-                                transaction.CalcTotals();
-                                transaction.Save();
                             }
-                        }
-                    }
-
-                    ////Application.Services.Discount.CalculateDiscount(transaction);
-                    if (foundDifferentTaxGroup == true)
-                    {
-                        using (frmMessage dialog = new frmMessage(string.Format("Untuk customer B2B, tidak boleh ada item\ndengan TaxGroup berbeda. Silakan ganti barang yang lain"), MessageBoxButtons.OK, MessageBoxIcon.Error))
-                        {
-                            LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
-                            posTransaction.OperationCancelled = true;
-                            LSRetailPosis.POSControls.POSFormsManager.ShowPOSStatusPanelText(string.Empty);
-                            //Application.RunOperation(PosisOperations.VoidItem, salesLine.ItemId);
-                            //return;
-                            //Application.RunOperation(PosisOperations.SetQty, itemIdRemove);
-                            //Application.RunOperation(PosisOperations.SetQty,itemIdRemove, posTransaction);
-
-                        }
-                    }
 
 
-                    if (removeItems == true)
-                    {
-                        using (frmMessage dialog = new frmMessage(string.Format("Untuk customer B2B, silakan scan ulang barang yang akan dibeli karena ada perbedaan pada harga dan barang"), MessageBoxButtons.OK, MessageBoxIcon.Error))
-                        {
-                            LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
-                            //BlankOperationInfo operationInfo = new BlankOperationInfo();
 
-                            //operationInfo.OperationId = "21";
-                            //operationInfo.Parameter = "TEST";
-                            //Application.Services.BlankOperations.BlankOperation((IBlankOperationInfo)operationInfo, (IPosTransaction)posTransaction);
-                            Application.RunOperation(PosisOperations.BlankOperation, "91", posTransaction);
+                            //Application.BusinessLogic.ItemSystem.CalculatePriceTaxDiscount(transaction);
+                            //Application.BusinessLogic.ItemSystem.RecalcPriceTaxDiscount(transaction, true);
+                            //Application.BusinessLogic.ItemSystem.RecalcPriceTaxDiscount(transaction, false);
 
                             transaction.CalcTotals();
-
                             transaction.Save();
                         }
+                    }
+                }
 
-                        removeItems = false;
+                ////Application.Services.Discount.CalculateDiscount(transaction);
+                //if (foundDifferentTaxGroup == true)
+                //{
+                //    using (frmMessage dialog = new frmMessage(string.Format("Untuk customer B2B, tidak boleh ada item\ndengan TaxGroup berbeda. Silakan ganti barang yang lain"), MessageBoxButtons.OK, MessageBoxIcon.Error))
+                //    {
+                //        LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                //        posTransaction.OperationCancelled = true;
+                //        LSRetailPosis.POSControls.POSFormsManager.ShowPOSStatusPanelText(string.Empty);
+                //        //Application.RunOperation(PosisOperations.VoidItem, salesLine.ItemId);
+                //        //return;
+                //        //Application.RunOperation(PosisOperations.SetQty, itemIdRemove);
+                //        //Application.RunOperation(PosisOperations.SetQty,itemIdRemove, posTransaction);
 
+                //    }
+                //}
+
+
+                if (removeItems == true)
+                {
+                    using (frmMessage dialog = new frmMessage(string.Format("Untuk customer B2B, silakan scan ulang barang yang akan dibeli karena ada perbedaan pada harga dan barang"), MessageBoxButtons.OK, MessageBoxIcon.Error))
+                    {
+                        LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                        //BlankOperationInfo operationInfo = new BlankOperationInfo();
+
+                        //operationInfo.OperationId = "21";
+                        //operationInfo.Parameter = "TEST";
+                        //Application.Services.BlankOperations.BlankOperation((IBlankOperationInfo)operationInfo, (IPosTransaction)posTransaction);
+                        Application.RunOperation(PosisOperations.BlankOperation, "91", posTransaction);
+
+                        transaction.CalcTotals();
+
+                        transaction.Save();
                     }
 
-                }
-            
-            */
-           // switch (posisOperation) 
-           // {
-           //     case PosisOperations.VoidTransaction :
-           //     //case PosisOperations.con
-           //     //case PosisOperations.q
+                    removeItems = false;
 
-           //     {
-           //         APIAccess.APIAccessClass.isB2b = null;
-           //         APIAccess.APIAccessClass.priceGroup = null;
-           //         APIAccess.APIAccessClass.lineDiscGroup = null;
-				    
-				    
-						
-           //         break;
-           //     }
-           //}
+                }
+
+            }
+            else
+            {
+                LSRetailPosis.POSControls.POSFormsManager.ShowPOSStatusPanelText(string.Empty);
+            }
+            
+            
+            switch (posisOperation)
+            {
+                case PosisOperations.VoidTransaction:
+                    //case PosisOperations.con
+                    //case PosisOperations.q
+                    {
+                        APIAccess.APIAccessClass.isB2b = null;
+                        APIAccess.APIAccessClass.priceGroup = null;
+                        APIAccess.APIAccessClass.lineDiscGroup = null;
+                        APIAccess.APIAccessClass.ppnValidation = null;
+                        APIAccess.APIAccessClass.custId = null;
+
+                        break;
+                    }
+            }
 			 //end add
 
 		}
+
+        private void findPriceAgreementForCustomer(IPosTransaction posTransaction)
+        {
+            throw new NotImplementedException();
+        }
 
 
         public Dictionary<string, Tuple<decimal, decimal, decimal, decimal>> CalculatePriceAndDiscount(RetailTransaction transaction, string _dataAreaId, long _channelId, List<string> itemIds, string _priceGroup, string _discGroup, List<string> _unitId)//(List<string> itemIds, RetailTransaction transaction)

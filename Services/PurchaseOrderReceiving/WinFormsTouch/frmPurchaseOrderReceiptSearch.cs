@@ -32,6 +32,7 @@ using System.Data.SqlClient;
 using System.Drawing.Printing;
 using System.Drawing;
 using System.Xml;
+using System.Collections.ObjectModel;
 
 
 
@@ -199,6 +200,8 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch
 		private SimpleButtonEx btnListPO;
 		private SimpleButtonEx btnListTO;
 		int Offset = 0;
+		private StyleController styleController;
+		private System.ComponentModel.IContainer components;
 
 		/// <summary>
 		/// Get/set property for singaling if form is called first time
@@ -219,11 +222,6 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch
 		/// Get/set property for selected purchase receipt type
 		/// </summary>
 		public PRCountingType SelectedPRType { get; set; }
-
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
 
 		/// <summary>
 		/// Displays form of purchase order receipts search.
@@ -519,431 +517,430 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmPurchaseOrderReceiptSearch));
-			this.xtraGridBlending1 = new DevExpress.XtraGrid.Blending.XtraGridBlending();
-			this.basePanel = new DevExpress.XtraEditors.PanelControl();
-			this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
-			this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
-			this.btnPgDown = new LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx();
-			this.btnDown = new LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx();
-			this.btnUp = new LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx();
-			this.btnPgUp = new LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx();
-			this.btnListPO = new LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx();
-			this.btnListTO = new LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx();
-			this.btnSelect = new LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx();
-			this.btnClose = new LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx();
-			this.btnRefresh = new LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx();
-			this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
-			this.grReceipts = new DevExpress.XtraGrid.GridControl();
-			this.grdView = new DevExpress.XtraGrid.Views.Grid.GridView();
-			this.colOrderType = new DevExpress.XtraGrid.Columns.GridColumn();
-			this.colPoNumber = new DevExpress.XtraGrid.Columns.GridColumn();
-			this.colStatus = new DevExpress.XtraGrid.Columns.GridColumn();
-			this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
-			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.txtKeyboardInput = new DevExpress.XtraEditors.TextEdit();
-			this.btnSearch = new LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx();
-			this.btnClear = new LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx();
-			this.lblHeading = new System.Windows.Forms.Label();
-			((System.ComponentModel.ISupportInitialize)(this.styleController)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.basePanel)).BeginInit();
-			this.basePanel.SuspendLayout();
-			this.tableLayoutPanel6.SuspendLayout();
-			this.tableLayoutPanel8.SuspendLayout();
-			this.tableLayoutPanel7.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.grReceipts)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.grdView)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
-			this.tableLayoutPanel1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.txtKeyboardInput.Properties)).BeginInit();
-			this.SuspendLayout();
-			// 
-			// xtraGridBlending1
-			// 
-			this.xtraGridBlending1.AlphaStyles.AddReplace("Row", 220);
-			// 
-			// basePanel
-			// 
-			this.basePanel.Controls.Add(this.tableLayoutPanel6);
-			this.basePanel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.basePanel.Location = new System.Drawing.Point(0, 0);
-			this.basePanel.Margin = new System.Windows.Forms.Padding(0);
-			this.basePanel.Name = "basePanel";
-			this.basePanel.Size = new System.Drawing.Size(1024, 768);
-			this.basePanel.TabIndex = 8;
-			// 
-			// tableLayoutPanel6
-			// 
-			this.tableLayoutPanel6.ColumnCount = 1;
-			this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel6.Controls.Add(this.tableLayoutPanel8, 0, 3);
-			this.tableLayoutPanel6.Controls.Add(this.tableLayoutPanel7, 0, 2);
-			this.tableLayoutPanel6.Controls.Add(this.tableLayoutPanel1, 0, 1);
-			this.tableLayoutPanel6.Controls.Add(this.lblHeading, 0, 0);
-			this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel6.Location = new System.Drawing.Point(2, 2);
-			this.tableLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
-			this.tableLayoutPanel6.Name = "tableLayoutPanel6";
-			this.tableLayoutPanel6.Padding = new System.Windows.Forms.Padding(26, 40, 26, 11);
-			this.tableLayoutPanel6.RowCount = 4;
-			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel6.Size = new System.Drawing.Size(1020, 764);
-			this.tableLayoutPanel6.TabIndex = 9;
-			// 
-			// tableLayoutPanel8
-			// 
-			this.tableLayoutPanel8.ColumnCount = 9;
-			this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel8.Controls.Add(this.btnPgDown, 8, 0);
-			this.tableLayoutPanel8.Controls.Add(this.btnDown, 7, 0);
-			this.tableLayoutPanel8.Controls.Add(this.btnUp, 1, 0);
-			this.tableLayoutPanel8.Controls.Add(this.btnPgUp, 0, 0);
-			this.tableLayoutPanel8.Controls.Add(this.btnListPO, 2, 0);
-			this.tableLayoutPanel8.Controls.Add(this.btnListTO, 3, 0);
-			this.tableLayoutPanel8.Controls.Add(this.btnSelect, 4, 0);
-			this.tableLayoutPanel8.Controls.Add(this.btnClose, 6, 0);
-			this.tableLayoutPanel8.Controls.Add(this.btnRefresh, 5, 0);
-			this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel8.Location = new System.Drawing.Point(26, 688);
-			this.tableLayoutPanel8.Margin = new System.Windows.Forms.Padding(0, 11, 0, 0);
-			this.tableLayoutPanel8.Name = "tableLayoutPanel8";
-			this.tableLayoutPanel8.RowCount = 1;
-			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel8.Size = new System.Drawing.Size(968, 65);
-			this.tableLayoutPanel8.TabIndex = 10;
-			// 
-			// btnPgDown
-			// 
-			this.btnPgDown.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.btnPgDown.Appearance.Font = new System.Drawing.Font("Wingdings", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
-			this.btnPgDown.Appearance.Options.UseFont = true;
-			this.btnPgDown.Image = ((System.Drawing.Image)(resources.GetObject("btnPgDown.Image")));
-			this.btnPgDown.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
-			this.btnPgDown.Location = new System.Drawing.Point(899, 3);
-			this.btnPgDown.Name = "btnPgDown";
-			this.btnPgDown.Size = new System.Drawing.Size(65, 59);
-			this.btnPgDown.TabIndex = 16;
-			this.btnPgDown.Text = "Ê";
-			this.btnPgDown.Click += new System.EventHandler(this.btnPgDown_Click);
-			// 
-			// btnDown
-			// 
-			this.btnDown.Anchor = System.Windows.Forms.AnchorStyles.Right;
-			this.btnDown.Appearance.Font = new System.Drawing.Font("Wingdings", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
-			this.btnDown.Appearance.Options.UseFont = true;
-			this.btnDown.Image = ((System.Drawing.Image)(resources.GetObject("btnDown.Image")));
-			this.btnDown.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
-			this.btnDown.Location = new System.Drawing.Point(828, 3);
-			this.btnDown.Name = "btnDown";
-			this.btnDown.Size = new System.Drawing.Size(65, 59);
-			this.btnDown.TabIndex = 15;
-			this.btnDown.Text = "ò";
-			this.btnDown.Click += new System.EventHandler(this.btnDown_Click);
-			// 
-			// btnUp
-			// 
-			this.btnUp.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.btnUp.Appearance.Font = new System.Drawing.Font("Wingdings", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
-			this.btnUp.Appearance.Options.UseFont = true;
-			this.btnUp.Image = ((System.Drawing.Image)(resources.GetObject("btnUp.Image")));
-			this.btnUp.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
-			this.btnUp.Location = new System.Drawing.Point(66, 3);
-			this.btnUp.Name = "btnUp";
-			this.btnUp.Size = new System.Drawing.Size(65, 59);
-			this.btnUp.TabIndex = 11;
-			this.btnUp.Text = "ñ";
-			this.btnUp.Click += new System.EventHandler(this.btnUp_Click);
-			// 
-			// btnPgUp
-			// 
-			this.btnPgUp.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.btnPgUp.Appearance.Font = new System.Drawing.Font("Wingdings", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
-			this.btnPgUp.Appearance.Options.UseFont = true;
-			this.btnPgUp.Image = ((System.Drawing.Image)(resources.GetObject("btnPgUp.Image")));
-			this.btnPgUp.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
-			this.btnPgUp.Location = new System.Drawing.Point(3, 4);
-			this.btnPgUp.Name = "btnPgUp";
-			this.btnPgUp.Padding = new System.Windows.Forms.Padding(0);
-			this.btnPgUp.Size = new System.Drawing.Size(57, 57);
-			this.btnPgUp.TabIndex = 10;
-			this.btnPgUp.Text = "Ç";
-			this.btnPgUp.Click += new System.EventHandler(this.btnPgUp_Click);
-			// 
-			// btnListPO
-			// 
-			this.btnListPO.Anchor = System.Windows.Forms.AnchorStyles.Right;
-			this.btnListPO.Appearance.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-			this.btnListPO.Appearance.Options.UseFont = true;
-			this.btnListPO.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
-			this.btnListPO.Location = new System.Drawing.Point(150, 4);
-			this.btnListPO.Name = "btnListPO";
-			this.btnListPO.Size = new System.Drawing.Size(127, 57);
-			this.btnListPO.TabIndex = 17;
-			this.btnListPO.Tag = "";
-			this.btnListPO.Text = "Print List PO";
-			this.btnListPO.Click += new System.EventHandler(this.btnListPO_Click);
-			// 
-			// btnListTO
-			// 
-			this.btnListTO.Anchor = System.Windows.Forms.AnchorStyles.Right;
-			this.btnListTO.Appearance.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-			this.btnListTO.Appearance.Options.UseFont = true;
-			this.btnListTO.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
-			this.btnListTO.Location = new System.Drawing.Point(283, 4);
-			this.btnListTO.Name = "btnListTO";
-			this.btnListTO.Size = new System.Drawing.Size(127, 57);
-			this.btnListTO.TabIndex = 18;
-			this.btnListTO.Tag = "";
-			this.btnListTO.Text = "Print List TO";
-			this.btnListTO.Click += new System.EventHandler(this.btnListTO_Click);
-			// 
-			// btnSelect
-			// 
-			this.btnSelect.Anchor = System.Windows.Forms.AnchorStyles.Right;
-			this.btnSelect.Appearance.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-			this.btnSelect.Appearance.Options.UseFont = true;
-			this.btnSelect.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
-			this.btnSelect.Location = new System.Drawing.Point(416, 4);
-			this.btnSelect.Name = "btnSelect";
-			this.btnSelect.Size = new System.Drawing.Size(127, 57);
-			this.btnSelect.TabIndex = 12;
-			this.btnSelect.Tag = "";
-			this.btnSelect.Text = "Select";
-			this.btnSelect.Click += new System.EventHandler(this.btnSelect_Click);
-			// 
-			// btnClose
-			// 
-			this.btnClose.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.btnClose.Appearance.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.btnClose.Appearance.Options.UseFont = true;
-			this.btnClose.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.btnClose.Location = new System.Drawing.Point(682, 4);
-			this.btnClose.Name = "btnClose";
-			this.btnClose.Size = new System.Drawing.Size(127, 57);
-			this.btnClose.TabIndex = 14;
-			this.btnClose.Tag = "";
-			this.btnClose.Text = "Close";
-			// 
-			// btnRefresh
-			// 
-			this.btnRefresh.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.btnRefresh.Appearance.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.btnRefresh.Appearance.Options.UseFont = true;
-			this.btnRefresh.Location = new System.Drawing.Point(549, 4);
-			this.btnRefresh.Name = "btnRefresh";
-			this.btnRefresh.Size = new System.Drawing.Size(127, 57);
-			this.btnRefresh.TabIndex = 13;
-			this.btnRefresh.Tag = "";
-			this.btnRefresh.Text = "Refresh";
-			this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
-			// 
-			// tableLayoutPanel7
-			// 
-			this.tableLayoutPanel7.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-			| System.Windows.Forms.AnchorStyles.Left) 
-			| System.Windows.Forms.AnchorStyles.Right)));
-			this.tableLayoutPanel7.ColumnCount = 1;
-			this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel7.Controls.Add(this.grReceipts, 0, 0);
-			this.tableLayoutPanel7.Location = new System.Drawing.Point(29, 182);
-			this.tableLayoutPanel7.Name = "tableLayoutPanel7";
-			this.tableLayoutPanel7.RowCount = 1;
-			this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 38.95131F));
-			this.tableLayoutPanel7.Size = new System.Drawing.Size(962, 492);
-			this.tableLayoutPanel7.TabIndex = 14;
-			// 
-			// grReceipts
-			// 
-			this.grReceipts.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-			this.grReceipts.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grReceipts.Location = new System.Drawing.Point(3, 3);
-			this.grReceipts.MainView = this.grdView;
-			this.grReceipts.Name = "grReceipts";
-			this.grReceipts.Size = new System.Drawing.Size(956, 486);
-			this.grReceipts.TabIndex = 20;
-			this.grReceipts.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
-			this.grdView,
-			this.gridView1});
-			this.grReceipts.KeyDown += new System.Windows.Forms.KeyEventHandler(this.grItems_KeyDown);
-			// 
-			// grdView
-			// 
-			this.grdView.Appearance.HeaderPanel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.grdView.Appearance.HeaderPanel.Options.UseFont = true;
-			this.grdView.Appearance.Row.Font = new System.Drawing.Font("Segoe UI", 10F);
-			this.grdView.Appearance.Row.Options.UseFont = true;
-			this.grdView.ColumnPanelRowHeight = 40;
-			this.grdView.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
-			this.colOrderType,
-			this.colPoNumber,
-			this.colStatus});
-			this.grdView.FocusRectStyle = DevExpress.XtraGrid.Views.Grid.DrawFocusRectStyle.None;
-			this.grdView.GridControl = this.grReceipts;
-			this.grdView.HorzScrollVisibility = DevExpress.XtraGrid.Views.Base.ScrollVisibility.Never;
-			this.grdView.Name = "grdView";
-			this.grdView.OptionsBehavior.Editable = false;
-			this.grdView.OptionsCustomization.AllowFilter = false;
-			this.grdView.OptionsSelection.EnableAppearanceFocusedCell = false;
-			this.grdView.OptionsView.ShowGroupPanel = false;
-			this.grdView.OptionsView.ShowIndicator = false;
-			this.grdView.RowHeight = 40;
-			this.grdView.ScrollStyle = DevExpress.XtraGrid.Views.Grid.ScrollStyleFlags.None;
-			this.grdView.SortInfo.AddRange(new DevExpress.XtraGrid.Columns.GridColumnSortInfo[] {
-			new DevExpress.XtraGrid.Columns.GridColumnSortInfo(this.colPoNumber, DevExpress.Data.ColumnSortOrder.Ascending)});
-			this.grdView.VertScrollVisibility = DevExpress.XtraGrid.Views.Base.ScrollVisibility.Never;
-			this.grdView.FocusedColumnChanged += new DevExpress.XtraGrid.Views.Base.FocusedColumnChangedEventHandler(this.gridView1_FocusedColumnChanged);
-			this.grdView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.grItems_KeyDown);
-			this.grdView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.grdView_MouseDown);
-			this.grdView.DoubleClick += new System.EventHandler(this.gridView1_DoubleClick);
-			// 
-			// colOrderType
-			// 
-			this.colOrderType.AppearanceCell.Options.UseTextOptions = true;
-			this.colOrderType.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
-			this.colOrderType.AppearanceHeader.Options.UseTextOptions = true;
-			this.colOrderType.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
-			this.colOrderType.Caption = "Order type";
-			this.colOrderType.FieldName = "ORDERTYPE";
-			this.colOrderType.Name = "colOrderType";
-			this.colOrderType.OptionsColumn.AllowEdit = false;
-			this.colOrderType.Visible = true;
-			this.colOrderType.VisibleIndex = 0;
-			// 
-			// colPoNumber
-			// 
-			this.colPoNumber.Caption = "Order number";
-			this.colPoNumber.FieldName = "PONUMBER";
-			this.colPoNumber.Name = "colPoNumber";
-			this.colPoNumber.OptionsColumn.AllowEdit = false;
-			this.colPoNumber.Visible = true;
-			this.colPoNumber.VisibleIndex = 1;
-			// 
-			// colStatus
-			// 
-			this.colStatus.AppearanceCell.Options.UseTextOptions = true;
-			this.colStatus.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
-			this.colStatus.AppearanceHeader.Options.UseTextOptions = true;
-			this.colStatus.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
-			this.colStatus.Caption = "Status";
-			this.colStatus.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Custom;
-			this.colStatus.FieldName = "STATUS";
-			this.colStatus.Name = "colStatus";
-			this.colStatus.OptionsColumn.AllowEdit = false;
-			this.colStatus.Visible = true;
-			this.colStatus.VisibleIndex = 2;
-			// 
-			// gridView1
-			// 
-			this.gridView1.GridControl = this.grReceipts;
-			this.gridView1.Name = "gridView1";
-			// 
-			// tableLayoutPanel1
-			// 
-			this.tableLayoutPanel1.ColumnCount = 3;
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel1.Controls.Add(this.txtKeyboardInput, 0, 0);
-			this.tableLayoutPanel1.Controls.Add(this.btnSearch, 1, 0);
-			this.tableLayoutPanel1.Controls.Add(this.btnClear, 2, 0);
-			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
-			this.tableLayoutPanel1.Location = new System.Drawing.Point(29, 138);
-			this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 3, 5, 3);
-			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 1;
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(960, 38);
-			this.tableLayoutPanel1.TabIndex = 13;
-			// 
-			// txtKeyboardInput
-			// 
-			this.txtKeyboardInput.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.txtKeyboardInput.Location = new System.Drawing.Point(3, 3);
-			this.txtKeyboardInput.Name = "txtKeyboardInput";
-			this.txtKeyboardInput.Properties.Appearance.BackColor = System.Drawing.Color.White;
-			this.txtKeyboardInput.Properties.Appearance.Font = new System.Drawing.Font("Segoe UI", 14F);
-			this.txtKeyboardInput.Properties.Appearance.ForeColor = System.Drawing.Color.Black;
-			this.txtKeyboardInput.Properties.Appearance.Options.UseBackColor = true;
-			this.txtKeyboardInput.Properties.Appearance.Options.UseFont = true;
-			this.txtKeyboardInput.Properties.Appearance.Options.UseForeColor = true;
-			this.txtKeyboardInput.Properties.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.Simple;
-			this.txtKeyboardInput.Size = new System.Drawing.Size(828, 32);
-			this.txtKeyboardInput.TabIndex = 1;
-			this.txtKeyboardInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtKeyboardInput_KeyDown);
-			// 
-			// btnSearch
-			// 
-			this.btnSearch.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.btnSearch.Image = ((System.Drawing.Image)(resources.GetObject("btnSearch.Image")));
-			this.btnSearch.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
-			this.btnSearch.Location = new System.Drawing.Point(837, 3);
-			this.btnSearch.Name = "btnSearch";
-			this.btnSearch.Size = new System.Drawing.Size(57, 32);
-			this.btnSearch.TabIndex = 2;
-			this.btnSearch.Text = "Search";
-			this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
-			// 
-			// btnClear
-			// 
-			this.btnClear.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.btnClear.Appearance.Font = new System.Drawing.Font("Wingdings", 21.75F);
-			this.btnClear.Appearance.Options.UseFont = true;
-			this.btnClear.Image = ((System.Drawing.Image)(resources.GetObject("btnClear.Image")));
-			this.btnClear.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
-			this.btnClear.Location = new System.Drawing.Point(900, 3);
-			this.btnClear.Name = "btnClear";
-			this.btnClear.Size = new System.Drawing.Size(57, 32);
-			this.btnClear.TabIndex = 3;
-			this.btnClear.Text = "û";
-			this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
-			// 
-			// lblHeading
-			// 
-			this.lblHeading.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.lblHeading.AutoSize = true;
-			this.lblHeading.Font = new System.Drawing.Font("Segoe UI Light", 36F);
-			this.lblHeading.Location = new System.Drawing.Point(284, 40);
-			this.lblHeading.Margin = new System.Windows.Forms.Padding(0);
-			this.lblHeading.Name = "lblHeading";
-			this.lblHeading.Padding = new System.Windows.Forms.Padding(0, 0, 0, 30);
-			this.lblHeading.Size = new System.Drawing.Size(451, 95);
-			this.lblHeading.TabIndex = 18;
-			this.lblHeading.Tag = "";
-			this.lblHeading.Text = "Picking and receiving";
-			this.lblHeading.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
-			// frmPurchaseOrderReceiptSearch
-			// 
-			this.ClientSize = new System.Drawing.Size(1024, 768);
-			this.Controls.Add(this.basePanel);
-			this.LookAndFeel.SkinName = "Money Twins";
-			this.Name = "frmPurchaseOrderReceiptSearch";
-			this.Controls.SetChildIndex(this.basePanel, 0);
-			((System.ComponentModel.ISupportInitialize)(this.styleController)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.basePanel)).EndInit();
-			this.basePanel.ResumeLayout(false);
-			this.tableLayoutPanel6.ResumeLayout(false);
-			this.tableLayoutPanel6.PerformLayout();
-			this.tableLayoutPanel8.ResumeLayout(false);
-			this.tableLayoutPanel7.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.grReceipts)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.grdView)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.gridView1)).EndInit();
-			this.tableLayoutPanel1.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.txtKeyboardInput.Properties)).EndInit();
-			this.ResumeLayout(false);
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmPurchaseOrderReceiptSearch));
+            this.styleController = new DevExpress.XtraEditors.StyleController(this.components);
+            this.xtraGridBlending1 = new DevExpress.XtraGrid.Blending.XtraGridBlending();
+            this.basePanel = new DevExpress.XtraEditors.PanelControl();
+            this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnPgDown = new LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx();
+            this.btnDown = new LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx();
+            this.btnUp = new LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx();
+            this.btnPgUp = new LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx();
+            this.btnListPO = new LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx();
+            this.btnListTO = new LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx();
+            this.btnSelect = new LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx();
+            this.btnClose = new LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx();
+            this.btnRefresh = new LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx();
+            this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
+            this.grReceipts = new DevExpress.XtraGrid.GridControl();
+            this.grdView = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.colOrderType = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colPoNumber = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colStatus = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.txtKeyboardInput = new DevExpress.XtraEditors.TextEdit();
+            this.btnSearch = new LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx();
+            this.btnClear = new LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx();
+            this.lblHeading = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.styleController)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.basePanel)).BeginInit();
+            this.tableLayoutPanel6.SuspendLayout();
+            this.tableLayoutPanel8.SuspendLayout();
+            this.tableLayoutPanel7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.grReceipts)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.grdView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
+            this.tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtKeyboardInput.Properties)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // basePanel
+            // 
+            this.basePanel.Controls.Add(this.tableLayoutPanel6);
+            this.basePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.basePanel.Location = new System.Drawing.Point(0, 0);
+            this.basePanel.Margin = new System.Windows.Forms.Padding(0);
+            this.basePanel.Name = "basePanel";
+            this.basePanel.Size = new System.Drawing.Size(1024, 768);
+            this.basePanel.TabIndex = 8;
+            // 
+            // tableLayoutPanel6
+            // 
+            this.tableLayoutPanel6.ColumnCount = 1;
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel6.Controls.Add(this.tableLayoutPanel8, 0, 3);
+            this.tableLayoutPanel6.Controls.Add(this.tableLayoutPanel7, 0, 2);
+            this.tableLayoutPanel6.Controls.Add(this.tableLayoutPanel1, 0, 1);
+            this.tableLayoutPanel6.Controls.Add(this.lblHeading, 0, 0);
+            this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(2, 2);
+            this.tableLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
+            this.tableLayoutPanel6.Name = "tableLayoutPanel6";
+            this.tableLayoutPanel6.Padding = new System.Windows.Forms.Padding(26, 40, 26, 11);
+            this.tableLayoutPanel6.RowCount = 4;
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(1020, 764);
+            this.tableLayoutPanel6.TabIndex = 9;
+            // 
+            // tableLayoutPanel8
+            // 
+            this.tableLayoutPanel8.ColumnCount = 9;
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel8.Controls.Add(this.btnPgDown, 8, 0);
+            this.tableLayoutPanel8.Controls.Add(this.btnDown, 7, 0);
+            this.tableLayoutPanel8.Controls.Add(this.btnUp, 1, 0);
+            this.tableLayoutPanel8.Controls.Add(this.btnPgUp, 0, 0);
+            this.tableLayoutPanel8.Controls.Add(this.btnListPO, 2, 0);
+            this.tableLayoutPanel8.Controls.Add(this.btnListTO, 3, 0);
+            this.tableLayoutPanel8.Controls.Add(this.btnSelect, 4, 0);
+            this.tableLayoutPanel8.Controls.Add(this.btnClose, 6, 0);
+            this.tableLayoutPanel8.Controls.Add(this.btnRefresh, 5, 0);
+            this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel8.Location = new System.Drawing.Point(26, 688);
+            this.tableLayoutPanel8.Margin = new System.Windows.Forms.Padding(0, 11, 0, 0);
+            this.tableLayoutPanel8.Name = "tableLayoutPanel8";
+            this.tableLayoutPanel8.RowCount = 1;
+            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(968, 65);
+            this.tableLayoutPanel8.TabIndex = 10;
+            // 
+            // btnPgDown
+            // 
+            this.btnPgDown.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.btnPgDown.Appearance.Font = new System.Drawing.Font("Wingdings", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
+            this.btnPgDown.Appearance.Options.UseFont = true;
+            this.btnPgDown.Image = ((System.Drawing.Image)(resources.GetObject("btnPgDown.Image")));
+            this.btnPgDown.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
+            this.btnPgDown.Location = new System.Drawing.Point(899, 3);
+            this.btnPgDown.Name = "btnPgDown";
+            this.btnPgDown.Size = new System.Drawing.Size(65, 59);
+            this.btnPgDown.TabIndex = 16;
+            this.btnPgDown.Text = "Ê";
+            this.btnPgDown.Click += new System.EventHandler(this.btnPgDown_Click);
+            // 
+            // btnDown
+            // 
+            this.btnDown.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btnDown.Appearance.Font = new System.Drawing.Font("Wingdings", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
+            this.btnDown.Appearance.Options.UseFont = true;
+            this.btnDown.Image = ((System.Drawing.Image)(resources.GetObject("btnDown.Image")));
+            this.btnDown.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
+            this.btnDown.Location = new System.Drawing.Point(828, 3);
+            this.btnDown.Name = "btnDown";
+            this.btnDown.Size = new System.Drawing.Size(65, 59);
+            this.btnDown.TabIndex = 15;
+            this.btnDown.Text = "ò";
+            this.btnDown.Click += new System.EventHandler(this.btnDown_Click);
+            // 
+            // btnUp
+            // 
+            this.btnUp.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.btnUp.Appearance.Font = new System.Drawing.Font("Wingdings", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
+            this.btnUp.Appearance.Options.UseFont = true;
+            this.btnUp.Image = ((System.Drawing.Image)(resources.GetObject("btnUp.Image")));
+            this.btnUp.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
+            this.btnUp.Location = new System.Drawing.Point(66, 3);
+            this.btnUp.Name = "btnUp";
+            this.btnUp.Size = new System.Drawing.Size(65, 59);
+            this.btnUp.TabIndex = 11;
+            this.btnUp.Text = "ñ";
+            this.btnUp.Click += new System.EventHandler(this.btnUp_Click);
+            // 
+            // btnPgUp
+            // 
+            this.btnPgUp.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnPgUp.Appearance.Font = new System.Drawing.Font("Wingdings", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
+            this.btnPgUp.Appearance.Options.UseFont = true;
+            this.btnPgUp.Image = ((System.Drawing.Image)(resources.GetObject("btnPgUp.Image")));
+            this.btnPgUp.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
+            this.btnPgUp.Location = new System.Drawing.Point(3, 4);
+            this.btnPgUp.Name = "btnPgUp";
+            this.btnPgUp.Padding = new System.Windows.Forms.Padding(0);
+            this.btnPgUp.Size = new System.Drawing.Size(57, 57);
+            this.btnPgUp.TabIndex = 10;
+            this.btnPgUp.Text = "Ç";
+            this.btnPgUp.Click += new System.EventHandler(this.btnPgUp_Click);
+            // 
+            // btnListPO
+            // 
+            this.btnListPO.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btnListPO.Appearance.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.btnListPO.Appearance.Options.UseFont = true;
+            this.btnListPO.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
+            this.btnListPO.Location = new System.Drawing.Point(150, 4);
+            this.btnListPO.Name = "btnListPO";
+            this.btnListPO.Size = new System.Drawing.Size(127, 57);
+            this.btnListPO.TabIndex = 17;
+            this.btnListPO.Tag = "";
+            this.btnListPO.Text = "Print List PO";
+            this.btnListPO.Click += new System.EventHandler(this.btnListPO_Click);
+            // 
+            // btnListTO
+            // 
+            this.btnListTO.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btnListTO.Appearance.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.btnListTO.Appearance.Options.UseFont = true;
+            this.btnListTO.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
+            this.btnListTO.Location = new System.Drawing.Point(283, 4);
+            this.btnListTO.Name = "btnListTO";
+            this.btnListTO.Size = new System.Drawing.Size(127, 57);
+            this.btnListTO.TabIndex = 18;
+            this.btnListTO.Tag = "";
+            this.btnListTO.Text = "Print List TO";
+            this.btnListTO.Click += new System.EventHandler(this.btnListTO_Click);
+            // 
+            // btnSelect
+            // 
+            this.btnSelect.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btnSelect.Appearance.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.btnSelect.Appearance.Options.UseFont = true;
+            this.btnSelect.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
+            this.btnSelect.Location = new System.Drawing.Point(416, 4);
+            this.btnSelect.Name = "btnSelect";
+            this.btnSelect.Size = new System.Drawing.Size(127, 57);
+            this.btnSelect.TabIndex = 12;
+            this.btnSelect.Tag = "";
+            this.btnSelect.Text = "Select";
+            this.btnSelect.Click += new System.EventHandler(this.btnSelect_Click);
+            // 
+            // btnClose
+            // 
+            this.btnClose.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.btnClose.Appearance.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnClose.Appearance.Options.UseFont = true;
+            this.btnClose.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.btnClose.Location = new System.Drawing.Point(682, 4);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(127, 57);
+            this.btnClose.TabIndex = 14;
+            this.btnClose.Tag = "";
+            this.btnClose.Text = "Close";
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnRefresh.Appearance.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRefresh.Appearance.Options.UseFont = true;
+            this.btnRefresh.Location = new System.Drawing.Point(549, 4);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(127, 57);
+            this.btnRefresh.TabIndex = 13;
+            this.btnRefresh.Tag = "";
+            this.btnRefresh.Text = "Refresh";
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
+            // 
+            // tableLayoutPanel7
+            // 
+            this.tableLayoutPanel7.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel7.ColumnCount = 1;
+            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel7.Controls.Add(this.grReceipts, 0, 0);
+            this.tableLayoutPanel7.Location = new System.Drawing.Point(29, 182);
+            this.tableLayoutPanel7.Name = "tableLayoutPanel7";
+            this.tableLayoutPanel7.RowCount = 1;
+            this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 38.95131F));
+            this.tableLayoutPanel7.Size = new System.Drawing.Size(962, 492);
+            this.tableLayoutPanel7.TabIndex = 14;
+            // 
+            // grReceipts
+            // 
+            this.grReceipts.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.grReceipts.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grReceipts.Location = new System.Drawing.Point(3, 3);
+            this.grReceipts.MainView = this.grdView;
+            this.grReceipts.Name = "grReceipts";
+            this.grReceipts.Size = new System.Drawing.Size(956, 486);
+            this.grReceipts.TabIndex = 20;
+            this.grReceipts.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
+            this.grdView,
+            this.gridView1});
+            this.grReceipts.KeyDown += new System.Windows.Forms.KeyEventHandler(this.grItems_KeyDown);
+            // 
+            // grdView
+            // 
+            this.grdView.Appearance.HeaderPanel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grdView.Appearance.HeaderPanel.Options.UseFont = true;
+            this.grdView.Appearance.Row.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.grdView.Appearance.Row.Options.UseFont = true;
+            this.grdView.ColumnPanelRowHeight = 40;
+            this.grdView.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this.colOrderType,
+            this.colPoNumber,
+            this.colStatus});
+            this.grdView.FocusRectStyle = DevExpress.XtraGrid.Views.Grid.DrawFocusRectStyle.None;
+            this.grdView.GridControl = this.grReceipts;
+            this.grdView.HorzScrollVisibility = DevExpress.XtraGrid.Views.Base.ScrollVisibility.Never;
+            this.grdView.Name = "grdView";
+            this.grdView.OptionsBehavior.Editable = false;
+            this.grdView.OptionsCustomization.AllowFilter = false;
+            this.grdView.OptionsSelection.EnableAppearanceFocusedCell = false;
+            this.grdView.OptionsView.ShowGroupPanel = false;
+            this.grdView.OptionsView.ShowIndicator = false;
+            this.grdView.RowHeight = 40;
+            this.grdView.ScrollStyle = DevExpress.XtraGrid.Views.Grid.ScrollStyleFlags.None;
+            this.grdView.SortInfo.AddRange(new DevExpress.XtraGrid.Columns.GridColumnSortInfo[] {
+            new DevExpress.XtraGrid.Columns.GridColumnSortInfo(this.colPoNumber, DevExpress.Data.ColumnSortOrder.Ascending)});
+            this.grdView.VertScrollVisibility = DevExpress.XtraGrid.Views.Base.ScrollVisibility.Never;
+            this.grdView.FocusedColumnChanged += new DevExpress.XtraGrid.Views.Base.FocusedColumnChangedEventHandler(this.gridView1_FocusedColumnChanged);
+            this.grdView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.grItems_KeyDown);
+            this.grdView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.grdView_MouseDown);
+            this.grdView.DoubleClick += new System.EventHandler(this.gridView1_DoubleClick);
+            // 
+            // colOrderType
+            // 
+            this.colOrderType.AppearanceCell.Options.UseTextOptions = true;
+            this.colOrderType.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
+            this.colOrderType.AppearanceHeader.Options.UseTextOptions = true;
+            this.colOrderType.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
+            this.colOrderType.Caption = "Order type";
+            this.colOrderType.FieldName = "ORDERTYPE";
+            this.colOrderType.Name = "colOrderType";
+            this.colOrderType.OptionsColumn.AllowEdit = false;
+            this.colOrderType.Visible = true;
+            this.colOrderType.VisibleIndex = 0;
+            // 
+            // colPoNumber
+            // 
+            this.colPoNumber.Caption = "Order number";
+            this.colPoNumber.FieldName = "PONUMBER";
+            this.colPoNumber.Name = "colPoNumber";
+            this.colPoNumber.OptionsColumn.AllowEdit = false;
+            this.colPoNumber.Visible = true;
+            this.colPoNumber.VisibleIndex = 1;
+            // 
+            // colStatus
+            // 
+            this.colStatus.AppearanceCell.Options.UseTextOptions = true;
+            this.colStatus.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
+            this.colStatus.AppearanceHeader.Options.UseTextOptions = true;
+            this.colStatus.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
+            this.colStatus.Caption = "Status";
+            this.colStatus.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Custom;
+            this.colStatus.FieldName = "STATUS";
+            this.colStatus.Name = "colStatus";
+            this.colStatus.OptionsColumn.AllowEdit = false;
+            this.colStatus.Visible = true;
+            this.colStatus.VisibleIndex = 2;
+            // 
+            // gridView1
+            // 
+            this.gridView1.GridControl = this.grReceipts;
+            this.gridView1.Name = "gridView1";
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 3;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.Controls.Add(this.txtKeyboardInput, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.btnSearch, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.btnClear, 2, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(29, 138);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 3, 5, 3);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 1;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(960, 38);
+            this.tableLayoutPanel1.TabIndex = 13;
+            // 
+            // txtKeyboardInput
+            // 
+            this.txtKeyboardInput.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.txtKeyboardInput.Location = new System.Drawing.Point(3, 3);
+            this.txtKeyboardInput.Name = "txtKeyboardInput";
+            // 
+            // 
+            // 
+            this.txtKeyboardInput.Properties.Appearance.BackColor = System.Drawing.Color.White;
+            this.txtKeyboardInput.Properties.Appearance.Font = new System.Drawing.Font("Segoe UI", 14F);
+            this.txtKeyboardInput.Properties.Appearance.ForeColor = System.Drawing.Color.Black;
+            this.txtKeyboardInput.Properties.Appearance.Options.UseBackColor = true;
+            this.txtKeyboardInput.Properties.Appearance.Options.UseFont = true;
+            this.txtKeyboardInput.Properties.Appearance.Options.UseForeColor = true;
+            this.txtKeyboardInput.Properties.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.Simple;
+            this.txtKeyboardInput.Size = new System.Drawing.Size(828, 32);
+            this.txtKeyboardInput.TabIndex = 1;
+            this.txtKeyboardInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtKeyboardInput_KeyDown);
+            // 
+            // btnSearch
+            // 
+            this.btnSearch.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnSearch.Image = ((System.Drawing.Image)(resources.GetObject("btnSearch.Image")));
+            this.btnSearch.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
+            this.btnSearch.Location = new System.Drawing.Point(837, 3);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(57, 32);
+            this.btnSearch.TabIndex = 2;
+            this.btnSearch.Text = "Search";
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            // 
+            // btnClear
+            // 
+            this.btnClear.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnClear.Appearance.Font = new System.Drawing.Font("Wingdings", 21.75F);
+            this.btnClear.Appearance.Options.UseFont = true;
+            this.btnClear.Image = ((System.Drawing.Image)(resources.GetObject("btnClear.Image")));
+            this.btnClear.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
+            this.btnClear.Location = new System.Drawing.Point(900, 3);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(57, 32);
+            this.btnClear.TabIndex = 3;
+            this.btnClear.Text = "û";
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            // 
+            // lblHeading
+            // 
+            this.lblHeading.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lblHeading.AutoSize = true;
+            this.lblHeading.Font = new System.Drawing.Font("Segoe UI Light", 36F);
+            this.lblHeading.Location = new System.Drawing.Point(284, 40);
+            this.lblHeading.Margin = new System.Windows.Forms.Padding(0);
+            this.lblHeading.Name = "lblHeading";
+            this.lblHeading.Padding = new System.Windows.Forms.Padding(0, 0, 0, 30);
+            this.lblHeading.Size = new System.Drawing.Size(451, 95);
+            this.lblHeading.TabIndex = 18;
+            this.lblHeading.Tag = "";
+            this.lblHeading.Text = "Picking and receiving";
+            this.lblHeading.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // frmPurchaseOrderReceiptSearch
+            // 
+            this.ClientSize = new System.Drawing.Size(1024, 768);
+            this.Controls.Add(this.basePanel);
+            this.LookAndFeel.SkinName = "Money Twins";
+            this.Name = "frmPurchaseOrderReceiptSearch";
+            this.Controls.SetChildIndex(this.basePanel, 0);
+            ((System.ComponentModel.ISupportInitialize)(this.styleController)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.basePanel)).EndInit();
+            this.tableLayoutPanel6.ResumeLayout(false);
+            this.tableLayoutPanel6.PerformLayout();
+            this.tableLayoutPanel8.ResumeLayout(false);
+            this.tableLayoutPanel7.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.grReceipts)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.grdView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridView1)).EndInit();
+            this.tableLayoutPanel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.txtKeyboardInput.Properties)).EndInit();
+            this.ResumeLayout(false);
 
 		}
 		#endregion
@@ -1024,7 +1021,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch
 					
 		}
 		
-		private string ListPOFormat()
+		private string ListPOFormat() //using RealTimeService
 		{           
 			string purchid, purchid2 ,itemid, itemname, unit, datecreated, storeName, vendName ;
 			string s = "";
@@ -1034,34 +1031,76 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch
 			string totalString = "";
 			string vendCodeName = "";
 			string vendCodeName2 = "";
-			string connectionString = ConfigurationManager.ConnectionStrings["CPConnection"].ConnectionString;
+			//string connectionString = ConfigurationManager.ConnectionStrings["CPConnection"].ConnectionString;
 			 //string connectionString = @"Data Source= DYNAMICS01\DEVPRISQLSVR ;Initial Catalog=DevDynamicsAX; Integrated Security=False;User ID=AXPOS;Password=P@ssw0rd;";//Persist Security Info=False;User ID=USER_NAME;Password=USER_PASS;
 			 //string connectionString = @"Data Source= DYNAMICS16\SQLAXDB1 ;Initial Catalog=PRDDynamicsAX; Integrated Security=False;User ID=AXPOS;Password=P@ssw0rd;";
+			object[] parameterList = new object[] 
+							{
+								ApplicationSettings.Terminal.StoreId.ToString(),
+								ApplicationSettings.Database.DATAAREAID.ToString()
+								
+								
+							};  
 
-			 SqlConnection connection = new SqlConnection(connectionString); //LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
 
+			 
+			
+			
+			//SqlConnection connection = new SqlConnection(connectionString); //LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+			 
 			 try
 			 {
+				 ReadOnlyCollection<object> containerArray = PurchaseOrderReceiving.InternalApplication.TransactionServices.InvokeExtension("getListPOFormat", parameterList);
 
-				 string queryString = @" SELECT convert(varchar,a.CREATEDDATETIME,101 ) CREATEDDATE, A.PURCHID, B.ITEMID, B.NAME ITEMNAME, A.ORDERACCOUNT +'-'+ E.NAME as VENDNAME, B.PURCHQTY, B.PURCHUNIT, A.DATAAREAID, C.NAME STORENAME  from PURCHTABLE A
-									JOIN PURCHLINE B on A.PURCHID = B.PURCHID AND A.DATAAREAID = B.DATAAREAID 
-									JOIN INVENTLOCATION C ON A.INVENTLOCATIONID = C.INVENTLOCATIONID AND A.DATAAREAID = B.DATAAREAID
-									JOIN VENDTABLE D ON A.ORDERACCOUNT = D.ACCOUNTNUM AND A.DATAAREAID = D.DATAAREAID
-									JOIN DIRPARTYTABLE E ON E.RECID = D.PARTY 
-									WHERE  A.DATAAREAID = " + ApplicationSettings.Database.DATAAREAID + " AND A.PURCHSTATUS = '1' and A.INVENTLOCATIONID like '%" + ApplicationSettings.Terminal.StoreId + "%' AND A.DELIVERYDATE >= (GETDATE()-14)";
-					 queryString += " AND A.PURCHID NOT IN ( SELECT DOCUMENTID FROM NECI_POSDocumentBuffer WHERE DATAAREAID = " + ApplicationSettings.Database.DATAAREAID + " AND  DOCUMENTID like 'PO%')";
-					 queryString += " ORDER BY A.PURCHID, B.LINENUMBER ASC";
+				 XmlDocument xmlDoc = new XmlDocument();
+				 xmlDoc.LoadXml(containerArray[3].ToString());
 
-				 using (SqlCommand command = new SqlCommand(queryString, connection))
-				 {
+				 XmlNodeList purchTableNodes = xmlDoc.SelectNodes("/PurchTable/PurchTable");
+
+				 //foreach (XmlNode node in purchTableNodes)
+				 //{
+				 //    string createdDate = node.Attributes["CREATEDDATE"].Value;
+				 //    string purchId = node.Attributes["PURCHID"].Value;
+				 //    string itemId = node.Attributes["ITEMID"].Value;
+				 //    string itemName = node.Attributes["ITEMNAME"].Value;
+				 //    string vendName1 = node.Attributes["VENDNAME"].Value;
+				 //    string purchQty = node.Attributes["PURCHQTY"].Value;
+				 //    string purchUnit = node.Attributes["PURCHUNIT"].Value;
+				 //    string dataAreaId = node.Attributes["DATAAREAID"].Value;
+				 //    string storeName1 = node.Attributes["STORENAME"].Value;
+
+				 //    Console.WriteLine("CREATEDDATE: " + createdDate);
+				 //    Console.WriteLine("PURCHID: " + purchId);
+				 //    Console.WriteLine("ITEMID: " + itemId);
+				 //    Console.WriteLine("ITEMNAME: " + itemName);
+				 //    Console.WriteLine("VENDNAME: " + vendName1);
+				 //    Console.WriteLine("PURCHQTY: " + purchQty);
+				 //    Console.WriteLine("PURCHUNIT: " + purchUnit);
+				 //    Console.WriteLine("DATAAREAID: " + dataAreaId);
+				 //    Console.WriteLine("STORENAME: " + storeName1);
+				 //    Console.WriteLine();
+				 //}
+
+
+//                 string queryString = @" SELECT convert(varchar,a.CREATEDDATETIME,101 ) CREATEDDATE, A.PURCHID, B.ITEMID, B.NAME ITEMNAME, A.ORDERACCOUNT +'-'+ E.NAME as VENDNAME, B.PURCHQTY, B.PURCHUNIT, A.DATAAREAID, C.NAME STORENAME  from PURCHTABLE A
+//									JOIN PURCHLINE B on A.PURCHID = B.PURCHID AND A.DATAAREAID = B.DATAAREAID 
+//									JOIN INVENTLOCATION C ON A.INVENTLOCATIONID = C.INVENTLOCATIONID AND A.DATAAREAID = B.DATAAREAID
+//									JOIN VENDTABLE D ON A.ORDERACCOUNT = D.ACCOUNTNUM AND A.DATAAREAID = D.DATAAREAID
+//									JOIN DIRPARTYTABLE E ON E.RECID = D.PARTY 
+//									WHERE  A.DATAAREAID = " + ApplicationSettings.Database.DATAAREAID + " AND A.PURCHSTATUS = '1' and A.INVENTLOCATIONID like '%" + ApplicationSettings.Terminal.StoreId + "%' AND A.DELIVERYDATE >= (GETDATE()-14)";
+//                     queryString += " AND A.PURCHID NOT IN ( SELECT DOCUMENTID FROM NECI_POSDocumentBuffer WHERE DATAAREAID = " + ApplicationSettings.Database.DATAAREAID + " AND  DOCUMENTID like 'PO%')";
+//                     queryString += " ORDER BY A.PURCHID, B.LINENUMBER ASC";
+
+				 //using (SqlCommand command = new SqlCommand(queryString, connection))
+				 //{
 
 					 string items;
-					 if (connection.State != ConnectionState.Open)
-					 {
-						 connection.Open();
-					 }
-					 using (SqlDataReader reader = command.ExecuteReader())
-					 {
+				 //    if (connection.State != ConnectionState.Open)
+				 //    {
+				 //        connection.Open();
+				 //    }
+				 //    using (SqlDataReader reader = command.ExecuteReader())
+				 //    {
 						 purchid2 = "";
 					   //  MessageBox.Show(ApplicationSettings.Terminal.StoreId);
 						 s += Environment.NewLine;
@@ -1077,17 +1116,33 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch
 						 Offset += 65;
 						 //end Edit by Erwin
 
-						 while (reader.Read())
+
+						 foreach (XmlNode node in purchTableNodes)
 						 {
-							 purchid        = reader.GetString(reader.GetOrdinal("PURCHID"));
-							 itemid         = reader.GetString(reader.GetOrdinal("ITEMID"));
+
+							 //    string createdDate = node.Attributes["CREATEDDATE"].Value;
+							 //    string purchId = node.Attributes["PURCHID"].Value;
+							 //    string itemId = node.Attributes["ITEMID"].Value;
+							 //    string itemName = node.Attributes["ITEMNAME"].Value;
+							 //    string vendName1 = node.Attributes["VENDNAME"].Value;
+							 //    string purchQty = node.Attributes["PURCHQTY"].Value;
+							 //    string purchUnit = node.Attributes["PURCHUNIT"].Value;
+							 //    string dataAreaId = node.Attributes["DATAAREAID"].Value;
+							 //    string storeName1 = node.Attributes["STORENAME"].Value;
+						 
+
+
+						 //while (reader.Read())
+						 //{
+							 purchid = node.Attributes["PURCHID"].Value;
+							 itemid = node.Attributes["ITEMID"].Value;
 							 
 							 //itemname       = reader.GetString(reader.GetOrdinal("ITEMNAME")).PadRight(19, ' '); 
 							 unit           =  "";//reader.GetString(reader.GetOrdinal("PURCHUNIT"));
-							 datecreated    = reader.GetString(reader.GetOrdinal("CREATEDDATE"));
-							 storeName      = reader.GetString(reader.GetOrdinal("STORENAME"));
-							 qty            = (Math.Truncate(Convert.ToDecimal(reader["PURCHQTY"]) * 1000m) / 1000m);//(int) reader.GetDecimal(reader.GetOrdinal("PURCHQTY"));
-							 vendName       = reader.GetString(reader.GetOrdinal("VENDNAME"));
+							 datecreated = node.Attributes["CREATEDDATE"].Value;
+							 storeName = node.Attributes["STORENAME"].Value;
+							 qty            = (Math.Truncate(Convert.ToDecimal(node.Attributes["PURCHQTY"].Value) * 1000m) / 100000m);//(int) reader.GetDecimal(reader.GetOrdinal("PURCHQTY"));
+							 vendName       =  node.Attributes["VENDNAME"].Value;
 							 
 							 //add by Yonathan 17/10/2022
 							 qtyStringMod = qty.ToString();
@@ -1106,13 +1161,13 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch
 								 }
 							 }
 							 //end
-							 if (reader.GetString(reader.GetOrdinal("ITEMNAME")).Length >= 19)
+							 if (node.Attributes["ITEMNAME"].Value.Length >= 19)
 							 {
-								 itemname = reader.GetString(reader.GetOrdinal("ITEMNAME")).Substring(0, 19).PadRight(19, ' ');
+								 itemname = node.Attributes["ITEMNAME"].Value.Substring(0, 19).PadRight(19, ' ');
 							 }
 							 else
 							 {
-								 itemname = reader.GetString(reader.GetOrdinal("ITEMNAME"));
+								 itemname = node.Attributes["ITEMNAME"].Value;
 								 int countItemName = itemname.Length;
 								 int addSpace = 19 - countItemName;
 								 for (int i = 0; i < addSpace; i++)
@@ -1218,8 +1273,8 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch
 						 //Offset = Offset + 30;
 						 Offset += 39;
 						 //end Edit by Erwin
-					 }
-				 }
+				//	 }
+				 //}
 				 return s;
 
 			 }
@@ -1227,6 +1282,213 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch
 			 {
 				 throw new Exception("Format Error", ex);
 			 }
+		}
+
+
+		private string ListPOFormatOld() //using CPConnection
+		{
+			string purchid, purchid2, itemid, itemname, unit, datecreated, storeName, vendName;
+			string s = "";
+
+			string qtyString = "";
+			string qtyStringMod = "";
+			string totalString = "";
+			string vendCodeName = "";
+			string vendCodeName2 = "";
+			string connectionString = ConfigurationManager.ConnectionStrings["CPConnection"].ConnectionString;
+			//string connectionString = @"Data Source= DYNAMICS01\DEVPRISQLSVR ;Initial Catalog=DevDynamicsAX; Integrated Security=False;User ID=AXPOS;Password=P@ssw0rd;";//Persist Security Info=False;User ID=USER_NAME;Password=USER_PASS;
+			//string connectionString = @"Data Source= DYNAMICS16\SQLAXDB1 ;Initial Catalog=PRDDynamicsAX; Integrated Security=False;User ID=AXPOS;Password=P@ssw0rd;";
+		   
+
+			SqlConnection connection = new SqlConnection(connectionString); //LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+
+			try
+			{
+
+				string queryString = @" SELECT convert(varchar,a.CREATEDDATETIME,101 ) CREATEDDATE, A.PURCHID, B.ITEMID, B.NAME ITEMNAME, A.ORDERACCOUNT +'-'+ E.NAME as VENDNAME, B.PURCHQTY, B.PURCHUNIT, A.DATAAREAID, C.NAME STORENAME  from PURCHTABLE A
+									JOIN PURCHLINE B on A.PURCHID = B.PURCHID AND A.DATAAREAID = B.DATAAREAID 
+									JOIN INVENTLOCATION C ON A.INVENTLOCATIONID = C.INVENTLOCATIONID AND A.DATAAREAID = B.DATAAREAID
+									JOIN VENDTABLE D ON A.ORDERACCOUNT = D.ACCOUNTNUM AND A.DATAAREAID = D.DATAAREAID
+									JOIN DIRPARTYTABLE E ON E.RECID = D.PARTY 
+									WHERE  A.DATAAREAID = " + ApplicationSettings.Database.DATAAREAID + " AND A.PURCHSTATUS = '1' and A.INVENTLOCATIONID like '%" + ApplicationSettings.Terminal.StoreId + "%' AND A.DELIVERYDATE >= (GETDATE()-14)";
+				queryString += " AND A.PURCHID NOT IN ( SELECT DOCUMENTID FROM NECI_POSDocumentBuffer WHERE DATAAREAID = " + ApplicationSettings.Database.DATAAREAID + " AND  DOCUMENTID like 'PO%')";
+				queryString += " ORDER BY A.PURCHID, B.LINENUMBER ASC";
+
+				using (SqlCommand command = new SqlCommand(queryString, connection))
+				{
+
+					string items;
+					if (connection.State != ConnectionState.Open)
+					{
+						connection.Open();
+					}
+					using (SqlDataReader reader = command.ExecuteReader())
+					{
+						purchid2 = "";
+						//  MessageBox.Show(ApplicationSettings.Terminal.StoreId);
+						s += Environment.NewLine;
+						s += Environment.NewLine;
+						s += "\t        " + "Print List PO Outstanding" + Environment.NewLine;
+						s += "\t        " + "Print Date:" + DateTime.Now + Environment.NewLine;
+						s += "\t        " + "Store:" + ApplicationSettings.Terminal.StoreId + Environment.NewLine;
+						decimal qty = 0;//int qty   = 0;
+						decimal total = 0;//int total = 0;
+
+						//Edit by Erwin
+						//Offset = Offset + 50;
+						Offset += 65;
+						//end Edit by Erwin
+
+						while (reader.Read())
+						{
+							purchid = reader.GetString(reader.GetOrdinal("PURCHID"));
+							itemid = reader.GetString(reader.GetOrdinal("ITEMID"));
+
+							//itemname       = reader.GetString(reader.GetOrdinal("ITEMNAME")).PadRight(19, ' '); 
+							unit = "";//reader.GetString(reader.GetOrdinal("PURCHUNIT"));
+							datecreated = reader.GetString(reader.GetOrdinal("CREATEDDATE"));
+							storeName = reader.GetString(reader.GetOrdinal("STORENAME"));
+							qty = (Math.Truncate(Convert.ToDecimal(reader["PURCHQTY"]) * 1000m) / 1000m);//(int) reader.GetDecimal(reader.GetOrdinal("PURCHQTY"));
+							vendName = reader.GetString(reader.GetOrdinal("VENDNAME"));
+
+							//add by Yonathan 17/10/2022
+							qtyStringMod = qty.ToString();
+							if (qty.ToString().Length == 7)
+							{
+								qtyString = qty.ToString();
+							}
+							else
+							{
+								qtyString = qty.ToString();
+								int stringCount = qty.ToString().Length;
+								int spaceToBeAdded = 7 - stringCount;
+								for (int i = 0; i < spaceToBeAdded; i++)
+								{
+									qtyString += " ";
+								}
+							}
+							//end
+							if (reader.GetString(reader.GetOrdinal("ITEMNAME")).Length >= 19)
+							{
+								itemname = reader.GetString(reader.GetOrdinal("ITEMNAME")).Substring(0, 19).PadRight(19, ' ');
+							}
+							else
+							{
+								itemname = reader.GetString(reader.GetOrdinal("ITEMNAME"));
+								int countItemName = itemname.Length;
+								int addSpace = 19 - countItemName;
+								for (int i = 0; i < addSpace; i++)
+								{
+									itemname += " ";
+								}
+							}
+
+							items = itemid + "-" + itemname; //.Substring(0, 19);
+							vendCodeName = "VendAcc: " + vendName;
+							if (vendCodeName.Length > 40)
+							{
+								//break the string
+
+								if (vendCodeName.Substring(40, 1) != " ")
+								{
+									vendCodeName2 = "\t        " + vendCodeName.Substring(40);
+								}
+								else
+								{
+									vendCodeName2 = "\t        " + vendCodeName.Substring(41);
+								}
+								vendCodeName = vendCodeName.Substring(0, 40) + "\n" + vendCodeName2;
+							}
+							if (purchid == purchid2)
+							{
+								// continue line
+								//  MessageBox.Show(purchid + "  " + itemid + " " + itemname + " " + unit + " " + datecreated + " " + storeName + " " + qty);
+								s += "\t        " + items.PadRight(28, ' ') + qtyString.PadLeft(8, ' ') + " ".PadLeft(4, ' ') + unit.PadLeft(5, ' ') + Environment.NewLine;
+								total += qty;
+
+								//Edit by Erwin
+								//Offset = Offset + 13;
+								Offset += 13;
+								//end Edit by Erwin
+							}
+							else
+							{
+								if (purchid2 != "")
+								{
+									s += "\t        " + "Total QTY  Ordered:".PadRight(29, ' ') + total.ToString().PadLeft(4, ' ') + Environment.NewLine;
+									//Edit by Erwin
+									//Offset = Offset + 13;
+									Offset += 13;
+									//end Edit by Erwin
+								}
+
+								purchid2 = purchid;
+
+								/*
+								s += Environment.NewLine;
+								s += "\t        " + "VendAcc: " + vendName + Environment.NewLine;
+								s += "\t        " + "Date PO Created: " + datecreated + Environment.NewLine;
+								s += "\t        " + "No.PO: " + purchid.PadRight(21, ' ') + "Qty".PadLeft(4, ' ') + "Qty".PadLeft(4, ' ') + Environment.NewLine;
+							 //   s += "\t        "+" ".PadRight(28,' ')+"Qty".PadLeft(4, ' ') + "Qty".PadLeft(4, ' ')+Environment.NewLine;
+							   
+								s += "\t        " + "Kode Barang".PadRight(28, ' ') + "Ord".PadLeft(4, ' ') + "Rcv".PadLeft(4, ' ') + "Unit".PadLeft(5, ' ') + Environment.NewLine;
+								s += "\t        " + items.PadRight(28, ' ') + qty.ToString().PadLeft(4, ' ') + " ".PadLeft(4, ' ') + unit.PadLeft(5,' ') + Environment.NewLine;*/
+								s += Environment.NewLine;
+								s += "\t        " + vendCodeName + Environment.NewLine; //changed by Yonathan 17/10/2022
+								s += "\t        " + "Date PO Created: " + datecreated + Environment.NewLine;
+								s += "\t        " + "No.PO: " + purchid.PadRight(21, ' ') + "Qty".PadLeft(4, ' ') + "Qty".PadLeft(8, ' ') + Environment.NewLine;
+								//   s += "\t        "+" ".PadRight(28,' ')+"Qty".PadLeft(4, ' ') + "Qty".PadLeft(4, ' ')+Environment.NewLine;
+
+								s += "\t        " + "Kode Barang".PadRight(28, ' ') + "Ord".PadLeft(4, ' ') + "Rcv".PadLeft(8, ' ') + Environment.NewLine;
+								s += "\t        " + items.PadRight(28, ' ') + qtyString.PadLeft(8, ' ') + " ".PadLeft(4, ' ') + unit.PadLeft(5, ' ') + Environment.NewLine;
+								// new line
+								total = qty;
+
+								//Edit by Erwin
+								//Offset = Offset + 52;
+								Offset += 78;
+								//end Edit by Erwin
+							}
+						}
+						//add yonathan 17/10/2022
+						qtyStringMod = total.ToString();
+						if (total.ToString().Length == 7)
+						{
+							qtyString = total.ToString();
+						}
+						else
+						{
+							totalString = total.ToString();
+							int stringCount = total.ToString().Length;
+							int spaceToBeAdded = 7 - stringCount;
+							for (int i = 0; i < spaceToBeAdded; i++)
+							{
+								totalString += " ";
+							}
+						}
+						//end add
+
+						//s += "\t        " + "Total QTY  Ordered:".PadRight(28, ' ') + total.ToString().PadLeft(4, ' ') + Environment.NewLine;
+						s += "\t        " + "Total QTY  Ordered:".PadRight(29, ' ') + total.ToString().PadLeft(4, ' ') + Environment.NewLine;
+						//s += "\t        " + "Total QTY  Ordered:".PadRight(29, ' ') + total.ToString().PadLeft(4, ' ') + Environment.NewLine;
+
+						s += Environment.NewLine;
+						s += "\t        ----------------------------------------" + Environment.NewLine; // modif by Julius 
+						//s += Environment.NewLine + Environment.NewLine;
+
+						//Edit by Erwin
+						//Offset = Offset + 30;
+						Offset += 39;
+						//end Edit by Erwin
+					}
+				}
+				return s;
+
+			}
+			catch (SqlException ex)
+			{
+				throw new Exception("Format Error", ex);
+			}
 		}
 
 		private void btnListTO_Click(object sender, EventArgs e)
@@ -1261,7 +1523,214 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch
 			}
 		}
 
-		private string ListTOFormat()
+		private string ListTOFormat() //using Real-time services
+		{
+			string purchid, purchid2, itemid, itemname, unit, datecreated, storeName;
+			string s = "";
+			string qtyString = "";
+			string qtyStringMod = "";
+			string totalString = "";
+			//string connectionString = ConfigurationManager.ConnectionStrings["CPConnection"].ConnectionString;
+			//string connectionString = @"Data Source= DYNAMICS01\DEVPRISQLSVR ;Initial Catalog=DevDynamicsAX; Integrated Security=False;User ID=AXPOS;Password=P@ssw0rd;";//Persist Security Info=False;User ID=USER_NAME;Password=USER_PASS;
+			//string connectionString = @"Data Source= DYNAMICS16\SQLAXDB1 ;Initial Catalog=PRDDynamicsAX; Integrated Security=False;User ID=AXPOS;Password=P@ssw0rd;";
+
+			//SqlConnection connection = new SqlConnection(connectionString); //LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+
+
+			object[] parameterList = new object[] 
+							{
+								ApplicationSettings.Terminal.StoreId.ToString(),
+								ApplicationSettings.Database.DATAAREAID.ToString()
+								
+								
+							};  
+
+
+			 
+			
+			
+			//SqlConnection connection = new SqlConnection(connectionString); //LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+			 
+			 
+			
+			try
+			{
+
+				ReadOnlyCollection<object> containerArray = PurchaseOrderReceiving.InternalApplication.TransactionServices.InvokeExtension("getListTOFormat", parameterList);
+
+
+				XmlDocument xmlDoc = new XmlDocument();
+				xmlDoc.LoadXml(containerArray[3].ToString());
+
+				XmlNodeList purchTableNodes = xmlDoc.SelectNodes("/TransferOrder/PurchTable");
+
+			   
+				/*string createdDate = node.Attributes["CREATEDDATE"].Value;
+							string transferId = node.Attributes["TRANSFERID"].Value;
+							string itemId = node.Attributes["ITEMID"].Value;
+							string itemName = node.Attributes["ITEMNAME"].Value;
+							string qtyTransfer = node.Attributes["QTYTRANSFER"].Value;
+							string unitId = node.Attributes["UNITID"].Value;
+							string storeName = node.Attributes["STORENAME"].Value;
+				*/
+				 
+					string items;
+					 
+						purchid2 = "";
+						//  MessageBox.Show(ApplicationSettings.Terminal.StoreId);
+						s += Environment.NewLine;
+						s += Environment.NewLine;
+						s += "\t        " + "Print List TO Outstanding" + Environment.NewLine;
+						s += "\t        " + "Print Date:" + DateTime.Now + Environment.NewLine;
+						s += "\t        " + "Store:" + ApplicationSettings.Terminal.StoreId + Environment.NewLine;
+						//int qty = 0;
+						//int total = 0;
+						decimal qty = 0;
+						decimal total = 0;
+
+						// add by Erwin
+						Offset += 65;
+						// end add by Erwin
+						foreach (XmlNode node in purchTableNodes)
+				
+						{
+							purchid = node.Attributes["TRANSFERID"].Value;
+							itemid =  node.Attributes["ITEMID"].Value;
+							itemname = node.Attributes["ITEMNAME"].Value.PadRight(20, ' ');
+							unit = node.Attributes["UNITID"].Value;
+							datecreated = node.Attributes["CREATEDDATE"].Value;
+							storeName = node.Attributes["STORENAME"].Value;
+							qty = (Math.Truncate(Convert.ToDecimal(node.Attributes["QTYTRANSFER"].Value) * 1000m) / 100000m); //(int)reader.GetDecimal(reader.GetOrdinal("QTYTRANSFER")); //add by yonathan 17/10/2022
+
+
+							//add by yonathan 17/10/2022
+							if (qty.ToString().Length == 7)
+							{
+								qtyString = qty.ToString();
+							}
+							else
+							{
+								qtyString = qty.ToString();
+								int stringCount = qty.ToString().Length;
+								int spaceToBeAdded = 7 - stringCount;
+								for (int i = 0; i < spaceToBeAdded; i++)
+								{
+									qtyString += " ";
+								}
+							}
+
+
+							if (itemname.Length >= 20)
+							{
+								itemname = itemname.Substring(0, 20).PadRight(20, ' ');
+							}
+							else
+							{
+								itemname = itemname;
+								int countItemName = itemname.Length;
+								int addSpace = 20 - countItemName;
+								for (int i = 0; i < addSpace; i++)
+								{
+									itemname += " ";
+								}
+							}
+							//end add
+							items = itemid + "-" + itemname;//.Substring(0, 19);
+
+							if (purchid == purchid2)
+							{
+								// continue line
+								//  MessageBox.Show(purchid + "  " + itemid + " " + itemname + " " + unit + " " + datecreated + " " + storeName + " " + qty);
+								s += "\t        " + items.PadRight(28, ' ') + qtyString.PadLeft(4, ' ') + unit.PadLeft(4, ' ') + " ".PadLeft(5, ' ') + Environment.NewLine;
+								total += qty;
+
+								//edit by Erwin
+								//Offset = Offset + 13;
+								Offset += 13;
+								//end edit by Erwin
+							}
+							else
+							{
+								if (purchid2 != "")
+								{
+									//add by yonathan 17/10/2022
+									qtyStringMod = total.ToString();
+									if (total.ToString().Length == 7)
+									{
+										totalString = total.ToString();
+									}
+									else
+									{
+										totalString = total.ToString();
+										int stringCount = total.ToString().Length;
+										int spaceToBeAdded = 7 - stringCount;
+										for (int i = 0; i < spaceToBeAdded; i++)
+										{
+											totalString += " ";
+										}
+									}
+									//end add
+									s += "\t        " + "Total QTY Transfer:".PadRight(29, ' ') + totalString.PadLeft(4, ' ') + Environment.NewLine;
+									//edit by Erwin
+									//Offset = Offset + 13;
+									Offset += 13;
+									//end edit by Erwin
+								}
+
+								purchid2 = purchid;
+
+								s += Environment.NewLine;
+								s += "\t        " + "Date TO Created: " + datecreated + Environment.NewLine;
+								s += "\t        " + "No.TO: " + purchid.PadRight(21, ' ') + "Qty".PadLeft(4, ' ') + Environment.NewLine;
+								s += "\t        " + "Kode Barang".PadRight(28, ' ') + "Trf".PadLeft(4, ' ') + " Unit".PadLeft(8, ' ') + Environment.NewLine;// +"Rmk".PadLeft(5, ' ') + Environment.NewLine;
+								s += "\t        " + items.PadRight(28, ' ') + qtyString.PadLeft(4, ' ') + unit.PadLeft(4, ' ') + " ".PadLeft(5, ' ') + Environment.NewLine;
+								// new line
+								total = qty;
+
+								//edit by Erwin
+								//Offset = Offset + 60;
+								Offset += 78;
+								//end edit by Erwin
+							}
+						}
+						//add by yonathan 17/10/2022
+						qtyStringMod = total.ToString();
+						if (total.ToString().Length == 7)
+						{
+							totalString = total.ToString();
+						}
+						else
+						{
+							totalString = total.ToString();
+							int stringCount = total.ToString().Length;
+							int spaceToBeAdded = 7 - stringCount;
+							for (int i = 0; i < spaceToBeAdded; i++)
+							{
+								totalString += " ";
+							}
+						}
+						//end add
+						s += "\t        " + "Total QTY Transfer:".PadRight(29, ' ') + totalString.PadLeft(4, ' ') + Environment.NewLine;
+						s += Environment.NewLine;
+						s += "\t        ----------------------------------------" + Environment.NewLine; // modif by Julius 
+						//s += Environment.NewLine + Environment.NewLine;
+
+						//edit by Erwin
+						//Offset = Offset + 30;
+						Offset += 39;
+						//end edit by Erwin
+				 
+				return s;
+
+			}
+			catch (SqlException ex)
+			{
+				throw new Exception("Format Error", ex);
+			}
+		  
+		}
+
+		private string ListTOFormatOld() //using CPCONNECTION
 		{
 			string purchid, purchid2, itemid, itemname, unit, datecreated, storeName;
 			string s = "";
@@ -1445,7 +1914,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch
 			{
 				throw new Exception("Format Error", ex);
 			}
-		  
+
 		}
 	
 		// end add

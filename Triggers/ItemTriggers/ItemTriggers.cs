@@ -196,7 +196,48 @@ namespace Microsoft.Dynamics.Retail.Pos.ItemTriggers
         {
             LSRetailPosis.ApplicationLog.Log("IItemTriggersV1.PostSale", "After the sale of an item...", LSRetailPosis.LogTraceLevel.Trace);
             activityTrigger = "AddSaleItemPOS";
+            string ppnValidation = APIAccess.APIAccessClass.ppnValidation;
+            var retailTransaction = posTransaction as RetailTransaction;
+            bool foundTaxDiff = false;
+            string taxGroupId="";
+            int countLoop = 0;
+            
+            if (APIAccess.APIAccessClass.isB2b == "1" || APIAccess.APIAccessClass.isB2b == "2") //check if customer is either B2B or Canvas 
+            {
+                foreach (var saleItems in retailTransaction.SaleItems) //loop to check if the item is the same tax group 
+                {
+                    //taxGroupId = saleItems.TaxGroupId;
+                    if (countLoop == 0)
+                    {
+                        taxGroupId = saleItems.TaxGroupId;
+                        countLoop++;
+                        continue;
+                    }
+                    else
+                    {
+                        if (taxGroupId != saleItems.TaxGroupId)
+                        {
+                            using (frmMessage dialog = new frmMessage(string.Format("Item '{0}' memiliki TaxGroup '{1}'.\nTidak boleh add item dengan TaxGroup selain '{2}'", saleItems.ItemId, saleItems.TaxGroupId, taxGroupId), MessageBoxButtons.OK, MessageBoxIcon.Error))
+                            {
+                                LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                                posTransaction.OperationCancelled = true;
+                                return;
+                                //Application.RunOperation(PosisOperations.SetQty, itemIdRemove);
+                                //Application.RunOperation(PosisOperations.SetQty,itemIdRemove, posTransaction);
 
+                            }
+                        }
+                        else
+                        {
+                            countLoop++;
+                            continue;
+                        }
+                    }
+
+
+                }
+            }
+            
             //posTransaction.OperationCancelled = true;
         }//
 

@@ -8,13 +8,11 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving</RootNamespace>
     <AssemblyName>PurchaseOrderReceiving</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>..\..\..\Users\it.application\Desktop\Retail POS\Extensions\</OutputPath>
-    <PlatformTarget>x64</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>$(SDKOutputPath)\bin\Release\</OutputPath>

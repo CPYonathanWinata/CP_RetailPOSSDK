@@ -432,6 +432,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 							{
 								SalesOrder.InternalApplication.Services.Dialog.ShowMessage(56120, MessageBoxButtons.OK, MessageBoxIcon.Information);
 								//add to trigger
+                                /* disable adding to API
 								var packList = new List<APIParameter.parmRequestAddItemMultiple>();                                 
 								foreach (DataGridViewRow row in dataGridView1.Rows)
 								{
@@ -452,6 +453,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 								}
 								urlAPI = APIClass.getURLAPIByFuncName(functionNameAPIAddItem);
 								string resultAPI = APIFunction.addItemMultiple(urlAPI, packList);
+                                 * */
 								//application.Services.Printing.PrintReceipt(Microsoft.Dynamics.Retail.Pos.Contracts.Services.FormType.SalesOrderReceipt, posTransaction, true);
 								SalesOrderActions.TryPrintPackSlip(LSRetailPosis.Transaction.SalesStatus.Delivered, salesID);
 							}

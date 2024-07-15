@@ -145,6 +145,9 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             if (!string.IsNullOrEmpty(this.cpGetDataDocumentBuffer()))
             {
                 btnCommit.Visible = false;
+                numPad1.Visible = false;
+                txtDelivery.Visible = false;
+                txtDriver.Visible = false;
             }
 
             btnSave.Visible = false;
@@ -165,6 +168,12 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             SetInputMode(NumPadMode.Quantity);
             btnEdit.Visible = false;
             //End Add by Erwin 15 July 2019
+
+
+            //add by Yonathan 13/07/2023
+            txtSearchBox.Text = "Search Item number or Description";
+            txtSearchBox.ForeColor = Color.Gray;
+            //end
         }
 
         private void TranslateLabels()
@@ -188,7 +197,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                     colReceivedNow.Caption = ApplicationLocalizer.Language.Translate(1031482); //Received Now
                     this.Text = lblHeader.Text = ApplicationLocalizer.Language.Translate(103140); //Receiving 
                     btnReceiveAll.Text = ApplicationLocalizer.Language.Translate(103118); //Receive All
-                    //start - add modification by Yonathan to disable Receive All button 10/10/2022 purchase order receiving
+                    //start - add modification by Yonathan to disable Receive All button 10/10/2022
                     btnReceiveAll.Visible = false;
                     numPad1.NumberOfDecimals = 3;
 
@@ -200,8 +209,11 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                     this.Text = lblHeader.Text = ApplicationLocalizer.Language.Translate(1031402); //Transfer Order Receiving 
                     btnReceiveAll.Text = ApplicationLocalizer.Language.Translate(103118); //Receive All
                     //start - add modification by Yonathan 10/10/2022 to disable numpad and entering quantity
-                    numPad1.Enabled = false;
                     //numPad1.Enabled = false;
+                    //numPad1.Enabled = false;
+                    //add modification by Yonathan 20/05/2024 to enable numpad 
+                    btnReceiveAll.Visible = false;
+                    numPad1.NumberOfDecimals = 3;
                     //end
                     break;
                 case PRCountingType.TransferOut:
@@ -219,7 +231,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             lblReceiptNumberHeading.Text = ApplicationLocalizer.Language.Translate(103141); //Picking/Receiving no.
             lblPoNumberHeading.Text = ApplicationLocalizer.Language.Translate(103142); //Order number
             lblDriverHeading.Text = ApplicationLocalizer.Language.Translate(103143); //Driver details
-            lblDeliveryHeading.Text = "Delivery note number"; // ApplicationLocalizer.Language.Translate(103144); //Delivery note number
+            lblDeliveryHeading.Text = ApplicationLocalizer.Language.Translate(103144); //Delivery note number
             lblDeliveryMethod.Text = "Delivery note cannot be duplicate, if PO has been canceled and you want to receive again,  the number must be new"; //ApplicationLocalizer.Language.Translate(56362); //Delivery method
             btnClose.Text = ApplicationLocalizer.Language.Translate(103153); //Close
             btnSearch.Text = ApplicationLocalizer.Language.Translate(103152); //Search
@@ -459,6 +471,20 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                 this.InventoryLookup(itemNumber);
             }
         }
+        //add by Yonathan for reprint PO 09/07/2024
+        private void btnReprint_Click(object sender, EventArgs s)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+
+            try
+            {
+                SaveReceipt();
+            }
+            finally
+            {
+                Cursor.Current = Cursors.Default;
+            }
+        }//end
 
         private void btnSave_Click(object sender, EventArgs s)
         {
@@ -923,66 +949,72 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                         //modif by Yonathan 18/10/2022
                         itemName = reader["ItemName"].ToString();
                         itemNumber = reader["ItemNumber"].ToString();
-
-                        if (itemName.Length >= 18)
-                        {
-                            itemName = itemName.Substring(0, 18).PadRight(18, ' ');
-                        }
-                        else
-                        {
-                            itemName = itemName;
-                            int countItemName = itemName.Length;
-                            int addSpace = 18 - countItemName;
-                            for (int i = 0; i < addSpace; i++)
-                            {
-                                itemName += " ";
-                            }
-                        }
-                        s += "             " + itemNumber + "-" + itemName;
-                        //end add
-                        /*
-                        if (reader["ItemName"].ToString().Length > c)
-                            s += "             " + reader["ItemNumber"].ToString() + "-" + reader["ItemName"].ToString().Substring(0, c).PadRight(d);
-                        else
-                            s += "             " + reader["ItemNumber"].ToString() + "-" + reader["ItemName"].ToString().PadRight(d);*/
-                        //Modify by heron 140817- change the sequence
-
-                        /*s += reader["Unit"].ToString().PadRight(5);
-                        s += Convert.ToInt32(reader["QuantityReceivedNow"]).ToString().PadLeft(4) + Environment.NewLine;*/
-                        /*decimal m = 199.123000000000m;
-                        m = Math.Truncate(m * 1000m) / 1000m;
-                        Console.WriteLine(m);*/
-                        //add by Yonathan 17/10/2022
                         qty = (Math.Truncate(Convert.ToDecimal(reader["QuantityReceivedNow"]) * 1000m) / 1000m);
-                        qtyStringMod = qty.ToString();
-                        if (qty.ToString().Length == 7)
+
+                        //mod by Yonathan 25/07/2023 to prevent item 0 qty receive to appear on the receipt.
+                        if (qty != 0)
                         {
-                            qtyString = qty.ToString();
-                        }
-                        else
-                        {
-                            qtyString = qty.ToString();
-                            int stringCount = qty.ToString().Length;
-                            int spaceToBeAdded = 7 - stringCount;
-                            for (int i = 0; i < spaceToBeAdded; i++)
+                            if (itemName.Length >= 18)
                             {
-                                qtyString += " ";
+                                itemName = itemName.Substring(0, 18).PadRight(18, ' ');
                             }
+                            else
+                            {
+                                itemName = itemName;
+                                int countItemName = itemName.Length;
+                                int addSpace = 18 - countItemName;
+                                for (int i = 0; i < addSpace; i++)
+                                {
+                                    itemName += " ";
+                                }
+                            }
+                            s += "             " + itemNumber + "-" + itemName;
+                            //end add
+                            /*
+                            if (reader["ItemName"].ToString().Length > c)
+                                s += "             " + reader["ItemNumber"].ToString() + "-" + reader["ItemName"].ToString().Substring(0, c).PadRight(d);
+                            else
+                                s += "             " + reader["ItemNumber"].ToString() + "-" + reader["ItemName"].ToString().PadRight(d);*/
+                            //Modify by heron 140817- change the sequence
+
+                            /*s += reader["Unit"].ToString().PadRight(5);
+                            s += Convert.ToInt32(reader["QuantityReceivedNow"]).ToString().PadLeft(4) + Environment.NewLine;*/
+                            /*decimal m = 199.123000000000m;
+                            m = Math.Truncate(m * 1000m) / 1000m;
+                            Console.WriteLine(m);*/
+                            //add by Yonathan 17/10/2022
+
+                            qtyStringMod = qty.ToString();
+                            if (qty.ToString().Length == 7)
+                            {
+                                qtyString = qty.ToString();
+                            }
+                            else
+                            {
+                                qtyString = qty.ToString();
+                                int stringCount = qty.ToString().Length;
+                                int spaceToBeAdded = 7 - stringCount;
+                                for (int i = 0; i < spaceToBeAdded; i++)
+                                {
+                                    qtyString += " ";
+                                }
+                            }
+                            //end
+
+                            //s += (Math.Truncate(Convert.ToDecimal(reader["QuantityReceivedNow"]) * 1000m) / 1000m).ToString().PadLeft(e) + Environment.NewLine;
+                            s += qtyString.PadLeft(e) + Environment.NewLine;
+                            //s += reader["QuantityReceivedNow"].ToString().PadLeft(4); //Convert.ToInt32(reader["QuantityReceivedNow"]).ToString().PadLeft(4);  disable by Yonathan 10/10/2022 because qty supports decimal
+                            //s += reader["Unit"].ToString().PadLeft(4) + Environment.NewLine; modif by Yonathan 11/10/2022 disable Unit column
+
+                            //End Modify by heron 140817- change the sequence
+
+
+
+                            // Convert.ToInt32(reader["QuantityReceivedNow"]); disable by Yonathan 10/10/2022 because qty supports decimal
+                            totalQtyDec += (Math.Truncate(Convert.ToDecimal(reader["QuantityReceivedNow"]) * 1000m) / 1000m);
+                            Offset = Offset + 13;
                         }
-                        //end
-
-                        //s += (Math.Truncate(Convert.ToDecimal(reader["QuantityReceivedNow"]) * 1000m) / 1000m).ToString().PadLeft(e) + Environment.NewLine;
-                        s += qtyString.PadLeft(e) + Environment.NewLine;
-                        //s += reader["QuantityReceivedNow"].ToString().PadLeft(4); //Convert.ToInt32(reader["QuantityReceivedNow"]).ToString().PadLeft(4);  disable by Yonathan 10/10/2022 because qty supports decimal
-                        //s += reader["Unit"].ToString().PadLeft(4) + Environment.NewLine; modif by Yonathan 11/10/2022 disable Unit column
-
-                        //End Modify by heron 140817- change the sequence
-
-
-
-                        // Convert.ToInt32(reader["QuantityReceivedNow"]); disable by Yonathan 10/10/2022 because qty supports decimal
-                        totalQtyDec += (Math.Truncate(Convert.ToDecimal(reader["QuantityReceivedNow"]) * 1000m) / 1000m);
-                        Offset = Offset + 13;
+                        
                     }
 
                     //     s += "------------------------------------------------" + Environment.NewLine;
@@ -1015,8 +1047,10 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
         //To check qty receive
         private void checkQtyItem()
         {
+            decimal totalQty = 0;
             foreach (DataRow row in entryTable.Rows)
             {
+                
                 decimal quantity = row.Field<decimal>(DataAccessConstants.QuantityOrdered) - row.Field<decimal>(DataAccessConstants.QuantityReceivedNow);
 
                 if (quantity < 0)
@@ -1024,6 +1058,14 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                     throw new Exception("Quantity receive greater than quantity ordered");
                 }
 
+                totalQty += row.Field<decimal>(DataAccessConstants.QuantityReceivedNow);
+
+            }
+
+            //add by yonathan 10/07/2024
+            if (totalQty == 0)
+            {
+                throw new Exception("PO harus ada barang yang di-receive.\nTidak boleh kosong sama sekali.");
             }
         }
 
@@ -1037,6 +1079,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             public string WAREHOUSE { get; set; }
             public string TYPE { get; set; }
             public string REFERENCESNUMBER { get; set; }
+            public string RETAILVARIANTID { get; set; }
         }
 
         public class parmMultiRequest
@@ -1074,7 +1117,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             }
         }
 
-        public string getFolderPath(string ProcessingDirectory, string typeFolder) //custom by yonathan
+        public string getFolderPath(string ProcessingDirectory, string typeFolder) //custom by YNWA
         {
             string Folder = "";
 
@@ -1099,6 +1142,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             //string unitId = "";
             string dataAreaId = "";
             string warehouseId = "";
+            string configId = "";
             //string transType = "";
             //string refNumber = "";
             string siteId = "";
@@ -1145,6 +1189,10 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                     }
                 }
 
+                //string queryString2 = @"SELECT ID.INVENTDIMID, ITEMID, CONFIGID FROM INVENTDIM ID JOIN INVENTITEMBARCODE IB ON ID.INVENTDIMID = IB.INVENTDIMID
+                //                         WHERE ITEMID = @ITEMID";
+
+                
 
             }
             catch (Exception ex)
@@ -1160,6 +1208,13 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                 }
             }
 
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |
+                                           SecurityProtocolType.Tls11 |
+                                           SecurityProtocolType.Tls12;
+
+            System.Net.ServicePointManager.ServerCertificateValidationCallback = (senderX, certificate, chain, sslPolicyErrors) => { return true; };
+
             HttpWebRequest httpRequest = (HttpWebRequest)WebRequest.Create(url);
             httpRequest.Method = "POST";
             httpRequest.ContentType = "application/json";
@@ -1170,6 +1225,47 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
 
             foreach (DataRow row in entryTable.Rows)
             {
+                try
+                {
+
+                    string queryString2 = @"SELECT ITEMID, RETAILVARIANTID FROM [ax].[INVENTITEMBARCODE]
+                                         WHERE ITEMID =  @ITEMID";
+
+
+                    using (SqlCommand command = new SqlCommand(queryString2, connection))
+                    {
+                        command.Parameters.AddWithValue("@ITEMID", row.Field<string>(DataAccessConstants.ItemNumber));
+
+                        if (connection.State != ConnectionState.Open)
+                        {
+                            connection.Open();
+
+                        }
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                //configId = reader["CONFIGID"].ToString();
+                                configId = reader["RETAILVARIANTID"].ToString();
+                            }
+
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                    throw;
+                }
+                finally
+                {
+                    if (connection.State != ConnectionState.Closed)
+                    {
+                        connection.Close();
+                    }
+                }
+
+
                 decimal quantity = row.Field<decimal>(DataAccessConstants.QuantityOrdered) - row.Field<decimal>(DataAccessConstants.QuantityReceivedNow);
 
                 var pack = new parmRequest
@@ -1180,7 +1276,8 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                     DATAAREAID = dataAreaId,
                     WAREHOUSE = warehouseId,
                     TYPE = this.prType == PRCountingType.TransferIn ? "0" : "1",
-                    REFERENCESNUMBER = this.prType == PRCountingType.TransferIn ? row.Field<string>(2) : row.Field<string>(DataAccessConstants.PoNumber)
+                    REFERENCESNUMBER = this.prType == PRCountingType.TransferIn ? row.Field<string>(2) : row.Field<string>(DataAccessConstants.PoNumber),
+                    RETAILVARIANTID = configId//this.saleLineItem.Dimension.VariantId
                 };
                 //var data = MyJsonConverter.Serialize(pack);
                 packList.Add(pack);
@@ -1324,8 +1421,6 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                     PaperSize psizeCopy = new PaperSize("Custom", 100, Offset + 236);
                     Margins marginsCopy = new Margins(0, 0, 0, 0);
 
-
-
                     pdCopy.Document = pCopy;
                     pdCopy.Document.DefaultPageSettings.PaperSize = psizeCopy;
                     pdCopy.Document.DefaultPageSettings.Margins = marginsCopy;
@@ -1354,7 +1449,6 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                     //Add customization by Yonathan 23 Sept 2022 to input the transaction to CPINVENTORYONHAND table for tracking daily on-hand
 
                     this.addCPInventoryOnHand();
-
 
                     //end customization
 
@@ -1626,7 +1720,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             }
             //end add
             
-            //int unitDecimals = uomData.GetUnitDecimals(item.Unit); //add by Yonathan 14 Oct 2022 stock positive
+            //int unitDecimals = uomData.GetUnitDecimals(item.Unit); //add by Yonathan 14 Oct 2022
 
             if ((unitDecimals == 0) && ((item.QuantityReceived - (int)item.QuantityReceived) != 0))
             {
@@ -1789,7 +1883,52 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                 }
             }
         }
-        private string cpGetDataDocumentBuffer()
+
+        private string cpGetDataDocumentBuffer()//using real-time service
+        {
+            string deliveryNote = "";
+
+            //string connectionString = ConfigurationManager.ConnectionStrings["CPConnection"].ConnectionString;
+            //string connectionString = @"Data Source= DYNAMICS01\DEVPRISQLSVR ;Initial Catalog=DevDynamicsAX; Integrated Security=False;User ID=AXPOS;Password=P@ssw0rd;";//Persist Security Info=False;User ID=USER_NAME;Password=USER_PASS;
+            //string connectionString = @"Data Source= DYNAMICS16\SQLAXDB1 ;Initial Catalog=PRDDynamicsAX; Integrated Security=False;User ID=AXPOS;Password=P@ssw0rd;";
+
+            //SqlConnection connection = new SqlConnection(connectionString); //LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+
+            object[] parameterList = new object[] 
+							{
+								txtPoNumber.Text.ToString(),
+                                ApplicationSettings.Database.DATAAREAID.ToString()
+								
+								
+							};
+
+
+            //ReadOnlyCollection<object> containerArray2 = PurchaseOrderReceiving.InternalApplication.TransactionServices.InvokeExtension("getStockOnHand", parameterList);
+
+            
+            try
+            {
+                ReadOnlyCollection<object> containerArray = PurchaseOrderReceiving.InternalApplication.TransactionServices.InvokeExtension("getDataDocumentBuffer", parameterList);
+
+
+                if (containerArray[2].ToString() == "true")
+                {
+                    deliveryNote = containerArray[3].ToString();
+                }
+                    
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+             
+            
+
+            return deliveryNote;
+        }
+
+        private string cpGetDataDocumentBufferOld() //using CPCONNECTION
         {
             string deliveryNote = "";
 
@@ -1799,6 +1938,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
 
             SqlConnection connection = new SqlConnection(connectionString); //LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
 
+            
             try
             {
                 string queryString = @" SELECT DOCUMENTID FROM NECI_POSDocumentBuffer
@@ -1858,6 +1998,79 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                     MessageBox.Show("Delivery Note maximum character is 20");
                     e.Cancel = true;
                 }
+        }
+
+        private void txtSearchBox_TextChanged(object sender, EventArgs e)
+        {
+            //add by Yonathan 13/07/2023 for select row based on text filter
+            if (txtSearchBox.Text != "Search Item number or Description")
+            {
+                int foundItemId = 0;
+                int foundItemName = 0;
+                string searchText = txtSearchBox.Text.Trim().ToLower(); // Get the text from the TextBox and remove leading/trailing spaces
+
+                // Loop through the rows of the GridView and select the ones that match the search text
+                for (int i = 0; i < gvInventory.RowCount && foundItemId == 0; i++)
+                {
+                    // Assuming the value you want to match is in a specific column (e.g., column with FieldName "ColumnName")
+                    string cellValue = gvInventory.GetRowCellValue(i, "ITEMNUMBER").ToString();
+
+                    if (cellValue.Contains(searchText))
+                    {
+                        foundItemId = 1;
+                        int rowHandle = gvInventory.LocateByValue("ITEMNUMBER", cellValue);
+                        if (rowHandle != DevExpress.XtraGrid.GridControl.InvalidRowHandle)
+                            gvInventory.FocusedRowHandle = rowHandle;
+                    }
+                    else
+                    {
+                        // Deselect rows that don't match the search text
+                        gvInventory.UnselectRow(i);
+                    }
+                }
+
+                //if not found itemid, search for the item description
+                for (int i = 0; i < gvInventory.RowCount && foundItemName == 0; i++)
+                {
+                    // Assuming the value you want to match is in a specific column (e.g., column with FieldName "ColumnName")
+                    string cellValueDesc = gvInventory.GetRowCellValue(i, "ITEMNAME").ToString();
+                    string cellValueDescToLower = cellValueDesc.ToLower();
+
+                    if (cellValueDescToLower.Contains(searchText))
+                    {
+                        foundItemName = 1;
+                        int rowHandle = gvInventory.LocateByValue("ITEMNAME", cellValueDesc);
+                        if (rowHandle != DevExpress.XtraGrid.GridControl.InvalidRowHandle)
+                            gvInventory.FocusedRowHandle = rowHandle;
+                    }
+                    else
+                    {
+                        // Deselect rows that don't match the search text
+                        gvInventory.UnselectRow(i);
+                    }
+                }
+            }
+            
+
+           
+        }
+        //add by Yonathan 13/07/2023
+        private void searchBox_Enter(object sender, EventArgs e)
+        {
+            if (txtSearchBox.Text == "Search Item number or Description")
+            {
+                txtSearchBox.Text = "";
+                txtSearchBox.ForeColor = Color.Black;
+            }
+        }
+
+        private void searchBox_Leave(object sender, EventArgs e)
+        {
+            if (txtSearchBox.Text == "")
+            {
+                txtSearchBox.Text = "Search Item number or Description";
+                txtSearchBox.ForeColor = Color.Gray;
+            }
         }
     }
 }
