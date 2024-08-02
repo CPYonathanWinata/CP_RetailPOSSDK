@@ -179,6 +179,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
         private void Timer_Tick(object sender, EventArgs e)
         {
             APIAccess.APIParameter.ApiResponseGrabmart responseAPI;
+            bool detectDelivered = false;
             // This method will be called every X minutes
 
             // Show a popup message
@@ -211,13 +212,20 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
             {
                 APIAccess.APIParameter.Data[] order = APIAccess.APIFunction.MyJsonConverter.Deserialize<APIAccess.APIParameter.Data[]>(responseAPI.data);
 
-                if (order.Length != 0)
+                foreach (var orderList in order)
+                {
+                    detectDelivered = orderList.state == "DELIVERED" ? true : false;
+                }
+
+
+
+                if (order.Length != 0 && detectDelivered == false)
                 {
                     PlayNotificationSound();
 
                     //DialogResult result = CustomMessageBox.Show("PESANAN BARU DITERIMA\nSILAKAN CEK GRABMART ORDER");
 
-                    ShowPopupMessage("GRABMART ORDER NOTIFICATION", string.Format("PESANAN BARU DITERIMA\nSILAKAN CEK GRABMART ORDER", notificationIntervalInMinutes));
+                    ShowPopupMessage("GRABMART ORDER NOTIFICATION", string.Format("PESANAN BARU DITERIMA\nJANGAN LUPA CEK GRABMART ORDER UNTUK MEMPROSES PESANAN", notificationIntervalInMinutes));
 
                 }
             }

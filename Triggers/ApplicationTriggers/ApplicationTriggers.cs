@@ -280,13 +280,11 @@ namespace Microsoft.Dynamics.Retail.Pos.ApplicationTriggers
                         }
                         else
                         {
-                            using (frmMessage dialog = new frmMessage("Please check internet connection or \nAPI table config!!!", MessageBoxButtons.OK, MessageBoxIcon.Error))
+                            using (frmMessage dialog = new frmMessage(string.Format("Tidak ada data toko {0} pada konfigurasi API Table.\nHubungi Tim IT untuk lebih lanjut", storeId), MessageBoxButtons.OK, MessageBoxIcon.Error))
                             {
                                 LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
                                 application.RunOperation(PosisOperations.ApplicationExit, "");
-                                //return;
-                                //Application.RunOperation(PosisOperations.SetQty, itemIdRemove);
-                                //Application.RunOperation(PosisOperations.SetQty,itemIdRemove, posTransaction);
+                                
 
                             }
                         }
@@ -353,11 +351,75 @@ namespace Microsoft.Dynamics.Retail.Pos.ApplicationTriggers
             string PathDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Pos.exe.config");
             string storeId = getFolderPath(PathDirectory, "StoreId");
             string dataAreaId = Application.Settings.Database.DataAreaID.ToString();
+            bool result = true;
             //APIAccess.MySQLConnect connectSQL = new APIAccess.MySQLConnect();
 
             //connectSQL.connectToDB(storeID, dataAreaId);
 
             connectToDB(storeId, dataAreaId);
+
+            result = checkTaxTable(storeId, dataAreaId);
+            if (result == false)
+            {
+                application.RunOperation(PosisOperations.ApplicationExit,  "Close");    
+            }
+
+        }
+
+        private bool checkTaxTable(string storeId, string dataAreaId)
+        {
+            SqlConnection connectionStore = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+            try
+            {               
+                string queryString = @"SELECT * FROM TAXTABLE JOIN TAXDATA
+                            ON TAXTABLE.TAXCODE = TAXDATA.TAXCODE
+                            WHERE TAXTABLE.DATAAREAID = @DATAAREAID";
+
+                using (SqlCommand command = new SqlCommand(queryString, connectionStore))
+				    {
+					 
+					    command.Parameters.AddWithValue("@DATAAREAID", dataAreaId );
+                   
+
+					    if (connectionStore.State != ConnectionState.Open)
+					    {
+						    connectionStore.Open();
+					    }
+
+					    using (SqlDataReader reader = command.ExecuteReader())
+					    {
+                            if (!reader.HasRows)
+                            {
+
+                                using (frmMessage dialog = new frmMessage(string.Format("Tidak ada data TAXTABLE/TAXDATA\npada toko {0}.\nHubungi Tim IT untuk melakukan Sync Data.", storeId), MessageBoxButtons.OK, MessageBoxIcon.Error))
+                                {
+                                    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                                    return false;
+
+                                }
+                            }
+                            else
+                            {
+                                return true;
+                            }
+					 
+
+					    }
+				    }
+			}
+			catch (Exception ex)
+			{
+				LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+				throw;
+			}
+			finally
+			{
+				if (connectionStore.State != ConnectionState.Closed)
+				{
+					connectionStore.Close();
+				}
+			}
+
 
         }
         #endregion

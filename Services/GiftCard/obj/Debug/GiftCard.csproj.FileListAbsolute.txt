@@ -25,3 +25,12 @@ C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\GiftCard
 C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\GiftCard\obj\Debug\GiftCard.dll.licenses
 C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\GiftCard\obj\Debug\GiftCard.dll
 C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\GiftCard\obj\Debug\GiftCard.pdb
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\POS\bin\Debug\GiftCard.dll
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\POS\bin\Debug\GiftCard.pdb
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\GiftCard\obj\Debug\GiftCard.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\GiftCard\obj\Debug\Microsoft.Dynamics.Retail.Pos.GiftCard.GiftCardForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\GiftCard\obj\Debug\Microsoft.Dynamics.Retail.Pos.GiftCard.Properties.Resources.resources
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\GiftCard\obj\Debug\GiftCard.csproj.GenerateResource.Cache
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\GiftCard\obj\Debug\GiftCard.dll.licenses
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\GiftCard\obj\Debug\GiftCard.dll
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\GiftCard\obj\Debug\GiftCard.pdb

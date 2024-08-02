@@ -82,6 +82,11 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder
             parameters.AddressRecordId = (customerOrder.ShippingAddress != null) ? customerOrder.ShippingAddress.AddressRecId : string.Empty;
             parameters.CustomerAccount = (customerOrder.Customer != null) ? customerOrder.Customer.CustomerId : string.Empty;
 
+
+            //add by Yonathan to add CPOrderNumber when creating SO 25/07/2024
+            parameters.CPOrderNumber = "POS-" + customerOrder.OperatorId.ToString();
+            //end
+
             //split the sales person and sales taker
 
             //check if the SalesPersonId split

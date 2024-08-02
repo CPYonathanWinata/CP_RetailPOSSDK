@@ -809,6 +809,19 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 //add here for validation b2b or regular customer
                 if (result == DialogResult.OK)
                 {
+
+                    //check mandatory fields
+                    if (cot.DeliveryMode == null && cot.ShippingAddress == null)
+                    {
+                        using (LSRetailPosis.POSProcesses.frmMessage msgDialog = new LSRetailPosis.POSProcesses.frmMessage("Field sales taker, shipping, delivery belum diisi. Tidak bisa melanjutkan order", MessageBoxButtons.OK, MessageBoxIcon.Error))  //The price can only be overridden on sales orders marked for full payment.
+                        {
+                            SalesOrder.InternalApplication.ApplicationFramework.POSShowForm(msgDialog);
+                            ShowOrderDetails(cot, OrderDetailsSelection.ViewDetails);
+                            
+                        }
+                         
+                    }
+                    //
                     //CHECK B2B by Yonathan 06/05/2024
 
                     string isB2bCust = "0";
@@ -829,7 +842,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                         }
                     }
 
-                    //Check to validate B2B or Regular customer
+                    //Check to validate B2B or Regular customer by Yonathan 2024
                     if ((isB2bCust == "1" || isB2bCust == "2") && hasSO == false) //if B2B but no SO yet
                     {
                         // Update the editing mode of the order.

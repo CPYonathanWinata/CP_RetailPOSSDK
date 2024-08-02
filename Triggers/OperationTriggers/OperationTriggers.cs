@@ -57,10 +57,31 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
 		public void PreProcessOperation(IPreTriggerResult preTriggerResult, IPosTransaction posTransaction, PosisOperations posisOperation)
 		{
 
+            //if (posisOperation == PosisOperations.RecallUnconcludedTransaction)
+            //{
+            //    posTransaction.OperationCancelled = true;
+            //    preTriggerResult.ContinueOperation = false;
+            //}
+
+            
+
             //add by Yonathan to disable any operation when promo discount payment applied - 23/01/2024 - CPPOS_PROMODISCPAYMENT
             if (posTransaction.ToString() == "LSRetailPosis.Transaction.RetailTransaction" )
             {
                 RetailTransaction transaction = posTransaction as RetailTransaction;
+                if(transaction.Customer != null && transaction.SaleItems.Count == 0 && (posisOperation == PosisOperations.ConvertCustomerOrder || posisOperation == PosisOperations.CustomerOrderDetails))
+                {
+                     using (frmMessage dialog = new frmMessage("Keranjang masih kosong, tidak bisa membuat customer order", MessageBoxButtons.OK, MessageBoxIcon.Error))
+                            {
+                                POSFormsManager.ShowPOSForm(dialog);
+                                posTransaction.OperationCancelled = true;
+                                preTriggerResult.ContinueOperation = false;
+                                return;
+                            }
+ 
+                }
+
+
 
                 if (transaction.Comment == "PAYMENTDISCOUNT" || transaction.Comment == "PROMOED" || transaction.Comment == "PROMORCPT") //if (transaction.Comment == "PAYMENTDISCOUNT"  || transaction.Comment == "PROMOPDI" || transaction.Comment == "PROMOPDIS")                                  
                 {
@@ -103,6 +124,19 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
            
             //end
 
+
+            //add by Yonathan to validate if customer order only can void transaction & pay
+            if (posTransaction.ToString() == "LSRetailPosis.Transaction.CustomerOrderTransaction" && (posisOperation != PosisOperations.PayCustomerAccount && posisOperation != PosisOperations.PayCash && posisOperation != PosisOperations.PayCard && posisOperation != PosisOperations.VoidTransaction && posisOperation != PosisOperations.ChangeBack && posisOperation != PosisOperations.DisplayTotal && posisOperation != PosisOperations.BlankOperation && posisOperation != PosisOperations.ItemSale && posisOperation != PosisOperations.ConvertCustomerOrder && posisOperation != PosisOperations.CustomerOrderDetails))
+            {
+                using (frmMessage dialog = new frmMessage("Fungsi ini dibatasi untuk transaksi Customer Order. Silakan lanjut ke menu pembayaran atau batalkan sepenuhnya (void) transaksi ini", MessageBoxButtons.OK, MessageBoxIcon.Error))
+                {
+                    POSFormsManager.ShowPOSForm(dialog);
+                    posTransaction.OperationCancelled = true;
+                    preTriggerResult.ContinueOperation = false;
+                    return;
+                }
+            }
+            //
 
 			int flag = 0;
 			LSRetailPosis.ApplicationLog.Log("ICustomerTriggersV1.PreProcessOperation", "Before the operation is processed this trigger is called.", LSRetailPosis.LogTraceLevel.Trace);
@@ -229,7 +263,7 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
             string taxGroup1="";
             string taxGroup2 ="";
             bool foundDifferentTaxGroup = false;
-            
+            foundOperationCancelled = false;
 
             //string[] listItemToRemove;
             List<string> listItemToRemove = new List<string>();
@@ -305,17 +339,23 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
                                 {
                                     //find the pricegroup that specified for the applied customer first yonathan 12/07/2024
 
-                                    List<string> result = findPriceAgreement(posTransaction, transaction.ChannelId, salesLine.ItemId, transaction.Customer.CustomerId, salesLine.BackofficeSalesOrderUnitOfMeasure);
+                                    List<string> result = findPriceAgreement(posTransaction, transaction.ChannelId, salesLine.ItemId, transaction.Customer.CustomerId, salesLine.BackofficeSalesOrderUnitOfMeasure, salesLine.Quantity);
 
                                     //if not found, check the pricegroup that exist in the customers master data
                                     //calculate the pricegroup 
                                     //List<string> 
                                     if (result.Count == 0)
                                     {
-                                        result = findPriceAgreement(posTransaction, transaction.ChannelId, salesLine.ItemId, priceGroup, salesLine.BackofficeSalesOrderUnitOfMeasure);
+                                        result = findPriceAgreement(posTransaction, transaction.ChannelId, salesLine.ItemId, priceGroup, salesLine.BackofficeSalesOrderUnitOfMeasure, salesLine.Quantity);
                                     }
                                     //calculate the discount                             
-                                    List<string> resultDisc = findDiscountAgreement(posTransaction, Application.Settings.Database.DataAreaID, salesLine.ItemId, lineDiscGroup, salesLine.BackofficeSalesOrderUnitOfMeasure);
+                                    //List<string> resultDisc = findDiscountAgreement(posTransaction, Application.Settings.Database.DataAreaID, salesLine.ItemId, lineDiscGroup, salesLine.BackofficeSalesOrderUnitOfMeasure);
+
+                                    List<string> resultDisc = findDiscountAgreement(posTransaction, transaction.ChannelId, salesLine.ItemId, transaction.Customer.CustomerId, salesLine.BackofficeSalesOrderUnitOfMeasure, salesLine.Quantity);
+                                    if (resultDisc.Count == 0)
+                                    {
+                                        resultDisc = findDiscountAgreement(posTransaction, transaction.ChannelId, salesLine.ItemId, lineDiscGroup, salesLine.BackofficeSalesOrderUnitOfMeasure, salesLine.Quantity);
+                                    }
                                     //query the B2B price from TA
 
                                     if (result != null && result.Count > 0)
@@ -704,47 +744,70 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
         }
 
 
-        public List<string> findDiscountAgreement(IPosTransaction posTransaction, string _dataAreaId, string _itemRelation, string _accountRelations, string _unitId)
+        public List<string> findDiscountAgreement(IPosTransaction posTransaction, long _channelId, string _itemRelation, string _accountRelations, string _unitId, decimal _qty = 0, bool found = true)
+            //(IPosTransaction posTransaction, string _dataAreaId, string _itemRelation, string _accountRelations, string _unitId, bool found = true)
         {
             List<string> stringList = new List<string>();
-            
+            bool isFound = found;
+            string additionalQuery = "";
+             
 
+            
             SqlConnection connectionStore = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
             try
             {
-                string queryString = @"SELECT ta.ITEMRELATION,
-	                                        ta.ACCOUNTRELATION,
-	                                        ta.FROMDATE,
-	                                        ta.TODATE,
-	                                        ta.AMOUNT,
-	                                        ta.PERCENT1,
-	                                        ta.PERCENT2,
-	                                        ta.RELATION,
-	                                        ta.DATAAREAID,
-	                                        ta.UNITID
- 
-                                        FROM [ax].PRICEDISCTABLE ta
-                                        WHERE
-                                        
-                                        ta.RELATION IN (5, 6, 7)
-                                        AND ta.CURRENCY = 'IDR'                                          
-                                        AND ((ta.FROMDATE <= @ActiveDate OR ta.FROMDATE <= @NoDate)
-                                                AND (ta.TODATE >= @ActiveDate OR ta.TODATE <= @NoDate))
-                                        AND ta.DATAAREAID = @DataAreaId                                        
-                                        AND ta.ITEMRELATION = @ItemRelation 
-                                        AND ta.ACCOUNTRELATION = @AccountRelations
-                                        AND ta.UNITID = @UnitId ";
+//                string queryString = @"SELECT ta.ITEMRELATION,
+//	                                        ta.ACCOUNTRELATION,
+//	                                        ta.FROMDATE,
+//	                                        ta.TODATE,
+//	                                        ta.AMOUNT,
+//	                                        ta.PERCENT1,
+//	                                        ta.PERCENT2,
+//	                                        ta.RELATION,
+//	                                        ta.DATAAREAID,
+//	                                        ta.UNITID
+// 
+//                                        FROM [ax].PRICEDISCTABLE ta
+//                                        WHERE
+//                                        
+//                                        ta.RELATION IN (5, 6, 7)
+//                                        AND ta.CURRENCY = 'IDR'                                          
+//                                        AND ((ta.FROMDATE <= @ActiveDate OR ta.FROMDATE <= @NoDate)
+//                                                AND (ta.TODATE >= @ActiveDate OR ta.TODATE <= @NoDate)) AND ta.DATAAREAID = @DataAreaId  AND ta.ITEMRELATION = @ItemRelation AND ta.ACCOUNTRELATION = @AccountRelations  AND ta.UNITID = @UnitId ";
+
+                string queryString = @"SELECT TOP 1 ITEMRELATION, ACCOUNTRELATION, AMOUNT,PERCENT1,PERCENT2, QUANTITYAMOUNTFROM, QUANTITYAMOUNTTO, FROMDATE,TODATE,RELATION FROM PRICEDISCTABLE TA
+                            INNER JOIN [ax].RETAILCHANNELTABLE AS c
+                            ON c.INVENTLOCATIONDATAAREAID = ta.DATAAREAID AND c.RECID = @CHANNELID
+                            LEFT JOIN [ax].INVENTDIM invdim ON ta.INVENTDIMID = invdim.INVENTDIMID AND ta.DATAAREAID = c.INVENTLOCATIONDATAAREAID
+                            WHERE ITEMRELATION = @ItemRelation
+	                            AND TA.ACCOUNTRELATION = @AccountRelations
+                                AND TA.RELATION = 5
+                                AND (
+                                (@Quantity BETWEEN QUANTITYAMOUNTFROM AND QUANTITYAMOUNTTO) OR
+                                (QUANTITYAMOUNTFROM = 0 AND QUANTITYAMOUNTTO = 0)
+                                )
+	                            AND(@ActiveDate BETWEEN TA.FROMDATE AND TA.TODATE )
+                            ORDER BY QUANTITYAMOUNTFROM DESC";
                 //RetailTransaction retailTransaction = (RetailTransaction)this.posTransaction;
 
                 using (SqlCommand command = new SqlCommand(queryString, connectionStore))
                 {
-                   
-                    command.Parameters.AddWithValue("@DataAreaId", _dataAreaId);
+                   //NEW
+                    command.Parameters.AddWithValue("@CHANNELID", _channelId);
+                    command.Parameters.AddWithValue("@Quantity", _qty.ToString());
                     command.Parameters.AddWithValue("@ItemRelation", _itemRelation);
                     command.Parameters.AddWithValue("@AccountRelations", _accountRelations);
                     command.Parameters.AddWithValue("@UnitId", _unitId);
                     command.Parameters.AddWithValue("@ActiveDate", DateTime.Now.ToString("yyyy-MM-dd"));
-                    command.Parameters.AddWithValue("@NoDate", new DateTime(1900, 01, 01));
+
+                    //OLD
+
+                    //command.Parameters.AddWithValue("@DataAreaId", _dataAreaId);
+                    //command.Parameters.AddWithValue("@ItemRelation", _itemRelation);
+                    //command.Parameters.AddWithValue("@AccountRelations", _accountRelations);
+                    //command.Parameters.AddWithValue("@UnitId", _unitId);
+                    //command.Parameters.AddWithValue("@ActiveDate", DateTime.Now.ToString("yyyy-MM-dd"));
+                    //command.Parameters.AddWithValue("@NoDate", new DateTime(1900, 01, 01));
                     if (connectionStore.State != ConnectionState.Open)
                     {
                         connectionStore.Open();
@@ -789,7 +852,16 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
                 }
             }
 
-            return stringList;
+            //if (stringList == null)
+            //{
+            //    isFound = false;
+            //    findDiscountAgreement(posTransaction, _dataAreaId, _itemRelation, _accountRelations, _unitId, isFound);
+            //}
+            //else
+            //{
+                return stringList;
+            //}
+            
 
         }
 
@@ -804,19 +876,19 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
             {
 
                 string queryString = @"SELECT 
-                							ta.ACCOUNTRELATION,ta.AMOUNT,ta.ITEMRELATION
-                							FROM [ax].PRICEDISCTABLE ta
-                							INNER JOIN [ax].RETAILCHANNELTABLE AS c
-                							ON c.INVENTLOCATIONDATAAREAID = ta.DATAAREAID AND c.RECID = @CHANNELID
-                							LEFT JOIN [ax].INVENTDIM invdim ON ta.INVENTDIMID = invdim.INVENTDIMID AND ta.DATAAREAID = c.INVENTLOCATIONDATAAREAID
-                							WHERE
-                							ta.ITEMRELATION in (@ItemRelation)
-                							AND ta.ACCOUNTRELATION = @AccountRelations                            
+                						ta.ACCOUNTRELATION,ta.AMOUNT,ta.ITEMRELATION
+                						FROM [ax].PRICEDISCTABLE ta
+                						INNER JOIN [ax].RETAILCHANNELTABLE AS c
+                						ON c.INVENTLOCATIONDATAAREAID = ta.DATAAREAID AND c.RECID = @CHANNELID
+                						LEFT JOIN [ax].INVENTDIM invdim ON ta.INVENTDIMID = invdim.INVENTDIMID AND ta.DATAAREAID = c.INVENTLOCATIONDATAAREAID
+                						WHERE
+                						ta.ITEMRELATION in (@ItemRelation)
+                						AND ta.ACCOUNTRELATION = @AccountRelations                            
                 							                   
-                							AND ta.FROMDATE <= @ActiveDate
-                							AND ta.TODATE >= @ActiveDate                           
+                						AND ta.FROMDATE <= @ActiveDate
+                						AND ta.TODATE >= @ActiveDate                           
                 
-                							ORDER BY ta.QUANTITYAMOUNTFROM, ta.RECID, ta.FROMDATE";
+                						ORDER BY ta.QUANTITYAMOUNTFROM, ta.RECID, ta.FROMDATE";
 
                  
                 //RetailTransaction retailTransaction = (RetailTransaction)this.posTransaction;
@@ -880,9 +952,11 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
 
         //public List<string> findPriceAgreement(IPosTransaction posTransaction, long _channelId, List<string> _itemRelation, string _accountRelations)//, string _unitId)
 		
-		public List<string>  findPriceAgreement(IPosTransaction posTransaction, long _channelId, string _itemRelation, string _accountRelations, string _unitId)
+		public List<string>  findPriceAgreement(IPosTransaction posTransaction, long _channelId, string _itemRelation, string _accountRelations, string _unitId, decimal _qty = 0)
 		{
 			List<string> stringList = new List<string>();
+            string excludeRec = "";
+            string additionalQuery = "";
 			SqlConnection connectionStore = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
 			try
 			{
@@ -902,21 +976,35 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
 //
 //							ORDER BY ta.QUANTITYAMOUNTFROM, ta.RECID, ta.FROMDATE";
 
-				string queryString = @"SELECT 
-							ta.ACCOUNTRELATION,ta.AMOUNT,ta.ITEMRELATION
-							FROM [ax].PRICEDISCTABLE ta
-							INNER JOIN [ax].RETAILCHANNELTABLE AS c
-							ON c.INVENTLOCATIONDATAAREAID = ta.DATAAREAID AND c.RECID = @CHANNELID
-							LEFT JOIN [ax].INVENTDIM invdim ON ta.INVENTDIMID = invdim.INVENTDIMID AND ta.DATAAREAID = c.INVENTLOCATIONDATAAREAID
-							WHERE
-							ta.ITEMRELATION = @ItemRelation
-							AND ta.ACCOUNTRELATION = @AccountRelations                            
-							AND ta.UNITID = @UnitId                          
-							AND ta.FROMDATE <= @ActiveDate
-							AND ta.TODATE >= @ActiveDate                           
+//                string queryString = @"SELECT 
+//							ta.ACCOUNTRELATION,ta.AMOUNT,ta.ITEMRELATION
+//							FROM [ax].PRICEDISCTABLE ta
+//							INNER JOIN [ax].RETAILCHANNELTABLE AS c
+//							ON c.INVENTLOCATIONDATAAREAID = ta.DATAAREAID AND c.RECID = @CHANNELID
+//							LEFT JOIN [ax].INVENTDIM invdim ON ta.INVENTDIMID = invdim.INVENTDIMID AND ta.DATAAREAID = c.INVENTLOCATIONDATAAREAID
+//							WHERE
+//							ta.ITEMRELATION = @ItemRelation
+//							AND ta.ACCOUNTRELATION = @AccountRelations                            
+//							AND ta.UNITID = @UnitId                          
+//							AND ta.FROMDATE <= @ActiveDate
+//							AND ta.TODATE >= @ActiveDate                           
+//
+//							ORDER BY ta.QUANTITYAMOUNTFROM, ta.RECID, ta.FROMDATE";
 
-							ORDER BY ta.QUANTITYAMOUNTFROM, ta.RECID, ta.FROMDATE";
-				//RetailTransaction retailTransaction = (RetailTransaction)this.posTransaction;
+
+                string queryString = @"SELECT TOP 1 ITEMRELATION, ACCOUNTRELATION, AMOUNT, QUANTITYAMOUNTFROM, QUANTITYAMOUNTTO, FROMDATE,TODATE FROM PRICEDISCTABLE TA
+                            INNER JOIN [ax].RETAILCHANNELTABLE AS c
+                            ON c.INVENTLOCATIONDATAAREAID = ta.DATAAREAID AND c.RECID = @CHANNELID
+                            LEFT JOIN [ax].INVENTDIM invdim ON ta.INVENTDIMID = invdim.INVENTDIMID AND ta.DATAAREAID = c.INVENTLOCATIONDATAAREAID
+                            WHERE ITEMRELATION = @ItemRelation
+	                            AND TA.ACCOUNTRELATION = @AccountRelations
+                                AND TA.RELATION = 4
+                                AND (
+                                (@Quantity BETWEEN QUANTITYAMOUNTFROM AND QUANTITYAMOUNTTO) OR
+                                (QUANTITYAMOUNTFROM = 0 AND QUANTITYAMOUNTTO = 0)
+                                )
+	                            AND(@ActiveDate BETWEEN TA.FROMDATE AND TA.TODATE )
+                            ORDER BY QUANTITYAMOUNTFROM DESC";
 
 				using (SqlCommand command = new SqlCommand(queryString, connectionStore))
 				{
@@ -931,7 +1019,7 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
 					@Quantity = 0
 					 */
 					command.Parameters.AddWithValue("@CHANNELID", _channelId );
-                    //command.Parameters.AddWithValue("@ItemRelation", string.Join(",", _itemRelation));
+                    command.Parameters.AddWithValue("@Quantity", _qty.ToString());
                     command.Parameters.AddWithValue("@ItemRelation", _itemRelation );                    
 					command.Parameters.AddWithValue("@AccountRelations", _accountRelations );
 					command.Parameters.AddWithValue("@UnitId", _unitId );                    

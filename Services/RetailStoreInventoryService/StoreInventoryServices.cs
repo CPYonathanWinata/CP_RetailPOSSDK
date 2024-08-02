@@ -148,6 +148,8 @@ namespace Microsoft.Dynamics.Retail.Pos.StoreInventoryServices
                 {
                     this.OrderType = PRCountingType.TransferOut;
                 }
+                //add by Yonathan to retrieve the status 30072024
+                this.RetailStatusType = PRDocumentLine.GetAttributeValue(toDocument, "TransferStatus");
             }
         }
 
@@ -1254,7 +1256,21 @@ namespace Microsoft.Dynamics.Retail.Pos.StoreInventoryServices
                         PurchaseOrderReceiptStatus posStatus;
                         int temp;
 
-                        if (int.TryParse(doc.RetailStatusType, out temp))
+                        //change to provide received status by Yonathan 25072024
+
+                        if (doc.RetailStatusType == "Received")
+                        {
+                            posStatus = PurchaseOrderReceiptStatus.InProgress;
+                        }
+                        else
+                        {
+                            posStatus = PurchaseOrderReceiptStatus.Open;
+                        }
+
+                       
+
+                        /* ORIGINAL CODE
+                         if (int.TryParse(doc.RetailStatusType, out temp))
                         {
                             posStatus = MapHHTRetailStatusTypeBaseToPurchaseOrderReceiptStatus((HHTRetailStatusTypeBase)temp);
                         }
@@ -1262,6 +1278,8 @@ namespace Microsoft.Dynamics.Retail.Pos.StoreInventoryServices
                         {
                             posStatus = PurchaseOrderReceiptStatus.Open;
                         }
+                        // Insert 
+                         */
                         // Insert receipt into DB if it is not already existing
                         int result = prData.InsertReceipt(doc.OrderType, doc.RecId, doc.PurchId, posStatus, doc.DeliveryMethod);
                     }

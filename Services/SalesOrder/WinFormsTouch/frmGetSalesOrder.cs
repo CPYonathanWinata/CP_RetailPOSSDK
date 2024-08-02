@@ -718,18 +718,17 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             //ReadOnlyCollection<object> containerArray = SalesOrder.InternalApplication.TransactionServices.Invoke("getSalesInvoicesBySalesId", this.SelectedSalesOrderId.ToString());
 
             //invoiceId = getInvoiceId(containerArray[3].ToString());
-            using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Do you want to use voucher for payment?", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
-			{
-            //using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Create and Post Payment Journal?", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
-			//{
-				LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
-                if (dialog.DialogResult == DialogResult.Yes)
-                {
-                    CP_frmPaymentInvoice invoicePayment = new CP_frmPaymentInvoice(SalesOrder.InternalApplication, this.SelectedSalesOrderId.ToString(), invoiceId, custId, this.selectedInvoiceAmount );
-                    invoicePayment.ShowDialog();
-                }
-                else if(dialog.DialogResult == DialogResult.No)
-                {
+            //using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Do you want to use voucher for payment?", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+            //{
+            
+            //    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+            //    if (dialog.DialogResult == DialogResult.Yes)
+            //    {
+            //        CP_frmPaymentInvoice invoicePayment = new CP_frmPaymentInvoice(SalesOrder.InternalApplication, this.SelectedSalesOrderId.ToString(), invoiceId, custId, this.selectedInvoiceAmount );
+            //        invoicePayment.ShowDialog();
+            //    }
+            //    else if(dialog.DialogResult == DialogResult.No)
+            //    {
                 //if (dialog.DialogResult == DialogResult.Yes)
                 //{
                     PostPayment(invoiceId, this.selectedInvoiceAmount, out journalNum);
@@ -737,10 +736,10 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                     {
                         SettlePayment(journalNum, invoiceId);
                     }
-                }
+            //    }
                     
-                //}
-            }
+            //    //}
+            //}
 
             
             RefreshGrid();

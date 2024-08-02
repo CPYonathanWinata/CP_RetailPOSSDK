@@ -321,7 +321,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                 {
                     APIAccess.APIParameter.Data[] order = APIAccess.APIFunction.MyJsonConverter.Deserialize<APIAccess.APIParameter.Data[]>(responseAPI.data);
 
-                    var groupedData = order.Where(item => item.state != "DELIVERED").GroupBy(item => item.orderID).Select(group => new
+                    var groupedData = order.Where(item => item.state != "").GroupBy(item => item.orderID).Select(group => new
                     {
                         OrderID = group.Key,
                         Items = group.ToList()
@@ -408,6 +408,20 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 
             if (e.ColumnIndex == grabMartList.Columns["Details"].Index && e.RowIndex >= 0)
             {
+                APIAccess.APIParameter.Data item = (APIAccess.APIParameter.Data)grabMartList.Rows[e.RowIndex].Tag;
+                orderId = grabMartList.Rows[e.RowIndex].Cells["OrderID"].Value.ToString();
+                driverState = grabMartList.Rows[e.RowIndex].Cells["state"].Value.ToString();
+                orderIdLong = grabMartList.Rows[e.RowIndex].Cells["OrderIDLong"].Value.ToString();
+
+                if (driverState == "DELIVERED")
+                {
+                    using (LSRetailPosis.POSProcesses.frmMessage dialog3 = new LSRetailPosis.POSProcesses.frmMessage("Pesanan ini tidak bisa diproses karena status pesanan telah DELIVERED dari sisi DRIVER", MessageBoxButtons.OK, MessageBoxIcon.Error))
+                    {
+                        LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog3);
+                        return;
+                    }
+                }
+
                 if (NextButtonClicked(out reasonMessage))
                 {
                     int currentIndex = currentPanelIndex;
@@ -427,12 +441,10 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                             //btnFinish.BackColor = Color.FromArgb(171, 194, 215);
                         }
                     }
-                    APIAccess.APIParameter.Data item = (APIAccess.APIParameter.Data)grabMartList.Rows[e.RowIndex].Tag;
-                    orderId = grabMartList.Rows[e.RowIndex].Cells["OrderID"].Value.ToString();
-                    driverState = grabMartList.Rows[e.RowIndex].Cells["state"].Value.ToString();
-                    orderIdLong = grabMartList.Rows[e.RowIndex].Cells["OrderIDLong"].Value.ToString();
+                    
 
                     // Show order details in a new form
+                    
                     ShowOrderDetailsForm(item, orderId, orderIdLong, driverState);
                 }
                 else

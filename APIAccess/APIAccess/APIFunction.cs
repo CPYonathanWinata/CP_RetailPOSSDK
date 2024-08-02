@@ -87,7 +87,8 @@ namespace APIAccess
 			}
 
 		}
-        public ReadOnlyCollection<object> checkStockOnHandMulti(IApplication _application, string url, string parmCompanyCode = "", string parmSiteId = "", string parmWareHouse = "", string parmItemId = "", string parmMaxQty = "", string parmBarcodeSetupId = "", string parmConfigId = "")
+        //public ReadOnlyCollection<object> checkStockOnHandMulti(IApplication _application, string url, string parmCompanyCode = "", string parmSiteId = "", string parmWareHouse = "", string parmItemId = "", string parmMaxQty = "", string parmBarcodeSetupId = "", string parmConfigId = "")
+            public ReadOnlyCollection<object> checkStockOnHandMulti(IApplication _application, string url, string parmCompanyCode = "", string parmSiteId = "", string parmWareHouse = "", string parmItemId = "", string parmMaxQty = "", string parmBarcodeSetupId = "", string parmConfigId = "",  string parmQtyInput = "", string parmTransId = "")
         {
             //System.Diagnostics.Stopwatch timer = new Stopwatch();
             string itemId, siteId, wareHouse, maxQty, barCode, company = "";
@@ -108,8 +109,9 @@ namespace APIAccess
 								parmWareHouse,
 								parmItemId,
 								"",
-								"",
-								
+								"",                                 
+                                parmQtyInput,
+                                parmTransId								
 							};
 
 

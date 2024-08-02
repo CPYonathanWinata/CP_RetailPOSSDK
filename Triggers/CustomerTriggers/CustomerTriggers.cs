@@ -211,9 +211,11 @@ namespace Microsoft.Dynamics.Retail.Pos.CustomerTriggers
                 try
                 {
                     ReadOnlyCollection<object> containerArray = Application.TransactionServices.InvokeExtension("getB2bRetailParam", customerId.ToString());
+
                     //APIAccess.APIAccessClass.userID = "";
                     //APIAccess.APIAccessClass.custId = transaction.Customer.CustomerId.ToString();
-                    APIAccess.APIAccessClass.isB2b = containerArray[6].ToString(); //containerArray[3].ToString(); //change to index 6 because to get if its canvas or b2b
+                    APIAccess.APIAccessClass.isB2b = containerArray[6].ToString();
+                    APIAccess.APIAccessClass.custBlocked = containerArray[8].ToString();//containerArray[3].ToString(); //change to index 6 because to get if its canvas or b2b
                     //APIAccess.APIAccessClass.priceGroup = containerArray[4].ToString();
                     //APIAccess.APIAccessClass.lineDiscGroup = containerArray[5].ToString();
                     //APIAccess.APIAccessClass.ppnValidation = containerArray[7].ToString();
@@ -226,12 +228,29 @@ namespace Microsoft.Dynamics.Retail.Pos.CustomerTriggers
             }
 
             //check if already add item first before adding the customer canvas or b2b 
-            if ((APIAccess.APIAccessClass.isB2b == "1" || APIAccess.APIAccessClass.isB2b == "2") && transaction.SaleItems.Count != 0 )//|| transaction.SaleItems != null))
+            if ((APIAccess.APIAccessClass.isB2b == "1" || APIAccess.APIAccessClass.isB2b == "2") )//|| transaction.SaleItems != null))
             {
+                //check if blocked customer
+                if (APIAccess.APIAccessClass.custBlocked == "2")
+                {
+                    //LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("For this customer no need to Add Voucher Code", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    LSRetailPosis.PosisException error = new LSRetailPosis.PosisException("Customer ini diblokir sehingga tidak bisa melanjutkan transaksi. Hubungi tim Finance untuk lebih lanjut.");
+                    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSErrorDialog(error);//  ShowPOSForm(dialog);
+                    posTransaction.OperationCancelled = true;
+                }
 
+                //check if already have item in cart
+                if(transaction.SaleItems.Count != 0 )
+                {
+                     //LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("For this customer no need to Add Voucher Code", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    LSRetailPosis.PosisException error = new LSRetailPosis.PosisException("Untuk customer dengan tipe Canvas/B2B, silakan Void transaksi ini. Add Customer terlebih dahulu baru kemudian Add Item.");
+                    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSErrorDialog(error);//  ShowPOSForm(dialog);
+                    posTransaction.OperationCancelled = true;
+                }
+
+
+               
                 
-                MessageBox.Show("Untuk customer dengan tipe Canvas/B2B, silakan Void transaksi ini. Add Customer terlebih dahulu baru kemudian Add Item.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                posTransaction.OperationCancelled = true;
             }
 
 

@@ -59,7 +59,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch
 			/// </summary>
 			public StatusFormatter()
 			{
-				this.StatusInProgress = ApplicationLocalizer.Language.Translate(103128);   // In Progress
+                this.StatusInProgress = "Received"; //ApplicationLocalizer.Language.Translate(103128);   // In Progress
 				this.StatusClosed = ApplicationLocalizer.Language.Translate(103129);   // Closed
 				this.StatusOpen = ApplicationLocalizer.Language.Translate(103127);   // Open
 			}
@@ -370,7 +370,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch
 					this.entryTable.Rows[i].Delete();
 				}
 			}
-
+            
 			grReceipts.DataSource = this.entryTable;            
 		}
 

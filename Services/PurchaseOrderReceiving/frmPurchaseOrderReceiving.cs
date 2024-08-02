@@ -146,8 +146,16 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             {
                 btnCommit.Visible = false;
                 numPad1.Visible = false;
-                txtDelivery.Visible = false;
+                txtDelivery.Visible = false; //temp disable 22072024
                 txtDriver.Visible = false;
+
+                //additional by Yonathan to enable the reprint button 23072024
+                btnReprint.Visible = true;
+                //end
+            }
+            else
+            {
+                btnReprint.Visible = false;
             }
 
             btnSave.Visible = false;
@@ -305,6 +313,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
 
         private void LoadReceiptLines()
         {
+            //string receiptNumber = "";
             LoadReceiptHeadersFromDB();
             LoadReceiptLinesFromDB();
 
@@ -313,6 +322,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                 GetReceiptLinesFromAX();
                 SaveReceipt();
                 LoadReceiptHeadersFromDB();
+                //receiptNumber = entryTable.Rows[0].Field<string>(DataAccessConstants.ReceiptNumber);
                 LoadReceiptLinesFromDB();
             }
 
@@ -320,7 +330,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             // or from DB, therefore it will NOT trigger the prompt of saving changes before exiting the form.
             this.entryTable.AcceptChanges();
 
-            this.txtReceiptNumber.Text = headerTable.Rows[0].Field<string>(DataAccessConstants.ReceiptNumber);
+            this.txtReceiptNumber.Text = headerTable.Rows[0].Field<string>(DataAccessConstants.ReceiptNumber); //receiptNumber; //change to receipt number from ax by Yonathan 23072024 //
             this.txtPoNumber.Text = headerTable.Rows[0].Field<string>(DataAccessConstants.PoNumber);
             this.txtDriver.Text = headerTable.Rows[0].Field<string>(DataAccessConstants.DriverDetails);
             //this.txtDelivery.Text = headerTable.Rows[0].Field<string>(DataAccessConstants.DeliveryNoteNumber);
@@ -361,7 +371,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
 
         private void btnClose_Click(object sender, EventArgs e)
         {
-            if (entryTable != null && entryTable.GetChanges() != null)
+            if (entryTable != null && entryTable.GetChanges() != null && btnReprint.Visible != true)
             {
                 POSFormsManager.ShowPOSMessageDialog(103119);
                 return;
@@ -474,11 +484,151 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
         //add by Yonathan for reprint PO 09/07/2024
         private void btnReprint_Click(object sender, EventArgs s)
         {
-            Cursor.Current = Cursors.WaitCursor;
+            string tempDriverDetails;
+            LoadReceiptLinesFromDB();
+            ////Begin add NEC hmz to manipulate PO Id with driver Details
+            //if (this.prType == PRCountingType.PurchaseOrder)// || this.prType == PRCountingType.TransferIn)
+            //    tempDriverDetails = this.PONumber + "-" + txtDelivery.Text;
+            //else
+            //    tempDriverDetails = this.PONumber;
 
             try
             {
-                SaveReceipt();
+                ////Begin add NEC
+                //if (txtDelivery.Text == "")
+                //{
+                //    // Show commit failure message                  
+                //    throw new Exception("Please Fill the Delivery note number");
+                //}
+                ////check item qty
+                //this.checkQtyItem();
+                //End add NEC
+                //<CPPOTOCancel>
+                
+                //</CPPOTOCancel>
+                // Save lines to local database
+                //SaveReceipt();
+
+                LoadReceiptLinesFromDB();
+                //Begin add NEC hmz to manipulate PO Id with driver Details
+                if (this.prType == PRCountingType.PurchaseOrder)// || this.prType == PRCountingType.TransferIn)
+                    tempDriverDetails = this.PONumber + "-" + txtDelivery.Text;
+                else
+                    tempDriverDetails = this.PONumber;
+                //End add NEC hmz
+
+                // Commit receipt to AX via webservice
+                // Begin modify line NEC - to pass tempDriverDetails
+                //IPRDocument prDoc = PurchaseOrderReceiving.InternalApplication.Services.StoreInventoryServices.CommitOrderReceipt(tempDriverDetails, this.ReceiptNumber, this.prType);
+
+                tempDriverDetails = this.PONumber;
+                // Remove rows that are successfully submitted
+                List<DataRow> removeRows = new List<DataRow>();
+
+                // Success commmit
+                 
+                 
+                    //string sPrint = this.ReceiveDocumentFormat("REPRINT");
+
+                    //PrintDocument p = new PrintDocument();
+                    //PrintDialog pd = new PrintDialog();
+                    //PaperSize psize = new PaperSize("Custom", 100, Offset + 236);
+                    //Margins margins = new Margins(0, 0, 0, 0);
+
+                    //Font normalFont = new Font("Courier New", 8);
+                    //Font biggerFont = new Font("Courier New", 12);
+
+                    //pd.Document = p;
+                    //pd.Document.DefaultPageSettings.PaperSize = psize;
+                    //pd.Document.DefaultPageSettings.Margins = margins;
+                    //p.DefaultPageSettings.PaperSize.Width = 600;
+                    //p.PrintPage += delegate(object sender1, PrintPageEventArgs e1)
+                    //{
+                       
+                    //    e1.Graphics.DrawString(sPrint, normalFont, new SolidBrush(Color.Black), new RectangleF(p.DefaultPageSettings.PrintableArea.Left, 0, p.DefaultPageSettings.PrintableArea.Width, p.DefaultPageSettings.PrintableArea.Height));
+
+                    //};
+                    //try
+                    //{
+                    //    //Edit by Erwin 23 October 2019
+                    //    //for (int i = 1; i <= 2; i++)
+                    //    //{
+                    //    //    p.Print();
+                    //    //}
+
+                    //    p.Print();
+
+                    //    //End Edit by Erwin 23 October 2019
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    throw new Exception("Exception Occured While Printing", ex);
+                    //}
+                string sHeader = "     -------------- " + Environment.NewLine +
+                                   "         REPRINT " + Environment.NewLine +
+                                   "     --------------" + Environment.NewLine;
+                //Offset = Offset + 260;
+
+                string sPrint = this.ReceiveDocumentFormat("REPRINT");
+
+                PrintDocument p = new PrintDocument();
+                PrintDialog pd = new PrintDialog();
+                PaperSize psize = new PaperSize("Custom", 100, Offset + 236);
+                Margins margins = new Margins(0, 0, 0, 0);
+
+                Font normalFont = new Font("Courier New", 8);
+                Font biggerFont = new Font("Courier New", 20);
+
+                pd.Document = p;
+                pd.Document.DefaultPageSettings.PaperSize = psize;
+                pd.Document.DefaultPageSettings.Margins = margins;
+                p.DefaultPageSettings.PaperSize.Width = 600;
+
+                p.PrintPage += delegate(object sender1, PrintPageEventArgs e1)
+                {
+                    SolidBrush brush = new SolidBrush(Color.Black);
+                    float leftMargin = p.DefaultPageSettings.PrintableArea.Left;
+                    float yPos = 0;
+
+                    //string sHeader ="     -------------- " + Environment.NewLine +
+                    //                "         REPRINT " + Environment.NewLine +
+                    //                "     --------------" + Environment.NewLine;
+                    //Offset = Offset + 260;
+                    // Print the header with a bigger font
+                    string[] headerLines = sHeader.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+                    foreach (string line in headerLines)
+                    {
+                        e1.Graphics.DrawString(line, biggerFont, brush, leftMargin, yPos);
+                        yPos += normalFont.GetHeight(e1.Graphics);
+                    }
+                    
+                    // Print the rest of the document with a normal font
+                    //string sPrint = this.ReceiveDocumentFormat("REPRINT");
+                    string[] printLines = sPrint.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+                    foreach (string line in printLines)
+                    {
+                        e1.Graphics.DrawString(line, normalFont, brush, leftMargin, yPos);
+                        yPos += normalFont.GetHeight(e1.Graphics);
+                    }
+                     
+                };
+
+                try
+                {
+                    p.Print();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Exception Occured While Printing", ex);
+                }
+
+                  
+
+
+                    
+                 
+
+                
             }
             finally
             {
@@ -581,7 +731,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             {
                 quantity = line.QtyOrdered;
             }
-            else
+            else 
             {
                 quantity = line.PurchQty;
             }
@@ -603,6 +753,9 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             row[DataAccessConstants.DeliveryMethod] = line.DeliveryMethod;
 
             // Does not assign GUID. GUID cannot be used as PK because it will change every time on AX side
+
+            //add by Yonathan to get receiptnumber from message line 22/07/2024
+            //row[DataAccessConstants.ReceiptNumber] = line.Message;
         }
 
         private void btnUom_Click(object sender, EventArgs e)
@@ -665,7 +818,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                 }
             }
 
-            return true;
+            return true; 
         }
 
         private void InventoryLookup(string barcode)
@@ -821,6 +974,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
 
                 lineItem.QuantityOrdered = PurchaseOrderReceiving.InternalApplication.Services.Rounding.Round(row.Field<decimal>(DataAccessConstants.QuantityOrdered), unitDecimals);
                 lineItem.QuantityPickedUp = PurchaseOrderReceiving.InternalApplication.Services.Rounding.Round(row.Field<decimal>(DataAccessConstants.QuantityReceived), unitDecimals);
+                //txtDelivery.Text = row.Field<string>(DataAccessConstants.ReceiptNumber);
             }
         }
 
@@ -875,6 +1029,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             string s = "";
             string namatoko = "";
             string deliverynote = "";
+            string receiptDate = "";
             string qtyString = "";
             string qtyStringMod = "";
             string itemName = "";
@@ -899,10 +1054,17 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                 {
                     connection.Open();
                     SqlDataReader reader, reader2, reader3 = null;
-                    SqlCommand command = new SqlCommand("Select ItemNumber, ItemName, Unit, QuantityReceivedNow from POSPURCHASEORDERRECEIPTLINE where PONumber = '" + this.PONumber + "'", connection);
+                    SqlCommand command = new SqlCommand("Select ItemNumber, ItemName, Unit,QuantityReceived, QuantityReceivedNow from POSPURCHASEORDERRECEIPTLINE where PONumber = '" + this.PONumber + "'", connection);
                     SqlCommand command2 = new SqlCommand("Select RETAILSTORETABLE.StoreNumber, DIRADDRESSBOOK.Description from RETAILSTORETABLE inner join DIRADDRESSBOOK ON RETAILSTORETABLE.STORENUMBER = DIRADDRESSBOOK.name where RETAILSTORETABLE.StoreNumber = '" + storeid + "'", connection);
-                    SqlCommand command3 = new SqlCommand("Select DeliveryNoteNumber from POSPURCHASEORDERRECEIPT where PONumber = '" + this.PONumber + "'", connection);
+                    SqlCommand command3;
 
+                    command3 = new SqlCommand(@"SELECT TOP (1) LINE.PONUMBER, LINE.RECEIPTDATE, HEADER.DELIVERYNOTENUMBER  FROM POSPURCHASEORDERRECEIPT HEADER
+JOIN POSPURCHASEORDERRECEIPTLINE LINE ON HEADER.PONUMBER = LINE.PONUMBER
+where HEADER.PONumber = '" + this.PONumber + "'", connection);
+                     
+                          //command3 = new SqlCommand("Select DeliveryNoteNumber from POSPURCHASEORDERRECEIPT where PONumber = '" + this.PONumber + "'", connection);
+                    
+                        
                     using (reader2 = command2.ExecuteReader())
                     {
                         while (reader2.Read())
@@ -916,13 +1078,55 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                         while (reader3.Read())
                         {
                             deliverynote = reader3["DeliveryNoteNumber"].ToString();
+                            receiptDate = reader3["RECEIPTDATE"].ToString();
                         }
                     }
 
-                    s += "             " + statusReceipt + Environment.NewLine;
+                    if (deliverynote == string.Empty || receiptDate == string.Empty)
+                    {
+                        object[] parameterList = new object[] 
+							{
+								this.PONumber,
+                                ApplicationSettings.Database.DATAAREAID.ToString()
+								
+								
+							};
+
+                        try
+                        {
+                            ReadOnlyCollection<object> containerArray = PurchaseOrderReceiving.InternalApplication.TransactionServices.InvokeExtension("getPackingSlipInfoPO", parameterList);
+
+
+                            if (containerArray[2].ToString() == "Success")
+                            {
+                                deliverynote = containerArray[3].ToString();
+                                receiptDate = containerArray[4].ToString();
+                            }
+
+                        }
+                        catch (Exception ex)
+                        {
+                            LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                            throw;
+                        }
+             
+                    }
+                    if (statusReceipt != "REPRINT") //additional code for reprint by Yonathan 16/07/2024
+                    {
+                        s += "             -----------------------------------" + Environment.NewLine;
+                        s += "                          " + statusReceipt + Environment.NewLine;
+                        s += "             -----------------------------------" + Environment.NewLine;
+                    }
+                    //s += "             -----------------------------------" + Environment.NewLine;
+                    //s += "                          " + statusReceipt + Environment.NewLine;
+                    //s += "             -----------------------------------" + Environment.NewLine;
+                    if (statusReceipt == "REPRINT") //additional code for reprint by Yonathan 16/07/2024
+                    {
+                        s += "             Tgl Reprint  : " + DateTime.Now.ToString() + Environment.NewLine;
+                    }
                     s += "             Keterangan   : " + namatoko + Environment.NewLine +
                          "             No. Terima   : " + this.ReceiptNumber + Environment.NewLine +
-                         "             Tgl Terima   : " + DateTime.Now.ToString() + Environment.NewLine +
+                         "             Tgl Terima   : " + receiptDate + Environment.NewLine + //DateTime.Now.ToString() 
                          "             No. PO/TO    : " + this.PONumber + Environment.NewLine +
                         //   "Tgl PO       :" + "Tanggal PO" + Environment.NewLine + //Custom field
                         //  "Supplier     :" + "Supplier" + Environment.NewLine + //Custom Field
@@ -949,8 +1153,15 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                         //modif by Yonathan 18/10/2022
                         itemName = reader["ItemName"].ToString();
                         itemNumber = reader["ItemNumber"].ToString();
-                        qty = (Math.Truncate(Convert.ToDecimal(reader["QuantityReceivedNow"]) * 1000m) / 1000m);
 
+                        if (statusReceipt == "REPRINT")
+                        {
+                            qty = (Math.Truncate(Convert.ToDecimal(reader["QuantityReceived"]) * 1000m) / 1000m);
+                        }
+                        else
+                        {
+                            qty = (Math.Truncate(Convert.ToDecimal(reader["QuantityReceivedNow"]) * 1000m) / 1000m);
+                        }
                         //mod by Yonathan 25/07/2023 to prevent item 0 qty receive to appear on the receipt.
                         if (qty != 0)
                         {
@@ -1011,7 +1222,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
 
 
                             // Convert.ToInt32(reader["QuantityReceivedNow"]); disable by Yonathan 10/10/2022 because qty supports decimal
-                            totalQtyDec += (Math.Truncate(Convert.ToDecimal(reader["QuantityReceivedNow"]) * 1000m) / 1000m);
+                            totalQtyDec += qty; //(Math.Truncate(Convert.ToDecimal(reader["QuantityReceivedNow"]) * 1000m) / 1000m);
                             Offset = Offset + 13;
                         }
                         
@@ -1021,7 +1232,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                     s += "             -----------------------------------" + Environment.NewLine; // modif by Julius 14 07 2017
                     //s += "Total Qty    :".PadRight(27) + totalQty.ToString().PadLeft(7) + Environment.NewLine;
                     //s += "             Total Qty    :".PadRight(22) + totalQty.ToString().PadLeft(7) + Environment.NewLine; //disable by Yonathan to add support for decimal
-                    s += "             Total Qty    :".PadRight(22) + totalQtyDec.ToString().PadLeft(7) + Environment.NewLine; //newly modified by yonathan 10/10/2022
+                    s += "             Total Qty    :".PadRight(22) + totalQtyDec.ToString().PadLeft(15) + Environment.NewLine; //newly modified by yonathan 10/10/2022
                     //     s += "------------------------------------------------" + Environment.NewLine;
                     s += "             -----------------------------------" + Environment.NewLine; // modif by Julius 14 07 2017
                     s += Environment.NewLine + Environment.NewLine + Environment.NewLine;
@@ -1324,7 +1535,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
 
             }
             if (quantityTotal == 0)
-            {
+            { 
                 throw new Exception("There is no quantity to received, please click receive all");
             }
         }
@@ -1332,10 +1543,14 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
 
         private void btnCommit_Click(object sender, EventArgs e)
         {
-            //NEC comment line
-            //Cursor.Current = Cursors.WaitCursor;
-            //Begin Add line HMZ NEC to automatically posting product receive
             string tempDriverDetails;
+            /*LoadReceiptLinesFromDB();
+            //Begin add NEC hmz to manipulate PO Id with driver Details
+            if (this.prType == PRCountingType.PurchaseOrder)// || this.prType == PRCountingType.TransferIn)
+                tempDriverDetails = this.PONumber + "-" + txtDelivery.Text;
+            else
+                tempDriverDetails = this.PONumber;
+            */
             try
             {
                 //Begin add NEC
@@ -1378,7 +1593,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
 
                     // print here
                     // Begin add NEC Hmz to custom print
-                    string s = this.ReceiveDocumentFormat("Original");
+                    string s = this.ReceiveDocumentFormat("ORIGINAL");
 
                     PrintDocument p = new PrintDocument();
                     PrintDialog pd = new PrintDialog();
@@ -1414,7 +1629,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                     }
 
                     //add by Erwin 23 October 2019 print copy receipt
-                    string sCopy = this.ReceiveDocumentFormat("Copy");
+                    string sCopy = this.ReceiveDocumentFormat("COPY");
 
                     PrintDocument pCopy = new PrintDocument();
                     PrintDialog pdCopy = new PrintDialog();

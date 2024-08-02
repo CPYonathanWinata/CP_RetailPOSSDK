@@ -29,6 +29,7 @@ namespace APIAccess
         public static string priceGroup { get; set; }
         public static string lineDiscGroup { get; set; }
         public static string ppnValidation { get; set; }
+        public static string custBlocked { get; set; }
 
         public static List<string> itemToRemove { get; set; }
         public static List<string> itemToRemoveList = new List<string>();

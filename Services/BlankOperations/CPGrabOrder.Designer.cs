@@ -227,20 +227,20 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
             // 
             // OrderID
             // 
-            this.OrderID.HeaderText = "Order Number";
+            this.OrderID.HeaderText = "Nomor Order";
             this.OrderID.Name = "OrderID";
             this.OrderID.ReadOnly = true;
             this.OrderID.Width = 250;
             // 
             // state
             // 
-            this.state.HeaderText = "Driver State";
+            this.state.HeaderText = "Status";
             this.state.Name = "state";
             this.state.ReadOnly = true;
             // 
             // OrderTime
             // 
-            this.OrderTime.HeaderText = "Order Datetime";
+            this.OrderTime.HeaderText = "Tanggal Order";
             this.OrderTime.Name = "OrderTime";
             this.OrderTime.ReadOnly = true;
             this.OrderTime.Width = 160;
@@ -252,7 +252,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
             this.Details.ReadOnly = true;
             this.Details.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.Details.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.Details.Text = "Details";
+            this.Details.Text = "Detail Pesanan";
             this.Details.UseColumnTextForButtonValue = true;
             // 
             // tabpage2
