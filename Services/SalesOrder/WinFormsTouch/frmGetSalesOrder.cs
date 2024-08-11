@@ -63,6 +63,9 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
         //add by yonathan 21/06/2023
         private string invoiceId;
         private string isOpen;
+        //add by yonathan 21/06/2024
+        string isB2bCust = "0";
+
         /// <summary>
         /// Returns selected sales order id as string.
         /// </summary>
@@ -387,6 +390,27 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             if (dataModel.OrderList != null && e != null && e.FocusedRowHandle >= 0 && e.FocusedRowHandle < dataModel.OrderList.Rows.Count)
             {
                 GetSelectedRow();
+
+                //get customer classification type
+                ReadOnlyCollection<object> containerArray;
+                var custId = gridView1.GetRowCellValue(gridView1.GetFocusedDataSourceRowIndex(), "CUSTOMERACCOUNT");
+                if (SalesOrder.InternalApplication.TransactionServices.CheckConnection())
+                {
+                    try
+                    {
+                        containerArray = SalesOrder.InternalApplication.TransactionServices.InvokeExtension("getB2bRetailParam", custId);
+                        isB2bCust = containerArray[6].ToString();
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                        throw;
+                    }
+                }
+                
+                //
                 this.EnableButtons();
             }
         }
@@ -473,16 +497,31 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 enableInvoice = true;
 
                 //disable invoice & payment feature right now
-                //enableInvoice = false;
+                enableInvoice = true;
                 //enableReturn = false;
             }
             else if (this.selectedOrderDocumentStatus == SalesStatus.Invoiced)
             {
                 enableInvoice = false;
+                
+               
                 if (invoiceId != "" && isOpen == "false" )
-                { enableReturn = false; }
+                {
+                    enableReturn = false; 
+                }
                 else
-                { enableReturn = true; }//mod by Yonathan 13/06/2023 true because change function to payment invoice
+                {
+                    if (isB2bCust == "1")
+                    {
+                        enableReturn = true; //payment if canvas customer
+                    }
+                    else
+                    {
+                        enableReturn = false; //cannot payment if B2B
+                    }
+
+                    
+                }//mod by Yonathan 13/06/2023 true because change function to payment invoice
                 enablePickup = false;
 
                 //disable invoice & payment feature right now
@@ -591,24 +630,24 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 if (SalesOrderActions.ShowOrderDetails(cot, OrderDetailsSelection.ViewDetails))
                 {
                     //edit to check whether b2b or not
-                    string isB2bCust = "0";
+                    
                     ReadOnlyCollection<object> containerArray;
-                    if (SalesOrder.InternalApplication.TransactionServices.CheckConnection())
-                    {
-                        try
-                        {
-                            containerArray = SalesOrder.InternalApplication.TransactionServices.InvokeExtension("getB2bRetailParam", cot.Customer.CustomerId.ToString());
-                            isB2bCust = containerArray[3].ToString();
+                    //if (SalesOrder.InternalApplication.TransactionServices.CheckConnection())
+                    //{
+                    //    try
+                    //    {
+                    //        containerArray = SalesOrder.InternalApplication.TransactionServices.InvokeExtension("getB2bRetailParam", cot.Customer.CustomerId.ToString());
+                    //        isB2bCust = containerArray[3].ToString();
                           
                             
-                        }
-                        catch (Exception ex)
-                        {
-                            LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
-                            throw;
-                        }
-                    }
-                    if (isB2bCust == "1")
+                    //    }
+                    //    catch (Exception ex)
+                    //    {
+                    //        LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                    //        throw;
+                    //    }
+                    //}
+                    if (isB2bCust == "1" || isB2bCust == "2")
                     {
                         SetSelectedOrderAndClose(cot);
                     }
@@ -679,18 +718,17 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             //ReadOnlyCollection<object> containerArray = SalesOrder.InternalApplication.TransactionServices.Invoke("getSalesInvoicesBySalesId", this.SelectedSalesOrderId.ToString());
 
             //invoiceId = getInvoiceId(containerArray[3].ToString());
-            using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Do you want to use voucher for payment?", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
-			{
-            //using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Create and Post Payment Journal?", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
-			//{
-				LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
-                if (dialog.DialogResult == DialogResult.Yes)
-                {
-                    CP_frmPaymentInvoice invoicePayment = new CP_frmPaymentInvoice(SalesOrder.InternalApplication, this.SelectedSalesOrderId.ToString(), invoiceId, custId, this.selectedInvoiceAmount );
-                    invoicePayment.ShowDialog();
-                }
-                else if(dialog.DialogResult == DialogResult.No)
-                {
+            //using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Do you want to use voucher for payment?", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+            //{
+            
+            //    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+            //    if (dialog.DialogResult == DialogResult.Yes)
+            //    {
+            //        CP_frmPaymentInvoice invoicePayment = new CP_frmPaymentInvoice(SalesOrder.InternalApplication, this.SelectedSalesOrderId.ToString(), invoiceId, custId, this.selectedInvoiceAmount );
+            //        invoicePayment.ShowDialog();
+            //    }
+            //    else if(dialog.DialogResult == DialogResult.No)
+            //    {
                 //if (dialog.DialogResult == DialogResult.Yes)
                 //{
                     PostPayment(invoiceId, this.selectedInvoiceAmount, out journalNum);
@@ -698,10 +736,10 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                     {
                         SettlePayment(journalNum, invoiceId);
                     }
-                }
+            //    }
                     
-                //}
-            }
+            //    //}
+            //}
 
             
             RefreshGrid();

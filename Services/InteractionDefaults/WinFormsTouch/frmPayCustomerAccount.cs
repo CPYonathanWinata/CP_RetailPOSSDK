@@ -2493,7 +2493,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 					//    btnOk.Enabled = false;
 					//}
 					////// Combine the base directory with the "/extension/img" folder path 
-					//string imgFolderPath = System.IO.Path.Combine(baseDirectory, "Extensions", "img");
+					//string imgFolderPath = System.IO.Path.Combine(baseDirectory, "Extensions", "img");    
 
 
 					//PictureBox pictureQRIS = new PictureBox();                

@@ -696,7 +696,23 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 
                             if ((customer.CustomerId != null || customer.CustomerId == "") && transaction.SaleItems.Count != 0)
                             {
+                                if (customer.CustomerId != "")
+                                {
+                                    checkB2bCust(customer.CustomerId);
+                                    string isB2bCust = "";
+                                    
 
+                                    isB2bCust = APIAccess.APIAccessClass.isB2b;
+
+                                    if (isB2bCust == "1" || isB2bCust == "2")
+                                    {
+                                        using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Customer B2B atau Canvas tidak bisa mengakses menu ini", MessageBoxButtons.OK, MessageBoxIcon.Stop))
+                                        {
+                                            LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                                            return;
+                                        }
+                                    }
+                                }
 
                                 foreach (var lineItem in transaction.SaleItems)
                                 {
@@ -765,7 +781,24 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                             //if ( transaction.SaleItems.Count != 0)
                             {
                                  //check 
-                                 
+                                if (customer.CustomerId != "")
+                                {
+                                    checkB2bCust(customer.CustomerId);
+                                    string isB2bCust = "";
+
+
+                                    isB2bCust = APIAccess.APIAccessClass.isB2b;
+
+                                    if (isB2bCust == "1" || isB2bCust == "2")
+                                    {
+                                        using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Customer B2B atau Canvas tidak bisa mengakses menu ini", MessageBoxButtons.OK, MessageBoxIcon.Stop))
+                                        {
+                                            LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                                            return;
+                                        }
+                                    }
+                                }
+
                                 foreach(var lineItem in transaction.SaleItems)
                                 {
                                     
@@ -849,7 +882,23 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                             //if ( transaction.SaleItems.Count != 0)
                             {
                                 //check 
+                                if (customer.CustomerId != "")
+                                {
+                                    checkB2bCust(customer.CustomerId);
+                                    string isB2bCust = "";
 
+
+                                    isB2bCust = APIAccess.APIAccessClass.isB2b;
+
+                                    if (isB2bCust == "1" || isB2bCust == "2")
+                                    {
+                                        using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Customer B2B atau Canvas tidak bisa mengakses menu ini", MessageBoxButtons.OK, MessageBoxIcon.Stop))
+                                        {
+                                            LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                                            return;
+                                        }
+                                    }
+                                }
                                 foreach (var lineItem in transaction.SaleItems)
                                 {
 
@@ -1308,6 +1357,31 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 			}
 
 		}
+
+        private void checkB2bCust(string _custId)
+        {
+             
+                string isB2bCust = "";
+                if (Application.TransactionServices.CheckConnection())
+                {
+                    try
+                    {
+                        ReadOnlyCollection<object> containerArray = Application.TransactionServices.InvokeExtension("getB2bRetailParam", _custId);
+
+                        APIAccess.APIAccessClass.isB2b = containerArray[6].ToString();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                        throw;
+                    }
+                }
+
+                 
+
+           
+        }
 
         private bool checkDiscPayment(IPosTransaction posTransaction)
         {

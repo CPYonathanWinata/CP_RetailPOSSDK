@@ -119,7 +119,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 			table.Columns.Add("ItemName");
 			table.Columns.Add("Unit");
 			table.Columns.Add("QtySO");
-			table.Columns.Add("QtyRcv");
+			table.Columns.Add("QtyDO");
 
 			//// Loop through the SalesLine elements and extract the values of ItemId and SalesQty
 			//XmlNodeList salesLines = doc.GetElementsByTagName("SalesLine");
@@ -164,7 +164,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 			table.Columns.Add("ItemName");
 			table.Columns.Add("Unit");
 			table.Columns.Add("QtySO");
-			table.Columns.Add("QtyRcv");
+			table.Columns.Add("QtyDO");
 
 			
 			foreach (var salesLine in this.lineItems)
@@ -222,7 +222,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 		{
 			string valueDeliverNow = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
 			decimal resultValue;
-			if (dataGridView1.Columns[e.ColumnIndex].Name == "QtyRcv")
+			if (dataGridView1.Columns[e.ColumnIndex].Name == "QtyDO")
 			{
 				if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null && decimal.TryParse(valueDeliverNow, out resultValue))
 				{
@@ -322,21 +322,21 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 					foreach (DataGridViewRow row in dataGridView1.Rows)
 					{
                         
-						//if (row.Cells["QtyRcv"].Value == null)
-						if (row.Cells["QtyRcv"].Value == null || row.Cells["QtyRcv"].Value == DBNull.Value || String.IsNullOrWhiteSpace(row.Cells["QtyRcv"].Value.ToString())) 
+						//if (row.Cells["QtyDO"].Value == null)
+						if (row.Cells["QtyDO"].Value == null || row.Cells["QtyDO"].Value == DBNull.Value || String.IsNullOrWhiteSpace(row.Cells["QtyDO"].Value.ToString())) 
 						{
 							flagError = 2;
 							break;
 						}
 						else
 						{
-                            qtyReceive = Convert.ToDecimal(row.Cells["QtyRcv"].Value);
+                            qtyReceive = Convert.ToDecimal(row.Cells["QtyDO"].Value);
                             qtySO = Convert.ToDecimal(row.Cells["QtySO"].Value);
                             if (qtyReceive < 0)
                             {
                                 flagError = 6;
                             }
-                            //if (Convert.ToDecimal(row.Cells["QtyRcv"].Value) <= Convert.ToDecimal(row.Cells["QtySO"].Value))
+                            //if (Convert.ToDecimal(row.Cells["QtyDO"].Value) <= Convert.ToDecimal(row.Cells["QtySO"].Value))
                             else
                             {
                                 if (qtyReceive <= qtySO)
@@ -344,7 +344,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                                     // Get the ItemId, SalesQty, and DeliverNow values from the DataGridView row
                                     string itemId = row.Cells["ItemId"].Value.ToString();
                                     string itemName = row.Cells["ItemName"].Value.ToString();
-                                    string deliverNow = row.Cells["QtyRcv"].Value.ToString();
+                                    string deliverNow = row.Cells["QtyDO"].Value.ToString();
 
                                     //check if this is stocked item
                                     positiveStatus = checkPositiveStatus(itemId);
@@ -380,7 +380,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                                         availQtyStockSO = decimal.Parse(responseCheckStockSO.response_data, CultureInfo.InvariantCulture);
 
                                         availQty = availQtyStock + availQtyStockSO; //
-                                        remainQty = availQty - Convert.ToDecimal(row.Cells["QtyRcv"].Value);
+                                        remainQty = availQty - Convert.ToDecimal(row.Cells["QtyDO"].Value);
                                         if (remainQty < 0)
                                         {
                                             flagError = 5;
@@ -392,7 +392,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 
                                             XmlElement salesLine = xmlDoc.CreateElement("SalesLine");
                                             salesLine.SetAttribute("ItemId", itemId);
-                                            salesLine.SetAttribute("QtyRcv", deliverNow);
+                                            salesLine.SetAttribute("QtyDO", deliverNow);
                                             root.AppendChild(salesLine);
 
                                         }
@@ -401,7 +401,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                                     {
                                         XmlElement salesLine = xmlDoc.CreateElement("SalesLine");
                                         salesLine.SetAttribute("ItemId", itemId);
-                                        salesLine.SetAttribute("QtyRcv", deliverNow);
+                                        salesLine.SetAttribute("QtyDO", deliverNow);
                                         root.AppendChild(salesLine);
                                     }
                                 }
@@ -432,6 +432,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 							{
 								SalesOrder.InternalApplication.Services.Dialog.ShowMessage(56120, MessageBoxButtons.OK, MessageBoxIcon.Information);
 								//add to trigger
+                                /* disable adding to API
 								var packList = new List<APIParameter.parmRequestAddItemMultiple>();                                 
 								foreach (DataGridViewRow row in dataGridView1.Rows)
 								{
@@ -439,7 +440,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 									var pack = new APIParameter.parmRequestAddItemMultiple()
 									{
 										ITEMID = row.Cells["ItemId"].Value.ToString(),
-										QTY = (Convert.ToDecimal(row.Cells["QtyRcv"].Value) * -1).ToString().Replace(",", "."), //lines.QuantityOrdered.ToString(),
+										QTY = (Convert.ToDecimal(row.Cells["QtyDO"].Value) * -1).ToString().Replace(",", "."), //lines.QuantityOrdered.ToString(),
 										UNITID = row.Cells["Unit"].Value.ToString(),
 										DATAAREAID = SalesOrder.InternalApplication.Settings.Database.DataAreaID,
 										WAREHOUSE = ApplicationSettings.Terminal.InventLocationId,
@@ -452,6 +453,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 								}
 								urlAPI = APIClass.getURLAPIByFuncName(functionNameAPIAddItem);
 								string resultAPI = APIFunction.addItemMultiple(urlAPI, packList);
+                                 * */
 								//application.Services.Printing.PrintReceipt(Microsoft.Dynamics.Retail.Pos.Contracts.Services.FormType.SalesOrderReceipt, posTransaction, true);
 								SalesOrderActions.TryPrintPackSlip(LSRetailPosis.Transaction.SalesStatus.Delivered, salesID);
 							}
@@ -468,11 +470,11 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 					}
 					else if( flagError == 1)
 					{
-						SalesOrder.InternalApplication.Services.Dialog.ShowMessage("QtyRcv tidak boleh lebih besar dari QtySo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						SalesOrder.InternalApplication.Services.Dialog.ShowMessage("QtyDO tidak boleh lebih besar dari QtySo", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					}
 					else if(flagError == 2)
 					{
-						SalesOrder.InternalApplication.Services.Dialog.ShowMessage("Belum input QtyRcv.\nApabila tidak di-receive, ketik 0 pada QtyRcv", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						SalesOrder.InternalApplication.Services.Dialog.ShowMessage("Belum input QtyDO.\nApabila tidak di-receive, ketik 0 pada QtyDO", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					}
                     else if (flagError == 3 || flagError == 4 || flagError == 5)
                     {
@@ -484,7 +486,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                     }
                     else if (flagError == 6)
                     {
-                        SalesOrder.InternalApplication.Services.Dialog.ShowMessage("QtyRcv tidak boleh minus / negatif", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        SalesOrder.InternalApplication.Services.Dialog.ShowMessage("QtyDO tidak boleh minus / negatif", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
 				}
 			}

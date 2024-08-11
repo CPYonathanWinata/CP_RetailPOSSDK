@@ -333,8 +333,14 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 				AddItemTransaction(posTransaction); //temporarily disable for testing because not implemented yet.
 				//end added
 
-			}
+                
 
+			}
+            APIAccess.APIAccessClass.isB2b = null;
+            APIAccess.APIAccessClass.priceGroup = null;
+            APIAccess.APIAccessClass.lineDiscGroup = null;
+            APIAccess.APIAccessClass.ppnValidation = null;
+            APIAccess.APIAccessClass.custId = null;
 		 
 		}
 
