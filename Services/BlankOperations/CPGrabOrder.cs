@@ -413,14 +413,14 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                 driverState = grabMartList.Rows[e.RowIndex].Cells["state"].Value.ToString();
                 orderIdLong = grabMartList.Rows[e.RowIndex].Cells["OrderIDLong"].Value.ToString();
 
-                if (driverState == "DELIVERED")
-                {
-                    using (LSRetailPosis.POSProcesses.frmMessage dialog3 = new LSRetailPosis.POSProcesses.frmMessage("Pesanan ini tidak bisa diproses karena status pesanan telah DELIVERED dari sisi DRIVER", MessageBoxButtons.OK, MessageBoxIcon.Error))
-                    {
-                        LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog3);
-                        return;
-                    }
-                }
+                //if (driverState == "DELIVERED") //add by Yonathan because of delivered status 09082024
+                //{
+                //    using (LSRetailPosis.POSProcesses.frmMessage dialog3 = new LSRetailPosis.POSProcesses.frmMessage("Pesanan ini tidak bisa diproses karena status pesanan telah DELIVERED dari sisi DRIVER", MessageBoxButtons.OK, MessageBoxIcon.Error))
+                //    {
+                //        LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog3);
+                //        return;
+                //    }
+                //}
 
                 if (NextButtonClicked(out reasonMessage))
                 {

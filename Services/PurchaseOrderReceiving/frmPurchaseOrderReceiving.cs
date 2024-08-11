@@ -42,6 +42,8 @@ using System.Net;
 using System.Runtime.Serialization.Json;
 using System.ComponentModel.Composition;
 using Microsoft.Dynamics.Retail.Pos.Contracts;
+using System.Printing;
+using System.Management;
 
 namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
 {
@@ -60,6 +62,8 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
         private PRCountingType prType;
         private bool isMixedDeliveryMode = false;
         decimal quantityTotal;
+
+        string errorPrinter = "Tidak bisa melakukan print !!!\nSebelum hubungi Tim IT, pastikan :\n- Printer sudah on/menyala\n- Default Printer \"EPSON LX 310 ESC/P\"\n- Posisi kertas struk terpasang dengan benar\n- Semua kabel USB tidak kendor\n\nKemudian coba print ulang ";//dengan tekan tombol \"Reprint\"";
         //Begin add line NEC
         int Offset = 0;
         /// <summary>
@@ -182,6 +186,15 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             txtSearchBox.Text = "Search Item number or Description";
             txtSearchBox.ForeColor = Color.Gray;
             //end
+            if (btnReprint.Visible == true)
+            {
+                btnCheckRcv.Visible = false;
+            }
+            else
+            {
+                btnCheckRcv.Visible = true;
+            }
+
         }
 
         private void TranslateLabels()
@@ -482,33 +495,14 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             }
         }
         //add by Yonathan for reprint PO 09/07/2024
-        private void btnReprint_Click(object sender, EventArgs s)
+        /*private void btnReprint_Click(object sender, EventArgs s)
         {
             string tempDriverDetails;
-            LoadReceiptLinesFromDB();
-            ////Begin add NEC hmz to manipulate PO Id with driver Details
-            //if (this.prType == PRCountingType.PurchaseOrder)// || this.prType == PRCountingType.TransferIn)
-            //    tempDriverDetails = this.PONumber + "-" + txtDelivery.Text;
-            //else
-            //    tempDriverDetails = this.PONumber;
+            LoadReceiptLinesFromDB();         
 
             try
             {
-                ////Begin add NEC
-                //if (txtDelivery.Text == "")
-                //{
-                //    // Show commit failure message                  
-                //    throw new Exception("Please Fill the Delivery note number");
-                //}
-                ////check item qty
-                //this.checkQtyItem();
-                //End add NEC
-                //<CPPOTOCancel>
-                
-                //</CPPOTOCancel>
-                // Save lines to local database
-                //SaveReceipt();
-
+               
                 LoadReceiptLinesFromDB();
                 //Begin add NEC hmz to manipulate PO Id with driver Details
                 if (this.prType == PRCountingType.PurchaseOrder)// || this.prType == PRCountingType.TransferIn)
@@ -525,45 +519,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                 // Remove rows that are successfully submitted
                 List<DataRow> removeRows = new List<DataRow>();
 
-                // Success commmit
-                 
-                 
-                    //string sPrint = this.ReceiveDocumentFormat("REPRINT");
-
-                    //PrintDocument p = new PrintDocument();
-                    //PrintDialog pd = new PrintDialog();
-                    //PaperSize psize = new PaperSize("Custom", 100, Offset + 236);
-                    //Margins margins = new Margins(0, 0, 0, 0);
-
-                    //Font normalFont = new Font("Courier New", 8);
-                    //Font biggerFont = new Font("Courier New", 12);
-
-                    //pd.Document = p;
-                    //pd.Document.DefaultPageSettings.PaperSize = psize;
-                    //pd.Document.DefaultPageSettings.Margins = margins;
-                    //p.DefaultPageSettings.PaperSize.Width = 600;
-                    //p.PrintPage += delegate(object sender1, PrintPageEventArgs e1)
-                    //{
-                       
-                    //    e1.Graphics.DrawString(sPrint, normalFont, new SolidBrush(Color.Black), new RectangleF(p.DefaultPageSettings.PrintableArea.Left, 0, p.DefaultPageSettings.PrintableArea.Width, p.DefaultPageSettings.PrintableArea.Height));
-
-                    //};
-                    //try
-                    //{
-                    //    //Edit by Erwin 23 October 2019
-                    //    //for (int i = 1; i <= 2; i++)
-                    //    //{
-                    //    //    p.Print();
-                    //    //}
-
-                    //    p.Print();
-
-                    //    //End Edit by Erwin 23 October 2019
-                    //}
-                    //catch (Exception ex)
-                    //{
-                    //    throw new Exception("Exception Occured While Printing", ex);
-                    //}
+               
                 string sHeader = "     -------------- " + Environment.NewLine +
                                    "         REPRINT " + Environment.NewLine +
                                    "     --------------" + Environment.NewLine;
@@ -589,12 +545,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                     SolidBrush brush = new SolidBrush(Color.Black);
                     float leftMargin = p.DefaultPageSettings.PrintableArea.Left;
                     float yPos = 0;
-
-                    //string sHeader ="     -------------- " + Environment.NewLine +
-                    //                "         REPRINT " + Environment.NewLine +
-                    //                "     --------------" + Environment.NewLine;
-                    //Offset = Offset + 260;
-                    // Print the header with a bigger font
+ 
                     string[] headerLines = sHeader.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
                     foreach (string line in headerLines)
                     {
@@ -602,8 +553,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                         yPos += normalFont.GetHeight(e1.Graphics);
                     }
                     
-                    // Print the rest of the document with a normal font
-                    //string sPrint = this.ReceiveDocumentFormat("REPRINT");
+                   
                     string[] printLines = sPrint.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
                     foreach (string line in printLines)
                     {
@@ -621,20 +571,268 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                 {
                     throw new Exception("Exception Occured While Printing", ex);
                 }
-
-                  
-
-
-                    
-                 
-
-                
+                   
             }
             finally
             {
                 Cursor.Current = Cursors.Default;
             }
         }//end
+         * */
+
+
+        private void btnCheckRcv_Click(object sender, EventArgs s)
+        {
+            string tempDriverDetails;
+            
+            if (txtDelivery.Text == "")
+            {
+                // Show commit failure message                  
+                throw new Exception("Please Fill the Delivery note number");
+            }
+            //check item qty
+            this.checkQtyItem();
+            //End add NEC
+            //<CPPOTOCancel>
+            if (this.prType == PRCountingType.TransferIn)
+            {
+                this.checkQtyReceived();
+            }
+            Offset = 0;
+            string itemName = "";
+            try
+            {
+               
+                
+                // Remove rows that are successfully submitted
+                List<DataRow> removeRows = new List<DataRow>();
+
+                string sHeader =   "   ----------------" + Environment.NewLine +
+                                   "     CEK  RECEIVE  " + Environment.NewLine +
+                                   "   ----------------" + Environment.NewLine;
+                int a = 34;
+                int b = 10;
+                string sPrint = "";
+                //sPrint += "             -----------------------------------" + Environment.NewLine;
+                sPrint += "        SKU      Nama Item".PadRight(a) + "   Terima".PadLeft(b) + Environment.NewLine;
+                sPrint += "        ---------------------------------------" + Environment.NewLine;
+                //loop each itemName
+                foreach (DataRow row in entryTable.Rows)
+                {
+                    //int unitDecimals = unitOfMeasureData.GetUnitDecimals(line.PurchUnit);
+                    if (row.Field<string>(DataAccessConstants.ItemName).Length > 22)
+                    {
+                        itemName = row.Field<string>(DataAccessConstants.ItemName).Substring(0,22).PadRight(24);
+                    }
+                    else
+                    {
+                        itemName = row.Field<string>(DataAccessConstants.ItemName).PadRight(24);
+                    }
+                    
+                    
+                    sPrint += "        " + row.Field<string>(DataAccessConstants.ItemNumber) + "-" + itemName + PurchaseOrderReceiving.InternalApplication.Services.Rounding.Round(row.Field<decimal>(DataAccessConstants.QuantityReceivedNow),3) + Environment.NewLine; 
+                }
+                
+                //
+
+                sPrint += "        ---------------------------------------" + Environment.NewLine;
+                sPrint += "        JIKA SUDAH BENAR, TEKAN TOMBOL COMMIT!" + Environment.NewLine;
+                Offset += 136;
+
+                //this.ReceiveDocumentFormat("PREVIEW");
+
+                PrintDocument p = new PrintDocument();
+                PrintDialog pd = new PrintDialog();
+                PaperSize psize = new PaperSize("Custom", 100, Offset + 236);
+                Margins margins = new Margins(0, 0, 0, 0);
+
+                Font normalFont = new Font("Courier New", 8);
+                Font biggerFont = new Font("Courier New", 20);
+
+                pd.Document = p;
+                pd.Document.DefaultPageSettings.PaperSize = psize;
+                pd.Document.DefaultPageSettings.Margins = margins;
+                p.DefaultPageSettings.PaperSize.Width = 600;
+
+                bool isPrinterOffline = checkPrinterStatus(p);                
+
+                
+
+                if (isPrinterOffline == false)
+                {
+                    p.PrintPage += delegate(object sender1, PrintPageEventArgs e1)
+                    {
+                        SolidBrush brush = new SolidBrush(Color.Black);
+                        float leftMargin = p.DefaultPageSettings.PrintableArea.Left;
+                        float yPos = 0;
+
+                        string[] headerLines = sHeader.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+                        foreach (string line in headerLines)
+                        {
+                            e1.Graphics.DrawString(line, biggerFont, brush, leftMargin, yPos);
+                            yPos += normalFont.GetHeight(e1.Graphics);
+                        }
+
+                        string[] printLines = sPrint.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+                        foreach (string line in printLines)
+                        {
+                            e1.Graphics.DrawString(line, normalFont, brush, leftMargin, yPos);
+                            yPos += normalFont.GetHeight(e1.Graphics);
+                        }
+                    };
+
+                    try
+                    {
+                        p.Print();
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Exception Occurred While Printing", ex);
+                    }
+                }
+                else
+                {
+                    using (frmMessage frm = new frmMessage(errorPrinter, MessageBoxButtons.OK, MessageBoxIcon.Error))
+                    {
+                        POSFormsManager.ShowPOSForm(frm);
+                    }
+                }
+                
+
+            }
+            finally
+            {
+                Cursor.Current = Cursors.Default;
+            }
+        }
+
+        private void btnReprint_Click(object sender, EventArgs s)
+        {
+            string tempDriverDetails;
+            LoadReceiptLinesFromDB();
+            Offset = 0;
+            
+            try
+            {
+                LoadReceiptLinesFromDB();
+                //Begin add NEC hmz to manipulate PO Id with driver Details
+                if (this.prType == PRCountingType.PurchaseOrder)// || this.prType == PRCountingType.TransferIn)
+                    tempDriverDetails = this.PONumber + "-" + txtDelivery.Text;
+                else
+                    tempDriverDetails = this.PONumber;
+                //End add NEC hmz
+
+                // Commit receipt to AX via webservice
+                // Begin modify line NEC - to pass tempDriverDetails
+                //IPRDocument prDoc = PurchaseOrderReceiving.InternalApplication.Services.StoreInventoryServices.CommitOrderReceipt(tempDriverDetails, this.ReceiptNumber, this.prType);
+
+                tempDriverDetails = this.PONumber;
+                // Remove rows that are successfully submitted
+                List<DataRow> removeRows = new List<DataRow>();
+
+                string sHeader =   "     -------------- " + Environment.NewLine +
+                                   "         REPRINT " + Environment.NewLine +
+                                   "     --------------" + Environment.NewLine;
+
+                string sPrint = this.ReceiveDocumentFormat("REPRINT");
+
+                PrintDocument p = new PrintDocument();
+                PrintDialog pd = new PrintDialog();
+                PaperSize psize = new PaperSize("Custom", 100, Offset + 236);
+                Margins margins = new Margins(0, 0, 0, 0);
+
+                Font normalFont = new Font("Courier New", 8);
+                Font biggerFont = new Font("Courier New", 20);
+
+                pd.Document = p;
+                pd.Document.DefaultPageSettings.PaperSize = psize;
+                pd.Document.DefaultPageSettings.Margins = margins;
+                p.DefaultPageSettings.PaperSize.Width = 600;
+
+                bool isPrinterOffline = checkPrinterStatus(p);                
+
+                
+
+                if (isPrinterOffline == false)
+                {
+                    p.PrintPage += delegate(object sender1, PrintPageEventArgs e1)
+                    {
+                        SolidBrush brush = new SolidBrush(Color.Black);
+                        float leftMargin = p.DefaultPageSettings.PrintableArea.Left;
+                        float yPos = 0;
+
+                        string[] headerLines = sHeader.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+                        foreach (string line in headerLines)
+                        {
+                            e1.Graphics.DrawString(line, biggerFont, brush, leftMargin, yPos);
+                            yPos += normalFont.GetHeight(e1.Graphics);
+                        }
+
+                        string[] printLines = sPrint.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+                        foreach (string line in printLines)
+                        {
+                            e1.Graphics.DrawString(line, normalFont, brush, leftMargin, yPos);
+                            yPos += normalFont.GetHeight(e1.Graphics);
+                        }
+                    };
+
+                    try
+                    {
+                        p.Print();
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Exception Occurred While Printing", ex);
+                    }
+                }
+                else
+                {
+                    using (frmMessage frm = new frmMessage(errorPrinter, MessageBoxButtons.OK, MessageBoxIcon.Error))
+                    {
+                        POSFormsManager.ShowPOSForm(frm);
+                    }
+                }
+                
+
+            }
+            finally
+            {
+                Cursor.Current = Cursors.Default;
+            }
+        }
+
+        private bool checkPrinterStatus(PrintDocument p)
+        {
+            string printerName = p.PrinterSettings.PrinterName;
+            bool isPrinterOffline = false;
+            ManagementObjectSearcher searcher = new
+            ManagementObjectSearcher(string.Format("SELECT * FROM Win32_Printer WHERE Name LIKE '%{0}'", printerName));
+
+            foreach (ManagementObject printer in searcher.Get())
+            {
+                printerName = p.PrinterSettings.PrinterName;
+                if (printerName.Equals(printerName))
+                {
+                    Console.WriteLine("Printer = " + printer["Name"]);
+                    if (printer["WorkOffline"].ToString().ToLower().Equals("true"))
+                    {
+                        // printer is offline by user
+                        //MessageBox.Show("Printer is offline or not available.");
+                        isPrinterOffline = true;
+
+                    }
+                    else
+                    {
+                        // printer is not offline
+                        //MessageBox.Show("Printer is is connected.");
+                        isPrinterOffline = false;
+
+                    }
+                }
+            }
+
+            return isPrinterOffline;
+        }
 
         private void btnSave_Click(object sender, EventArgs s)
         {
@@ -1604,58 +1802,73 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
                     pd.Document.DefaultPageSettings.PaperSize = psize;
                     pd.Document.DefaultPageSettings.Margins = margins;
                     p.DefaultPageSettings.PaperSize.Width = 600;
-                    p.PrintPage += delegate(object sender1, PrintPageEventArgs e1)
-                    {
-                        //e1.Graphics.DrawString(s, new Font("Courier New", 9), new SolidBrush(Color.Black), new RectangleF(p.DefaultPageSettings.PrintableArea.Left + 100, 0, p.DefaultPageSettings.PrintableArea.Width, p.DefaultPageSettings.PrintableArea.Height));
-                        //modif by Julius 14 07 2017
-                        e1.Graphics.DrawString(s, new Font("Courier New", 8), new SolidBrush(Color.Black), new RectangleF(p.DefaultPageSettings.PrintableArea.Left, 0, p.DefaultPageSettings.PrintableArea.Width, p.DefaultPageSettings.PrintableArea.Height));
 
-                    };
-                    try
+                    //add by Yonathan to CHeck whether the printer is online 06082024
+                    bool isPrinterOffline = checkPrinterStatus(p);
+                    if (isPrinterOffline == false)
                     {
-                        //Edit by Erwin 23 October 2019
-                        //for (int i = 1; i <= 2; i++)
-                        //{
-                        //    p.Print();
-                        //}
-                       
-                        p.Print();
+                        p.PrintPage += delegate(object sender1, PrintPageEventArgs e1)
+                        {
+                            //e1.Graphics.DrawString(s, new Font("Courier New", 9), new SolidBrush(Color.Black), new RectangleF(p.DefaultPageSettings.PrintableArea.Left + 100, 0, p.DefaultPageSettings.PrintableArea.Width, p.DefaultPageSettings.PrintableArea.Height));
+                            //modif by Julius 14 07 2017
+                            e1.Graphics.DrawString(s, new Font("Courier New", 8), new SolidBrush(Color.Black), new RectangleF(p.DefaultPageSettings.PrintableArea.Left, 0, p.DefaultPageSettings.PrintableArea.Width, p.DefaultPageSettings.PrintableArea.Height));
 
-                        //End Edit by Erwin 23 October 2019
+                        };
+                        try
+                        {
+                            //Edit by Erwin 23 October 2019
+                            //for (int i = 1; i <= 2; i++)
+                            //{
+                            //    p.Print();
+                            //}
+
+                            p.Print();
+
+                            //End Edit by Erwin 23 October 2019
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new Exception("Exception Occured While Printing", ex);
+                        }
+
+                        //add by Erwin 23 October 2019 print copy receipt
+                        string sCopy = this.ReceiveDocumentFormat("COPY");
+
+                        PrintDocument pCopy = new PrintDocument();
+                        PrintDialog pdCopy = new PrintDialog();
+                        PaperSize psizeCopy = new PaperSize("Custom", 100, Offset + 236);
+                        Margins marginsCopy = new Margins(0, 0, 0, 0);
+
+                        pdCopy.Document = pCopy;
+                        pdCopy.Document.DefaultPageSettings.PaperSize = psizeCopy;
+                        pdCopy.Document.DefaultPageSettings.Margins = marginsCopy;
+                        pCopy.DefaultPageSettings.PaperSize.Width = 600;
+                        pCopy.PrintPage += delegate(object sender1, PrintPageEventArgs e1)
+                        {
+                            //e1.Graphics.DrawString(s, new Font("Courier New", 9), new SolidBrush(Color.Black), new RectangleF(p.DefaultPageSettings.PrintableArea.Left + 100, 0, p.DefaultPageSettings.PrintableArea.Width, p.DefaultPageSettings.PrintableArea.Height));
+                            //modif by Julius 14 07 2017
+                            e1.Graphics.DrawString(sCopy, new Font("Courier New", 8), new SolidBrush(Color.Black), new RectangleF(pCopy.DefaultPageSettings.PrintableArea.Left, 0, pCopy.DefaultPageSettings.PrintableArea.Width, pCopy.DefaultPageSettings.PrintableArea.Height));
+
+                        };
+                        try
+                        {
+
+                            pCopy.Print();
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new Exception("Exception Occured While Printing", ex);
+                        }
+                    }                    
+                    else
+                    {
+                        using (frmMessage frm = new frmMessage(errorPrinter, MessageBoxButtons.OK, MessageBoxIcon.Error))
+                        {
+                            POSFormsManager.ShowPOSForm(frm);
+                        }
                     }
-                    catch (Exception ex)
-                    {
-                        throw new Exception("Exception Occured While Printing", ex);
-                    }
 
-                    //add by Erwin 23 October 2019 print copy receipt
-                    string sCopy = this.ReceiveDocumentFormat("COPY");
-
-                    PrintDocument pCopy = new PrintDocument();
-                    PrintDialog pdCopy = new PrintDialog();
-                    PaperSize psizeCopy = new PaperSize("Custom", 100, Offset + 236);
-                    Margins marginsCopy = new Margins(0, 0, 0, 0);
-
-                    pdCopy.Document = pCopy;
-                    pdCopy.Document.DefaultPageSettings.PaperSize = psizeCopy;
-                    pdCopy.Document.DefaultPageSettings.Margins = marginsCopy;
-                    pCopy.DefaultPageSettings.PaperSize.Width = 600;
-                    pCopy.PrintPage += delegate(object sender1, PrintPageEventArgs e1)
-                    {
-                        //e1.Graphics.DrawString(s, new Font("Courier New", 9), new SolidBrush(Color.Black), new RectangleF(p.DefaultPageSettings.PrintableArea.Left + 100, 0, p.DefaultPageSettings.PrintableArea.Width, p.DefaultPageSettings.PrintableArea.Height));
-                        //modif by Julius 14 07 2017
-                        e1.Graphics.DrawString(sCopy, new Font("Courier New", 8), new SolidBrush(Color.Black), new RectangleF(pCopy.DefaultPageSettings.PrintableArea.Left, 0, pCopy.DefaultPageSettings.PrintableArea.Width, pCopy.DefaultPageSettings.PrintableArea.Height));
-
-                    };
-                    try
-                    {
-
-                        pCopy.Print();
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception("Exception Occured While Printing", ex);
-                    }
+                   
 
                     //END add by Erwin 23 October 2019 print copy receipt
 

@@ -416,6 +416,7 @@ namespace Microsoft.Dynamics.Retail.Pos.ItemTriggers
         private bool checkTaxTable(string storeId, string dataAreaId, string itemId)
         {
             SqlConnection connectionStore = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+            bool result = false;
             //CHECK THE TAX TABLE DATA
             try
             {
@@ -443,12 +444,12 @@ namespace Microsoft.Dynamics.Retail.Pos.ItemTriggers
                             {
                                 LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
 
-                                return false;
+                                result= false;
                             }
                         }
                         else
                         {
-                            return true;
+                            result= true;
                         }
                         
 
@@ -497,12 +498,12 @@ namespace Microsoft.Dynamics.Retail.Pos.ItemTriggers
                             {
                                 LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
 
-                                return false;
+                                result=  false;
                             }
                         }
                         else
                         {
-                            return true;
+                            result=  true;
                         }
 
 
@@ -521,6 +522,7 @@ namespace Microsoft.Dynamics.Retail.Pos.ItemTriggers
                     connectionStore.Close();
                 }
             }
+            return result;
 
         }
 

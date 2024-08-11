@@ -79,6 +79,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.btnRefresh = new LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx();
             this.btnSave = new LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx();
             this.btnReprint = new LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx();
+            this.btnCheckRcv = new LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx();
             this.btnEdit = new LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx();
             this.btnCommit = new LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx();
             this.btnClose = new LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx();
@@ -513,6 +514,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.tablePanelSideButtons.Controls.Add(this.btnRefresh, 0, 1);
             this.tablePanelSideButtons.Controls.Add(this.btnSave, 0, 2);
             this.tablePanelSideButtons.Controls.Add(this.btnReprint, 0, 3);
+            this.tablePanelSideButtons.Controls.Add(this.btnCheckRcv, 0, 4);
             this.tablePanelSideButtons.Controls.Add(this.btnEdit, 0, 5);
             this.tablePanelSideButtons.Controls.Add(this.btnCommit, 0, 6);
             this.tablePanelSideButtons.Controls.Add(this.btnClose, 0, 8);
@@ -586,6 +588,23 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.btnReprint.Tag = "BtnNormal";
             this.btnReprint.Text = "Reprint";
             this.btnReprint.Click += new System.EventHandler(this.btnReprint_Click);
+            // 
+            // btnCheckRcv
+            // 
+            this.btnCheckRcv.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCheckRcv.Appearance.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.btnCheckRcv.Appearance.Options.UseFont = true;
+            this.btnCheckRcv.Appearance.Options.UseTextOptions = true;
+            this.btnCheckRcv.Appearance.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
+            this.btnCheckRcv.Location = new System.Drawing.Point(3, 228);
+            this.btnCheckRcv.Name = "btnCheckRcv";
+            this.btnCheckRcv.Size = new System.Drawing.Size(86, 78);
+            this.btnCheckRcv.TabIndex = 12;
+            this.btnCheckRcv.Tag = "BtnNormal";
+            this.btnCheckRcv.Text = "Cek Receive";
+            this.btnCheckRcv.Click += new System.EventHandler(this.btnCheckRcv_Click);
             // 
             // btnEdit
             // 
@@ -787,6 +806,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
 
         //add by Yonathan 09/07/2024
         private LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx btnReprint;
+        private LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx btnCheckRcv;
         //end
         private LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx btnUom;
         private LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx btnEdit;
