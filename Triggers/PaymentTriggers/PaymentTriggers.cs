@@ -139,7 +139,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
 
         public void PrePayment(IPreTriggerResult preTriggerResult, IPosTransaction posTransaction, object posOperation, string tenderId)
         {
-            string messageBoxString;
+            string messageBoxString = "";
 
             //add by Yonathan 13/05/2024 to check B2B Cust cannot pay unless creat a customer order first
             if ((APIAccess.APIAccessClass.isB2b == "1" || APIAccess.APIAccessClass.isB2b == "2") && posTransaction.ToString() == "LSRetailPosis.Transaction.RetailTransaction")
