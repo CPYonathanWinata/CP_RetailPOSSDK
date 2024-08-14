@@ -392,7 +392,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 
                                             XmlElement salesLine = xmlDoc.CreateElement("SalesLine");
                                             salesLine.SetAttribute("ItemId", itemId);
-                                            salesLine.SetAttribute("QtyDO", deliverNow);
+                                            salesLine.SetAttribute("QtyRcv", deliverNow);
                                             root.AppendChild(salesLine);
 
                                         }
@@ -401,7 +401,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                                     {
                                         XmlElement salesLine = xmlDoc.CreateElement("SalesLine");
                                         salesLine.SetAttribute("ItemId", itemId);
-                                        salesLine.SetAttribute("QtyDO", deliverNow);
+                                        salesLine.SetAttribute("QtyRcv", deliverNow);
                                         root.AppendChild(salesLine);
                                     }
                                 }
