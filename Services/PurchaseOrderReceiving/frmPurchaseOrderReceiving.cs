@@ -189,6 +189,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             if (btnReprint.Visible == true)
             {
                 btnCheckRcv.Visible = false;
+                btnReceiveAll.Visible = false;
             }
             else
             {

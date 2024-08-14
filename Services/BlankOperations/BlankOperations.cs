@@ -602,7 +602,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 					{
 
                         bool isCartEmpty = true;
-                        bool isIntegrated = false;
+                        bool isIntegrated = false; 
 						//Validate must choose customer before proceed
 						if (posTransaction.ToString() == "LSRetailPosis.Transaction.RetailTransaction")
 						{
@@ -610,8 +610,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                             RetailTransaction transaction = posTransaction as RetailTransaction;
 
                              
-                            string tenderId = "19"; //for DEV 
-                            //string tenderId = "16"; //for PROD
+                            //string tenderId = "19"; //for DEV 
+                            string tenderId = "16"; //for PROD
                             if (!validateCustomer(posTransaction, tenderId))
                             {
                                 using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Please Choose Correct Customer", MessageBoxButtons.OK, MessageBoxIcon.Stop))
