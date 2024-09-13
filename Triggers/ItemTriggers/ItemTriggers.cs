@@ -226,7 +226,8 @@ namespace Microsoft.Dynamics.Retail.Pos.ItemTriggers
                     }
                     else
                     {
-                        if (taxGroupId != saleItems.TaxGroupId)
+                        //if (taxGroupId != saleItems.TaxGroupId)
+                        if(!taxGroupId.Equals(saleItems.TaxGroupId, StringComparison.OrdinalIgnoreCase))
                         {
                             using (frmMessage dialog = new frmMessage(string.Format("Item '{0}' memiliki TaxGroup '{1}'.\nTidak boleh add item dengan TaxGroup selain '{2}'", saleItems.ItemId, saleItems.TaxGroupId, taxGroupId), MessageBoxButtons.OK, MessageBoxIcon.Error))
                             {

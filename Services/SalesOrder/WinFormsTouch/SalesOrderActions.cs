@@ -883,6 +883,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                         transaction.OperationCancelled = true;
 
                     }
+                        /* //this is not needed
                     else
                     {
                         //if not, then only save the changes
@@ -898,7 +899,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                             SalesOrder.InternalApplication.Services.Dialog.ShowMessage("Sales order updated", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                         transaction.OperationCancelled = true;
-                    }
+                    }*/
 
                     //// Update the editing mode of the order.
                     //UpdateCustomerOrderMode(cot, selectionMode);

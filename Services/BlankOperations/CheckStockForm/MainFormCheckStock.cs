@@ -88,6 +88,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CheckStockForm
         {
             string itemIdMulti = "";
             string siteId = "";
+            string qtyMulti = "";
 
             if (dataGridView1.Rows.Count == 0)
             {
@@ -106,6 +107,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CheckStockForm
 
                         // Add the SKU to the itemIdMulti string with a semicolon separator
                         itemIdMulti += sku + ";";
+                        qtyMulti += "0" + ";";
                     }
                 }
 
@@ -113,13 +115,14 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CheckStockForm
                 if (!string.IsNullOrEmpty(itemIdMulti))
                 {
                     itemIdMulti = itemIdMulti.TrimEnd(';');
+                    qtyMulti = qtyMulti.TrimEnd(';');
                 }
 
                 // Now, itemIdMulti contains all SKUs separated by semicolons
                 // You can use itemIdMulti as needed (e.g., display, process, etc.)
                 //MessageBox.Show(itemIdMulti);
                 getSiteWH(out  siteId);
-                checkStockItem(itemIdMulti, siteId);
+                checkStockItem(itemIdMulti, qtyMulti, siteId);
             }
 
 
@@ -179,7 +182,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CheckStockForm
 
         }
 
-        private void checkStockItem(string _itemIdMulti, string _siteId)
+        private void checkStockItem(string _itemIdMulti, string _qtyMulti, string _siteId)
         {
             string functionNameAX = "GetStockAX%"; // "GetStockAXPFMPOC"; //change to GetStockAX
             string functionNameAPI = "GetItemAPI";
@@ -204,7 +207,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CheckStockForm
 
                     if (statusTrans == true)
                     {
-                        var result = apiFunction.checkStockOnHandMulti(application, urlRTS, application.Settings.Database.DataAreaID, _siteId, ApplicationSettings.Terminal.InventLocationId, _itemIdMulti, "", "", "");
+                        var result = apiFunction.checkStockOnHandMulti(application, urlRTS, application.Settings.Database.DataAreaID, _siteId, ApplicationSettings.Terminal.InventLocationId, _itemIdMulti, "", "", "", _qtyMulti, posTransaction.StoreId+"-FORMCHECKSTOCK"); //add 2 new parameter by Yonathan 11092024
+                      //var result = apiFunction.checkStockOnHandMulti(Application, urlRTS, Application.Settings.Database.DataAreaID, siteId, ApplicationSettings.Terminal.InventLocationId, itemIdMulti, "", "", configIdMulti, quantityItems, transaction.TransactionId);
                         xmlResponse = result[3].ToString();
 
                         XmlDocument xmlDoc = new XmlDocument();

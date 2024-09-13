@@ -82,6 +82,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
         //decimal totalDibebaskan = 0; //declare variable to store amount
         decimal amountAmbilTunai = 0; //declare ambilTunai variable
         decimal amountAdmFee = 0;//add adm fee Yonathan 13/06/2024 //CPIADMFEE
+        string invoiceId = ""; //add for invoice id Yonathan 10092024
         #endregion
 
         #endregion
@@ -197,7 +198,13 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
 
                                 return cot.OrderId;
                             }*/
-                    
+                    //add by Yonathan 10092024
+                    if ((cot = theTransaction as CustomerOrderTransaction) != null)
+                    {
+                        invoiceId = getInvoiceId(cot.OrderId);
+                    }
+
+                    //end
                       
                      
                     switch (itemInfo.Variable.ToUpperInvariant().Replace(" ", string.Empty))
@@ -570,6 +577,56 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                             }
                             return string.Empty;
                             //end
+                        //add by yonathan to invclude invoiceid 10092024
+                        case "LABELINVOICEID":
+                            
+                            if ((cot = theTransaction as CustomerOrderTransaction) != null)
+                            {
+                                //string invoiceId = "";
+                                
+                                if (string.IsNullOrWhiteSpace(invoiceId))
+                                {
+                                    return string.Empty;
+                                }
+                                else
+                                {
+                                    return "Invoice Id";
+                                    
+                                }
+                            }
+                            return string.Empty;
+
+                        case "TEXTINVOICEID":
+
+                            if ((cot = theTransaction as CustomerOrderTransaction) != null)
+                            {
+                                 
+                                if (string.IsNullOrWhiteSpace(invoiceId))
+                                {
+                                    return string.Empty;
+                                }
+                                else
+                                {
+                                    return invoiceId; 
+                                }
+                            }
+                            return string.Empty;
+                        case "TEXTINFO1":
+
+                            if ((cot = theTransaction as CustomerOrderTransaction) != null)
+                            {
+
+                                if (string.IsNullOrWhiteSpace(invoiceId))
+                                {
+                                    return "BUKAN STRUK INVOICE";
+                                }
+                                else
+                                {
+                                    return string.Empty;
+                                }
+                            }
+                            return string.Empty;
+                            //end
                         case "TOTALSHIPPIINGCHARGES":
                         case "SHIPPINGCHARGE":
                             if ((cot = theTransaction as CustomerOrderTransaction) != null)
@@ -935,6 +992,54 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
             }
 
             return string.Empty;
+        }
+
+        private string getInvoiceId(string _salesId)
+        {
+            SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+            string invoiceId = "";
+            try
+            {
+                string queryString = @"SELECT INVOICECOMMENT,SALESORDERID,RECEIPTID FROM [ax].[RETAILTRANSACTIONTABLE]  where SALESORDERID = '"+_salesId+"'";
+                //string queryString = @"SELECT ITEMID,POSITIVESTATUS,DATAAREAID FROM ax.CPITEMONHANDSTATUS where ITEMID=@ITEMID";
+
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+
+                    //command.Parameters.AddWithValue("@SALESID", _salesId);
+
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+
+                                invoiceId = reader.GetString(0);
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            catch (Exception ex)
+            {
+                //LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+
+                }
+            }
+
+            return invoiceId;
         }
 
         private string checkDiscPayment(string infocodeId)

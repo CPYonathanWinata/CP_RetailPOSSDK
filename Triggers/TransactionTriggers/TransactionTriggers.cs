@@ -306,7 +306,7 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 		public void PostEndTransaction(IPosTransaction posTransaction)
 		{
 			LSRetailPosis.ApplicationLog.Log("TransactionTriggers.PostEndTransaction", "When concluding the transaction, after printing and saving", LSRetailPosis.LogTraceLevel.Trace);
-
+            bool foundGiftCardPayment = false; //add by Yoanthan 10092024
 			if (posTransaction.ToString() == "LSRetailPosis.Transaction.RetailTransaction")
 			{
 
@@ -333,6 +333,23 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 				AddItemTransaction(posTransaction); //temporarily disable for testing because not implemented yet.
 				//end added
 
+                //add by yonathan to update receiptid on giftcard 10092024
+                RetailTransaction retail = posTransaction as RetailTransaction;
+                foreach (var tenderLines in retail.TenderLines)
+                {
+                    if(tenderLines.ToString() == "LSRetailPosis.Transaction.Line.TenderItem.GiftCertificateTenderLineItem")
+                    {
+                        foundGiftCardPayment = true;
+                    }
+                    
+                }
+                //[LSRetailPosis.Transaction.Line.TenderItem.GiftCertificateTenderLineItem] = {LSRetailPosis.Transaction.Line.TenderItem.GiftCertificateTenderLineItem}
+                if(foundGiftCardPayment == true)
+                {
+                    UpdateGiftCardReceiptId(posTransaction);
+                }
+                
+                //end
                 
 
 			}
@@ -343,6 +360,35 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
             APIAccess.APIAccessClass.custId = null;
 		 
 		}
+
+        private void UpdateGiftCardReceiptId(IPosTransaction posTransaction)
+        {
+            
+            if (Application.TransactionServices.CheckConnection())
+            {
+                ReadOnlyCollection<object> containerArray = new ReadOnlyCollection<object>(new object[0]);
+                
+                try
+                {
+                    object[] parameterList = new object[] 
+							{
+								posTransaction.StoreId,
+								posTransaction.ReceiptId,
+                                posTransaction.TerminalId,
+								posTransaction.TransactionId								
+							};
+
+
+                    containerArray = Application.TransactionServices.InvokeExtension("updateGiftCardReceiptId", parameterList);
+                }
+                catch (Exception ex)
+                {
+                    LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                    throw;
+                }
+            }
+           
+        }
 
 		public static string ConvertStringToHex(string asciiString)
 		{

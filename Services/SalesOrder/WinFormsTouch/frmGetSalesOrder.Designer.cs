@@ -177,20 +177,20 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel.Controls.Add(this.grSalesOrders, 0, 2);
             this.tableLayoutPanel.Controls.Add(this.btnEdit, 3, 4);
-            this.tableLayoutPanel.Controls.Add(this.btnPickUp, 5, 4);
-            this.tableLayoutPanel.Controls.Add(this.btnCancelOrder, 7, 4);
+            this.tableLayoutPanel.Controls.Add(this.btnPickUp, 7, 5);
+            this.tableLayoutPanel.Controls.Add(this.btnCreateInvoice, 7, 4);
             this.tableLayoutPanel.Controls.Add(this.btnReturn, 9, 4);
             this.tableLayoutPanel.Controls.Add(this.tableLayoutPanel1, 0, 1);
             this.tableLayoutPanel.Controls.Add(this.btnCreatePickList, 3, 5);
-            this.tableLayoutPanel.Controls.Add(this.btnCreatePackSlip, 5, 5);
-            this.tableLayoutPanel.Controls.Add(this.btnPrintPackSlip, 7, 5);
+            this.tableLayoutPanel.Controls.Add(this.btnCreatePackSlip, 5, 4);
+            this.tableLayoutPanel.Controls.Add(this.btnPrintPackSlip, 5, 5);
             this.tableLayoutPanel.Controls.Add(this.btnClose, 12, 5);
             this.tableLayoutPanel.Controls.Add(this.btnPgUp, 0, 4);
             this.tableLayoutPanel.Controls.Add(this.btnUp, 1, 4);
             this.tableLayoutPanel.Controls.Add(this.btnDown, 12, 4);
             this.tableLayoutPanel.Controls.Add(this.btnPgDown, 13, 4);
             this.tableLayoutPanel.Controls.Add(this.lblHeading, 0, 0);
-            this.tableLayoutPanel.Controls.Add(this.btnCreateInvoice, 9, 5);
+            this.tableLayoutPanel.Controls.Add(this.btnCancelOrder, 9, 5);
             this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel.Location = new System.Drawing.Point(2, 2);
             this.tableLayoutPanel.Margin = new System.Windows.Forms.Padding(0);
@@ -359,10 +359,10 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             this.btnEdit.Appearance.Options.UseFont = true;
             this.tableLayoutPanel.SetColumnSpan(this.btnEdit, 2);
             this.btnEdit.Location = new System.Drawing.Point(232, 538);
-            this.btnEdit.Margin = new System.Windows.Forms.Padding(4, 11, 4, 4);
+            this.btnEdit.Margin = new System.Windows.Forms.Padding(4);//, 11, 4, 4);
             this.btnEdit.Name = "btnEdit";
             this.btnEdit.ShowToolTips = false;
-            this.btnEdit.Size = new System.Drawing.Size(130, 57);
+            this.btnEdit.Size = new System.Drawing.Size(136, 57);
             this.btnEdit.TabIndex = 2;
             this.btnEdit.Text = "Edit order";
             this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
@@ -374,13 +374,13 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             this.btnPickUp.Appearance.Options.UseFont = true;
             this.tableLayoutPanel.SetColumnSpan(this.btnPickUp, 2);
             this.btnPickUp.Location = new System.Drawing.Point(370, 538);
-            this.btnPickUp.Margin = new System.Windows.Forms.Padding(4, 11, 4, 4);
+            this.btnPickUp.Margin = new System.Windows.Forms.Padding(4);//, 11, 4, 4);
             this.btnPickUp.Name = "btnPickUp";
             this.btnPickUp.ShowToolTips = false;
             this.btnPickUp.Size = new System.Drawing.Size(136, 57);
             this.btnPickUp.TabIndex = 3;
-            this.btnPickUp.Text = "Pick up order";
-            this.btnPickUp.Click += new System.EventHandler(this.btnPickUp_Click);
+            this.btnPickUp.Text = "Print Invoice"; //change to Print Invoice Yonathan 09092024 //Pick up Order
+            this.btnPickUp.Click += new System.EventHandler(this.btnPrintInvoice_Click); //change to Print Invoice Yonathan 09092024 //btnPickUp_Click
             // 
             // btnCancelOrder
             // 
@@ -396,6 +396,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             this.btnCancelOrder.TabIndex = 4;
             this.btnCancelOrder.Text = "Cancel order";
             this.btnCancelOrder.Click += new System.EventHandler(this.btnCancelOrder_Click);
+            this.btnCancelOrder.Visible = false;
             // 
             // btnReturn
             // 
@@ -411,6 +412,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             this.btnReturn.TabIndex = 5;
             this.btnReturn.Text = "Return order";
             this.btnReturn.Click += new System.EventHandler(this.btnPayment_Click);
+            this.btnReturn.Visible = false;//hide yonathan 09092024
             // 
             // tableLayoutPanel1
             // 
@@ -495,6 +497,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             this.btnCreatePickList.Tag = "BtnNormal";
             this.btnCreatePickList.Text = "Create picking list";
             this.btnCreatePickList.Click += new System.EventHandler(this.btnCreatePickList_Click);
+            this.btnCreatePickList.Visible = true; //hide yonathan 09092024
             // 
             // btnCreatePackSlip
             // 
@@ -527,6 +530,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             this.btnPrintPackSlip.Tag = "BtnNormal";
             this.btnPrintPackSlip.Text = "Print packing slip";
             this.btnPrintPackSlip.Click += new System.EventHandler(this.btnPrintPackSlip_Click);
+
             // 
             // btnClose
             // 
@@ -597,6 +601,8 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             this.ResumeLayout(false);
 
         }
+
+       
 
         #endregion
 

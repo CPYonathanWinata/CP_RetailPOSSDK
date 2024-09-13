@@ -189,6 +189,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             if (btnReprint.Visible == true)
             {
                 btnCheckRcv.Visible = false;
+                btnReceiveAll.Visible = false;
             }
             else
             {
@@ -233,7 +234,14 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                     //numPad1.Enabled = false;
                     //numPad1.Enabled = false;
                     //add modification by Yonathan 20/05/2024 to enable numpad 
-                    btnReceiveAll.Visible = false;
+                    //btnReceiveAll.Visible = false;
+
+                    //btnReceiveAll.Visible = false;
+
+                    //13/08/2024 disable numpad, enable btnReceiveAll by Yonathan
+                    btnReceiveAll.Visible = true;
+                    numPad1.Enabled = false;
+                    //end
                     numPad1.NumberOfDecimals = 3;
                     //end
                     break;

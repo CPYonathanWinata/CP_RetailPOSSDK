@@ -669,3 +669,4 @@ C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\Printing\obj\
 C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\Printing\obj\Debug\Printing.csproj.GenerateResource.Cache
 C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\Printing\obj\Debug\Printing.dll
 C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\Printing\obj\Debug\Printing.pdb
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\Printing\obj\Debug\Printing.csprojResolveAssemblyReference.cache
