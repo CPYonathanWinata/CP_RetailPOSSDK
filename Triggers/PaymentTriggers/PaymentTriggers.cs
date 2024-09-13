@@ -532,14 +532,38 @@ namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
             urlRTS = APIClass.getURLAPIByFuncName(functionNameAX);
 
 
-            var positiveItemIds = transaction.SaleItems
+            //var positiveItemIds = transaction.SaleItems
+            //.Where(item => !item.Voided && checkPositiveStatus(item.ItemId))
+            //.GroupBy(item => item.ItemId)
+            //.Select(group => group.Key.ToString());
+
+            //itemIdMulti = string.Join(";", positiveItemIds);
+
+
+            //// Split the string by semicolon (;) delimiter
+            //string[] itemIdVal = itemIdMulti.Split(';');
+
+            //new to get item quantity
+            //change by Yonathan to add QTY Input 15/08/2024
+            var positiveItems = transaction.SaleItems
             .Where(item => !item.Voided && checkPositiveStatus(item.ItemId))
             .GroupBy(item => item.ItemId)
-            .Select(group => group.Key.ToString());
+            .Select(group => new
+            {
+                ItemId = group.Key,
+                Quantity = group.Sum(item => item.Quantity)
+            });
+
+            var positiveItemIds = positiveItems
+                .Select(item => item.ItemId.ToString());
 
             itemIdMulti = string.Join(";", positiveItemIds);
 
+            var positiveQuantities = positiveItems
+                .Select(item => item.Quantity);
 
+            string quantityItems = string.Join(";", positiveQuantities);
+            //end
             // Split the string by semicolon (;) delimiter
             string[] itemIdVal = itemIdMulti.Split(';');
 
@@ -652,7 +676,8 @@ namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
            
             if (itemIdMulti != "")
             {
-                var result = apiFunction.checkStockOnHandMulti(Application, urlRTS, Application.Settings.Database.DataAreaID, siteId, ApplicationSettings.Terminal.InventLocationId, itemIdMulti, "", "", configIdMulti);
+                //change by Yonathan to add QTY Input 15/08/2024
+                var result = apiFunction.checkStockOnHandMulti(Application, urlRTS, Application.Settings.Database.DataAreaID, siteId, ApplicationSettings.Terminal.InventLocationId, itemIdMulti, "", "", configIdMulti, quantityItems,transaction.TransactionId);
                 xmlResponse = result[3].ToString();
                 
                 XmlDocument xmlDoc = new XmlDocument(); 

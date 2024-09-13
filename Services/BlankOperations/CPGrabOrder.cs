@@ -484,9 +484,10 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
             string siteId = "";
             string warehouseId = "";
             string itemIdMulti = "";
+            //string qtyMulti = "";
             string barcodeMulti = "";
             string configIdMulti= "";
-            string qtyMulti = "";
+            string qtyMulti = ""; //add Qty by Yonathan 11092024
             string xmlResponse;
             // Set the font size for the headers
             //this.itemDetailsGrid.ColumnHeadersDefaultCellStyle.Font = new Font("Tahoma", 14, FontStyle.Bold);
@@ -542,6 +543,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 
                 //loop through the items in the cart
                 itemIdMulti += orderItem.id;
+                qtyMulti += orderItem.quantity; //add Qty by Yonathan 11092024
                 //barcodeMulti +=
                 //configIdMulti +=
                 //qtyMulti +=
@@ -552,6 +554,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                 if (orderItem.id != item.items[item.items.Count - 1].id)
                 {
                     itemIdMulti += ";";
+                    qtyMulti += ";"; //add Qty by Yonathan 11092024
                 }
             }
 
@@ -625,7 +628,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                 }
             }
 
-            var result = apiFunction.checkStockOnHandMulti(application, urlRTS, application.Settings.Database.DataAreaID, siteId, ApplicationSettings.Terminal.InventLocationId, itemIdMulti, "", "", "");
+            var result = apiFunction.checkStockOnHandMulti(application, urlRTS, application.Settings.Database.DataAreaID, siteId, ApplicationSettings.Terminal.InventLocationId, itemIdMulti, "", "", "", qtyMulti, posTransaction.StoreId+"-"+ _orderId.ToString()); // mod by Yonathan to add 2 parameters qty and trans id 11092024
             xmlResponse = result[3].ToString();
 
             XmlDocument xmlDoc = new XmlDocument();

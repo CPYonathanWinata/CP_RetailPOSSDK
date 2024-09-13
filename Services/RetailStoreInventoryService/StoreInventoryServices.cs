@@ -121,6 +121,10 @@ namespace Microsoft.Dynamics.Retail.Pos.StoreInventoryServices
         public string InventLocationIdTo { get; set; }
         public string ShipDate { get; set; }
 
+        //add by Yonathan 15082024
+        //public string RetailStatusType { get; set; }
+        //
+
         /// <summary>
         /// Parse a xml format of TO document into object
         /// </summary>
@@ -150,6 +154,7 @@ namespace Microsoft.Dynamics.Retail.Pos.StoreInventoryServices
                 }
                 //add by Yonathan to retrieve the status 30072024
                 this.RetailStatusType = PRDocumentLine.GetAttributeValue(toDocument, "TransferStatus");
+                this.DeliveryMethod = PRDocumentLine.GetAttributeValue(toDocument, "DlvMode");
             }
         }
 
@@ -1261,6 +1266,10 @@ namespace Microsoft.Dynamics.Retail.Pos.StoreInventoryServices
                         if (doc.RetailStatusType == "Received")
                         {
                             posStatus = PurchaseOrderReceiptStatus.InProgress;
+                            if (doc.DeliveryMethod == null)
+                            {
+                                doc.DeliveryMethod = "";
+                            }
                         }
                         else
                         {
@@ -1269,17 +1278,17 @@ namespace Microsoft.Dynamics.Retail.Pos.StoreInventoryServices
 
                        
 
-                        /* ORIGINAL CODE
-                         if (int.TryParse(doc.RetailStatusType, out temp))
-                        {
-                            posStatus = MapHHTRetailStatusTypeBaseToPurchaseOrderReceiptStatus((HHTRetailStatusTypeBase)temp);
-                        }
-                        else
-                        {
-                            posStatus = PurchaseOrderReceiptStatus.Open;
-                        }
+                        // ORIGINAL CODE
+                        // if (int.TryParse(doc.RetailStatusType, out temp))
+                        //{
+                        //    posStatus = MapHHTRetailStatusTypeBaseToPurchaseOrderReceiptStatus((HHTRetailStatusTypeBase)temp);
+                        //}
+                        //else
+                        //{
+                        //    posStatus = PurchaseOrderReceiptStatus.Open;
+                        //}
                         // Insert 
-                         */
+                         
                         // Insert receipt into DB if it is not already existing
                         int result = prData.InsertReceipt(doc.OrderType, doc.RecId, doc.PurchId, posStatus, doc.DeliveryMethod);
                     }

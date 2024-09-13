@@ -20,6 +20,10 @@
     <Reference Include="DevExpress.Data.v16.2">
       <Private>False</Private>
     </Reference>
+    <Reference Include="DevExpress.Utils.v14.2, Version=14.2.107.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\DevExpress.Utils.v14.2.dll</HintPath>
+    </Reference>
     <Reference Include="DevExpress.Utils.v16.2">
       <Private>False</Private>
     </Reference>

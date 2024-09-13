@@ -25,7 +25,9 @@ using System.Net;
 using System.IO;
 using System.Xml;
 using System.Runtime.Serialization.Json;
-
+using System.Collections.ObjectModel;
+using System.Xml.Linq;
+using System.Globalization;
 namespace Microsoft.Dynamics.Retail.Pos.EOD
 {
     /// <summary>
@@ -211,7 +213,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
 
             try
             {
-
+                //to do change to RETAILTRANSACTIONPAYMENTTRANS FOR TENDERID DISTINCT YONATHAN
                 string queryString = @" SELECT DISTINCT TenderID FROM ax.CPNewPaymentPOS";
 
                 using (SqlCommand command = new SqlCommand(queryString, connection))
@@ -263,6 +265,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
 
                 try
                 {
+                  //to do change to LOOKUP TENDERNAME FROM MASTER - YONATHAN
                     string queryCustAccount = @"
                                                 SELECT  
                                                     C.TenderName, 
@@ -433,8 +436,10 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             
 
             reportLayout.AppendLine(string.Format("Walk In Cust : {0} = {1}", RoundDecimal(AmountWalkInCustom), CountWalkInCustom));
-            reportLayout.AppendLine(string.Format("Customer Order : {0} = {1}", RoundDecimal(AmountCanvasCustom), CountCanvasCustom));
-            reportLayout.AppendLine(string.Format("Sales Order : {0} = {1}", RoundDecimal(AmountDeliveryOrderCustom), CountDeliveryOrderCustom));
+            //disable cust order calc because have details in below - Yonathan 02092024
+            //reportLayout.AppendLine(string.Format("Customer Order : {0} = {1}", RoundDecimal(AmountCanvasCustom), CountCanvasCustom));
+            //reportLayout.AppendLine(string.Format("Sales Order : {0} = {1}", RoundDecimal(AmountDeliveryOrderCustom), CountDeliveryOrderCustom));
+            //end
             reportLayout.AppendLine(string.Format("Total Customer : {0} = {1}", RoundDecimal(custAmountTotal), custCountTotal));
 
             reportLayout.AppendLine();
@@ -460,6 +465,145 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
 
             //reportLayout.AppendReportLine(amountShort ? 7055 : 7054, RoundDecimal(amountShort ? decimal.Negate(batch.OverShortTotal) : batch.OverShortTotal));
             reportLayout.AppendLine();
+
+
+            //add by Yonathan to include the Cust Order for today 30082024
+            string returnString;
+            ReadOnlyCollection<object> containerArray;
+            
+            string fromDate = batch.StartDateTime.ToString("yyyy-MM-dd HH:mm:ss"); // "29/08/2024 00:00:00";
+            string fromDateUtc = "";
+            string toDateUtc = "";
+            string toDate = reportType == ReportType.ZReport ? batch.CloseDateTime.ToString("yyyy-MM-dd HH:mm:ss") :  DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"); //"29/08/2024 16:00:00";
+            string itemGroupLines = "";
+            decimal totalAmount, totalSales;
+            string returnValue = "false";
+            //containerArray = EOD.InternalApplication.TransactionServices.InvokeExtension("getSalesOrderSummary", "JKT", "WH_JDELIMA", fromDate, toDate);
+            
+            string salesOrderParam = "";
+            // Example datetime
+            DateTime batchStartDateTime = batch.StartDateTime; // Use your batch.StartDateTime here
+            DateTime batchToDateTime = reportType == ReportType.ZReport ? batch.CloseDateTime : DateTime.Now; //"29/08/2024 16:00:00";
+            // Convert DateTime to DateTimeOffset to get the local timezone offset
+            DateTimeOffset fromDatelocalDateTimeOffset = new DateTimeOffset(batchStartDateTime, TimeZoneInfo.Local.GetUtcOffset(batchStartDateTime));
+            DateTimeOffset toDateLocalDateTimeOffset = new DateTimeOffset(batchToDateTime, TimeZoneInfo.Local.GetUtcOffset(batchToDateTime));
+            // Subtract the offset to get the UTC time
+            DateTime fromUtcDateTime = fromDatelocalDateTimeOffset.UtcDateTime;
+            DateTime toUtcDateTime = toDateLocalDateTimeOffset.UtcDateTime;
+            fromDateUtc = fromUtcDateTime.ToString("yyyy-MM-dd HH:mm:ss");
+            toDateUtc = toUtcDateTime.ToString("yyyy-MM-dd HH:mm:ss");
+            // Format the UTC datetime to a string
+
+            salesOrderParam = getCustOrderTransaction(fromDateUtc, toDateUtc);
+            //"SO/24/0000000034;SO/24/0000000033;SO/24/0000000032;SO/24/0000000031";
+            containerArray = EOD.InternalApplication.TransactionServices.InvokeExtension("getInvoiceSalesOrder", salesOrderParam);
+            returnString = containerArray[3].ToString();
+            returnValue = containerArray[1].ToString();
+
+
+            totalAmount = 0;
+            totalSales = 0;
+            if (containerArray[1].ToString() != "False")
+            {
+
+                reportLayout.AppendLine("-------------------------------------------------------");
+                reportLayout.AppendLine("Customer Order Summary");
+                reportLayout.AppendLine("-------------------------------------------------------");
+
+                
+                returnString = containerArray[3].ToString();
+                // Load XML into XDocument
+                XDocument xdoc = XDocument.Parse(returnString);
+                var cultureInfo = new CultureInfo("id-ID");
+                // Parse the XML and group by ItemId and ItemName
+                var groupedData = xdoc.Descendants("CustInvoiceTrans")
+                    .Where(e => e.Attribute("ItemLines") != null)
+                    .Select(e => e.Attribute("ItemLines").Value.Split(';'))
+                    .GroupBy(
+                        fields => new { ItemId = fields[0], ItemName = fields[1] }, // Group by ItemId and ItemName
+                        fields => new
+                        {
+                            Quantity = decimal.Parse(fields[2], NumberStyles.Number, cultureInfo),
+                            LineAmount = decimal.Parse(fields[3], NumberStyles.Number, cultureInfo),
+                            SalesId = fields[4]
+                        }
+                    )
+                    .Select(group => new
+                    {
+                        group.Key.ItemId,
+                        group.Key.ItemName,
+                        TotalQty = group.Sum(x => x.Quantity),
+                        TotalLineAmount = group.Sum(x => x.LineAmount),
+                        //SalesIdCount = group.Select(x => x.SalesId).Distinct().Count()
+                    });
+
+                // Output the results
+                foreach (var data in groupedData)
+                {
+
+                    reportLayout.AppendLine(string.Format("{0} - {1}", data.ItemId.ToString(), data.ItemName.ToString()));
+
+                    reportLayout.AppendLine(string.Format("{0} - {1}", data.TotalQty, RoundDecimal(Convert.ToDecimal(data.TotalLineAmount))));
+                    totalAmount += data.TotalLineAmount;
+                    //totalSales = data.SalesIdCount;
+                }
+                XmlDocument xmlDoc = new XmlDocument();
+                //xmlDoc.LoadXml(containerArray[3].ToString());
+
+                //XmlNodeList purchTableNodes = xmlDoc.SelectNodes("/CustInvoiceTrans/CustInvoiceTrans");
+                //foreach (XmlNode node in purchTableNodes)
+                //{
+
+                //    itemGroupLines = node.Attributes["ItemLines"].Value;
+                //    //string input = "15010102;FIESTA SHOESTRING 1000 GR;1,00;31.216,00;SO/24/0001198728";
+                //    string[] parts = itemGroupLines.Split(';');
+
+                //    // Assign each part to a variable
+                //    string ItemId = parts[0];
+                //    string ItemName = parts[1];
+                //    string Quantity = parts[2];
+                //    string Price = parts[3];
+                //    string SalesId = parts[4];
+
+
+                //    reportLayout.AppendLine(string.Format("{0} - {1}", ItemId.ToString(), ItemName.ToString()));
+
+                //    reportLayout.AppendLine(string.Format("{0} - {1}", Quantity, RoundDecimal(Convert.ToDecimal(Price))));
+
+                //    //reportLayout.AppendLine(string.Format("{0}", itemGroupLines));
+                //    //purchid = node.Attributes["PURCHID"].Value;
+                //    //itemid = node.Attributes["ITEMID"].Value;
+
+                //}
+                //XmlNodeList totalNodes = xmlDoc.SelectNodes("/CustInvoiceTrans/Total");
+                // Load XML into XDocument
+                 
+
+                // Extract distinct SalesId values from the XML
+                var distinctSalesIds = xdoc.Descendants("CustInvoiceTrans")
+                    .Where(e => e.Attribute("ItemLines") != null)
+                    .Select(e => e.Attribute("ItemLines").Value.Split(';').Last()) // Extract the last part (SalesId)
+                    .Distinct() // Get distinct SalesId values
+                    .Count(); // Count the number of distinct SalesId values
+
+                reportLayout.AppendLine("-------------------------------------------------------");
+                //foreach (XmlNode eachNode in totalNodes)
+                //{
+
+                //    totalAmount = eachNode.Attributes["TotalAmount"].Value;
+                //    totalAmount.Replace(".", ",");
+                    reportLayout.AppendLine(string.Format("Total Amount Sales Order : {0}", RoundDecimal(Convert.ToDecimal(totalAmount))));
+                 //   totalSales = eachNode.Attributes["TotalSales"].Value;
+                    reportLayout.AppendLine(string.Format("Total Sales Order : {0}", RoundDecimal(distinctSalesIds)));
+                    //purchid = node.Attributes["PURCHID"].Value;
+                    //itemid = node.Attributes["ITEMID"].Value;
+                //}
+
+            }
+           
+
+            //end
+
             // End add and comment standard NEC
             // Income/Expense
             // Begin comment standard NEC
@@ -547,6 +691,77 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
                 EOD.InternalApplication.Services.Peripherals.FiscalPrinter.PrintReceipt(reportLayout.ToString());
             }
         }
+
+        private static string getCustOrderTransaction(string fromDate, string toDate)
+        {
+            SqlConnection localConnection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+            string salesIdMulti = "" ;
+            string salesIds = "";
+            //add by Yonathan C.BANK != 'QRISBCA' for filtering the bank not QRIS
+            decimal totalTunai = 0;
+            try
+            {
+                string queryData = @"SELECT SALESORDERID, MODIFIEDDATETIME, TRANSACTIONID FROM ax.RETAILTRANSACTIONTABLE WHERE 
+		                            SALESORDERID !='' 
+		                            AND MODIFIEDDATETIME BETWEEN  '" + fromDate + "'  AND '" + toDate + "' ORDER BY SALESORDERID DESC"; 
+                //DATEADD(HOUR, -(DATEPART(TZOFFSET, SYSDATETIMEOFFSET()) / 60), SYSDATETIME()) 
+                //C.BANK != 'QRISBCA'
+                using (SqlCommand cmd = new SqlCommand(queryData, localConnection))
+                {
+
+
+                    if (localConnection.State != ConnectionState.Open)
+                    {
+                        localConnection.Open();
+                    }
+
+                    //int flagFirstItem = 0;
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        StringBuilder salesIdBuilder = new StringBuilder();
+
+                        while (reader.Read())
+                        {
+                            // Retrieve SALESORDERID from the reader
+                              salesIdMulti = reader["SALESORDERID"].ToString();
+
+                            // Append salesOrderId followed by a semicolon
+                            if (salesIdBuilder.Length > 0)
+                            {
+                                salesIdBuilder.Append(";");
+                            }
+                            salesIdBuilder.Append(salesIdMulti);
+                        }
+
+                        // Convert the StringBuilder to a string
+                          salesIds = salesIdBuilder.ToString();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //LSRetailPosis.ApplicationExceptionHandler.HandleException();
+                throw;
+            }
+            finally
+            {
+                if (localConnection.State != ConnectionState.Closed)
+                {
+                    localConnection.Close();
+                }
+            }
+
+            return salesIds;
+            //throw new NotImplementedException();
+        }
+
+        //private string getSalesOrderSummary()
+        //{
+            
+
+        //    return containerArray[3].ToString();
+        //}
 
         /// <summary>
         /// Prints tax lines to the X or Z report.

@@ -21,6 +21,7 @@ using APIAccess;
 using LSRetailPosis.Settings;
 using System.Globalization;
 using System.Data.SqlClient;
+using Microsoft.Dynamics.Retail.Pos.Contracts.BusinessLogic;
 namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 {
 	public partial class CP_frmPackingSlipDetail : frmTouchBase
@@ -456,9 +457,15 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                                  * */
 								//application.Services.Printing.PrintReceipt(Microsoft.Dynamics.Retail.Pos.Contracts.Services.FormType.SalesOrderReceipt, posTransaction, true);
 								SalesOrderActions.TryPrintPackSlip(LSRetailPosis.Transaction.SalesStatus.Delivered, salesID);
+
+                                string invoiceAx = "";
+                                CreateInvoice(out invoiceAx);
+                                
 							}
 						
 							this.Close();
+                           
+
 						}
 						catch (Exception x)
 						{
@@ -491,7 +498,93 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 				}
 			}
 		}
+        private void CreateInvoice(out string _invoiceAx)
+        {
+            _invoiceAx = "";
+            string statusInvoice;
+            try
+            {
+                object[] parameterList = new object[] 
+							{
+								salesID.ToString(),
+								DateTime.Now
+								
+							};
 
+                ReadOnlyCollection<object> containerArray = SalesOrder.InternalApplication.TransactionServices.InvokeExtension("postSalesInvoice", parameterList);
+                _invoiceAx = containerArray[3].ToString();
+                statusInvoice = containerArray[2].ToString();
+                if (statusInvoice == "Success")
+                {
+                    SalesOrder.InternalApplication.Services.Dialog.ShowMessage(String.Format("Invoice {0} has been created", _invoiceAx), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    //print
+                    //update invoice id yonathan 06092024
+                    updateInvoiceId(_invoiceAx, salesID.ToString()); 
+                    ITransactionSystem transSys = SalesOrder.InternalApplication.BusinessLogic.TransactionSystem;
+                    transaction.InvoiceComment = _invoiceAx;
+                    transaction.Save();
+                   
+                    transSys.PrintTransaction(transaction, true, false);
+                    
+                }
+                else
+                {
+                    throw new Exception("Invoice error, please post invoice on AX");
+                }
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+        }
+        //update invoice id yonathan 06092024
+        private void updateInvoiceId(string _invoiceAx, string _salesId)
+        {
+            string storeId = "";
+            SqlConnection connection = ApplicationSettings.Database.LocalConnection;
+            storeId = ApplicationSettings.Terminal.StoreId;
+            //var retailTransaction = posTransaction as RetailTransaction;
+            try
+            {
+                string queryString = @" UPDATE RETAILTRANSACTIONTABLE
+                                        SET INVOICECOMMENT = @INVOICECOMMENT
+                                        WHERE STORE = @STOREID
+                                        AND  SALESORDERID =@SALESID";
+
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+                    command.Parameters.AddWithValue("@STOREID", storeId);
+                    command.Parameters.AddWithValue("@SALESID", _salesId);
+                    command.Parameters.AddWithValue("@INVOICECOMMENT", _invoiceAx);
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+                    }
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+
+                            
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+                }
+            }
+        }
 		private string getInventSite(string inventLocationId)
 		{
 			string inventSite = "";

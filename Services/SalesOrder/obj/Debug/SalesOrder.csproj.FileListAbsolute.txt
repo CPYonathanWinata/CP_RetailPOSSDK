@@ -108,7 +108,6 @@ C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\SalesOrd
 C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\SalesOrder\obj\Debug\SalesOrder.pdb
 C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\POS\bin\Debug\SalesOrder.dll
 C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\POS\bin\Debug\SalesOrder.pdb
-C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\SalesOrder\obj\Debug\SalesOrder.csprojResolveAssemblyReference.cache
 C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.Properties.Resources.resources
 C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.CP_frmPackingSlipDetail.resources
 C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.CP_frmPaymentInvoice.resources
@@ -134,3 +133,4 @@ C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\SalesOrder\ob
 C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\SalesOrder\obj\Debug\SalesOrder.dll.licenses
 C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\SalesOrder\obj\Debug\SalesOrder.dll
 C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\SalesOrder\obj\Debug\SalesOrder.pdb
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\SalesOrder\obj\Debug\SalesOrder.csprojResolveAssemblyReference.cache

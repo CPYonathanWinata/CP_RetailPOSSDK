@@ -1313,7 +1313,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                 case "101":
                     {
 
-                        
+                        ReadOnlyCollection<object> containerArray;
+                        string fromDate = "21/06/2024 00:00:00";
+                        string toDate = "21/06/2024 16:00:00";
+                        containerArray = Application.TransactionServices.InvokeExtension("getSalesOrderSummary", "JKT", "WH_JDELIMA", fromDate,toDate);
+                        //MessageBox.Show(string.Format("{0} - {1}",DateTime.Now.ToString(), containerArray[3].ToString()));
                     }
                     break;
                 //Application.RunOperation(PosisOperations.PayCard, string.Empty, posTransaction);

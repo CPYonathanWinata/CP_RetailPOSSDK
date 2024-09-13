@@ -361,7 +361,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             "INNER JOIN ECORESPRODUCTTRANSLATION EPT " +
             "ON EPT.PRODUCT = EP.RECID " +
             sqlWhereBatchClause +
-            "AND (H.TYPE = 2 OR H.TYPE = 19) " +
+            "AND (H.TYPE = 2 ) " + //OR H.TYPE = 19) " + //disable to exclude the Customer Order by Yonathan 02092024
             "AND L.AMOUNTCUR > 0 " +
             "AND LN.RETURNTRANSACTIONID = '' " +
             "AND LN.TRANSACTIONSTATUS = 0 " +
