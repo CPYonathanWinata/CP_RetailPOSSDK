@@ -782,6 +782,7 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
                             WHERE ITEMRELATION = @ItemRelation
 	                            AND TA.ACCOUNTRELATION = @AccountRelations
                                 AND TA.RELATION = 5
+                                AND TA.UNITID = @UnitId
                                 AND (
                                 (@Quantity BETWEEN QUANTITYAMOUNTFROM AND QUANTITYAMOUNTTO) OR
                                 (QUANTITYAMOUNTFROM = 0 AND QUANTITYAMOUNTTO = 0)
@@ -998,6 +999,7 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
                             LEFT JOIN [ax].INVENTDIM invdim ON ta.INVENTDIMID = invdim.INVENTDIMID AND ta.DATAAREAID = c.INVENTLOCATIONDATAAREAID
                             WHERE ITEMRELATION = @ItemRelation
 	                            AND TA.ACCOUNTRELATION = @AccountRelations
+                                AND TA.UNITID = @UnitId
                                 AND TA.RELATION = 4
                                 AND (
                                 (@Quantity BETWEEN QUANTITYAMOUNTFROM AND QUANTITYAMOUNTTO) OR
