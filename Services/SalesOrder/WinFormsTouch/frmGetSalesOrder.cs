@@ -506,7 +506,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 enableInvoice = false;
                 
                
-                if (invoiceId != "" && isOpen == "false" )
+                if (invoiceId != "" )//&& isOpen == "false" )
                 {
                     enableReturn = false;
                     enablePickup = true;
@@ -676,8 +676,13 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 
         private void btnPrintInvoice_Click(object sender, System.EventArgs e)
         {
-            CustomerOrderTransaction cot = SalesOrderActions.GetCustomerOrder(this.SelectedSalesOrderId, this.SelectedOrderType, LSRetailPosis.Transaction.CustomerOrderMode.Pickup);
+            //CustomerOrderTransaction cot = SalesOrderActions.GetCustomerOrder(this.SelectedSalesOrderId, this.SelectedOrderType, LSRetailPosis.Transaction.CustomerOrderMode.Pickup);
+            CustomerOrderTransaction cot = SalesOrderActions.GetCustomerOrder(this.SelectedSalesOrderId, this.SelectedOrderType, LSRetailPosis.Transaction.CustomerOrderMode.Edit);
+            
             ITransactionSystem transSys = SalesOrder.InternalApplication.BusinessLogic.TransactionSystem;
+
+            //SalesOrder.InternalApplication.RunOperation(Contracts.PosisOperations.PrintPreviousInvoice,cot);
+
 
             transSys.PrintTransaction(cot, true, false);
         }
@@ -1072,7 +1077,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                     SelectedOrder.InvoiceComment = _invoiceAx;
                     SelectedOrder.Save();
 
-                    transSys.PrintTransaction(SelectedOrder, true, false);
+                    transSys.PrintTransaction(SelectedOrder, false, false);
                 }
                 else
                 {

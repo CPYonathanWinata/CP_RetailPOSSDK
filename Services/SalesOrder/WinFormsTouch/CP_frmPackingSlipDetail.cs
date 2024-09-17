@@ -283,6 +283,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 		{
 			bool retValue;
 			string comment;
+            string splitInvoice;
 			int flagError = 0;
 			string functionNameAX = "GetStockAX%";
 			string functionNameAPI = "GetItemAPI";
@@ -304,7 +305,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 
 			APIAccess.APIAccessClass APIClass = new APIAccess.APIAccessClass();
 			APIAccess.APIFunction APIFunction = new APIAccess.APIFunction();
-			using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Are you sure to post packing slip?\nMake sure the qty receive is correct", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+			using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Apakah yakin akan melakukan posting?\nHarap pastikan qty barang sudah sesuai.", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
 			{
 				LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
 				if (dialog.DialogResult == DialogResult.Yes)
@@ -385,7 +386,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                                         if (remainQty < 0)
                                         {
                                             flagError = 5;
-                                            itemIdStock += itemIdStock == "" ? string.Format("Itemid-ProductName-Stok\n{0} - {1} - (Qty {2})\n", itemId, itemName, availQty.ToString()) : string.Format("{0} - {1} - Qty {2}\n", itemId, itemName, availQty.ToString());
+                                            itemIdStock += itemIdStock == "" ? string.Format("Itemid-NamaBarang-Stok\n{0} - {1} - (Qty {2})\n", itemId, itemName, availQty.ToString()) : string.Format("{0} - {1} - Qty {2}\n", itemId, itemName, availQty.ToString());
 
                                         }
                                         else
@@ -424,14 +425,32 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 
 						try
 						{                            
-							CreatePackingSlip(out retValue, out comment, salesID, updatedXmlString);
+							CreatePackingSlip(out retValue, out comment, out splitInvoice, salesID, updatedXmlString);
 							if (retValue == false)
 							{
 								SalesOrder.InternalApplication.Services.Dialog.ShowMessage(comment, MessageBoxButtons.OK, MessageBoxIcon.Error);
 							}
 							else
 							{
-								SalesOrder.InternalApplication.Services.Dialog.ShowMessage(56120, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                if (comment == "4") //if sales order cancelled
+                                {
+                                    SalesOrder.InternalApplication.Services.Dialog.ShowMessage("Sales Order dibatalkan.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                }
+                                else
+                                {
+                                    SalesOrder.InternalApplication.Services.Dialog.ShowMessage("Posting berhasil.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    SalesOrderActions.TryPrintPackSlip(LSRetailPosis.Transaction.SalesStatus.Delivered, salesID);
+
+                                    string invoiceAx = "";
+                                    //string comboInvoice = "0";
+                                    //validate if automatically post invoice after packing slip DO (based on customer master) - Yonathan 17092024
+                                    if(splitInvoice == "0")
+                                    {
+                                        CreateInvoice(out invoiceAx);
+                                    }
+                                    
+                                }
+								
 								//add to trigger
                                 /* disable adding to API
 								var packList = new List<APIParameter.parmRequestAddItemMultiple>();                                 
@@ -447,7 +466,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 										WAREHOUSE = ApplicationSettings.Terminal.InventLocationId,
 										TYPE = "2",
 										REFERENCESNUMBER = salesID,
-										RETAILVARIANTID = ""
+										RETAILVARIANTID = "" 
 									};
 									//var data = MyJsonConverter.Serialize(pack);
 									packList.Add(pack);
@@ -456,10 +475,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 								string resultAPI = APIFunction.addItemMultiple(urlAPI, packList);
                                  * */
 								//application.Services.Printing.PrintReceipt(Microsoft.Dynamics.Retail.Pos.Contracts.Services.FormType.SalesOrderReceipt, posTransaction, true);
-								SalesOrderActions.TryPrintPackSlip(LSRetailPosis.Transaction.SalesStatus.Delivered, salesID);
-
-                                string invoiceAx = "";
-                                CreateInvoice(out invoiceAx);
+								
                                 
 							}
 						
@@ -477,11 +493,11 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 					}
 					else if( flagError == 1)
 					{
-						SalesOrder.InternalApplication.Services.Dialog.ShowMessage("QtyDO tidak boleh lebih besar dari QtySo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						SalesOrder.InternalApplication.Services.Dialog.ShowMessage("QtyDO tidak boleh lebih besar dari QtySo.", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					}
 					else if(flagError == 2)
 					{
-						SalesOrder.InternalApplication.Services.Dialog.ShowMessage("Belum input QtyDO.\nApabila tidak di-receive, ketik 0 pada QtyDO", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						SalesOrder.InternalApplication.Services.Dialog.ShowMessage("Belum input QtyDO.\nApabila tidak di-receive, ketik 0 pada QtyDO.", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					}
                     else if (flagError == 3 || flagError == 4 || flagError == 5)
                     {
@@ -493,7 +509,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                     }
                     else if (flagError == 6)
                     {
-                        SalesOrder.InternalApplication.Services.Dialog.ShowMessage("QtyDO tidak boleh minus / negatif", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        SalesOrder.InternalApplication.Services.Dialog.ShowMessage("QtyDO tidak boleh minus / negatif.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
 				}
 			}
@@ -516,7 +532,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 statusInvoice = containerArray[2].ToString();
                 if (statusInvoice == "Success")
                 {
-                    SalesOrder.InternalApplication.Services.Dialog.ShowMessage(String.Format("Invoice {0} has been created", _invoiceAx), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    SalesOrder.InternalApplication.Services.Dialog.ShowMessage(String.Format("Invoice {0} sudah terbentuk.", _invoiceAx), MessageBoxButtons.OK, MessageBoxIcon.Information);
                     //print
                     //update invoice id yonathan 06092024
                     updateInvoiceId(_invoiceAx, salesID.ToString()); 
@@ -524,7 +540,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                     transaction.InvoiceComment = _invoiceAx;
                     transaction.Save();
                    
-                    transSys.PrintTransaction(transaction, true, false);
+                    transSys.PrintTransaction(transaction, false, false);
                     
                 }
                 else
@@ -635,8 +651,10 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 		public void CreatePackingSlip(
 			out bool retValue,
 			out string comment,
+            out string splitInvoice,
 			string salesId, string _xmlString)
 		{
+            splitInvoice = "0";
 			try
 			{
 				object[] parameterList = new object[] 
@@ -650,15 +668,26 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 				ReadOnlyCollection<object> containerArray = application.TransactionServices.InvokeExtension("postPackingSlip", parameterList);
 				retValue = (bool)containerArray[1];
 				comment = containerArray[2].ToString();
-
+                
 				if (containerArray.Count > 3)
 				{
-					string errorDetail = containerArray[3].ToString();
-
-					if (!string.IsNullOrWhiteSpace(errorDetail))
+					string detailComment = containerArray[3].ToString();
+                    splitInvoice = containerArray[3].ToString();
+                    if (!string.IsNullOrWhiteSpace(detailComment))
 					{
-						comment += errorDetail;
+                        comment += detailComment;
 					}
+
+                    if (!string.IsNullOrWhiteSpace(splitInvoice))
+                    {
+                        splitInvoice = splitInvoice;
+                    }
+                    else
+                    {
+                        splitInvoice = "0";
+                    }
+
+                    
 				}
 			}
 			catch (Exception ex)
