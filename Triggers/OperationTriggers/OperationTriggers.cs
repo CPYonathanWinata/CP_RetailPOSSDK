@@ -627,7 +627,7 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
                                 WHERE
                                 ta.ITEMRELATION in (@ItemRelation)
                                 AND ta.ACCOUNTRELATION = @AccountRelations                            
-                                --AND ta.UNITID in (@UnitId)                       
+                                AND ta.UNITID in (@UnitId)                       
                                 AND ta.FROMDATE <= @ActiveDate
                                 AND ta.TODATE >= @ActiveDate                           
                 
@@ -646,7 +646,7 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
                 //priceCommand.Parameters.AddWithValue("@ItemRelation", string.Join(",", itemIds));
                 priceCommand.Parameters.AddWithValue("@ItemRelation", joinedItems);
                 priceCommand.Parameters.AddWithValue("@AccountRelations", _priceGroup);
-                //priceCommand.Parameters.AddWithValue("@UnitId", string.Join(",", _unitId));
+                priceCommand.Parameters.AddWithValue("@UnitId", string.Join(",", _unitId));
                 priceCommand.Parameters.AddWithValue("@ActiveDate", DateTime.Now.ToString("yyyy-MM-dd"));
                 // Open the price connection
                 priceConnection.Open();
@@ -700,7 +700,7 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
                                         AND ta.DATAAREAID = @DataAreaId                                        
                                         AND ta.ITEMRELATION in (@ItemRelation)
                                         AND ta.ACCOUNTRELATION = @AccountRelations
-                                        --AND ta.UNITID in (@UnitId)";
+                                        AND ta.UNITID in (@UnitId)";
             using (SqlConnection discountConnection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection)
             using (SqlCommand discountCommand = new SqlCommand(discountQuery, discountConnection))
             {
@@ -709,7 +709,7 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
                 discountCommand.Parameters.AddWithValue("@DataAreaId", _dataAreaId);
                 discountCommand.Parameters.AddWithValue("@ItemRelation", string.Join(",", itemIds));
                 discountCommand.Parameters.AddWithValue("@AccountRelations", _discGroup);
-                //discountCommand.Parameters.AddWithValue("@UnitId", string.Join(",", _unitId));
+                discountCommand.Parameters.AddWithValue("@UnitId", string.Join(",", _unitId));
                 discountCommand.Parameters.AddWithValue("@ActiveDate", DateTime.Now.ToString("yyyy-MM-dd"));
                 discountCommand.Parameters.AddWithValue("@NoDate", new DateTime(1900, 01, 01));
                 // Open the discount connection

@@ -163,7 +163,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder
                     // Quit if cancel is pressed...
                     if (salesOrderDialog.DialogResult == System.Windows.Forms.DialogResult.Cancel)
                     {
-                        SalesOrder.InternalApplication.RunOperation(PosisOperations.VoidTransaction, false);
+                        //SalesOrder.InternalApplication.RunOperation(PosisOperations.VoidTransaction, false);
                         //SalesOrder.InternalApplication.RunOperation(PosisOperations.VoidTransaction, false);
                         return posTransaction;
                     }
