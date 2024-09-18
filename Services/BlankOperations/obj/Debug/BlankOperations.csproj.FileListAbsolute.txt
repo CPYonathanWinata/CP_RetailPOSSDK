@@ -257,6 +257,7 @@ C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\BlankOperatio
 C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\aa\BlankOperations.resources.dll
 C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\BlankOperations.dll
 C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\BlankOperations.pdb
+<<<<<<< HEAD
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\BlankOperations.csprojResolveAssemblyReference.cache
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CheckStockForm.Infolog.resources
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CheckStockForm.ItemSearch.resources
@@ -302,3 +303,5 @@ C:\Users\yonathan.winata\Documents\GitHub\AX\Retail POS\Extensions\BlankOperatio
 C:\Users\yonathan.winata\Documents\GitHub\AX\Retail POS\Extensions\BlankOperations.pdb
 C:\Users\yonathan.winata\Documents\GitHub\AX\Retail POS\Extensions\aa\BlankOperations.resources.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\aa\BlankOperations.resources.dll
+=======
+>>>>>>> a91569e0e793ed2a2c16580a828e61f8a0ec0699

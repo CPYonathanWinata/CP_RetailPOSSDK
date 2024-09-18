@@ -16,7 +16,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Services
     /// <summary>
     /// An abstract base class the provides functionality for various barcode encoder classes.
     /// </summary>
-    internal abstract class Barcode
+    public abstract class Barcode
     {
         protected const float DEFAULT_DPI = 96f;
         protected const string TEXT_FONT_NAME = "Courier New";
@@ -42,12 +42,23 @@ namespace Microsoft.Dynamics.Retail.Pos.Services
         /// <summary>
         /// Creates a barcode image.
         /// </summary>
-        /// <param name="text">The text.</param>
+        /// <param name="text">The text to be used to create the barcode image.</param>        
+        /// <returns>The barcode image. Null if barcode is not created.</returns>
+        /// <remarks>Creates the barcode image with a default DPI.</remarks>
+        public virtual Image Create(string text)
+        {
+            return Create(text, DEFAULT_DPI, DEFAULT_DPI);
+        }
+
+        /// <summary>
+        /// Creates a barcode image.
+        /// </summary>
+        /// <param name="text">The text to be used to create the barcode image.</param>        
         /// <param name="xDpi">Horizontal resolution.</param>
         /// <param name="yDpi">Vertical resolution.</param>
-        /// <returns>Barcode image. Null if barcde is not created.</returns>
+        /// <returns>Barcode image. Null if barcode is not created.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Caller is responsible for disposing returned object")]
-        public virtual Image Create(string text, float xDpi = DEFAULT_DPI, float yDpi = DEFAULT_DPI)
+        public virtual Image Create(string text, float xDpi, float yDpi)
         {
             NetTracer.Information("Peripheral [{0}] - Create", this);
 
@@ -88,7 +99,9 @@ namespace Microsoft.Dynamics.Retail.Pos.Services
                         catch (Exception ex)
                         {
                             if (barcodeImage != null)
+                            {
                                 barcodeImage.Dispose();
+                            }
 
                             NetTracer.Error(ex, "Peripheral [{0}] - Exception during barcode creation.", this);
                         }

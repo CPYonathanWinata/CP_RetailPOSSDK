@@ -306,7 +306,7 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 		public void PostEndTransaction(IPosTransaction posTransaction)
 		{
 			LSRetailPosis.ApplicationLog.Log("TransactionTriggers.PostEndTransaction", "When concluding the transaction, after printing and saving", LSRetailPosis.LogTraceLevel.Trace);
-
+            bool foundGiftCardPayment = false; //add by Yoanthan 10092024
 			if (posTransaction.ToString() == "LSRetailPosis.Transaction.RetailTransaction")
 			{
 
@@ -333,10 +333,62 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 				AddItemTransaction(posTransaction); //temporarily disable for testing because not implemented yet.
 				//end added
 
-			}
+                //add by yonathan to update receiptid on giftcard 10092024
+                RetailTransaction retail = posTransaction as RetailTransaction;
+                foreach (var tenderLines in retail.TenderLines)
+                {
+                    if(tenderLines.ToString() == "LSRetailPosis.Transaction.Line.TenderItem.GiftCertificateTenderLineItem")
+                    {
+                        foundGiftCardPayment = true;
+                    }
+                    
+                }
+                //[LSRetailPosis.Transaction.Line.TenderItem.GiftCertificateTenderLineItem] = {LSRetailPosis.Transaction.Line.TenderItem.GiftCertificateTenderLineItem}
+                if(foundGiftCardPayment == true)
+                {
+                    UpdateGiftCardReceiptId(posTransaction);
+                }
+                
+                //end
+                
 
+			}
+            APIAccess.APIAccessClass.isB2b = null;
+            APIAccess.APIAccessClass.priceGroup = null;
+            APIAccess.APIAccessClass.lineDiscGroup = null;
+            APIAccess.APIAccessClass.ppnValidation = null;
+            APIAccess.APIAccessClass.custId = null;
 		 
 		}
+
+        private void UpdateGiftCardReceiptId(IPosTransaction posTransaction)
+        {
+            
+            if (Application.TransactionServices.CheckConnection())
+            {
+                ReadOnlyCollection<object> containerArray = new ReadOnlyCollection<object>(new object[0]);
+                
+                try
+                {
+                    object[] parameterList = new object[] 
+							{
+								posTransaction.StoreId,
+								posTransaction.ReceiptId,
+                                posTransaction.TerminalId,
+								posTransaction.TransactionId								
+							};
+
+
+                    containerArray = Application.TransactionServices.InvokeExtension("updateGiftCardReceiptId", parameterList);
+                }
+                catch (Exception ex)
+                {
+                    LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                    throw;
+                }
+            }
+           
+        }
 
 		public static string ConvertStringToHex(string asciiString)
 		{
@@ -864,6 +916,55 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 			
 		}*/
 
+        //CPIADMFEE
+        public decimal GetAdmFee(int _tenderId)
+        {
+            string admFee = "";
+            decimal amountAdmFee = 0;
+            SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+            try
+            {
+                string queryString = @"SELECT ADMFEE 
+                                        FROM ax.CPBANKADM 
+                                        WHERE TENDERTYPEID = @TENDERID 
+                                        AND FROMDATE <= CAST(GETDATE() AS date) AND TODATE >= CAST(GETDATE() AS date)";
+
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+                    command.Parameters.AddWithValue("@TENDERID", _tenderId);
+
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+                    }
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            admFee = reader[0].ToString();
+                             
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+                }
+            }
+
+            amountAdmFee = (Math.Truncate(Convert.ToDecimal(admFee) * 1000m) / 1000m);
+            return amountAdmFee;
+        }
+	
 
 		private void CPNEWPAYMENTPOS()
 		{
@@ -947,6 +1048,9 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 			}
 
 			#region CPECRBCA
+
+
+
 			/*
 			 * Move data from AX.CPAMBILTUNAITEMP to AX.CPAMBILTUNAI
 			 * after that, delete data from AX.CPAMBILTUNAITEMP
@@ -965,8 +1069,8 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 				string trxIdECR = "";
 				string dataAreaIdECR = "";
 				string partitionECR = "";
-
-				try
+                string admFeeECR = ""; //add admfee for fee tarik tunai by yonathan //CPIADMFEE
+				try 
 				{
 					string queryString = @"
 											SELECT
@@ -981,6 +1085,7 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 												TRANSDATE,
 												TRXIDEDC,
 												DATAAREAID,
+                                                ADMFEE,
 												PARTITION
 											FROM
 												AX.CPAMBILTUNAITEMP
@@ -1012,6 +1117,7 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 								transDateECR = reader[8] + "";
 								trxIdECR = reader[9] + "";
 								dataAreaIdECR = reader[10] + "";
+                                admFeeECR = reader[11] + "";
 							}
 						}
 					}
@@ -1033,6 +1139,9 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 				{
 					try
 					{
+                        //decimal admFee = 0;
+                        //admFee = GetAdmFee(TenderID);
+                        //ADD ADMFEE FOR INSERT BY YONATHAN 13/06/2024 //CPIADMFEE
 						string queryString = @"
 											INSERT INTO AX.CPAMBILTUNAI (
 																			TRANSACTIONID, 
@@ -1046,6 +1155,8 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 																			STORE,
 																			TRANSDATE,
 																			TRANSACTIONSTATUS,
+                                                                            ADMFEE,
+                                                                            FEE,
 																			[DATAAREAID],
 																			[PARTITION]
 																			)
@@ -1061,6 +1172,8 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 													@STORE, 
 													@TRANSDATE,
 													@TRANSACTIONSTATUS,
+                                                    @ADMFEE,
+                                                    @FEE,
 													@DATAAREAID,
 													@PARTITION
 													)";
@@ -1078,8 +1191,11 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 							command.Parameters.AddWithValue("@Store", storeECR);
 							command.Parameters.AddWithValue("@TRANSDATE", Convert.ToDateTime(transDateECR).ToString("yyyy-MM-dd")); //convertdate YYYY-MM-DD 
 							command.Parameters.AddWithValue("@TRANSACTIONSTATUS", transactionStatusECR);
+                            command.Parameters.AddWithValue("@ADMFEE", admFeeECR);
+                            command.Parameters.AddWithValue("@FEE", admFeeECR);
 							command.Parameters.AddWithValue("@DATAAREAID", dataAreaIdECR);
 							command.Parameters.AddWithValue("@PARTITION", partitionECR);
+                            //command.Parameters.AddWithValue("@PARTITION", partitionECR);
 
 							if (connection.State != ConnectionState.Open)
 							{

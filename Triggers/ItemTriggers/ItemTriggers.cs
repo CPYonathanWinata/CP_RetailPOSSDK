@@ -72,6 +72,7 @@ namespace Microsoft.Dynamics.Retail.Pos.ItemTriggers
         public string itemIdRemove;
         public string activityTrigger;
         public decimal qtyBeforeAdded;
+        string taxGroupId ;
         public class parmRequest
         {
             public string company { get; set; }
@@ -171,14 +172,24 @@ namespace Microsoft.Dynamics.Retail.Pos.ItemTriggers
 
         public void PreSale(IPreTriggerResult preTriggerResult, ISaleLineItem saleLineItem, IPosTransaction posTransaction)
         {
-
+            bool existTaxTable = true;
             LSRetailPosis.ApplicationLog.Log("IItemTriggersV1.PreSale", "Prior to the sale of an item...", LSRetailPosis.LogTraceLevel.Trace);
-            
+
+
+            //check TaxTable - yonathan 17/07/2024
+            existTaxTable = checkTaxTable(LSRetailPosis.Settings.ApplicationSettings.Terminal.StoreId, Application.Settings.Database.DataAreaID, saleLineItem.ItemId);
+            //
+            if (existTaxTable == false)
+            {
+                posTransaction.OperationCancelled = true;
+                preTriggerResult.ContinueOperation = false;
+                return;
+            }
             //last before adding the item.
 
             
 
-
+             
             /*string customer = ((RetailTransaction)posTransaction).Customer.CustomerId;
 
             if (customer.ToString() == "C000004125")
@@ -196,7 +207,49 @@ namespace Microsoft.Dynamics.Retail.Pos.ItemTriggers
         {
             LSRetailPosis.ApplicationLog.Log("IItemTriggersV1.PostSale", "After the sale of an item...", LSRetailPosis.LogTraceLevel.Trace);
             activityTrigger = "AddSaleItemPOS";
+            string ppnValidation = APIAccess.APIAccessClass.ppnValidation;
+            var retailTransaction = posTransaction as RetailTransaction;
+            bool foundTaxDiff = false;
+            taxGroupId = "";
+            int countLoop = 0;
+            
+            if (APIAccess.APIAccessClass.isB2b == "1" || APIAccess.APIAccessClass.isB2b == "2") //check if customer is either B2B or Canvas 
+            {
+                foreach (var saleItems in retailTransaction.SaleItems) //loop to check if the item is the same tax group 
+                {
+                    //taxGroupId = saleItems.TaxGroupId;
+                    if (countLoop == 0)
+                    {
+                        taxGroupId = saleItems.TaxGroupId;
+                        countLoop++;
+                        continue;
+                    }
+                    else
+                    {
+                        //if (taxGroupId != saleItems.TaxGroupId)
+                        if(!taxGroupId.Equals(saleItems.TaxGroupId, StringComparison.OrdinalIgnoreCase))
+                        {
+                            using (frmMessage dialog = new frmMessage(string.Format("Item '{0}' memiliki TaxGroup '{1}'.\nTidak boleh add item dengan TaxGroup selain '{2}'", saleItems.ItemId, saleItems.TaxGroupId, taxGroupId), MessageBoxButtons.OK, MessageBoxIcon.Error))
+                            {
+                                LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                                posTransaction.OperationCancelled = true;
+                                return;
+                                //Application.RunOperation(PosisOperations.SetQty, itemIdRemove);
+                                //Application.RunOperation(PosisOperations.SetQty,itemIdRemove, posTransaction);
 
+                            }
+                        }
+                        else
+                        {
+                            countLoop++;
+                            continue;
+                        }
+                    }
+
+
+                }
+            }
+            
             //posTransaction.OperationCancelled = true;
         }//
 
@@ -212,6 +265,20 @@ namespace Microsoft.Dynamics.Retail.Pos.ItemTriggers
 
         public void PreVoidItem(IPreTriggerResult preTriggerResult, IPosTransaction posTransaction, int lineId)
         {
+
+            if (posTransaction.ToString() == "LSRetailPosis.Transaction.CustomerOrderTransaction" && (APIAccess.APIAccessClass.isB2b == "1" || APIAccess.APIAccessClass.isB2b == "2")) //check if customer is either B2B or Canvas 
+            {
+                string custType = APIAccess.APIAccessClass.isB2b == "1" ? "Canvas" : "B2B";
+                using (frmMessage dialog = new frmMessage(string.Format("Tidak bisa Void Product apabila sudah terbentuk Customer Order. Apabila ada item yang ingin ditambahkan, silakan void transaksi ini dan input ulang."), MessageBoxButtons.OK, MessageBoxIcon.Error))
+                {
+                    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                    posTransaction.OperationCancelled = true;
+                    return;
+                    //Application.RunOperation(PosisOperations.SetQty, itemIdRemove);
+                    //Application.RunOperation(PosisOperations.SetQty,itemIdRemove, posTransaction);
+
+                }
+            }
             LSRetailPosis.ApplicationLog.Log("IItemTriggersV1.PreVoidItem", "Before voiding an item", LSRetailPosis.LogTraceLevel.Trace);
             /*
             string customer = ((RetailTransaction)posTransaction).Customer.CustomerId;
@@ -277,6 +344,14 @@ namespace Microsoft.Dynamics.Retail.Pos.ItemTriggers
             LSRetailPosis.ApplicationLog.Log(source, value, LSRetailPosis.LogTraceLevel.Trace);
             LSRetailPosis.ApplicationLog.WriteAuditEntry(source, value);
 
+            var retailTransaction = posTransaction as RetailTransaction;
+            //add a code to delete the ppn if the itemline is zero - yonathan 16/07/2024
+            if (retailTransaction.SaleItems.Count == 0)
+            {
+                taxGroupId = "";
+            }
+            //
+
             //add to check discount payment from transaction.comment
             //var retailTransaction = posTransaction as RetailTransaction;
             //if (checkDiscPayment(posTransaction) == true)
@@ -303,28 +378,152 @@ namespace Microsoft.Dynamics.Retail.Pos.ItemTriggers
             LSRetailPosis.ApplicationLog.Log("IItemTriggersV1.PreSetQty", "Before setting the qty for an item", LSRetailPosis.LogTraceLevel.Trace);
             int countLines = 0;
             bool isPaymDisc = false;
+            bool existTaxTable = true;
             string userIDFromClass = APIAccess.APIAccessClass.userID;
 
-            //qtyBeforeAdded = posTransaction.
-            var retailTransaction = posTransaction as RetailTransaction;
-            //must fix here to get the real qty of the selected item
+            ////qtyBeforeAdded = posTransaction.
+            //var retailTransaction = posTransaction as RetailTransaction;
+            ////must fix here to get the real qty of the selected item
 
-            if(retailTransaction.CalculableSalesLines.Count != 0 && saleLineItem != null)
-            {
-                foreach (var lines in retailTransaction.CalculableSalesLines)
-                {
-                    if (retailTransaction.CalculableSalesLines[countLines].ItemId == saleLineItem.ItemId)
-                    {
-                        qtyBeforeAdded += retailTransaction.CalculableSalesLines[countLines].PriceQty;
+            //if(retailTransaction.CalculableSalesLines.Count != 0 && saleLineItem != null)
+            //{
+            //    foreach (var lines in retailTransaction.CalculableSalesLines)
+            //    {
+            //        if (retailTransaction.CalculableSalesLines[countLines].ItemId == saleLineItem.ItemId)
+            //        {
+            //            qtyBeforeAdded += retailTransaction.CalculableSalesLines[countLines].PriceQty;
                         
-                    }
-                    countLines++;
-                }
+            //        }
+            //        countLines++;
+            //    }
                 
+            //}
+            //check TaxTable - yonathan 17/07/2024
+            if (saleLineItem != null)
+            {
+                existTaxTable = checkTaxTable(LSRetailPosis.Settings.ApplicationSettings.Terminal.StoreId, Application.Settings.Database.DataAreaID, saleLineItem.ItemId);
             }
-
+            //
+            if (existTaxTable == false)
+            {
+                posTransaction.OperationCancelled = true;
+                preTriggerResult.ContinueOperation = false;
+                return;
+            }
             
 
+        }
+
+        private bool checkTaxTable(string storeId, string dataAreaId, string itemId)
+        {
+            SqlConnection connectionStore = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+            bool result = false;
+            //CHECK THE TAX TABLE DATA
+            try
+            {
+                string queryString = @"SELECT * FROM TAXTABLE JOIN TAXDATA
+                            ON TAXTABLE.TAXCODE = TAXDATA.TAXCODE
+                            WHERE TAXTABLE.DATAAREAID = @DATAAREAID";
+
+                using (SqlCommand command = new SqlCommand(queryString, connectionStore))
+                {
+
+                    command.Parameters.AddWithValue("@DATAAREAID", dataAreaId);
+
+
+                    if (connectionStore.State != ConnectionState.Open)
+                    {
+                        connectionStore.Open(); 
+                    }
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (!reader.HasRows)
+                        {
+
+                            using (frmMessage dialog = new frmMessage(string.Format("Tidak bisa melanjutkan transaksi karena tidak ada data TAXTABLE/TAXDATA pada toko {0}.\nHubungi Tim IT untuk melakukan Sync Data.", storeId), MessageBoxButtons.OK, MessageBoxIcon.Error))
+                            {
+                                LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+
+                                result= false;
+                            }
+                        }
+                        else
+                        {
+                            result= true;
+                        }
+                        
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+            finally
+            {
+                if (connectionStore.State != ConnectionState.Closed)
+                {
+                    connectionStore.Close();
+                }
+            }
+
+            //CHECK THE INVENTITEMMODULE TAX GROUP DATA
+            try
+            {
+                string queryString = @"SELECT ITEMID, MODULETYPE, TAXITEMGROUPID      
+                                        FROM  [ax].[INVENTTABLEMODULE]
+                                        WHERE MODULETYPE = 2
+                                        AND ITEMID = @ITEMID
+                                        AND TAXITEMGROUPID = ''";
+
+                using (SqlCommand command = new SqlCommand(queryString, connectionStore))
+                {
+
+                    command.Parameters.AddWithValue("@DATAAREAID", dataAreaId);
+                    command.Parameters.AddWithValue("@ITEMID", itemId);
+
+                    if (connectionStore.State != ConnectionState.Open)
+                    {
+                        connectionStore.Open();
+                    }
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+
+                            using (frmMessage dialog = new frmMessage(string.Format("Tidak bisa melanjutkan transaksi karena tidak ada data TAXGROUP INVENTTABLEMODULE untuk Item {0} pada toko {1}.\nHubungi Tim IT untuk melakukan Sync Data.",itemId, storeId), MessageBoxButtons.OK, MessageBoxIcon.Error))
+                            {
+                                LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+
+                                result=  false;
+                            }
+                        }
+                        else
+                        {
+                            result=  true;
+                        }
+
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+            finally
+            {
+                if (connectionStore.State != ConnectionState.Closed)
+                {
+                    connectionStore.Close();
+                }
+            }
+            return result;
 
         }
 

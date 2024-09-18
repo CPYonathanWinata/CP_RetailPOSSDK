@@ -21,6 +21,7 @@ using APIAccess;
 using LSRetailPosis.Settings;
 using System.Globalization;
 using System.Data.SqlClient;
+using Microsoft.Dynamics.Retail.Pos.Contracts.BusinessLogic;
 namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 {
 	public partial class CP_frmPackingSlipDetail : frmTouchBase
@@ -119,7 +120,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 			table.Columns.Add("ItemName");
 			table.Columns.Add("Unit");
 			table.Columns.Add("QtySO");
-			table.Columns.Add("QtyRcv");
+			table.Columns.Add("QtyDO");
 
 			//// Loop through the SalesLine elements and extract the values of ItemId and SalesQty
 			//XmlNodeList salesLines = doc.GetElementsByTagName("SalesLine");
@@ -164,7 +165,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 			table.Columns.Add("ItemName");
 			table.Columns.Add("Unit");
 			table.Columns.Add("QtySO");
-			table.Columns.Add("QtyRcv");
+			table.Columns.Add("QtyDO");
 
 			
 			foreach (var salesLine in this.lineItems)
@@ -222,7 +223,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 		{
 			string valueDeliverNow = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
 			decimal resultValue;
-			if (dataGridView1.Columns[e.ColumnIndex].Name == "QtyRcv")
+			if (dataGridView1.Columns[e.ColumnIndex].Name == "QtyDO")
 			{
 				if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null && decimal.TryParse(valueDeliverNow, out resultValue))
 				{
@@ -282,6 +283,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 		{
 			bool retValue;
 			string comment;
+            string splitInvoice;
 			int flagError = 0;
 			string functionNameAX = "GetStockAX%";
 			string functionNameAPI = "GetItemAPI";
@@ -303,7 +305,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 
 			APIAccess.APIAccessClass APIClass = new APIAccess.APIAccessClass();
 			APIAccess.APIFunction APIFunction = new APIAccess.APIFunction();
-			using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Are you sure to post packing slip?\nMake sure the qty receive is correct", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+			using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Apakah yakin akan melakukan posting?\nHarap pastikan qty barang sudah sesuai.", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
 			{
 				LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
 				if (dialog.DialogResult == DialogResult.Yes)
@@ -322,21 +324,21 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 					foreach (DataGridViewRow row in dataGridView1.Rows)
 					{
                         
-						//if (row.Cells["QtyRcv"].Value == null)
-						if (row.Cells["QtyRcv"].Value == null || row.Cells["QtyRcv"].Value == DBNull.Value || String.IsNullOrWhiteSpace(row.Cells["QtyRcv"].Value.ToString())) 
+						//if (row.Cells["QtyDO"].Value == null)
+						if (row.Cells["QtyDO"].Value == null || row.Cells["QtyDO"].Value == DBNull.Value || String.IsNullOrWhiteSpace(row.Cells["QtyDO"].Value.ToString())) 
 						{
 							flagError = 2;
 							break;
 						}
 						else
 						{
-                            qtyReceive = Convert.ToDecimal(row.Cells["QtyRcv"].Value);
+                            qtyReceive = Convert.ToDecimal(row.Cells["QtyDO"].Value);
                             qtySO = Convert.ToDecimal(row.Cells["QtySO"].Value);
                             if (qtyReceive < 0)
                             {
                                 flagError = 6;
                             }
-                            //if (Convert.ToDecimal(row.Cells["QtyRcv"].Value) <= Convert.ToDecimal(row.Cells["QtySO"].Value))
+                            //if (Convert.ToDecimal(row.Cells["QtyDO"].Value) <= Convert.ToDecimal(row.Cells["QtySO"].Value))
                             else
                             {
                                 if (qtyReceive <= qtySO)
@@ -344,7 +346,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                                     // Get the ItemId, SalesQty, and DeliverNow values from the DataGridView row
                                     string itemId = row.Cells["ItemId"].Value.ToString();
                                     string itemName = row.Cells["ItemName"].Value.ToString();
-                                    string deliverNow = row.Cells["QtyRcv"].Value.ToString();
+                                    string deliverNow = row.Cells["QtyDO"].Value.ToString();
 
                                     //check if this is stocked item
                                     positiveStatus = checkPositiveStatus(itemId);
@@ -380,11 +382,11 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                                         availQtyStockSO = decimal.Parse(responseCheckStockSO.response_data, CultureInfo.InvariantCulture);
 
                                         availQty = availQtyStock + availQtyStockSO; //
-                                        remainQty = availQty - Convert.ToDecimal(row.Cells["QtyRcv"].Value);
+                                        remainQty = availQty - Convert.ToDecimal(row.Cells["QtyDO"].Value);
                                         if (remainQty < 0)
                                         {
                                             flagError = 5;
-                                            itemIdStock += itemIdStock == "" ? string.Format("Itemid-ProductName-Stok\n{0} - {1} - (Qty {2})\n", itemId, itemName, availQty.ToString()) : string.Format("{0} - {1} - Qty {2}\n", itemId, itemName, availQty.ToString());
+                                            itemIdStock += itemIdStock == "" ? string.Format("Itemid-NamaBarang-Stok\n{0} - {1} - (Qty {2})\n", itemId, itemName, availQty.ToString()) : string.Format("{0} - {1} - Qty {2}\n", itemId, itemName, availQty.ToString());
 
                                         }
                                         else
@@ -423,15 +425,34 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 
 						try
 						{                            
-							CreatePackingSlip(out retValue, out comment, salesID, updatedXmlString);
+							CreatePackingSlip(out retValue, out comment, out splitInvoice, salesID, updatedXmlString);
 							if (retValue == false)
 							{
 								SalesOrder.InternalApplication.Services.Dialog.ShowMessage(comment, MessageBoxButtons.OK, MessageBoxIcon.Error);
 							}
 							else
 							{
-								SalesOrder.InternalApplication.Services.Dialog.ShowMessage(56120, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                if (comment == "4") //if sales order cancelled
+                                {
+                                    SalesOrder.InternalApplication.Services.Dialog.ShowMessage("Sales Order dibatalkan.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                }
+                                else
+                                {
+                                    SalesOrder.InternalApplication.Services.Dialog.ShowMessage("Posting berhasil.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    SalesOrderActions.TryPrintPackSlip(LSRetailPosis.Transaction.SalesStatus.Delivered, salesID);
+
+                                    string invoiceAx = "";
+                                    //string comboInvoice = "0";
+                                    //validate if automatically post invoice after packing slip DO (based on customer master) - Yonathan 17092024
+                                    if(splitInvoice == "0")
+                                    {
+                                        CreateInvoice(out invoiceAx);
+                                    }
+                                    
+                                }
+								
 								//add to trigger
+                                /* disable adding to API
 								var packList = new List<APIParameter.parmRequestAddItemMultiple>();                                 
 								foreach (DataGridViewRow row in dataGridView1.Rows)
 								{
@@ -439,24 +460,28 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 									var pack = new APIParameter.parmRequestAddItemMultiple()
 									{
 										ITEMID = row.Cells["ItemId"].Value.ToString(),
-										QTY = (Convert.ToDecimal(row.Cells["QtyRcv"].Value) * -1).ToString().Replace(",", "."), //lines.QuantityOrdered.ToString(),
+										QTY = (Convert.ToDecimal(row.Cells["QtyDO"].Value) * -1).ToString().Replace(",", "."), //lines.QuantityOrdered.ToString(),
 										UNITID = row.Cells["Unit"].Value.ToString(),
 										DATAAREAID = SalesOrder.InternalApplication.Settings.Database.DataAreaID,
 										WAREHOUSE = ApplicationSettings.Terminal.InventLocationId,
 										TYPE = "2",
 										REFERENCESNUMBER = salesID,
-										RETAILVARIANTID = ""
+										RETAILVARIANTID = "" 
 									};
 									//var data = MyJsonConverter.Serialize(pack);
 									packList.Add(pack);
 								}
 								urlAPI = APIClass.getURLAPIByFuncName(functionNameAPIAddItem);
 								string resultAPI = APIFunction.addItemMultiple(urlAPI, packList);
+                                 * */
 								//application.Services.Printing.PrintReceipt(Microsoft.Dynamics.Retail.Pos.Contracts.Services.FormType.SalesOrderReceipt, posTransaction, true);
-								SalesOrderActions.TryPrintPackSlip(LSRetailPosis.Transaction.SalesStatus.Delivered, salesID);
+								
+                                
 							}
 						
 							this.Close();
+                           
+
 						}
 						catch (Exception x)
 						{
@@ -468,11 +493,11 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 					}
 					else if( flagError == 1)
 					{
-						SalesOrder.InternalApplication.Services.Dialog.ShowMessage("QtyRcv tidak boleh lebih besar dari QtySo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						SalesOrder.InternalApplication.Services.Dialog.ShowMessage("QtyDO tidak boleh lebih besar dari QtySo.", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					}
 					else if(flagError == 2)
 					{
-						SalesOrder.InternalApplication.Services.Dialog.ShowMessage("Belum input QtyRcv.\nApabila tidak di-receive, ketik 0 pada QtyRcv", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						SalesOrder.InternalApplication.Services.Dialog.ShowMessage("Belum input QtyDO.\nApabila tidak di-receive, ketik 0 pada QtyDO.", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					}
                     else if (flagError == 3 || flagError == 4 || flagError == 5)
                     {
@@ -484,12 +509,98 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                     }
                     else if (flagError == 6)
                     {
-                        SalesOrder.InternalApplication.Services.Dialog.ShowMessage("QtyRcv tidak boleh minus / negatif", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        SalesOrder.InternalApplication.Services.Dialog.ShowMessage("QtyDO tidak boleh minus / negatif.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
 				}
 			}
 		}
+        private void CreateInvoice(out string _invoiceAx)
+        {
+            _invoiceAx = "";
+            string statusInvoice;
+            try
+            {
+                object[] parameterList = new object[] 
+							{
+								salesID.ToString(),
+								DateTime.Now
+								
+							};
 
+                ReadOnlyCollection<object> containerArray = SalesOrder.InternalApplication.TransactionServices.InvokeExtension("postSalesInvoice", parameterList);
+                _invoiceAx = containerArray[3].ToString();
+                statusInvoice = containerArray[2].ToString();
+                if (statusInvoice == "Success")
+                {
+                    SalesOrder.InternalApplication.Services.Dialog.ShowMessage(String.Format("Invoice {0} sudah terbentuk.", _invoiceAx), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    //print
+                    //update invoice id yonathan 06092024
+                    updateInvoiceId(_invoiceAx, salesID.ToString()); 
+                    ITransactionSystem transSys = SalesOrder.InternalApplication.BusinessLogic.TransactionSystem;
+                    transaction.InvoiceComment = _invoiceAx;
+                    transaction.Save();
+                   
+                    transSys.PrintTransaction(transaction, false, false);
+                    
+                }
+                else
+                {
+                    throw new Exception("Invoice error, please post invoice on AX");
+                }
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+        }
+        //update invoice id yonathan 06092024
+        private void updateInvoiceId(string _invoiceAx, string _salesId)
+        {
+            string storeId = "";
+            SqlConnection connection = ApplicationSettings.Database.LocalConnection;
+            storeId = ApplicationSettings.Terminal.StoreId;
+            //var retailTransaction = posTransaction as RetailTransaction;
+            try
+            {
+                string queryString = @" UPDATE RETAILTRANSACTIONTABLE
+                                        SET INVOICECOMMENT = @INVOICECOMMENT
+                                        WHERE STORE = @STOREID
+                                        AND  SALESORDERID =@SALESID";
+
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+                    command.Parameters.AddWithValue("@STOREID", storeId);
+                    command.Parameters.AddWithValue("@SALESID", _salesId);
+                    command.Parameters.AddWithValue("@INVOICECOMMENT", _invoiceAx);
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+                    }
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+
+                            
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+                }
+            }
+        }
 		private string getInventSite(string inventLocationId)
 		{
 			string inventSite = "";
@@ -540,8 +651,10 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 		public void CreatePackingSlip(
 			out bool retValue,
 			out string comment,
+            out string splitInvoice,
 			string salesId, string _xmlString)
 		{
+            splitInvoice = "0";
 			try
 			{
 				object[] parameterList = new object[] 
@@ -555,15 +668,26 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 				ReadOnlyCollection<object> containerArray = application.TransactionServices.InvokeExtension("postPackingSlip", parameterList);
 				retValue = (bool)containerArray[1];
 				comment = containerArray[2].ToString();
-
+                
 				if (containerArray.Count > 3)
 				{
-					string errorDetail = containerArray[3].ToString();
-
-					if (!string.IsNullOrWhiteSpace(errorDetail))
+					string detailComment = containerArray[3].ToString();
+                    splitInvoice = containerArray[3].ToString();
+                    if (!string.IsNullOrWhiteSpace(detailComment))
 					{
-						comment += errorDetail;
+                        comment += detailComment;
 					}
+
+                    if (!string.IsNullOrWhiteSpace(splitInvoice))
+                    {
+                        splitInvoice = splitInvoice;
+                    }
+                    else
+                    {
+                        splitInvoice = "0";
+                    }
+
+                    
 				}
 			}
 			catch (Exception ex)

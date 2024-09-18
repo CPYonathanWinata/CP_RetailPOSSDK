@@ -163,6 +163,8 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder
                     // Quit if cancel is pressed...
                     if (salesOrderDialog.DialogResult == System.Windows.Forms.DialogResult.Cancel)
                     {
+                        //SalesOrder.InternalApplication.RunOperation(PosisOperations.VoidTransaction, false);
+                        //SalesOrder.InternalApplication.RunOperation(PosisOperations.VoidTransaction, false);
                         return posTransaction;
                     }
                     else
@@ -959,9 +961,10 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder
                         // Call EFT to get credit card token - NOTE: May throw exception
                         this.Application.Services.EFT.GenerateCardToken(CalculateShippingDue(cot), cot);
                         valid = !(string.IsNullOrEmpty(cot.CreditCardToken));
-                    }
+                    } 
                 }
             }
+            //application.RunOperation(PosisOperations.VoidTransaction, ""); //mod test
             return valid;
         }
 
@@ -1742,7 +1745,10 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder
             ReadOnlyCollection<object> containerArray;
             string fromDateString = SerializationHelper.GetDateString(startDate);
             string toDateString = SerializationHelper.GetDateString(endDate);
-            containerArray = SalesOrder.InternalApplication.TransactionServices.Invoke("searchCustomerOrderList", customerSearchTerm, orderSearchTerm, fromDateString, toDateString, resultMaxCount);
+
+            //add by Yonathan to specified warehouse id for this store only 20082024
+            string wareHouse = "WH_"+ApplicationSettings.Database.StoreID;
+            containerArray = SalesOrder.InternalApplication.TransactionServices.Invoke("searchCustomerOrderList", customerSearchTerm, orderSearchTerm, fromDateString, toDateString, wareHouse, resultMaxCount);
 
             retValue = SerializationHelper.ConvertToBooleanAtIndex(containerArray, 1);
             comment = SerializationHelper.ConvertToStringAtIndex(containerArray, 2);

@@ -214,6 +214,17 @@ namespace Microsoft.Dynamics.Retail.Pos.Services
                 AlignedText(string.Empty, amount));
         }
 
+        /// <summary>
+        /// Display change due on the line display.
+        /// </summary>
+        /// <param name="amount"></param>
+        public void DisplayChange(string amount)
+        {
+            DisplayText(
+                ApplicationLocalizer.Language.Translate(2703), //Change
+                AlignedText(string.Empty, amount));
+        }
+
         #endregion
 
         #region Private Methods

@@ -279,7 +279,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             this.tableLayoutPanelLower.Size = new System.Drawing.Size(828, 153);
             this.tableLayoutPanelLower.TabIndex = 13;
             // 
-            // btnSave
+            // btnSaveF
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSave.Appearance.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));

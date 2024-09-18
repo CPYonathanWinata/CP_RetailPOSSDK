@@ -336,7 +336,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 						{
 
                             //check if already apply custom discount, so that the user can't edit Qty from here.
-                            if (retailTransaction.Comment == "PAYMENTDISCOUNT" || retailTransaction.Comment == "PROMOED" || retailTransaction.Comment == "PROMORCPT")
+                            if (retailTransaction.Comment == "PAYMENTDISCOUNT" || retailTransaction.Comment == "PROMOPDI" || retailTransaction.Comment == "PROMOPDIS")
                             {
                                 
                                 ShowMsgBox("Fungsi ini dibatasi ketika sudah apply discount PROMO. Silakan lanjut ke menu pembayaran atau batalkan sepenuhnya (void) transaksi ini");
@@ -602,7 +602,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 					{
 
                         bool isCartEmpty = true;
-                        bool isIntegrated = false;
+                        bool isIntegrated = false; 
 						//Validate must choose customer before proceed
 						if (posTransaction.ToString() == "LSRetailPosis.Transaction.RetailTransaction")
 						{
@@ -696,7 +696,23 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 
                             if ((customer.CustomerId != null || customer.CustomerId == "") && transaction.SaleItems.Count != 0)
                             {
+                                if (customer.CustomerId != "")
+                                {
+                                    checkB2bCust(customer.CustomerId);
+                                    string isB2bCust = "";
+                                    
 
+                                    isB2bCust = APIAccess.APIAccessClass.isB2b;
+
+                                    if (isB2bCust == "1" || isB2bCust == "2")
+                                    {
+                                        using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Customer B2B atau Canvas tidak bisa mengakses menu ini", MessageBoxButtons.OK, MessageBoxIcon.Stop))
+                                        {
+                                            LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                                            return;
+                                        }
+                                    }
+                                }
 
                                 foreach (var lineItem in transaction.SaleItems)
                                 {
@@ -704,7 +720,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                                     foreach (var discountLines in lineItem.PeriodicDiscountLines)
                                     {
                                         PeriodicDiscountItem periodDiscItem = discountLines as PeriodicDiscountItem;
+<<<<<<< HEAD
                                         if (periodDiscItem.OfferId.StartsWith("PDI") || periodDiscItem.OfferId.StartsWith("PDIS"))  //if (periodDiscItem.OfferId.StartsWith("ED") || periodDiscItem.OfferId.StartsWith("QS")) //
+=======
+                                        if (periodDiscItem.OfferId.StartsWith("PDI") || periodDiscItem.OfferId.StartsWith("PDIS")) //if (periodDiscItem.OfferId.StartsWith("PDI") || periodDiscItem.OfferId.StartsWith("PDIS"))  //
+>>>>>>> a91569e0e793ed2a2c16580a828e61f8a0ec0699
                                         {
                                             using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Tidak bisa akses ke menu ini karena sudah mendapat diskon", MessageBoxButtons.OK, MessageBoxIcon.Stop))
                                             {
@@ -765,7 +785,24 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                             //if ( transaction.SaleItems.Count != 0)
                             {
                                  //check 
-                                 
+                                if (customer.CustomerId != "")
+                                {
+                                    checkB2bCust(customer.CustomerId);
+                                    string isB2bCust = "";
+
+
+                                    isB2bCust = APIAccess.APIAccessClass.isB2b;
+
+                                    if (isB2bCust == "1" || isB2bCust == "2")
+                                    {
+                                        using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Customer B2B atau Canvas tidak bisa mengakses menu ini", MessageBoxButtons.OK, MessageBoxIcon.Stop))
+                                        {
+                                            LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                                            return;
+                                        }
+                                    }
+                                }
+
                                 foreach(var lineItem in transaction.SaleItems)
                                 {
                                     
@@ -773,7 +810,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                                     {
                                         PeriodicDiscountItem periodDiscItem = discountLines as PeriodicDiscountItem;
 
+<<<<<<< HEAD
                                         if (periodDiscItem.OfferId.StartsWith("PDI")) //if (periodDiscItem.OfferId.StartsWith("ED")) //
+=======
+                                        if (periodDiscItem.OfferId.StartsWith("PDI")) //if (periodDiscItem.OfferId.StartsWith("PDI")) //
+>>>>>>> a91569e0e793ed2a2c16580a828e61f8a0ec0699
                                         {
                                              promoID = periodDiscItem.OfferId;
                                         }
@@ -849,7 +890,23 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                             //if ( transaction.SaleItems.Count != 0)
                             {
                                 //check 
+                                if (customer.CustomerId != "")
+                                {
+                                    checkB2bCust(customer.CustomerId);
+                                    string isB2bCust = "";
 
+
+                                    isB2bCust = APIAccess.APIAccessClass.isB2b;
+
+                                    if (isB2bCust == "1" || isB2bCust == "2")
+                                    {
+                                        using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Customer B2B atau Canvas tidak bisa mengakses menu ini", MessageBoxButtons.OK, MessageBoxIcon.Stop))
+                                        {
+                                            LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                                            return;
+                                        }
+                                    }
+                                }
                                 foreach (var lineItem in transaction.SaleItems)
                                 {
 
@@ -868,7 +925,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                                         //{
                                         //    promoID = periodDiscItem.OfferId;
                                         //}
+<<<<<<< HEAD
                                         if (periodDiscItem.OfferId.StartsWith("PDIS")) //if (periodDiscItem.OfferId.StartsWith("QS")) //
+=======
+                                        if (periodDiscItem.OfferId.StartsWith("PDIS")) //if (periodDiscItem.OfferId.StartsWith("PDIS")) //
+>>>>>>> a91569e0e793ed2a2c16580a828e61f8a0ec0699
                                         {
                                             promoID = periodDiscItem.OfferId;
                                         }
@@ -1264,7 +1325,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                 case "101":
                     {
 
-                        
+                        ReadOnlyCollection<object> containerArray;
+                        string fromDate = "21/06/2024 00:00:00";
+                        string toDate = "21/06/2024 16:00:00";
+                        containerArray = Application.TransactionServices.InvokeExtension("getSalesOrderSummary", "JKT", "WH_JDELIMA", fromDate,toDate);
+                        //MessageBox.Show(string.Format("{0} - {1}",DateTime.Now.ToString(), containerArray[3].ToString()));
                     }
                     break;
                 //Application.RunOperation(PosisOperations.PayCard, string.Empty, posTransaction);
@@ -1308,6 +1373,31 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 			}
 
 		}
+
+        private void checkB2bCust(string _custId)
+        {
+             
+                string isB2bCust = "";
+                if (Application.TransactionServices.CheckConnection())
+                {
+                    try
+                    {
+                        ReadOnlyCollection<object> containerArray = Application.TransactionServices.InvokeExtension("getB2bRetailParam", _custId);
+
+                        APIAccess.APIAccessClass.isB2b = containerArray[6].ToString();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                        throw;
+                    }
+                }
+
+                 
+
+           
+        }
 
         private bool checkDiscPayment(IPosTransaction posTransaction)
         {

@@ -137,6 +137,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
 			LSRetailPosis.ApplicationLog.Log("PaymentTriggers.OnPayment", "On the addition of a tender...", LSRetailPosis.LogTraceLevel.Trace);
 		}
 
+<<<<<<< HEAD
 		public void PrePayment(IPreTriggerResult preTriggerResult, IPosTransaction posTransaction, object posOperation, string tenderId)
 		{
 			string messageBoxString;
@@ -159,6 +160,31 @@ namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
 			   
 				preTriggerResult.ContinueOperation = false;
 				return;
+=======
+        public void PrePayment(IPreTriggerResult preTriggerResult, IPosTransaction posTransaction, object posOperation, string tenderId)
+        {
+            string messageBoxString = "";
+
+            //add by Yonathan 13/05/2024 to check B2B Cust cannot pay unless creat a customer order first
+            if ((APIAccess.APIAccessClass.isB2b == "1" || APIAccess.APIAccessClass.isB2b == "2") && posTransaction.ToString() == "LSRetailPosis.Transaction.RetailTransaction")
+            {
+                string custType = APIAccess.APIAccessClass.isB2b == "1" ? "Canvas" : "B2B";
+                using (frmMessage dialog = new frmMessage(string.Format("Customer {0} diharuskan membuat Customer Order\nterlebih dahulu untuk bisa melakukan pembayaran.",custType), MessageBoxButtons.OK, MessageBoxIcon.Stop))
+                {
+                    POSFormsManager.ShowPOSForm(dialog);
+                }
+              
+                preTriggerResult.ContinueOperation = false;                     
+                
+                return;
+            }
+            //add if to check whether the stock is enough by yonathan 02/01/2023
+            if (checkStock(posTransaction, out messageBoxString) == true)
+            {
+               
+                preTriggerResult.ContinueOperation = false;
+                return;
+>>>>>>> a91569e0e793ed2a2c16580a828e61f8a0ec0699
  
 			}
 			else
@@ -531,16 +557,52 @@ namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
 			urlRTS = APIClass.getURLAPIByFuncName(functionNameAX);
 
 
+<<<<<<< HEAD
 			var positiveItemIds = transaction.SaleItems
 			.Where(item => !item.Voided && checkPositiveStatus(item.ItemId))
 			.GroupBy(item => item.ItemId)
 			.Select(group => group.Key.ToString());
+=======
+            //var positiveItemIds = transaction.SaleItems
+            //.Where(item => !item.Voided && checkPositiveStatus(item.ItemId))
+            //.GroupBy(item => item.ItemId)
+            //.Select(group => group.Key.ToString());
+
+            //itemIdMulti = string.Join(";", positiveItemIds);
+
+
+            //// Split the string by semicolon (;) delimiter
+            //string[] itemIdVal = itemIdMulti.Split(';');
+
+            //new to get item quantity
+            //change by Yonathan to add QTY Input 15/08/2024
+            var positiveItems = transaction.SaleItems
+            .Where(item => !item.Voided && checkPositiveStatus(item.ItemId))
+            .GroupBy(item => item.ItemId)
+            .Select(group => new
+            {
+                ItemId = group.Key,
+                Quantity = group.Sum(item => item.Quantity)
+            });
+
+            var positiveItemIds = positiveItems
+                .Select(item => item.ItemId.ToString());
+>>>>>>> a91569e0e793ed2a2c16580a828e61f8a0ec0699
 
 			itemIdMulti = string.Join(";", positiveItemIds);
 
+            var positiveQuantities = positiveItems
+                .Select(item => item.Quantity);
 
+<<<<<<< HEAD
 			// Split the string by semicolon (;) delimiter
 			string[] itemIdVal = itemIdMulti.Split(';');
+=======
+            string quantityItems = string.Join(";", positiveQuantities);
+            //end
+            // Split the string by semicolon (;) delimiter
+            string[] itemIdVal = itemIdMulti.Split(';');
+>>>>>>> a91569e0e793ed2a2c16580a828e61f8a0ec0699
 
 			// Loop through each substring
 			for (int indexLoop = 0; indexLoop < itemIdVal.Length; indexLoop++)
@@ -562,6 +624,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
 			}
  
 
+<<<<<<< HEAD
 			
 
 			/*
@@ -1102,6 +1165,549 @@ namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
 			{
 				MessageBox.Show(e.ToString());
 			}
+=======
+            
+
+            /*
+            foreach (var orderItem in transaction.SaleItems.Where(s => s.Voided == false))
+            {
+                positiveStatus = checkPositiveStatus(orderItem.ItemId);
+                
+                // Add the separator (;) if it's not the last item
+                if (orderItem.ItemId != transaction.SaleItems.ElementAt(transaction.SaleItems.Count - 1).ItemId && positiveStatus == true)
+                {
+                    itemIdMulti += ";";
+                }
+                else if (positiveStatus == true)
+                {
+                    itemIdMulti += orderItem.ItemId;
+                }
+
+
+                ////chec if positivestatus
+                
+                ////loop through the items in the cart
+
+                //if(positiveStatus == true)
+                //{
+                //    itemIdMulti += orderItem.ItemId;
+                //    // Add the separator (;) if it's not the last item
+                //    if (orderItem.ItemId != transaction.SaleItems.ElementAt(transaction.SaleItems.Count - 1).ItemId)
+                //    {
+                //        itemIdMulti += ";";
+                //    }
+                //}
+                 
+                
+            }*/
+
+            
+
+            
+            try
+            {
+
+                string queryString = @" SELECT A.INVENTLOCATION, A.INVENTLOCATIONDATAAREAID, C.INVENTSITEID 
+                            FROM ax.RETAILCHANNELTABLE A, ax.RETAILSTORETABLE B, ax.INVENTLOCATION C
+                            WHERE A.RECID=B.RECID AND C.INVENTLOCATIONID=A.INVENTLOCATION AND B.STORENUMBER=@STOREID";
+
+
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+                    command.Parameters.AddWithValue("@STOREID", posTransaction.StoreId);
+
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+
+                    }
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            siteId = reader["INVENTSITEID"].ToString();
+                            warehouseId = reader["INVENTLOCATION"].ToString();
+                        }
+
+                    }
+                }
+
+                //string queryString2 = @"SELECT ID.INVENTDIMID, ITEMID, CONFIGID FROM INVENTDIM ID JOIN INVENTITEMBARCODE IB ON ID.INVENTDIMID = IB.INVENTDIMID
+                //                         WHERE ITEMID = @ITEMID";
+
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+                }
+            }
+
+            ////for testing purpose
+            //MessageBox.Show(itemIdMulti);
+            ////
+           
+            if (itemIdMulti != "")
+            {
+                //change by Yonathan to add QTY Input 15/08/2024
+                var result = apiFunction.checkStockOnHandMulti(Application, urlRTS, Application.Settings.Database.DataAreaID, siteId, ApplicationSettings.Terminal.InventLocationId, itemIdMulti, "", "", configIdMulti, quantityItems,transaction.TransactionId);
+                xmlResponse = result[3].ToString();
+                
+                XmlDocument xmlDoc = new XmlDocument(); 
+                xmlDoc.LoadXml(xmlResponse);
+
+                XmlNodeList itemNodes = xmlDoc.SelectNodes("//StockListResult");
+                //messageBoxString = "Stock barang di bawah ini kurang atau tidak cukup untuk ditransaksikan. Silakan hapus atau kurangi quantity-nya.\n\n";//ITEMID   | QTY TERSEDIA \n";
+                //messageBoxString += "ITEMID | NAMA ITEM                | QTY TERSEDIA \n";
+
+                //string[] itemIdsArray = itemIdMulti.Split(';');
+
+                //foreach (XmlNode node in itemNodes)
+                //{
+                //    itemId = node.Attributes["ItemId"].Value;
+                //    remainQty = Convert.ToDecimal(node.Attributes["QtyAvail"].Value);
+                //    var selectedSaleItem = transaction.SaleItems.FirstOrDefault(item => item.ItemId == node.Attributes["ItemId"].Value && item.Voided != true);
+                //    statusItem = remainQty - selectedSaleItem.Quantity < 0 ? "Tidak" : "Ya";
+
+                //    if (statusItem == "Tidak")
+                //    {
+                //        itemName = selectedSaleItem.Description.PadRight(35); // Adjust the width as needed
+                         
+                //        selectedSaleItem.ShouldBeManuallyRemoved = true;
+                //        findStockEmpty = true;
+                //    }
+                //}
+
+
+                //Yonathan for test purposes
+                
+                //end  
+                // Show custom dialog form
+                using (Infolog customDialog = new Infolog(itemNodes,transaction))
+                {
+                    findStockEmpty = customDialog.findStockEmpty;
+                    if (findStockEmpty == true)
+                    {
+                        customDialog.ShowDialog();
+
+                    }
+                     
+                    
+
+
+                }
+                //customDialogForm.Controls.Add(dataGridView);
+
+                //// Show the custom dialog form
+                //customDialogForm.ShowDialog();
+            }
+
+          
+
+
+            /*
+            // Iterate through the array using a foreach loop
+            //foreach (string orderItem in itemIdsArray)
+            foreach (var orderItem in transaction.SaleItems.Where(s => s.Voided == false))
+            //&& !excludedItemIds.Split(';').Contains(item.ItemId.ToString())
+            //foreach (XmlNode node in itemNodes)
+            //foreach (var orderItem in transaction.SaleItems.Where(s => s.Voided == false && !itemIdMulti.Split(';').Contains(s.ItemId.ToString())))
+            {//availQty;// -(orderItem.quantity);// + qtyBeforeAdded);
+
+                //remainQty = Convert.ToDecimal(node.Attributes["QtyAvail"].Value); 
+                remainQty = Convert.ToDecimal(itemNodes[indexRow].Attributes["QtyAvail"].Value);
+                statusItem = remainQty - orderItem.Quantity < 0 ? "Tidak" : "Ya";
+                itemId = itemNodes[indexRow].Attributes["ItemId"].Value;
+                
+
+                if (statusItem == "Tidak")
+                {
+                    itemName = orderItem.Description; //TruncateString(orderItem.Description, 33);
+                    messageBoxString += itemId + " | " + itemName + " | " + remainQty + "\n";// +" | " + statusItem + "\n";
+                    orderItem.ShouldBeManuallyRemoved = true;
+                    findStockEmpty = true;
+                }
+                //APIAccess.APIAccessClass.itemToRemove.Add(itemId);
+                    //+ "\n";
+                indexRow++;
+            }
+             * */
+
+            //MessageBox.Show(messageBoxString);
+            return findStockEmpty;
+            //itemNodes[indexRow].Attributes["ItemId"].Value
+            //itemNodes[indexRow].Attributes["QtyAvail"].Value
+            //throw new NotImplementedException();
+        }
+
+
+
+        /// <summary>
+        /// Triggered before voiding of a payment.
+        /// </summary>
+        /// <param name="preTriggerResult"></param>
+        /// <param name="posTransaction"></param>
+        /// <param name="lineId"> </param>
+        public void PreVoidPayment(IPreTriggerResult preTriggerResult, IPosTransaction posTransaction, int lineId)
+        {
+            LSRetailPosis.ApplicationLog.Log("PaymentTriggers.PreVoidPayment", "Before the void payment operation...", LSRetailPosis.LogTraceLevel.Trace);
+        }
+
+        /// <summary>
+        /// Triggered after voiding of a payment.
+        /// </summary>
+        /// <param name="posTransaction"></param>
+        /// <param name="lineId"> </param>
+        public void PostVoidPayment(IPosTransaction posTransaction, int lineId)
+        {
+            LSRetailPosis.ApplicationLog.Log("PaymentTriggers.PostVoidPayment", "After the void payment operation...", LSRetailPosis.LogTraceLevel.Trace);
+        }
+
+        /// <summary>
+        /// Triggered before registering cash payment.
+        /// </summary>
+        /// <param name="preTriggerResult"></param>
+        /// <param name="posTransaction"></param>
+        /// <param name="posOperation"></param>
+        /// <param name="tenderId"></param>
+        /// <param name="currencyCode"></param>
+        /// <param name="amount"></param>
+        public void PreRegisterPayment(IPreTriggerResult preTriggerResult, IPosTransaction posTransaction, object posOperation, string tenderId, string currencyCode, decimal amount)
+        {
+            LSRetailPosis.ApplicationLog.Log("PaymentTriggers.PreRegisterPayment", "Before registering the payment...", LSRetailPosis.LogTraceLevel.Trace);
+        }
+        #endregion
+
+        #region Custom
+        private void getCustAddNoOrder(string custId)
+        {
+            SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+            try
+            {
+
+                string queryString = @" SELECT CPNoOrder FROM [ax].[CUSTTABLE]
+                                        WHERE ACCOUNTNUM =  @CUSTID
+                                        AND CPNoOrder = 1";
+
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+                    command.Parameters.AddWithValue("@CUSTID", custId);
+
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+                    }
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            custNoOrder = reader.GetInt32(0);
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+                }
+            }
+        }
+
+        private void getNoOrder(string transactionId)
+        {
+            SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+            try
+            {
+                string queryString = @" SELECT NOORDER FROM [dbo].[CPOrderTable]
+                                        WHERE TRANSACTIONID =  @TRANSACTIONID";
+
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+                    command.Parameters.AddWithValue("@TRANSACTIONID", transactionId);
+
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+                    }
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            NoOrder = reader.GetString(0);
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+                }
+            }
+        }
+
+        public static char ReturnLRC(string RequestMessage)
+        {
+            int lrcAnswer = 0;
+            for (int i = 0; i < RequestMessage.Length; i++)
+            {
+                lrcAnswer = lrcAnswer ^ (Byte)(Encoding.UTF7.GetBytes(RequestMessage.Substring(i, 1))[0]);
+            }
+            return (Char)lrcAnswer;
+        }
+
+
+        public static string ConvertStringToHex(string asciiString)
+        {
+            string hex = "";
+            foreach (char c in asciiString)
+            {
+                int tmp = c;
+                hex += String.Format("{0:x2}", (uint)System.Convert.ToUInt32(tmp.ToString()));
+            }
+            return hex;
+        }
+
+        public static string ConvertHexToString(string HexValue)
+        {
+            string StrValue = "";
+            while (HexValue.Length > 0)
+            {
+                StrValue += System.Convert.ToChar(System.Convert.ToUInt32(HexValue.Substring(0, 2), 16)).ToString();
+                HexValue = HexValue.Substring(2, HexValue.Length - 2);
+            }
+            return StrValue;
+        }
+
+        public static bool CheckForInternetConnection()
+        {
+            try
+            {
+                using (var client = new WebClient())
+                using (client.OpenRead("https://pfm.cp.co.id/api/connection/check"))
+                    return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        /*
+        private void CPAPIEZEELINKCheckConnection()
+        {
+            SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+
+            try
+            {
+                string queryString = "SELECT TOP 1 TRANSACTIONID FROM CPEZSELECTEDCUSTOMER ORDER BY TRANSACTIONID DESC";
+
+                using (SqlCommand cmd = new SqlCommand(queryString, connection))
+                {
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+                    }
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            if(!CheckForInternetConnection())
+                            {
+                                MessageBox.Show("No Internet Connection, Current transaction will not earn point.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Format Error", ex);
+            }
+            finally
+            {
+                if (connection != null)
+                    connection.Dispose();
+            }
+        }
+        */
+        private bool checkCustVoucherCode(string custID)
+        {
+            bool returnValue = false;
+            SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+
+            try
+            {
+                string queryString = @" SELECT ISVOUCHERCODEREQUIRED FROM [ax].[CPCUSTTABLEVOUCHER]
+                                        WHERE ACCOUNTNUM =  @CUSTID
+                                        AND ISVOUCHERCODEREQUIRED = 1";
+
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+                    command.Parameters.AddWithValue("@CUSTID", custID);
+
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+                    }
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            returnValue = true;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+                }
+            }
+
+            return returnValue;
+        }
+
+        private bool checkVoucherCode()
+        {
+            bool returnValue = false;
+            SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+
+            try
+            {
+
+                string queryString = @"SELECT TOP 1 VOUCHERCODE FROM CPEXTVOUCHERCODETMP";
+
+                using (SqlCommand cmd = new SqlCommand(queryString, connection))
+                {
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+                    }
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            returnValue = true;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+                }
+            } 
+
+            return returnValue;
+        }
+
+        private void CP_PaymentForm(decimal amount)
+        {
+            CP_FormPayment cpFormPayment = new CP_FormPayment(amount);
+            cpFormPayment.ShowDialog();
+        //    break;
+        }
+        
+        /*
+        private void CP_ECRBCA(decimal amount)
+        {
+          //  int amount = (int)((RetailTransaction)posTransaction).NetAmountWithTax;
+        //    MessageBox.Show("masuk ke CPECRBCA"); 
+            
+            SerialPort port = new SerialPort();
+            port.PortName = "COM6";
+       //     port.PortName = "COM7";
+            port.Parity = Parity.None;
+            port.BaudRate = 9600;
+            port.DataBits = 8;
+            port.StopBits = StopBits.One;
+           // port.Handshake = Handshake.RequestToSend;
+           // port.ReceivedBytesThreshold = 8;
+            if (port.IsOpen)
+            {
+                MessageBox.Show("port is open");
+                port.DataReceived += new SerialDataReceivedEventHandler(mySerialPort_DataReceived);
+                port.Close();
+                port.Dispose();
+            }
+            else 
+            {
+         //       MessageBox.Show("port is not open");
+            }
+          //   string hexString = this.CPgetHexData(amount);
+       
+             byte[] bytesToSend = StringToByteArray(CPgetHexData(amount));
+
+             int lrcValue = bytesToSend[1] ^ bytesToSend[2];
+
+             for (int i = 3; i < bytesToSend.Length; i++)
+            {
+                lrcValue ^= bytesToSend[i];
+            }
+
+            //hexString = ConvertStringToHex(paddingValue);
+            int tmp = lrcValue;
+            string hexString = String.Format("{0:x2}", (uint)System.Convert.ToUInt32(tmp.ToString()));
+            //Array.Clear(valueByte, 0, valueByte.Length);
+            byte[] valueByte = StringToByteArray(hexString);
+
+            for (int i = 0; i < valueByte.Length; i++)
+            {
+                Array.Resize(ref bytesToSend, bytesToSend.Length + 1);
+                bytesToSend[bytesToSend.GetUpperBound(0)] = valueByte[i];
+            }
+
+            Console.WriteLine("Request Hex : ");
+            Console.WriteLine(bytesToSend);
+            
+            try
+            {
+                port.DataReceived += new SerialDataReceivedEventHandler(mySerialPort_DataReceived);
+                port.Open();
+       //         MessageBox.Show("open port");
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.ToString());
+            }
+>>>>>>> a91569e0e793ed2a2c16580a828e61f8a0ec0699
    //         MessageBox.Show("before write port ");
 			port.Write(bytesToSend,0,bytesToSend.Length);
 	 //       MessageBox.Show("write port");

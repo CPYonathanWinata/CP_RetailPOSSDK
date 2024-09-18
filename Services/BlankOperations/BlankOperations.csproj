@@ -14,6 +14,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>..\..\..\..\AX\Retail POS\Extensions\</OutputPath>
     <UseVSHostingProcess>false</UseVSHostingProcess>
+    <DefineConstants>lica</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>$(SDKOutputPath)\bin\Release\</OutputPath>

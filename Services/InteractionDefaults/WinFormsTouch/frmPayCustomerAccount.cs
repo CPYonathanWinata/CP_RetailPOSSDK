@@ -356,7 +356,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 					using (frmMessage dialog = new frmMessage("Please Choose Customer for Tender " + this.tenderInfo.TenderName, MessageBoxButtons.OK, MessageBoxIcon.Stop))
 					{
 						POSFormsManager.ShowPOSForm(dialog);
-						Close();
+						Close(); 
 					}
 				}
 				#endregion
@@ -420,7 +420,9 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 
 				//set Unused field to Invisible
 				lblCustName.Visible = false;
-				txtCustName.Visible = false;
+                //lblCustName.Text = "Biaya Tarik Tunai";
+                txtCustName.Visible = false; //set true for bank adm fee 10/06/2024 Yonathan //CPIADMFEE
+                
 				//custom by Yonathan 2 Dec 2022 custom QRIS 
 				btnInquiry.Visible = false;
 				//btnQRIS.Visible = false;
@@ -522,7 +524,13 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 			else if ((int.Parse(this.tenderInfo.TenderID) == tenderShopee
 				|| int.Parse(this.tenderInfo.TenderID) == tenderShopeeDev) && isIntegrated == true)
 			{
-				getURLAPI();
+				//getURLAPI(); //disable temporarily for testing JOFFICE 11092024
+
+                //temp code to define URL for SHOPEE
+                urlCreate = "https://partnerpfm.cp.co.id/api/shopeePay/snap/createDynamicQR";//reader["URLCREATE"].ToString();
+                urlInvalidate = "https://partnerpfm.cp.co.id/api/shopeePay/snap/QRInvalidate"; //reader["URLINVALIDATE"].ToString();
+                urlNotify = "https://partnerpfm.cp.co.id/api/shopeePay/snap/manualPaymentStatus";//reader["URLNOTIFY"].ToString();   
+                //end
 				//prepare form for other payment (default as is)
 				cmbPilihBank.Visible = false;
 				btnRequest.Visible = false;
@@ -2491,7 +2499,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 					//    btnOk.Enabled = false;
 					//}
 					////// Combine the base directory with the "/extension/img" folder path 
-					//string imgFolderPath = System.IO.Path.Combine(baseDirectory, "Extensions", "img");
+					//string imgFolderPath = System.IO.Path.Combine(baseDirectory, "Extensions", "img");    
 
 
 					//PictureBox pictureQRIS = new PictureBox();                
@@ -2690,6 +2698,37 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 								string invoiceNumber = GME_Var.invoiceNumberBCA;
 								int transAmount = int.Parse(GME_Var.amountBCA.Substring(0, GME_Var.amountBCA.Length - 2));
 								int otherAmount = int.Parse(GME_Var.otherAmountBCA.Substring(0, GME_Var.otherAmountBCA.Length - 2));
+                                decimal admFee = 0;
+                                decimal admFeeText = 0;
+                                //add Adm fee by Yonathan 10/06/2024 //CPIADMFEE
+                                //get ADM fee
+                                if (otherAmount != 0)
+                                {
+                                    admFee = GetAdmFee(int.Parse(this.tenderInfo.TenderID));
+                                    
+                                    otherAmount = admFee != 0 ? otherAmount - (int)admFee : otherAmount;
+
+                                    admFeeText = admFee;
+                                    lblCustName.Visible = true;
+                                    lblCustName.Text = "Biaya Admin";
+                                    txtCustName.Visible = true;
+                                    txtCustName.ReadOnly = true;
+                                    txtCustName.Text = PosApplication.Instance.Services.Rounding.Round(admFeeText, false); //admFee.ToString();
+                                }
+                                else
+                                {
+                                    lblCustName.Visible = true;
+                                    lblCustName.Text = "Biaya Admin";
+                                    txtCustName.Visible = true;
+                                    txtCustName.ReadOnly = true;
+                                    txtCustName.Text = PosApplication.Instance.Services.Rounding.Round(admFeeText, false);
+                                    //lblCustName.Visible = false;
+                                    //txtCustName.ReadOnly = false;
+                                    //txtCustName.Visible = false; 
+                                }
+                                
+                                //end
+
 								string pan = GME_Var.panBCA;
 								pan = pan.Replace(" ", "");
 								//if (pan != "" && pan != null)
@@ -2712,7 +2751,8 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 								 * add value to field
 								 * set button enabled/disabled
 								 */
-								txtPhone.Text = otherAmount + "";
+
+								txtPhone.Text = PosApplication.Instance.Services.Rounding.Round(otherAmount, false); // otherAmount + "";
 								txtReff.Text = pan; //must be changed to masking
 							   
 								
@@ -2742,7 +2782,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 
 									//insert into AX.CPAMBILTUNAI
 									SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
-
+                                    //add ADM FEE //CPIADMFEE
 									try
 									{
 										string queryString = @"
@@ -2757,6 +2797,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 																			STORE,
 																			TRANSDATE,
 																			TRANSACTIONSTATUS,
+                                                                            ADMFEE,
 																			[DATAAREAID],
 																			[PARTITION]
 																			)
@@ -2771,6 +2812,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 													@STORE, 
 													@TRANSDATE,
 													@TRANSACTIONSTATUS,
+                                                    @ADMFEE,
 													@DATAAREAID,
 													@PARTITION
 													)";
@@ -2787,6 +2829,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 											command.Parameters.AddWithValue("@Store", this.posTransaction.StoreId);
 											command.Parameters.AddWithValue("@TRANSDATE", DateTime.Now);
 											command.Parameters.AddWithValue("@TRANSACTIONSTATUS", 0);
+                                            command.Parameters.AddWithValue("@ADMFEE", admFee);
 											command.Parameters.AddWithValue("@DATAAREAID", LSRetailPosis.Settings.ApplicationSettings.Database.DATAAREAID);
 											command.Parameters.AddWithValue("@PARTITION", 1);
 
@@ -3867,6 +3910,56 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 		}
 
 		#endregion
+
+        //additional for adm fee by Yonathan 10/06/2024 //CPIADMFEE
+        public decimal GetAdmFee(int _tenderId)
+        {
+            string admFee = "0";
+            decimal amountAdmFee = 0;
+            SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+            try
+            {
+                string queryString = @"SELECT ADMFEE 
+                                        FROM ax.CPBANKADM 
+                                        WHERE TENDERTYPEID = @TENDERID 
+                                        AND DATAAREAID = @DATAAREAID
+                                        AND FROMDATE <= CAST(GETDATE() AS date) AND TODATE >= CAST(GETDATE() AS date)";
+
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+                    command.Parameters.AddWithValue("@TENDERID", _tenderId);
+                    command.Parameters.AddWithValue("@DATAAREAID", LSRetailPosis.Settings.ApplicationSettings.Database.DATAAREAID);
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+                    }
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            admFee = reader[0].ToString();
+
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+                }
+            }
+
+            amountAdmFee = (Math.Truncate(Convert.ToDecimal(admFee) * 1000m) / 1000m);
+            return amountAdmFee;
+        }
 	}
 
     class Printer
@@ -3895,7 +3988,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
         public void printQR(Image image)
         {
             // print here
-            // Begin add NEC Hmz to custom print
+             
             int Offset = 0;
             string s = "QRIS";
             int offset = 0;
@@ -4004,6 +4097,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
             }
         }
 
+       
 
         private void printDocument_PrintPage(object sender, PrintPageEventArgs e)
         {

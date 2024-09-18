@@ -1,4 +1,5 @@
-﻿namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.IZone.PLN
+﻿using System.Drawing;
+namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.IZone.PLN
 {
     partial class CPPLNPrabayar
     {
@@ -37,13 +38,11 @@
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.label2 = new System.Windows.Forms.Label();
-            this.txtInputBy = new System.Windows.Forms.TextBox();
             this.txtIDMeter = new System.Windows.Forms.TextBox();
             this.lblIDMeter = new System.Windows.Forms.Label();
-            this.lblInputBy = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.nominalBox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.txtNominal = new System.Windows.Forms.TextBox();
             this.lblNominal = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -135,10 +134,8 @@
             // 
             this.tabPage1.BackColor = System.Drawing.Color.White;
             this.tabPage1.Controls.Add(this.label2);
-            this.tabPage1.Controls.Add(this.txtInputBy);
             this.tabPage1.Controls.Add(this.txtIDMeter);
             this.tabPage1.Controls.Add(this.lblIDMeter);
-            this.tabPage1.Controls.Add(this.lblInputBy);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -155,14 +152,6 @@
             this.label2.Size = new System.Drawing.Size(277, 23);
             this.label2.TabIndex = 6;
             this.label2.Text = "PEMBELIAN LISTRIK PRABAYAR";
-            // 
-            // txtInputBy
-            // 
-            this.txtInputBy.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.txtInputBy.Location = new System.Drawing.Point(218, 139);
-            this.txtInputBy.Name = "txtInputBy";
-            this.txtInputBy.Size = new System.Drawing.Size(499, 30);
-            this.txtInputBy.TabIndex = 3;
             // 
             // txtIDMeter
             // 
@@ -182,21 +171,11 @@
             this.lblIDMeter.TabIndex = 1;
             this.lblIDMeter.Text = "ID Pelanggan :";
             // 
-            // lblInputBy
-            // 
-            this.lblInputBy.AutoSize = true;
-            this.lblInputBy.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.lblInputBy.Location = new System.Drawing.Point(214, 113);
-            this.lblInputBy.Name = "lblInputBy";
-            this.lblInputBy.Size = new System.Drawing.Size(95, 23);
-            this.lblInputBy.TabIndex = 0;
-            this.lblInputBy.Text = "Input By :";
-            // 
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.White;
+            this.tabPage2.Controls.Add(this.nominalBox);
             this.tabPage2.Controls.Add(this.label1);
-            this.tabPage2.Controls.Add(this.txtNominal);
             this.tabPage2.Controls.Add(this.lblNominal);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
@@ -204,6 +183,18 @@
             this.tabPage2.Size = new System.Drawing.Size(840, 491);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
+            // 
+            // nominalBox
+            // 
+            this.nominalBox.BackColor = System.Drawing.SystemColors.Window;
+            this.nominalBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.nominalBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
+            this.nominalBox.FormattingEnabled = true;
+            this.nominalBox.ItemHeight = 24;
+            this.nominalBox.Location = new System.Drawing.Point(218, 151);
+            this.nominalBox.Name = "nominalBox";
+            this.nominalBox.Size = new System.Drawing.Size(499, 32);
+            this.nominalBox.TabIndex = 6;
             // 
             // label1
             // 
@@ -214,14 +205,6 @@
             this.label1.Size = new System.Drawing.Size(277, 23);
             this.label1.TabIndex = 5;
             this.label1.Text = "PEMBELIAN LISTRIK PRABAYAR";
-            // 
-            // txtNominal
-            // 
-            this.txtNominal.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.txtNominal.Location = new System.Drawing.Point(218, 139);
-            this.txtNominal.Name = "txtNominal";
-            this.txtNominal.Size = new System.Drawing.Size(499, 30);
-            this.txtNominal.TabIndex = 4;
             // 
             // lblNominal
             // 
@@ -250,7 +233,7 @@
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 86.89957F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 13.10044F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 234F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 238F));
             this.tableLayoutPanel1.Controls.Add(this.textBox7, 2, 6);
             this.tableLayoutPanel1.Controls.Add(this.textBox6, 2, 5);
             this.tableLayoutPanel1.Controls.Add(this.textBox5, 2, 4);
@@ -281,7 +264,7 @@
             // textBox7
             // 
             this.textBox7.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.textBox7.Location = new System.Drawing.Point(222, 231);
+            this.textBox7.Location = new System.Drawing.Point(218, 231);
             this.textBox7.Name = "textBox7";
             this.textBox7.Size = new System.Drawing.Size(227, 30);
             this.textBox7.TabIndex = 14;
@@ -289,7 +272,7 @@
             // textBox6
             // 
             this.textBox6.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.textBox6.Location = new System.Drawing.Point(222, 193);
+            this.textBox6.Location = new System.Drawing.Point(218, 193);
             this.textBox6.Name = "textBox6";
             this.textBox6.Size = new System.Drawing.Size(227, 30);
             this.textBox6.TabIndex = 14;
@@ -297,7 +280,7 @@
             // textBox5
             // 
             this.textBox5.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.textBox5.Location = new System.Drawing.Point(222, 155);
+            this.textBox5.Location = new System.Drawing.Point(218, 155);
             this.textBox5.Name = "textBox5";
             this.textBox5.Size = new System.Drawing.Size(227, 30);
             this.textBox5.TabIndex = 14;
@@ -305,7 +288,7 @@
             // textBox4
             // 
             this.textBox4.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.textBox4.Location = new System.Drawing.Point(222, 117);
+            this.textBox4.Location = new System.Drawing.Point(218, 117);
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(227, 30);
             this.textBox4.TabIndex = 14;
@@ -313,7 +296,7 @@
             // textBox3
             // 
             this.textBox3.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.textBox3.Location = new System.Drawing.Point(222, 79);
+            this.textBox3.Location = new System.Drawing.Point(218, 79);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(227, 30);
             this.textBox3.TabIndex = 14;
@@ -321,7 +304,7 @@
             // textBox2
             // 
             this.textBox2.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.textBox2.Location = new System.Drawing.Point(222, 41);
+            this.textBox2.Location = new System.Drawing.Point(218, 41);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(227, 30);
             this.textBox2.TabIndex = 22;
@@ -329,7 +312,7 @@
             // textBox1
             // 
             this.textBox1.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.textBox1.Location = new System.Drawing.Point(222, 3);
+            this.textBox1.Location = new System.Drawing.Point(218, 3);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(227, 30);
             this.textBox1.TabIndex = 13;
@@ -501,11 +484,9 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TextBox txtIDMeter;
         private System.Windows.Forms.Label lblIDMeter;
-        private System.Windows.Forms.Label lblInputBy;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnFinish;
-        private System.Windows.Forms.TextBox txtNominal;
         private System.Windows.Forms.Label lblNominal;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.Label lblStroom;
@@ -524,9 +505,9 @@
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox txtInputBy;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private DevExpress.XtraEditors.DropDownButton dropDownButton1;
+        private System.Windows.Forms.ComboBox nominalBox;
     }
 }

@@ -31,6 +31,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
     using System.Collections.ObjectModel;
     using System.Xml;
     using Microsoft.Dynamics.Retail.Pos.SalesOrder.CustomerOrderParameters;
+    using Microsoft.Dynamics.Retail.Pos.Contracts.BusinessLogic;
    
 
     public partial class frmGetSalesOrder : LSRetailPosis.POSProcesses.frmTouchBase
@@ -63,6 +64,9 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
         //add by yonathan 21/06/2023
         private string invoiceId;
         private string isOpen;
+        //add by yonathan 21/06/2024
+        string isB2bCust = "0";
+
         /// <summary>
         /// Returns selected sales order id as string.
         /// </summary>
@@ -139,7 +143,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             btnReturn.Text = "Payment Invoice"; //ApplicationLocalizer.Language.Translate(56398);   //Return Order changed by Yonathan 26/06/2023
             btnCancelOrder.Text = ApplicationLocalizer.Language.Translate(56215);   //Cancel order
             btnEdit.Text = ApplicationLocalizer.Language.Translate(56212);   //View details
-            btnPickUp.Text = ApplicationLocalizer.Language.Translate(56213);   //Pickup order
+            btnPickUp.Text = "Print Invoice"; //ApplicationLocalizer.Language.Translate(56213);   //Pickup order changed by Yonathan 09092024
             btnClose.Text = ApplicationLocalizer.Language.Translate(56205);   //Close
 
             colOrderType.Caption = "Journal Payment"; //ApplicationLocalizer.Language.Translate(56216); //Order type  changed by Yonathan 26/06/2023
@@ -387,6 +391,27 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             if (dataModel.OrderList != null && e != null && e.FocusedRowHandle >= 0 && e.FocusedRowHandle < dataModel.OrderList.Rows.Count)
             {
                 GetSelectedRow();
+
+                //get customer classification type
+                ReadOnlyCollection<object> containerArray;
+                var custId = gridView1.GetRowCellValue(gridView1.GetFocusedDataSourceRowIndex(), "CUSTOMERACCOUNT");
+                if (SalesOrder.InternalApplication.TransactionServices.CheckConnection())
+                {
+                    try
+                    {
+                        containerArray = SalesOrder.InternalApplication.TransactionServices.InvokeExtension("getB2bRetailParam", custId);
+                        isB2bCust = containerArray[6].ToString();
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                        throw;
+                    }
+                }
+                
+                //
                 this.EnableButtons();
             }
         }
@@ -397,7 +422,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
         private void DisableButtons()
         {
             this.btnEdit.Enabled = false;
-            this.btnPickUp.Enabled = false;
+            //this.btnPickUp.Enabled = false;
             this.btnReturn.Enabled = false;
             this.btnCancelOrder.Enabled = false;
             this.btnCreatePickList.Enabled = false;
@@ -473,33 +498,51 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 enableInvoice = true;
 
                 //disable invoice & payment feature right now
-                enableInvoice = false;
-                enableReturn = false;
+                enableInvoice = true;
+                //enableReturn = false;
             }
             else if (this.selectedOrderDocumentStatus == SalesStatus.Invoiced)
             {
                 enableInvoice = false;
-                if (invoiceId != "" && isOpen == "false" )
-                { enableReturn = false; }
+                
+               
+                if (invoiceId != "" )//&& isOpen == "false" )
+                {
+                    enableReturn = false;
+                    enablePickup = true;
+                }
                 else
-                { enableReturn = true; }//mod by Yonathan 13/06/2023 true because change function to payment invoice
-                enablePickup = false;
+                {
+                    if (isB2bCust == "1")
+                    {
+                        enableReturn = true; //payment if canvas customer
+                    }
+                    else
+                    {
+                        enableReturn = false; //cannot payment if B2B
+                    }
+
+                    
+                }
+                //mod by Yonathan 13/06/2023 true because change function to payment invoice
+                //enablePickup = false;
 
                 //disable invoice & payment feature right now
-                enableInvoice = false;
-                enableReturn = false;
+                //enableInvoice = false;
+                //enableReturn = false;
             }
 
             //add by Yonathan 26/06/2023 to prevent pickup when there is no result SO
             if (dataModel.OrderList.Rows.Count == 0)
             {
                 enablePickup = false;
+                enableEdit = false;
             }
             // Add By Erwin 13 March 2019 - End
 
 
             this.btnEdit.Enabled = enableEdit;
-            this.btnPickUp.Enabled = false; //enablePickup; //disable by Yonathan as not useed 15/08/2023 
+            this.btnPickUp.Enabled = enablePickup; //enablePickup; //disable by Yonathan as not useed 15/08/2023 
             this.btnReturn.Enabled = enableReturn;
             this.btnCancelOrder.Enabled = enableCancel;
             this.btnCreatePickList.Enabled = false; //enablePickList; //disable by Yonathan as not useed 15/08/2023 
@@ -591,24 +634,24 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 if (SalesOrderActions.ShowOrderDetails(cot, OrderDetailsSelection.ViewDetails))
                 {
                     //edit to check whether b2b or not
-                    string isB2bCust = "0";
+                    
                     ReadOnlyCollection<object> containerArray;
-                    if (SalesOrder.InternalApplication.TransactionServices.CheckConnection())
-                    {
-                        try
-                        {
-                            containerArray = SalesOrder.InternalApplication.TransactionServices.InvokeExtension("getB2bRetailParam", cot.Customer.CustomerId.ToString());
-                            isB2bCust = containerArray[3].ToString();
+                    //if (SalesOrder.InternalApplication.TransactionServices.CheckConnection())
+                    //{
+                    //    try
+                    //    {
+                    //        containerArray = SalesOrder.InternalApplication.TransactionServices.InvokeExtension("getB2bRetailParam", cot.Customer.CustomerId.ToString());
+                    //        isB2bCust = containerArray[3].ToString();
                           
                             
-                        }
-                        catch (Exception ex)
-                        {
-                            LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
-                            throw;
-                        }
-                    }
-                    if (isB2bCust == "1")
+                    //    }
+                    //    catch (Exception ex)
+                    //    {
+                    //        LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                    //        throw;
+                    //    }
+                    //}
+                    if (isB2bCust == "1" || isB2bCust == "2")
                     {
                         SetSelectedOrderAndClose(cot);
                     }
@@ -629,6 +672,19 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 }                
             }
 
+        }
+
+        private void btnPrintInvoice_Click(object sender, System.EventArgs e)
+        {
+            //CustomerOrderTransaction cot = SalesOrderActions.GetCustomerOrder(this.SelectedSalesOrderId, this.SelectedOrderType, LSRetailPosis.Transaction.CustomerOrderMode.Pickup);
+            CustomerOrderTransaction cot = SalesOrderActions.GetCustomerOrder(this.SelectedSalesOrderId, this.SelectedOrderType, LSRetailPosis.Transaction.CustomerOrderMode.Edit);
+            
+            ITransactionSystem transSys = SalesOrder.InternalApplication.BusinessLogic.TransactionSystem;
+
+            //SalesOrder.InternalApplication.RunOperation(Contracts.PosisOperations.PrintPreviousInvoice,cot);
+
+
+            transSys.PrintTransaction(cot, true, false);
         }
 
         private void btnPickUp_Click(object sender, EventArgs e)
@@ -679,18 +735,17 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             //ReadOnlyCollection<object> containerArray = SalesOrder.InternalApplication.TransactionServices.Invoke("getSalesInvoicesBySalesId", this.SelectedSalesOrderId.ToString());
 
             //invoiceId = getInvoiceId(containerArray[3].ToString());
-            using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Do you want to use voucher for payment?", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
-			{
-            //using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Create and Post Payment Journal?", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
-			//{
-				LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
-                if (dialog.DialogResult == DialogResult.Yes)
-                {
-                    CP_frmPaymentInvoice invoicePayment = new CP_frmPaymentInvoice(SalesOrder.InternalApplication, this.SelectedSalesOrderId.ToString(), invoiceId, custId, this.selectedInvoiceAmount );
-                    invoicePayment.ShowDialog();
-                }
-                else if(dialog.DialogResult == DialogResult.No)
-                {
+            //using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Do you want to use voucher for payment?", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+            //{
+            
+            //    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+            //    if (dialog.DialogResult == DialogResult.Yes)
+            //    {
+            //        CP_frmPaymentInvoice invoicePayment = new CP_frmPaymentInvoice(SalesOrder.InternalApplication, this.SelectedSalesOrderId.ToString(), invoiceId, custId, this.selectedInvoiceAmount );
+            //        invoicePayment.ShowDialog();
+            //    }
+            //    else if(dialog.DialogResult == DialogResult.No)
+            //    {
                 //if (dialog.DialogResult == DialogResult.Yes)
                 //{
                     PostPayment(invoiceId, this.selectedInvoiceAmount, out journalNum);
@@ -698,10 +753,10 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                     {
                         SettlePayment(journalNum, invoiceId);
                     }
-                }
+            //    }
                     
-                //}
-            }
+            //    //}
+            //}
 
             
             RefreshGrid();
@@ -822,6 +877,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 {
                     CreateInvoice(out invoiceAx);
                 }
+                
             }
             /*if (invoiceAx != "")
             {
@@ -1010,6 +1066,18 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 if(statusInvoice == "Success")
                 {
                     SalesOrder.InternalApplication.Services.Dialog.ShowMessage(String.Format("Invoice {0} has been created", _invoiceAx), MessageBoxButtons.OK, MessageBoxIcon.Information); 
+
+                    ////print
+
+                    //ITransactionSystem transSys = SalesOrder.InternalApplication.BusinessLogic.TransactionSystem;
+                    //transSys.PrintTransaction(SelectedOrder, true, true);
+                    //update invoice id yonathan 06092024
+                    updateInvoiceId(_invoiceAx, this.SelectedSalesOrderId.ToString());
+                    ITransactionSystem transSys = SalesOrder.InternalApplication.BusinessLogic.TransactionSystem;
+                    SelectedOrder.InvoiceComment = _invoiceAx;
+                    SelectedOrder.Save();
+
+                    transSys.PrintTransaction(SelectedOrder, false, false);
                 }
                 else
                 {
@@ -1022,8 +1090,55 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 throw;
             }
         }
-    }
+        //update invoice id yonathan 06092024
+        private void updateInvoiceId(string _invoiceAx, string _salesId)
+        {
+            string storeId = "";
+            SqlConnection connection = ApplicationSettings.Database.LocalConnection;
+            storeId = ApplicationSettings.Terminal.StoreId;
+            //var retailTransaction = posTransaction as RetailTransaction;
+            try
+            {
+                string queryString = @" UPDATE RETAILTRANSACTIONTABLE
+                                        SET INVOICECOMMENT = @INVOICECOMMENT
+                                        WHERE STORE = @STOREID
+                                        AND  SALESORDERID =@SALESID";
 
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+                    command.Parameters.AddWithValue("@STOREID", storeId);
+                    command.Parameters.AddWithValue("@SALESID", _salesId);
+                    command.Parameters.AddWithValue("@INVOICECOMMENT", _invoiceAx);
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+                    }
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+
+
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+                }
+            }
+        }
+    }
+    
     /// <summary>
     /// 
     /// </summary>

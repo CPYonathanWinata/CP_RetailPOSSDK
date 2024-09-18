@@ -9,18 +9,14 @@ NO TECHNICAL SUPPORT IS PROVIDED.  YOU MAY NOT DISTRIBUTE THIS CODE UNLESS YOU H
 
 
 using System;
-using LSRetailPosis.POSProcesses;
-using LSRetailPosis.Settings.FunctionalityProfiles;
-using LSRetailPosis.Transaction;
-using LSRetailPosis.Transaction.Line.Discount;
-using LSRetailPosis.Transaction.Line.SaleItem;
+using System.Collections.Generic;
+using System.ComponentModel.Composition;
+using System.Data.SqlClient;
 using Microsoft.Dynamics.Retail.Pos.Contracts;
 using Microsoft.Dynamics.Retail.Pos.Contracts.BusinessObjects;
 using Microsoft.Dynamics.Retail.Pos.Contracts.DataEntity;
 using Microsoft.Dynamics.Retail.Pos.Contracts.Services;
 using Microsoft.Dynamics.Retail.Pos.Contracts.Triggers;
-using System.ComponentModel.Composition;
-using System.Data.SqlClient;
 
 namespace Microsoft.Dynamics.Retail.FiscalPrinter
 {
@@ -125,6 +121,60 @@ namespace Microsoft.Dynamics.Retail.FiscalPrinter
         /// <param name="info">EFT info</param>
         /// <param name="transaction">Retail transaction</param>
         public void ProcessCardPayment(IEFTInfo info, IRetailTransaction transaction)
+        {
+            throw new NotSupportedException();
+        }
+
+        /// <summary>        
+        /// Gets maximum number of symbols on paper for the specific <c>IFiscalPrinterFontStyle</c>.
+        /// </summary>
+        /// <param name="fontStyle">Font style.</param>        
+        public int GetLineLegth(IFiscalPrinterFontStyle fontStyle)
+        {
+            throw new NotSupportedException();
+        }
+
+        /// <summary>
+        /// Print custom document.
+        /// </summary>
+        /// <param name="layoutId">layoutid parameter value.</param>
+        /// <param name="textToPrint">List of text blocks with format style to print.</param>
+        /// <param name="posTransaction">POS transaction.</param>
+        public void PrintCustomDocument(string layoutId, IList<IFiscalPrinterTextData> textToPrint, IPosTransaction posTransaction)
+        {
+            throw new NotSupportedException();
+        }
+
+        /// <summary>
+        /// Creates font style based on fontStyle and partner data.
+        /// </summary>
+        /// <param name="fontStyleType">Style of the text.</param>
+        /// <param name="partnerData">Dynamic object that hold partner's data.</param>
+        /// <returns>return the object created</returns>
+        public IFiscalPrinterFontStyle CreateFiscalPrinterFontStyle(FontStyleType fontStyleType, dynamic partnerData)
+        {
+            throw new NotSupportedException();
+        }
+
+        /// <summary>
+        /// Creates font style with text based on text, fontStyle and partner data.
+        /// </summary>
+        /// <param name="text">Text to print.</param>
+        /// <param name="fontStyleType">Style of the text.</param>
+        /// <param name="partnerData">Dynamic object that hold partner's data.</param>
+        /// <returns>return the object created.</returns>
+        public IFiscalPrinterTextData CreateFiscalPrinterTextData(string text, FontStyleType fontStyleType, dynamic partnerData)
+        {
+            throw new NotSupportedException();
+        }
+
+        /// <summary>
+        /// Creates font style with text based on text and font style.
+        /// </summary>
+        /// <param name="text">Text to print.</param>
+        /// <param name="fontStyle">Style of the font.</param>        
+        /// <returns>return the object created.</returns>
+        public IFiscalPrinterTextData CreateFiscalPrinterTextData(string text, IFiscalPrinterFontStyle fontStyle)
         {
             throw new NotSupportedException();
         }
@@ -535,6 +585,16 @@ namespace Microsoft.Dynamics.Retail.FiscalPrinter
             throw new NotImplementedException();
         }
 
+        /// <summary>        
+        /// Prints gift cards balance in sale/return transaction.
+        /// </summary>
+        /// <param name="giftCardsList">The giftCardsList object containing the information the gift cards.</param>
+        /// <param name="transaction">Retail transaction</param>        
+        public void PrintGiftCardsBalance(IList<IGiftCardLineItem> giftCardsList, IRetailTransaction transaction)
+        {
+            throw new NotImplementedException();
+        } 
+
         #endregion
 
         #region IItemTriggers Members
@@ -699,6 +759,21 @@ namespace Microsoft.Dynamics.Retail.FiscalPrinter
             throw new NotSupportedException();
         }
 
+        /// <summary>
+        /// Triggered before pay card authorization.
+        /// </summary>
+        /// <param name="preTriggerResult">The pre trigger result class.</param>
+        /// <param name="posTransaction">The pos transaction.</param>
+        /// <param name="cardInfo">The card info.</param>
+        /// <param name="amount">The amount.</param>
+        public void PrePayCardAuthorization(IPreTriggerResult preTriggerResult, IPosTransaction posTransaction, ICardInfo cardInfo,
+            decimal amount)
+        {
+            //
+            //Left empty on purpose
+            //
+        }
+
         #endregion
 
         #region ITransactionTriggers Members
@@ -841,6 +916,50 @@ namespace Microsoft.Dynamics.Retail.FiscalPrinter
         public void PostProcessOperation(IPosTransaction posTransaction, PosisOperations posisOperation)
         {
             throw new NotSupportedException();
+        }
+
+        #endregion
+
+        #region Suspend Triggers
+
+        public void PreSuspendTransaction(IPreTriggerResult preTriggerResult, IPosTransaction posTransaction)
+        {
+            throw new NotSupportedException();
+        }
+
+        public void PostSuspendTransaction(IPosTransaction posTransaction)
+        {
+            throw new NotSupportedException();
+        }
+
+        public void PreRecallTransaction(IPreTriggerResult preTriggerResult, IPosTransaction posTransaction)
+        {
+            throw new NotSupportedException();
+        }
+
+        public void PostRecallTransaction(IPosTransaction posTransaction)
+        {
+            throw new NotSupportedException();
+        }
+
+        public void OnSuspendTransaction(IPosTransaction posTransaction)
+        {
+            throw new NotSupportedException();
+        }
+
+        public void OnRecallTransaction(IPosTransaction posTransaction)
+        {
+            throw new NotSupportedException();
+        }
+
+        public void PreCancelTransaction(IPreTriggerResult preTriggerResult, IRetailTransaction originalTransaction, IPosTransaction posTransaction)
+        {
+            throw new NotSupportedException();
+        }
+
+        public void PreConfirmReturnTransaction(IPreTriggerResult preTriggerResult, IRetailTransaction originalTransaction)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

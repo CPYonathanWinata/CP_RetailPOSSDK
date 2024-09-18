@@ -56,7 +56,12 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
             operationId = _operationId;
             isDev = false;
 
+<<<<<<< HEAD
             
+=======
+            //if(isDev == true)
+            //{
+>>>>>>> a91569e0e793ed2a2c16580a828e61f8a0ec0699
                 if (operationId == "23")
                 {
                     promoCode = "PDI";  //"PDI"; //ED
@@ -65,7 +70,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     lblHeader.Text = "Promo Discount Item";
                     LoadDataHeader();
                     LoadData();
+<<<<<<< HEAD
                     
+=======
+                   
+>>>>>>> a91569e0e793ed2a2c16580a828e61f8a0ec0699
                 }
                 else if(operationId == "25")
                 {
@@ -75,9 +84,36 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     lblHeader.Text = "Promo Discount Item per Struk";
                     LoadDataHeaderReceipt();
                     LoadDataLineReceipt();
+<<<<<<< HEAD
                    
                 }
           
+=======
+                    
+                }
+            //}
+            //else
+            //{
+            //    if (operationId == "23")
+            //    {
+            //        LoadDataHeader();
+            //        LoadData();
+            //        promoCode = "PDI";  //"PDI"; //ED
+            //        commentCode = "PROMOPDI";  //"PROMOPDI";
+            //        lineCommentCode = "AddItem-PDI";  //"AddItem-PDI";
+            //        lblHeader.Text = "Promo Discount Item";
+            //    }
+            //    else if(operationId == "25")
+            //    {
+            //        LoadDataHeaderReceipt();
+            //        LoadDataLineReceipt();
+            //        promoCode = "PDIS";  //"PDIS";
+            //        commentCode = "PROMOPDIS"; // "PROMOPDIS";
+            //        lineCommentCode = "AddItem-PDIS";// "AddItem-PDIS"; 
+            //        lblHeader.Text = "Promo Discount Item per Struk";
+            //    }
+            //}
+>>>>>>> a91569e0e793ed2a2c16580a828e61f8a0ec0699
             
 
 
@@ -141,7 +177,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     foreach (var discountLines in items.PeriodicDiscountLines)
                     {
                         PeriodicDiscountItem periodDiscItem = discountLines as PeriodicDiscountItem;
+<<<<<<< HEAD
                         if (!periodDiscItem.OfferId.StartsWith(promoCode))  //if (!periodDiscItem.OfferId.StartsWith("PDIS"))
+=======
+                        if (!periodDiscItem.OfferId.StartsWith("PDIS"))  //if (!periodDiscItem.OfferId.StartsWith("PDIS"))
+>>>>>>> a91569e0e793ed2a2c16580a828e61f8a0ec0699
                         {
                             excludeList.Add(items.ItemId);
                             //itemToExclude += "'" + items.ItemId + "'";
@@ -577,7 +617,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 					foreach (var discountLines in items.PeriodicDiscountLines)
 					{
 						PeriodicDiscountItem periodDiscItem = discountLines as PeriodicDiscountItem;
+<<<<<<< HEAD
                         if (!periodDiscItem.OfferId.StartsWith(promoCode)) //if (!periodDiscItem.OfferId.StartsWith("PDI"))
+=======
+                        if (!periodDiscItem.OfferId.StartsWith("PDI")) //if (!periodDiscItem.OfferId.StartsWith("PDI"))
+>>>>>>> a91569e0e793ed2a2c16580a828e61f8a0ec0699
 						{
 							excludeList.Add(items.ItemId);
 							//itemToExclude += "'" + items.ItemId + "'";

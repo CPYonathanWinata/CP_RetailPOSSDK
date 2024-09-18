@@ -38,3 +38,9 @@ C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Triggers\PaymentT
 C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.csproj.GenerateResource.Cache
 C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.dll
 C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.pdb
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.CP_FormPayment.resources
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.Infolog.resources
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.csproj.GenerateResource.Cache
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.pdb

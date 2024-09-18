@@ -134,7 +134,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Services
                 this.oposPinpad.Amount = amount;
                 //CheckResultCode();  // We know verifone has problems with amount.
                 this.oposPinpad.AccountNumber = accountNumber;
-                this.oposPinpad.TerminalID = LSRetailPosis.Settings.ApplicationSettings.Terminal.TerminalId;
+                this.oposPinpad.TerminalID = LSRetailPosis.Settings.ApplicationSettings.Terminal.TerminalIdEFT;
                 if (amount < 0)
                 {   // Money is being refunded to the debit card - this is credit
                     this.oposPinpad.TransactionType = (int)EFTTransactionType.Credit;

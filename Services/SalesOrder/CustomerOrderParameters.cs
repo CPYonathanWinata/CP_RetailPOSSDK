@@ -180,13 +180,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.CustomerOrderParameters
         [XmlElement("SalespersonName")]
         public string SalespersonName;
 
-        //Custom by Yonathan 06/02/2024
-        /// <summary>
-        /// Worker ID for sales person.
-        /// </summary>
-        /// <remarks>Note this is not the same as operator ID</remarks>
-        [XmlElement("SalesTakerStaffId")]
-        public string SalesTakerStaffId;
+    
 
         /// <summary>
         /// Worker name for sales person.
@@ -243,7 +237,23 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.CustomerOrderParameters
         [XmlElement("Email")]
         public string Email;
 
+        //Custom by Yonathan 06/02/2024
         /// <summary>
+        /// Worker ID for sales person.
+        /// </summary>
+        /// <remarks>Note this is not the same as operator ID</remarks>
+        [XmlElement("SalesTakerStaffId")]
+        public string SalesTakerStaffId;
+
+        //Custom by Yonathan 25/07/2024
+        /// <summary>
+        /// Worker ID for sales person.
+        /// </summary>
+        /// <remarks>Note this is not the same as operator ID</remarks>
+        [XmlElement("CPOrderNumber")]
+        public string CPOrderNumber;
+
+        /// <summary> 
         /// Items
         /// </summary>
         public Collection<ItemInfo> Items;
