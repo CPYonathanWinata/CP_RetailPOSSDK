@@ -509,7 +509,8 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 if (invoiceId != "" )//&& isOpen == "false" )
                 {
                     enableReturn = false;
-                    enablePickup = true;
+                    enablePickup = true; //print invoice button
+                    enablePrintPackSlip = true;
                 }
                 else
                 {
@@ -850,7 +851,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
         private void btnPrintPackSlip_Click(object sender, EventArgs e)
         {
             //to call pack Slip Method
-            SalesOrderActions.TryPrintPackSlip(this.selectedOrderDocumentStatus, this.SelectedSalesOrderId);
+            SalesOrderActions.TryPrintPackSlip(this.selectedOrderDocumentStatus, this.SelectedSalesOrderId, "0");
         }
 
         private void btnCreateInvoice_Click(object sender, EventArgs e)
@@ -1073,11 +1074,19 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                     //transSys.PrintTransaction(SelectedOrder, true, true);
                     //update invoice id yonathan 06092024
                     updateInvoiceId(_invoiceAx, this.SelectedSalesOrderId.ToString());
-                    ITransactionSystem transSys = SalesOrder.InternalApplication.BusinessLogic.TransactionSystem;
-                    SelectedOrder.InvoiceComment = _invoiceAx;
-                    SelectedOrder.Save();
+                    //ITransactionSystem transSys = SalesOrder.InternalApplication.BusinessLogic.TransactionSystem;
+                    //CustomerOrderTransaction cot = SalesOrderActions.GetCustomerOrder(this.SelectedSalesOrderId, this.SelectedOrderType, LSRetailPosis.Transaction.CustomerOrderMode.Pickup);
+                    CustomerOrderTransaction cot = SalesOrderActions.GetCustomerOrder(this.SelectedSalesOrderId, this.SelectedOrderType, LSRetailPosis.Transaction.CustomerOrderMode.Edit);
 
-                    transSys.PrintTransaction(SelectedOrder, false, false);
+                    ITransactionSystem transSys = SalesOrder.InternalApplication.BusinessLogic.TransactionSystem;
+                    
+                    //SalesOrder.InternalApplication.RunOperation(Contracts.PosisOperations.PrintPreviousInvoice,cot);
+
+
+                    
+
+                    transSys.PrintTransaction(cot, false, false);  //print for original
+                    transSys.PrintTransaction(cot, true, false); //print for copy
                 }
                 else
                 {

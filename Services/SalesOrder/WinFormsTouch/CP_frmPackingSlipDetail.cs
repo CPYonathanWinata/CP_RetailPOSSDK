@@ -439,7 +439,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                                 else
                                 {
                                     SalesOrder.InternalApplication.Services.Dialog.ShowMessage("Posting berhasil.", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                    SalesOrderActions.TryPrintPackSlip(LSRetailPosis.Transaction.SalesStatus.Delivered, salesID);
+                                    SalesOrderActions.TryPrintPackSlip(LSRetailPosis.Transaction.SalesStatus.Delivered, salesID, "1");
 
                                     string invoiceAx = "";
                                     //string comboInvoice = "0";
@@ -540,7 +540,8 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                     transaction.InvoiceComment = _invoiceAx;
                     transaction.Save();
                    
-                    transSys.PrintTransaction(transaction, false, false);
+                    transSys.PrintTransaction(transaction, false, false); //print original
+                    transSys.PrintTransaction(transaction, true, false); //print for copy
                     
                 }
                 else

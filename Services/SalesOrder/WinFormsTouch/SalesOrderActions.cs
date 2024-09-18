@@ -127,7 +127,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
         /// </summary>
         /// <param name="documentStatus"></param>
         /// <param name="orderId"></param>
-        internal static void TryPrintPackSlip(SalesStatus documentStatus, string orderId)
+        internal static void TryPrintPackSlip(SalesStatus documentStatus, string orderId, string firstTime = "0")
         {
             try
             {
@@ -179,7 +179,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                                     connection.Open();
                                 }
 
-                                using (SqlDataReader reader = commandSearch.ExecuteReader())
+                                using (SqlDataReader reader = commandSearch.ExecuteReader()) 
                                 {
                                     if (!reader.Read())
                                     {
@@ -206,12 +206,22 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                         //Change default printing method to custom method
 
                         //SalesOrder.InternalApplication.Services.Printing.PrintPackSlip(transaction);
-                        CPPrintPackSlip(orderId, "Original");
+                        if (firstTime == "1")
+                        {
+                            CPPrintPackSlip(orderId, "Original");
+                            if (MessageBox.Show("Print Copy Receipt?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                            {
+                                CPPrintPackSlip(orderId, "Copy");
+                            }
 
-                        if(MessageBox.Show("Print Copy Receipt?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                        }
+                        else
                         {
                             CPPrintPackSlip(orderId, "Copy");
                         }
+                        
+                        
+                        
 
                         //End Edit by Erwin 22 March 2019
                     }
