@@ -887,7 +887,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 {
                     SettlePayment(journalNum, invoiceAx);
                 }
-            }*/
+            }*/ 
             
             
             /*

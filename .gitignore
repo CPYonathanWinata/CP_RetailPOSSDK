@@ -8,3 +8,5 @@ Services/Services.v12.suo
 *.cache
 *.suo
 *.dll
+*.dll
+*.pdb
