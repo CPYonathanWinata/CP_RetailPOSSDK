@@ -82,8 +82,8 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
                 }
 
 
-
-                if (transaction.Comment == "PAYMENTDISCOUNT" || transaction.Comment == "PROMOED" || transaction.Comment == "PROMORCPT") //if (transaction.Comment == "PAYMENTDISCOUNT"  || transaction.Comment == "PROMOPDI" || transaction.Comment == "PROMOPDIS")                                  
+                //this promo code for Production 18092024
+                if (transaction.Comment == "PAYMENTDISCOUNT"  || transaction.Comment == "PROMOPDI" || transaction.Comment == "PROMOPDIS")                                  
                 {
 
                     /*
