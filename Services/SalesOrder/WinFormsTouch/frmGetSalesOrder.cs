@@ -1108,8 +1108,10 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             //var retailTransaction = posTransaction as RetailTransaction;
             try
             {
-                string queryString = @" UPDATE RETAILTRANSACTIONTABLE
-                                        SET INVOICECOMMENT = @INVOICECOMMENT
+                string queryString = @" UPDATE AX.RETAILTRANSACTIONTABLE
+                                        SET 
+                                        INVOICECOMMENT = @INVOICECOMMENT,
+                                        MODIFIEDDATETIME = DATEADD(HOUR, -(DATEPART(TZOFFSET, SYSDATETIMEOFFSET()) / 60), SYSDATETIME())  
                                         WHERE STORE = @STOREID
                                         AND  SALESORDERID =@SALESID";
 
