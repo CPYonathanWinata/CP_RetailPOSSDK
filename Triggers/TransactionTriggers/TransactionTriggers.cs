@@ -306,7 +306,7 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 		public void PostEndTransaction(IPosTransaction posTransaction)
 		{
 			LSRetailPosis.ApplicationLog.Log("TransactionTriggers.PostEndTransaction", "When concluding the transaction, after printing and saving", LSRetailPosis.LogTraceLevel.Trace);
-            bool foundGiftCardPayment = false; //add by Yoanthan 10092024
+            bool foundGiftCardPayment = false; //add by Yoanthan 10092024 
 			if (posTransaction.ToString() == "LSRetailPosis.Transaction.RetailTransaction")
 			{
 

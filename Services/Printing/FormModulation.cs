@@ -579,7 +579,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                             //end
                         //add by yonathan to invclude invoiceid 10092024
                         case "LABELINVOICEID":
-                            
+                             
                             if ((cot = theTransaction as CustomerOrderTransaction) != null)
                             {
                                 //string invoiceId = "";

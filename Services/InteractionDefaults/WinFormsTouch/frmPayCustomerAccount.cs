@@ -527,9 +527,9 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 				//getURLAPI(); //disable temporarily for testing JOFFICE 11092024
 
                 //temp code to define URL for SHOPEE
-                urlCreate = "https://partnerpfm.cp.co.id/api/shopeePay/snap/createDynamicQR";//reader["URLCREATE"].ToString();
-                urlInvalidate = "https://partnerpfm.cp.co.id/api/shopeePay/snap/QRInvalidate"; //reader["URLINVALIDATE"].ToString();
-                urlNotify = "https://partnerpfm.cp.co.id/api/shopeePay/snap/manualPaymentStatus";//reader["URLNOTIFY"].ToString();   
+                //urlCreate = "https://partnerpfm.cp.co.id/api/shopeePay/snap/createDynamicQR";//reader["URLCREATE"].ToString();
+                //urlInvalidate = "https://partnerpfm.cp.co.id/api/shopeePay/snap/QRInvalidate"; //reader["URLINVALIDATE"].ToString();
+                //urlNotify = "https://partnerpfm.cp.co.id/api/shopeePay/snap/manualPaymentStatus";//reader["URLNOTIFY"].ToString();   
                 //end
 				//prepare form for other payment (default as is)
 				cmbPilihBank.Visible = false;
