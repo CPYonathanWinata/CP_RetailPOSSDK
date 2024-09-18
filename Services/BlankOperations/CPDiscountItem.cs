@@ -60,9 +60,9 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
             //{
                 if (operationId == "23")
                 {
-                    promoCode = "ED";  //"PDI"; //ED
-                    commentCode = "PROMOED";  //"PROMOPDI";
-                    lineCommentCode = "AddItem-ED";  //"AddItem-PDI";
+                    promoCode = "PDI";  //"PDI"; //ED
+                    commentCode = "PROMOPDI";  //"PROMOPDI";
+                    lineCommentCode = "AddItem-PDI";  //"AddItem-PDI";
                     lblHeader.Text = "Promo Discount Item";
                     LoadDataHeader();
                     LoadData();
@@ -70,9 +70,9 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                 }
                 else if(operationId == "25")
                 {
-                    promoCode = "QS";  //"PDIS";
-                    commentCode = "PROMORCPT"; // "PROMOPDIS";
-                    lineCommentCode = "AddItem-QS";// "AddItem-PDIS"; 
+                    promoCode = "PDIS";  //"PDIS";
+                    commentCode = "PROMOPDIS"; // "PROMOPDIS";
+                    lineCommentCode = "AddItem-PDIS";// "AddItem-PDIS"; 
                     lblHeader.Text = "Promo Discount Item per Struk";
                     LoadDataHeaderReceipt();
                     LoadDataLineReceipt();
@@ -163,7 +163,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     foreach (var discountLines in items.PeriodicDiscountLines)
                     {
                         PeriodicDiscountItem periodDiscItem = discountLines as PeriodicDiscountItem;
-                        if (!periodDiscItem.OfferId.StartsWith("QS"))  //if (!periodDiscItem.OfferId.StartsWith("PDIS"))
+                        if (!periodDiscItem.OfferId.StartsWith(promoCode))//if (!periodDiscItem.OfferId.StartsWith("QS"))  //if (!periodDiscItem.OfferId.StartsWith("PDIS"))
                         {
                             excludeList.Add(items.ItemId);
                             //itemToExclude += "'" + items.ItemId + "'";
@@ -599,7 +599,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 					foreach (var discountLines in items.PeriodicDiscountLines)
 					{
 						PeriodicDiscountItem periodDiscItem = discountLines as PeriodicDiscountItem;
-                        if (!periodDiscItem.OfferId.StartsWith("ED")) //if (!periodDiscItem.OfferId.StartsWith("PDI"))
+                        if (!periodDiscItem.OfferId.StartsWith(promoCode)) //if (!periodDiscItem.OfferId.StartsWith("ED")) //if (!periodDiscItem.OfferId.StartsWith("PDI"))
 						{
 							excludeList.Add(items.ItemId);
 							//itemToExclude += "'" + items.ItemId + "'";

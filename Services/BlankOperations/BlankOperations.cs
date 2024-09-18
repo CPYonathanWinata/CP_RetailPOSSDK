@@ -335,8 +335,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 						using (LSRetailPosis.POSProcesses.frmInputNumpad formInputQty = new LSRetailPosis.POSProcesses.frmInputNumpad())
 						{
 
-                            //check if already apply custom discount, so that the user can't edit Qty from here.
-                            if (retailTransaction.Comment == "PAYMENTDISCOUNT" || retailTransaction.Comment == "PROMOED" || retailTransaction.Comment == "PROMORCPT")
+                            //check if already apply custom discount, so that the user can't edit Qty from here. //change to promocode for production
+                            if (retailTransaction.Comment == "PAYMENTDISCOUNT" || retailTransaction.Comment == "PROMOPDI" || retailTransaction.Comment == "PROMOPDIS")
                             {
                                 
                                 ShowMsgBox("Fungsi ini dibatasi ketika sudah apply discount PROMO. Silakan lanjut ke menu pembayaran atau batalkan sepenuhnya (void) transaksi ini");
@@ -720,7 +720,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                                     foreach (var discountLines in lineItem.PeriodicDiscountLines)
                                     {
                                         PeriodicDiscountItem periodDiscItem = discountLines as PeriodicDiscountItem;
-                                        if (periodDiscItem.OfferId.StartsWith("ED") || periodDiscItem.OfferId.StartsWith("QS")) //if (periodDiscItem.OfferId.StartsWith("PDI") || periodDiscItem.OfferId.StartsWith("PDIS"))  //
+                                        if (periodDiscItem.OfferId.StartsWith("PDI") || periodDiscItem.OfferId.StartsWith("PDIS"))
                                         {
                                             using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Tidak bisa akses ke menu ini karena sudah mendapat diskon", MessageBoxButtons.OK, MessageBoxIcon.Stop))
                                             {
@@ -806,7 +806,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                                     {
                                         PeriodicDiscountItem periodDiscItem = discountLines as PeriodicDiscountItem;
 
-                                        if (periodDiscItem.OfferId.StartsWith("ED")) //if (periodDiscItem.OfferId.StartsWith("PDI")) //
+                                        if (periodDiscItem.OfferId.StartsWith("PDI")) //
                                         {
                                              promoID = periodDiscItem.OfferId;
                                         }
@@ -917,7 +917,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                                         //{
                                         //    promoID = periodDiscItem.OfferId;
                                         //}
-                                        if (periodDiscItem.OfferId.StartsWith("QS")) //if (periodDiscItem.OfferId.StartsWith("PDIS")) //
+                                        if (periodDiscItem.OfferId.StartsWith("PDIS")) //
                                         {
                                             promoID = periodDiscItem.OfferId;
                                         }
