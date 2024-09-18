@@ -55,9 +55,9 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
         /// <param name="reportType">Report type</param>
         public static void Print(this Batch batch, ReportType reportType)
         {
-            // TextID's for the Z/X Report are reserved at 7000 - 7099
+            // TextID's for the Z/X Report are reserved at 7000 - 7099 
 
-            if (EOD.InternalApplication.Services.Peripherals.FiscalPrinter.FiscalPrinterEnabled())
+            if (EOD.InternalApplication.Services.Peripherals.FiscalPrinter.FiscalPrinterEnabled()) 
             {
                 paperWidth = EOD.InternalApplication.Services.Peripherals.FiscalPrinter.GetLineLegth(null);
             }
@@ -443,8 +443,16 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             reportLayout.AppendLine(string.Format("Total Customer : {0} = {1}", RoundDecimal(custAmountTotal), custCountTotal));
 
             reportLayout.AppendLine();
+            decimal avgBasket;
+            if (custCountTotal != 0)
+            {
+                  avgBasket = Math.Round((decimal)custAmountTotal, 0, MidpointRounding.AwayFromZero) / custCountTotal;
 
-            decimal avgBasket = Math.Round((decimal)custAmountTotal, 0, MidpointRounding.AwayFromZero) / custCountTotal;
+            }
+            else
+            {
+                  avgBasket = 0;
+            }
 
             reportLayout.AppendLine(string.Format("Avg. Basket : {0} / Orang", RoundDecimal(avgBasket)));
             //End add and comment standard NEC
