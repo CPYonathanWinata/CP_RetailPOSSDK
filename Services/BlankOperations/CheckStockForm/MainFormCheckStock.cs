@@ -207,7 +207,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CheckStockForm
 
                     if (statusTrans == true)
                     {
-                        var result = apiFunction.checkStockOnHandMulti(application, urlRTS, application.Settings.Database.DataAreaID, _siteId, ApplicationSettings.Terminal.InventLocationId, _itemIdMulti, "", "", "", _qtyMulti, posTransaction.StoreId+"-FORMCHECKSTOCK"); //add 2 new parameter by Yonathan 11092024
+                        var result = apiFunction.checkStockOnHandMultiNew(application, urlRTS, application.Settings.Database.DataAreaID, _siteId, ApplicationSettings.Terminal.InventLocationId, _itemIdMulti, "", "", "", _qtyMulti, posTransaction.StoreId + "-FORMCHECKSTOCK"); //add 2 new parameter by Yonathan 11092024
                       //var result = apiFunction.checkStockOnHandMulti(Application, urlRTS, Application.Settings.Database.DataAreaID, siteId, ApplicationSettings.Terminal.InventLocationId, itemIdMulti, "", "", configIdMulti, quantityItems, transaction.TransactionId);
                         xmlResponse = result[3].ToString();
 

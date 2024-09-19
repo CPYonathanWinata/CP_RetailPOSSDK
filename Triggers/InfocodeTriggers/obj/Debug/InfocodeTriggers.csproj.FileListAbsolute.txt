@@ -13,3 +13,8 @@ C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\POS\bin\Debug\Inf
 C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Triggers\InfocodeTriggers\obj\Debug\InfocodeTriggers.csprojResolveAssemblyReference.cache
 C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Triggers\InfocodeTriggers\obj\Debug\InfocodeTriggers.dll
 C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Triggers\InfocodeTriggers\obj\Debug\InfocodeTriggers.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\POS\bin\Debug\InfocodeTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\POS\bin\Debug\InfocodeTriggers.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Triggers\InfocodeTriggers\obj\Debug\InfocodeTriggers.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Triggers\InfocodeTriggers\obj\Debug\InfocodeTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Triggers\InfocodeTriggers\obj\Debug\InfocodeTriggers.pdb
