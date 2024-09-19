@@ -1,0 +1,5 @@
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\POS\bin\Debug\SuspendTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\POS\bin\Debug\SuspendTriggers.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Triggers\SuspendTriggers\obj\Debug\SuspendTriggers.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Triggers\SuspendTriggers\obj\Debug\SuspendTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Triggers\SuspendTriggers\obj\Debug\SuspendTriggers.pdb

@@ -18,3 +18,8 @@ C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\POS\bin\Debug\Discount
 C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Triggers\DiscountTriggers\obj\Debug\DiscountTriggers.csprojResolveAssemblyReference.cache
 C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Triggers\DiscountTriggers\obj\Debug\DiscountTriggers.dll
 C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Triggers\DiscountTriggers\obj\Debug\DiscountTriggers.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\POS\bin\Debug\DiscountTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\POS\bin\Debug\DiscountTriggers.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Triggers\DiscountTriggers\obj\Debug\DiscountTriggers.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Triggers\DiscountTriggers\obj\Debug\DiscountTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Triggers\DiscountTriggers\obj\Debug\DiscountTriggers.pdb

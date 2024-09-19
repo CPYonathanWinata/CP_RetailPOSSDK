@@ -257,3 +257,48 @@ C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\BlankOperatio
 C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\aa\BlankOperations.resources.dll
 C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\BlankOperations.dll
 C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\BlankOperations.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\BlankOperations.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CheckStockForm.Infolog.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CheckStockForm.ItemSearch.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CheckStockForm.MainFormCheckStock.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPCheckBalanceEZ.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPCustomerNumber.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPCustomerStd.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPDiscountItem.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPDiscountPayment.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPGrabmartOrder.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPIZone.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPLoveRemittTPT.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPNotification.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPayECR.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPayGoPay.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPLoveRemittPayment.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPRedeemEZ.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPRequestBNI.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPSearchCustomerEZ.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPSettlementEDC.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPShowJournal.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPStressTest.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPVoucherCode.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPWeightBarcode.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_DailyOnHand.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPGrabOrder.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_IZone.PLN.CPPLNPascabayar.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_SalesOrderDetail.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.frmShowNotification.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPLoveInquiry.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.frmShowRetailTrx.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.frmCheckLoyaltyDetail.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.frmAddNoOrder.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.IZone.PLN.CPPLNPrabayar.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.Properties.Resources.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPSettlementEDC.aa.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\BlankOperations.csproj.GenerateResource.Cache
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\BlankOperations.dll.licenses
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\BlankOperations.dll
+C:\Users\yonathan.winata\Documents\GitHub\AX\Retail POS\Extensions\BlankOperations.dll.config
+C:\Users\yonathan.winata\Documents\GitHub\AX\Retail POS\Extensions\BlankOperations.dll
+C:\Users\yonathan.winata\Documents\GitHub\AX\Retail POS\Extensions\BlankOperations.pdb
+C:\Users\yonathan.winata\Documents\GitHub\AX\Retail POS\Extensions\aa\BlankOperations.resources.dll
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\aa\BlankOperations.resources.dll
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\BlankOperations.pdb

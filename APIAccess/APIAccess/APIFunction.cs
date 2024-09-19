@@ -88,7 +88,7 @@ namespace APIAccess
 
 		}
         //public ReadOnlyCollection<object> checkStockOnHandMulti(IApplication _application, string url, string parmCompanyCode = "", string parmSiteId = "", string parmWareHouse = "", string parmItemId = "", string parmMaxQty = "", string parmBarcodeSetupId = "", string parmConfigId = "")
-            public ReadOnlyCollection<object> checkStockOnHandMulti(IApplication _application, string url, string parmCompanyCode = "", string parmSiteId = "", string parmWareHouse = "", string parmItemId = "", string parmMaxQty = "", string parmBarcodeSetupId = "", string parmConfigId = "",  string parmQtyInput = "", string parmTransId = "")
+            public ReadOnlyCollection<object> checkStockOnHandMultiNew(IApplication _application, string url, string parmCompanyCode = "", string parmSiteId = "", string parmWareHouse = "", string parmItemId = "", string parmMaxQty = "", string parmBarcodeSetupId = "", string parmConfigId = "",  string parmQtyInput = "", string parmTransId = "")
         {
             //System.Diagnostics.Stopwatch timer = new Stopwatch();
             string itemId, siteId, wareHouse, maxQty, barCode, company = "";
@@ -116,7 +116,7 @@ namespace APIAccess
 							};
 
 
-                containerArray = Application.TransactionServices.InvokeExtension("getStockOnHandMulti", parameterList);
+                containerArray = Application.TransactionServices.InvokeExtension("getStockOnHandMultiNew", parameterList);
 
 
 
@@ -131,6 +131,49 @@ namespace APIAccess
             }
 
         }
+
+            public ReadOnlyCollection<object> checkStockOnHandMulti(IApplication _application, string url, string parmCompanyCode = "", string parmSiteId = "", string parmWareHouse = "", string parmItemId = "", string parmMaxQty = "", string parmBarcodeSetupId = "", string parmConfigId = "")
+            //public ReadOnlyCollection<object> checkStockOnHandMulti(IApplication _application, string url, string parmCompanyCode = "", string parmSiteId = "", string parmWareHouse = "", string parmItemId = "", string parmMaxQty = "", string parmBarcodeSetupId = "", string parmConfigId = "", string parmQtyInput = "", string parmTransId = "")
+            {
+                //System.Diagnostics.Stopwatch timer = new Stopwatch();
+                string itemId, siteId, wareHouse, maxQty, barCode, company = "";
+                bool status = false;
+                string message = "";
+                //object[] array = Array.Empty<object>();
+
+                Application = _application;
+                ReadOnlyCollection<object> containerArray = new ReadOnlyCollection<object>(new object[0]);
+
+                try
+                {
+
+                    object[] parameterList = new object[] 
+							{
+								url,
+                                parmCompanyCode,
+								parmSiteId,
+								parmWareHouse,
+								parmItemId,
+								"",
+								""						
+							};
+
+
+                    containerArray = Application.TransactionServices.InvokeExtension("getStockOnHandMulti", parameterList);
+
+
+
+                    return containerArray;
+
+
+                }
+                catch (Exception ex)
+                {
+                    return containerArray;
+
+                }
+
+            }
 		//itemid,qty,unitid,dataareaid,warehouse,type,reffnum,retailvarid
 		public string addItemMultiple(string _url, List<APIParameter.parmRequestAddItemMultiple> _listData)
 		{

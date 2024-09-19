@@ -2,3 +2,4 @@ C:\WorkingFolderAX\Triggers\FiscalPrinterTriggers\obj\Debug\FiscalPrinterTrigger
 C:\Project POS SourceCode\Triggers\FiscalPrinterTriggers\obj\Debug\FiscalPrinterTriggers.csprojResolveAssemblyReference.cache
 D:\GT\Triggers\FiscalPrinterTriggers\obj\Debug\FiscalPrinterTriggers.csprojResolveAssemblyReference.cache
 D:\Work\GT\Triggers\FiscalPrinterTriggers\obj\Debug\FiscalPrinterTriggers.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Triggers\FiscalPrinterTriggers\obj\Debug\FiscalPrinterTriggers.csprojResolveAssemblyReference.cache

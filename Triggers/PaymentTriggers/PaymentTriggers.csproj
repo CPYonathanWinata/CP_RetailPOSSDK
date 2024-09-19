@@ -20,21 +20,29 @@
   <ItemGroup>
     <Reference Include="APIAccess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Extensions\APIAccess.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Extensions\APIAccess.dll</HintPath>
     </Reference>
     <Reference Include="Application">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Extensions\Application.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Extensions\Application.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Data.v16.2, Version=16.2.15.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.Printing.v16.2.Core, Version=16.2.15.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Data.v16.2, Version=16.2.15.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\..\..\..\DevExpress\Framework\DevExpress.Data.v16.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Printing.v16.2.Core, Version=16.2.15.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\..\..\..\DevExpress\Framework\DevExpress.Printing.v16.2.Core.dll</HintPath>
+    </Reference>
     <Reference Include="DevExpress.Utils.v14.2, Version=14.2.107.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Client\Bin\DevExpress.Utils.v14.2.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Utils.v16.2, Version=16.2.15.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.XtraEditors.v16.2, Version=16.2.15.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Utils.v16.2, Version=16.2.15.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\..\..\..\DevExpress\Framework\DevExpress.Utils.v16.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraEditors.v16.2, Version=16.2.15.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\..\..\..\DevExpress\Framework\DevExpress.XtraEditors.v16.2.dll</HintPath>
+    </Reference>
     <Reference Include="GME_Custom">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Extensions\GME_Custom.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Extensions\GME_Custom.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Dynamics.Retail.Pos.Contracts, Version=6.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
