@@ -677,7 +677,11 @@ namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
             if (itemIdMulti != "")
             {
                 //change by Yonathan to add QTY Input 15/08/2024
-                var result = apiFunction.checkStockOnHandMultiNew(Application, urlRTS, Application.Settings.Database.DataAreaID, siteId, ApplicationSettings.Terminal.InventLocationId, itemIdMulti, "", "", configIdMulti, quantityItems,transaction.TransactionId);
+                var result = apiFunction.checkStockOnHandMultiNew(Application, urlRTS, Application.Settings.Database.DataAreaID, siteId, ApplicationSettings.Terminal.InventLocationId, itemIdMulti, "", "", configIdMulti, quantityItems, transaction.TransactionId);
+
+                //only for testing with old method
+                //var result = apiFunction.checkStockOnHandMulti(Application, urlRTS, Application.Settings.Database.DataAreaID, siteId, ApplicationSettings.Terminal.InventLocationId, itemIdMulti, "", "", configIdMulti);//, quantityItems, transaction.TransactionId);
+                //end
                 xmlResponse = result[3].ToString();
                 
                 XmlDocument xmlDoc = new XmlDocument(); 

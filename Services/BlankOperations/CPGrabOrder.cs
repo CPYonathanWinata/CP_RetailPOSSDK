@@ -628,7 +628,12 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                 }
             }
 
-            var result = apiFunction.checkStockOnHandMultiNew(application, urlRTS, application.Settings.Database.DataAreaID, siteId, ApplicationSettings.Terminal.InventLocationId, itemIdMulti, "", "", "", qtyMulti, posTransaction.StoreId+"-"+ _orderId.ToString()); // mod by Yonathan to add 2 parameters qty and trans id 11092024
+            var result = apiFunction.checkStockOnHandMultiNew(application, urlRTS, application.Settings.Database.DataAreaID, siteId, ApplicationSettings.Terminal.InventLocationId, itemIdMulti, "", "", "", qtyMulti, posTransaction.StoreId + "-" + _orderId.ToString()); // mod by Yonathan to add 2 parameters qty and trans id 11092024
+
+            //testing for 1 store only, nanti dibalikin ke yang baru (yang atas)
+            //var result = apiFunction.checkStockOnHandMulti(application, urlRTS, application.Settings.Database.DataAreaID, siteId, ApplicationSettings.Terminal.InventLocationId, itemIdMulti, "", "", "");//, qtyMulti, posTransaction.StoreId+"-"+ _orderId.ToString())//, _qtyMulti, posTransaction.StoreId + "-FORMCHECKSTOCK"); 
+            //end
+
             xmlResponse = result[3].ToString();
 
             XmlDocument xmlDoc = new XmlDocument();
