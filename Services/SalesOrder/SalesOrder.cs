@@ -1703,8 +1703,9 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder
         /// <param name="comment"></param>
         /// <param name="salesOrders"></param>
         /// <param name="customerAccount"></param>
+        /// //new orderType for order 0.POS / 1.Online - Yonathan 23092024
         [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Caller's will dispose of datatable")]
-        internal static DataTable GetCustomerOrdersList(ref bool retValue, ref string comment, string customerSearchTerm, string orderSearchTerm, DateTime? startDate, DateTime? endDate, int? resultMaxCount)
+        internal static DataTable GetCustomerOrdersList(ref bool retValue, ref string comment, string customerSearchTerm, string orderSearchTerm, DateTime? startDate, DateTime? endDate, int? resultMaxCount, int orderType)
         {
             if (comment == null)
             {
@@ -1720,6 +1721,12 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder
             {
                 NetTracer.Warning("orderSearchTerm parameter is null");
                 throw new ArgumentNullException("orderSearchTerm");
+            }
+
+            if (orderType == null)
+            {
+                NetTracer.Warning("orderType parameter is null");
+                throw new ArgumentNullException("orderType");
             }
 
             DataTable salesOrders = new DataTable();
@@ -1748,7 +1755,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder
 
             //add by Yonathan to specified warehouse id for this store only 20082024
             string wareHouse = "WH_"+ApplicationSettings.Database.StoreID;
-            containerArray = SalesOrder.InternalApplication.TransactionServices.Invoke("searchCustomerOrderList", customerSearchTerm, orderSearchTerm, fromDateString, toDateString, wareHouse, resultMaxCount);
+            containerArray = SalesOrder.InternalApplication.TransactionServices.Invoke("searchCustomerOrderList", customerSearchTerm, orderSearchTerm, fromDateString, toDateString, wareHouse, resultMaxCount, orderType);
 
             retValue = SerializationHelper.ConvertToBooleanAtIndex(containerArray, 1);
             comment = SerializationHelper.ConvertToStringAtIndex(containerArray, 2);

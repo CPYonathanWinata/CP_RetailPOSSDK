@@ -1192,10 +1192,10 @@ namespace Microsoft.Dynamics.Retail.Pos.StoreInventoryServices
                 switch (docType)
                 {
                     case PrDocListType.PurchaseOrder:
-                        this.CallTransactionService(ref succeeded, ref returnMessage, ref retVal, "GetOpenPurchaseOrders", ApplicationSettings.Terminal.InventLocationId);
+                        this.CallTransactionService(ref succeeded, ref returnMessage, ref retVal, "GetOpenPurchaseOrders", ApplicationSettings.Terminal.InventLocationId);//,"POS");
                         break;
                     case PrDocListType.TransferOrder:
-                        this.CallTransactionService(ref succeeded, ref returnMessage, ref retVal, "GetOpenTransferOrders", ApplicationSettings.Terminal.InventLocationId);
+                        this.CallTransactionService(ref succeeded, ref returnMessage, ref retVal, "GetOpenTransferOrders", ApplicationSettings.Terminal.InventLocationId);//, "POS");
                         break;
                     case PrDocListType.PickingList:
                         this.CallTransactionService(ref succeeded, ref returnMessage, ref retVal, "GetPickingLists", ApplicationSettings.Terminal.InventLocationId);

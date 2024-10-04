@@ -60,6 +60,8 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             btnCustomerSearch.Enabled = false;
             // End Add By Erwin 20 March 2019
 
+            this.orderBox.SelectedIndex = 0;
+
             base.OnLoad(e);
         }
 
@@ -167,7 +169,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 }
 
                 //Note : Restricting the result to only 100 records for a good response time.
-                SearchOrderListModel list = new SearchOrderListModel(customer, order, fromDate, toDate, RESULT_MAX_COUNT);
+                SearchOrderListModel list = new SearchOrderListModel(customer, order, fromDate, toDate, RESULT_MAX_COUNT, this.orderBox.SelectedIndex);
 
                 using (frmGetSalesOrder listDialog = new frmGetSalesOrder(list))
                 {

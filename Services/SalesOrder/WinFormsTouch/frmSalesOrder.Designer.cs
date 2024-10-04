@@ -56,7 +56,10 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             this.lblToDate = new DevExpress.XtraEditors.LabelControl();
             this.dtpFromDate = new System.Windows.Forms.DateTimePicker();
             this.dtpToDate = new System.Windows.Forms.DateTimePicker();
+            this.lblOrder = new DevExpress.XtraEditors.LabelControl();
+            this.orderBox = new System.Windows.Forms.ComboBox();
             this.btnCustomerSearch = new LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx();
+            this.chkOnlineOrder = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.styleController)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
@@ -84,7 +87,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Controls.Add(this.lblFromDate, 0, 7);
             this.tableLayoutPanel1.Controls.Add(this.lblHeading, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 13);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 14);
             this.tableLayoutPanel1.Controls.Add(this.lblCustomerIdHeading, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.txtCustomerId, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.lblSalesOrderIdHeading, 0, 4);
@@ -92,13 +95,15 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             this.tableLayoutPanel1.Controls.Add(this.lblToDate, 0, 10);
             this.tableLayoutPanel1.Controls.Add(this.dtpFromDate, 0, 8);
             this.tableLayoutPanel1.Controls.Add(this.dtpToDate, 0, 11);
+            this.tableLayoutPanel1.Controls.Add(this.lblOrder, 0, 12);
+            this.tableLayoutPanel1.Controls.Add(this.orderBox, 0, 13);
             this.tableLayoutPanel1.Controls.Add(this.btnCustomerSearch, 1, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(7, 7);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.Padding = new System.Windows.Forms.Padding(30, 40, 30, 5);
-            this.tableLayoutPanel1.RowCount = 14;
+            this.tableLayoutPanel1.RowCount = 15;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -109,6 +114,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -284,6 +290,29 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             this.dtpToDate.TabIndex = 9;
             this.dtpToDate.ValueChanged += new System.EventHandler(this.OnFieldChanged);
             // 
+            // lblOrder
+            // 
+            this.lblOrder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblOrder.Appearance.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblOrder.Location = new System.Drawing.Point(33, 461);
+            this.lblOrder.Name = "lblOrder";
+            this.lblOrder.Size = new System.Drawing.Size(94, 25);
+            this.lblOrder.TabIndex = 4;
+            this.lblOrder.Text = "Order type:";
+            // 
+            // orderBox
+            // 
+            this.orderBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.orderBox.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.orderBox.FormattingEnabled = true;
+            this.orderBox.Items.AddRange(new object[] {
+            "POS Order",
+            "Online Order"});
+            this.orderBox.Location = new System.Drawing.Point(33, 492);
+            this.orderBox.Name = "orderBox";
+            this.orderBox.Size = new System.Drawing.Size(271, 33);
+            this.orderBox.TabIndex = 6;
+            // 
             // btnCustomerSearch
             // 
             this.btnCustomerSearch.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -298,6 +327,17 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             this.btnCustomerSearch.Size = new System.Drawing.Size(57, 32);
             this.btnCustomerSearch.TabIndex = 3;
             this.btnCustomerSearch.Click += new System.EventHandler(this.btnCustomerSearch_Click);
+            // 
+            // chkOnlineOrder
+            // 
+            this.chkOnlineOrder.AutoSize = true;
+            this.chkOnlineOrder.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkOnlineOrder.Location = new System.Drawing.Point(33, 461);
+            this.chkOnlineOrder.Name = "chkOnlineOrder";
+            this.chkOnlineOrder.Size = new System.Drawing.Size(188, 29);
+            this.chkOnlineOrder.TabIndex = 5;
+            this.chkOnlineOrder.Text = "Online order only";
+            this.chkOnlineOrder.UseVisualStyleBackColor = true;
             // 
             // frmSalesOrder
             // 
@@ -338,5 +378,12 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
         private System.Windows.Forms.DateTimePicker dtpFromDate;
         private System.Windows.Forms.DateTimePicker dtpToDate;
         private DevExpress.XtraEditors.StyleController styleController;
+
+        //add checkbox - yonathan 23092024
+        private System.Windows.Forms.CheckBox chkOnlineOrder;
+        private System.Windows.Forms.ComboBox orderBox;
+        private DevExpress.XtraEditors.LabelControl lblOrder;
+        //private System.Windows.Forms.Label lblOrder;
+        //end
     }
 }

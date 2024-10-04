@@ -10,6 +10,8 @@ NO TECHNICAL SUPPORT IS PROVIDED.  YOU MAY NOT DISTRIBUTE THIS CODE UNLESS YOU H
 
 using Microsoft.Dynamics.Retail.Pos.Contracts.Services;
 using Microsoft.Dynamics.Retail.Pos.Contracts.UI;
+using System;
+using System.Windows.Forms;
 
 namespace Microsoft.Dynamics.Retail.Pos.GiftCard
 {
@@ -256,6 +258,9 @@ namespace Microsoft.Dynamics.Retail.Pos.GiftCard
             this.numCurrNumpad.TimerEnabled = true;
             this.numCurrNumpad.EnterButtonPressed += new LSRetailPosis.POSProcesses.WinControls.NumPad.enterbuttonDelegate(this.OnNumpad_EnterButtonPressed);
             this.numCurrNumpad.CardSwept += new LSRetailPosis.POSProcesses.WinControls.NumPad.cardSwipedDelegate(this.ProcessSwipedCard);
+            this.numCurrNumpad.Visible = false;
+
+            //this.numCurrNumpad.HideKeyboard();
             // 
             // panelAmount
             // 
@@ -641,7 +646,10 @@ namespace Microsoft.Dynamics.Retail.Pos.GiftCard
             this.textBoxCardNumber.Size = new System.Drawing.Size(332, 28);
             this.textBoxCardNumber.TabIndex = 1;
             this.textBoxCardNumber.Enter += new System.EventHandler(this.OnCardNumberTextBox_Enter);
-            this.textBoxCardNumber.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.OnTextbox_KeyPress);
+            //this.textBoxCardNumber.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.OnTextbox_KeyPress);
+            bool enable = true;
+            //this.textBoxCardNumber.Enabled = enable;
+            this.textBoxCardNumber.ReadOnly = enable;
             // 
             // btnCheckBalance
             // 
@@ -659,6 +667,9 @@ namespace Microsoft.Dynamics.Retail.Pos.GiftCard
             // 
             // GiftCardForm
             // 
+            this.KeyDown += GiftCardForm_KeyDown;
+            this.KeyUp += GiftCardForm_KeyUp;
+
             this.Appearance.Options.UseFont = true;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(1024, 768);
@@ -687,8 +698,65 @@ namespace Microsoft.Dynamics.Retail.Pos.GiftCard
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textBoxCardNumber.Properties)).EndInit();
+
+            //new
+             
+            
+
             this.ResumeLayout(false);
 
+        }
+
+        private void GiftCardForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            cforKeyDown = (char)e.KeyCode;
+        }
+
+        private void GiftCardForm_KeyUp(object sender, KeyEventArgs e)
+        {
+            // if keyboard input is allowed to read
+
+
+            /* check if keydown and keyup is not different
+             * and keydown event is not fired again before the keyup event fired for the same key
+             * and keydown is not null
+             * Barcode never fired keydown event more than 1 time before the same key fired keyup event
+             * Barcode generally finishes all events (like keydown > keypress > keyup) of single key at a time, if two different keys are pressed then it is with keyboard
+             */
+            if (cforKeyDown != (char)e.KeyCode || cforKeyDown == '\0')
+            {
+                cforKeyDown = '\0';
+                _barcode.Clear();
+                return;
+            }
+
+            // getting the time difference between 2 keys
+            int elapsed = (DateTime.Now.Millisecond - _lastKeystroke);
+
+            /*
+             * Barcode scanner usually takes less than 17 milliseconds to read, increase this if neccessary of your barcode scanner is slower
+             * also assuming human can not type faster than 17 milliseconds
+             */
+            if (elapsed > 17)
+                _barcode.Clear();
+
+            // Do not push in array if Enter/Return is pressed, since it is not any Character that need to be read
+            if (e.KeyCode != Keys.Return)
+            {
+                _barcode.Add((char)e.KeyData);
+            }
+
+            // Barcode scanner hits Enter/Return after reading barcode
+            if (e.KeyCode == Keys.Return && _barcode.Count > 0)
+            {
+                string BarCodeData = new String(_barcode.ToArray());
+                if (!UseKeyboard)
+                    textBoxCardNumber.Text = String.Format("{0}", BarCodeData);//MessageBox.Show(String.Format("{0}", BarCodeData));
+                _barcode.Clear();
+            }
+
+            // update the last key press strock time
+            _lastKeystroke = DateTime.Now.Millisecond;
         }
         #endregion
 
