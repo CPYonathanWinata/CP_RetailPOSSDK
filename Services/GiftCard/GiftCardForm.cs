@@ -20,6 +20,9 @@ using Microsoft.Dynamics.Retail.Pos.Contracts.Services;
 using Microsoft.Dynamics.Retail.Pos.Contracts.TransactionServices;
 using Microsoft.Dynamics.Retail.Pos.Contracts.UI;
 using Microsoft.Dynamics.Retail.Pos.GiftCard.Properties;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Microsoft.Dynamics.Retail.Pos.GiftCard
 {
@@ -28,6 +31,15 @@ namespace Microsoft.Dynamics.Retail.Pos.GiftCard
     /// </summary>
     partial class GiftCardForm : frmTouchBase
     {
+        //start custom disable
+        private Stopwatch stopwatch;
+        private const int MaxKeyPressInterval = 20;
+        char cforKeyDown = '\0';
+        int _lastKeystroke = DateTime.Now.Millisecond;
+        List<char> _barcode = new List<char>(1);
+        bool UseKeyboard = false;
+
+        //end
         protected GiftCardForm()
         {
             //
@@ -93,11 +105,12 @@ namespace Microsoft.Dynamics.Retail.Pos.GiftCard
         protected override void OnLoad(EventArgs e)
         {
             this.textBoxAmount.ReadOnly = true;
+            string statusScan = "";
             if (!this.DesignMode)
             {
                 TranslateLabels();
                 
-                //textBoxAmount.Enabled = false;
+                //textBoxAmount.Enabled = false; 
                 // Initialize payment amount on number pad for the pay by gift card form
                 if (this.ViewModel.Context == GiftCardController.ContextType.GiftCardPayment)
                 {
@@ -110,9 +123,37 @@ namespace Microsoft.Dynamics.Retail.Pos.GiftCard
                 GiftCard.InternalApplication.Services.Peripherals.MSR.MSRMessageEvent -= new MSRMessageEventHandler(ProcessSwipedCard);
                 GiftCard.InternalApplication.Services.Peripherals.Scanner.ScannerMessageEvent += new ScannerMessageEventHandler(ProcessScannedItem);
                 GiftCard.InternalApplication.Services.Peripherals.MSR.MSRMessageEvent += new MSRMessageEventHandler(ProcessSwipedCard);
+                ////new
+                //stopwatch = new Stopwatch();
+                //stopwatch.Start();
+                //this.KeyDown += new KeyEventHandler(BarcodeReader_KeyDown);
+                //this.KeyUp += new KeyEventHandler(BarcodeReader_KeyUp);
 
+
+                //add new scan only - yonathan 26092024
+                if (GiftCard.InternalApplication.TransactionServices.CheckConnection())
+                {
+                    ReadOnlyCollection<object>  containerArray = GiftCard.InternalApplication.TransactionServices.InvokeExtension("getInputStatus", ApplicationSettings.Database.DATAAREAID);
+                    statusScan = containerArray[3].ToString();
+                    if ( statusScan == "True")
+                    {
+                        labelCardNumber.Text = labelCardNumber.Text + " (HANYA SCAN BARCODE)";
+                        this.textBoxCardNumber.KeyDown += new System.Windows.Forms.KeyEventHandler(this.BarcodeReader_KeyDown);
+                        this.textBoxCardNumber.KeyUp += new System.Windows.Forms.KeyEventHandler(this.BarcodeReader_KeyUp);
+                    }
+                    else
+                    {
+                        this.textBoxCardNumber.ReadOnly = false;
+                    }
+                    
+                }
+                
+
+                
+                //end
                 EnablePosDevices();
             }
+            
 
             base.OnLoad(e);
             
@@ -125,6 +166,7 @@ namespace Microsoft.Dynamics.Retail.Pos.GiftCard
             base.OnFormClosed(e);
         }
 
+       
         private void TranslateLabels()
         {
             //
@@ -722,8 +764,27 @@ namespace Microsoft.Dynamics.Retail.Pos.GiftCard
                 // Jump to next object
                 this.OnNumpad_EnterButtonPressed();
             }
+
+            /*
+            //new custom
+            stopwatch.Stop();
+
+            // Check the interval between key presses
+            if (stopwatch.ElapsedMilliseconds > MaxKeyPressInterval)
+            {
+                e.Handled = true; // Block input from keyboard
+            }
+            else
+            {
+                e.Handled = false; // Allow fast input (likely from a barcode scanner)
+            }
+
+            // Restart the stopwatch for the next key press
+            stopwatch.Restart();*/
         }
 
+
+       
         #endregion
 
         /// <summary>
@@ -740,6 +801,96 @@ namespace Microsoft.Dynamics.Retail.Pos.GiftCard
                 e.Cancel = false;
             }
         }     
+
+
+        //custom method for disabling input via keyboard
+        
+        private void BarcodeReader_KeyUp(object sender, KeyEventArgs e)
+        {
+            // if keyboard input is allowed to read
+
+
+            /* check if keydown and keyup is not different
+             * and keydown event is not fired again before the keyup event fired for the same key
+             * and keydown is not null
+             * Barcode never fired keydown event more than 1 time before the same key fired keyup event
+             * Barcode generally finishes all events (like keydown > keypress > keyup) of single key at a time, if two different keys are pressed then it is with keyboard
+             */
+            if (cforKeyDown != (char)e.KeyCode || cforKeyDown == '\0')
+            {
+                cforKeyDown = '\0';
+                _barcode.Clear();
+                return;
+            }
+
+            // getting the time difference between 2 keys
+            int elapsed = (DateTime.Now.Millisecond - _lastKeystroke);
+
+            /*
+             * Barcode scanner usually takes less than 17 milliseconds to read, increase this if neccessary of your barcode scanner is slower
+             * also assuming human can not type faster than 17 milliseconds
+             */
+            if (elapsed > 20)
+                _barcode.Clear();
+
+            // Do not push in array if Enter/Return is pressed, since it is not any Character that need to be read
+            //if (e.KeyCode != Keys.Return)
+            //{
+            //    _barcode.Add((char)e.KeyData);
+            //}
+            if (e.KeyCode != Keys.Back && e.KeyCode != Keys.Return)
+            {
+                _barcode.Add((char)e.KeyData);
+            }
+
+            // Barcode scanner hits Enter/Return after reading barcode
+            if (e.KeyCode == Keys.Return && _barcode.Count > 0)
+            {
+                string BarCodeData = new String(_barcode.ToArray());
+                if (!UseKeyboard)
+                { 
+                    textBoxCardNumber.Text = String.Format("{0}", BarCodeData);
+
+
+                    if (e.KeyCode == Keys.Return)
+                    {
+                        // Stop numeric pad value overwritting the current text box value
+                        this.numCurrNumpad.EnteredValue = string.Empty;
+
+                        // Jump to next object
+                        this.OnNumpad_EnterButtonPressed();
+                    }
+
+                    //string inputValue = textBoxCardNumber.Text;
+
+                    //if (inputValue.Length > 4)
+                    //{
+                    //    string maskedValue = new string('*', inputValue.Length - 4) + inputValue.Substring(inputValue.Length - 4);
+                    //    //textBoxCardNumber.TextChanged -= MaskInput;  // Temporarily unsubscribe to avoid infinite loop
+                    //    textBoxCardNumber.Text = maskedValue;
+                    //    textBoxCardNumber.SelectionStart = maskedValue.Length; // Keep cursor at the end
+                    //    //textBoxCardNumber.TextChanged += MaskInput;  // Re-subscribe
+                    //}
+
+                }//MessageBox.Show(String.Format("{0}", BarCodeData));
+                _barcode.Clear();
+            }
+            else
+            {
+                textBoxCardNumber.Text = "";
+            }
+
+
+            // update the last key press strock time
+            _lastKeystroke = DateTime.Now.Millisecond;
+        }
+
+        private void BarcodeReader_KeyDown(object sender, KeyEventArgs e)
+        {
+            //Debug.WriteLine("BarcodeReader_KeyDown : " + (char)e.KeyCode);
+            //_barcode.Clear();
+            cforKeyDown = (char)e.KeyCode;
+        }
     }
 
     // States for input boxes in form

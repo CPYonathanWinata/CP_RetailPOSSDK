@@ -637,8 +637,9 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
         /// Get a list of sales order for a specific customer...
         /// </summary>
         /// <returns></returns>
+        /// //new orderType for order 0.POS / 1.Online - Yonathan 23092024
         [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Caller is responsible for disposing of data table")]
-        internal static DataTable GetOrdersList(string customerSearchTerm, string orderSearchTerm, DateTime? startDate, DateTime? endDate, int? resultMaxCount)
+        internal static DataTable GetOrdersList(string customerSearchTerm, string orderSearchTerm, DateTime? startDate, DateTime? endDate, int? resultMaxCount, int orderType)
         {
             ApplicationLog.Log(
                 SalesOrderActions.LogSource,
@@ -651,7 +652,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 
             try
             {
-                salesOrders = SalesOrder.GetCustomerOrdersList(ref retVal, ref comment, customerSearchTerm, orderSearchTerm, startDate, endDate, resultMaxCount);
+                salesOrders = SalesOrder.GetCustomerOrdersList(ref retVal, ref comment, customerSearchTerm, orderSearchTerm, startDate, endDate, resultMaxCount, orderType);
             }
             catch (PosisException px)
             {

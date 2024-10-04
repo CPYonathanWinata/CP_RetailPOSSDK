@@ -463,7 +463,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 (this.selectedOrderDocumentStatus == SalesStatus.Delivered);//|| this.selectedOrderDocumentStatus == SalesStatus.Invoiced);
 
             bool enableInvoice = false; //add by Yonathan to create invoice indise POS 13/01/2023
-
+            enablePickup = false;
             // If the list is only for PackSlip creation, disable everything else
             if (this.dataModel is PackslipOrderListModel)
             {
@@ -1217,19 +1217,22 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
         DateTime? startDate = null;
         DateTime? endDate = null;
         int? resultMaxCount;
-
-        public SearchOrderListModel(string customerSearchTerm, string orderSearchTerm, DateTime? startDateTerm, DateTime? endDateTerm, int? resultMaxCount)
+        //new orderType for order 0.POS / 1.Online - Yonathan 23092024
+        int orderType;
+        //end
+        public SearchOrderListModel(string customerSearchTerm, string orderSearchTerm, DateTime? startDateTerm, DateTime? endDateTerm, int? resultMaxCount, int orderType)
         {
             this.customerId = customerSearchTerm;
             this.orderId = orderSearchTerm;
             this.startDate = startDateTerm;
             this.endDate = endDateTerm;
             this.resultMaxCount = resultMaxCount;
+            this.orderType = orderType;
         }
 
         public override void Refresh()
         {
-            this.OrderList = SalesOrderActions.GetOrdersList(this.customerId, this.orderId, this.startDate, this.endDate, this.resultMaxCount);
+            this.OrderList = SalesOrderActions.GetOrdersList(this.customerId, this.orderId, this.startDate, this.endDate, this.resultMaxCount, this.orderType);
         }
     }
 
