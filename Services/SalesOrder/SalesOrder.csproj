@@ -103,6 +103,12 @@
       <DependentUpon>CP_frmPaymentInvoice.cs</DependentUpon>
     </Compile>
     <Compile Include="WinFormsTouch\FlexibleMessageBox.cs" />
+    <Compile Include="WinFormsTouch\CP_frmStockInfolog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\CP_frmStockInfolog.designer.cs">
+      <DependentUpon>CP_frmStockInfolog.cs</DependentUpon>
+    </Compile>
     <Compile Include="WinFormsTouch\OrderDetailsPages\ViewModels\CustomerInformationViewModel.cs" />
     <Compile Include="WinFormsTouch\OrderDetailsPages\ViewModels\LineLevelInformationViewModel.cs" />
     <Compile Include="WinFormsTouch\OrderDetailsPages\ViewModels\ItemDetailsViewModel.cs" />
@@ -302,6 +308,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="WinFormsTouch\frmShippingInformation.resx">
       <DependentUpon>frmShippingInformation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsTouch\CP_frmStockInfolog.resx">
+      <DependentUpon>CP_frmStockInfolog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WinFormsTouch\OrderDetailsPages\CancellationChargePage.resx">
       <DependentUpon>CancellationChargePage.cs</DependentUpon>

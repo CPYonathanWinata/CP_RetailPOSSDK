@@ -171,7 +171,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 //Note : Restricting the result to only 100 records for a good response time.
                 SearchOrderListModel list = new SearchOrderListModel(customer, order, fromDate, toDate, RESULT_MAX_COUNT, this.orderBox.SelectedIndex);
 
-                using (frmGetSalesOrder listDialog = new frmGetSalesOrder(list))
+                using (frmGetSalesOrder listDialog = new frmGetSalesOrder(list, this.orderBox.SelectedIndex))
                 {
                     SalesOrder.InternalApplication.ApplicationFramework.POSShowForm(listDialog);
                     if (listDialog.DialogResult == System.Windows.Forms.DialogResult.OK)

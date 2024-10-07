@@ -137,6 +137,7 @@ namespace Microsoft.Dynamics.Retail.Pos.GiftCard
                     statusScan = containerArray[3].ToString();
                     if ( statusScan == "True")
                     {
+                        this.textBoxCardNumber.ReadOnly = true;
                         labelCardNumber.Text = labelCardNumber.Text + " (HANYA SCAN BARCODE)";
                         this.textBoxCardNumber.KeyDown += new System.Windows.Forms.KeyEventHandler(this.BarcodeReader_KeyDown);
                         this.textBoxCardNumber.KeyUp += new System.Windows.Forms.KeyEventHandler(this.BarcodeReader_KeyUp);
@@ -809,14 +810,16 @@ namespace Microsoft.Dynamics.Retail.Pos.GiftCard
         {
             // if keyboard input is allowed to read
 
-
+            Debug.WriteLine("Key Up - Key Code: " + e.KeyCode.ToString());
+            Debug.WriteLine("Key Up - Key Data: " + e.KeyData.ToString());
             /* check if keydown and keyup is not different
              * and keydown event is not fired again before the keyup event fired for the same key
              * and keydown is not null
              * Barcode never fired keydown event more than 1 time before the same key fired keyup event
              * Barcode generally finishes all events (like keydown > keypress > keyup) of single key at a time, if two different keys are pressed then it is with keyboard
              */
-            if (cforKeyDown != (char)e.KeyCode || cforKeyDown == '\0')
+            if ((cforKeyDown != (char)e.KeyCode || cforKeyDown == '\0') && e.KeyCode!=Keys.ShiftKey)
+            
             {
                 cforKeyDown = '\0';
                 _barcode.Clear();
@@ -838,9 +841,11 @@ namespace Microsoft.Dynamics.Retail.Pos.GiftCard
             //{
             //    _barcode.Add((char)e.KeyData);
             //}
-            if (e.KeyCode != Keys.Back && e.KeyCode != Keys.Return)
+            if (e.KeyCode != Keys.Back && e.KeyCode != Keys.Return && e.KeyCode != Keys.ShiftKey)
             {
-                _barcode.Add((char)e.KeyData);
+                char keyPressed = (char)e.KeyCode;
+                _barcode.Add(keyPressed);
+                Debug.WriteLine("Barcode Data Added: " + keyPressed); // Check each added character
             }
 
             // Barcode scanner hits Enter/Return after reading barcode
@@ -889,6 +894,7 @@ namespace Microsoft.Dynamics.Retail.Pos.GiftCard
         {
             //Debug.WriteLine("BarcodeReader_KeyDown : " + (char)e.KeyCode);
             //_barcode.Clear();
+            if (e.KeyCode != Keys.ShiftKey)
             cforKeyDown = (char)e.KeyCode;
         }
     }
