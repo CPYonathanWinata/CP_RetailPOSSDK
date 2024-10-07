@@ -66,7 +66,8 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
         private string isOpen;
         //add by yonathan 21/06/2024
         string isB2bCust = "0";
-
+        //add by Yonathan order type - 04102024
+        int orderTypeSO = 0; //0 POS - 1 Online
         /// <summary>
         /// Returns selected sales order id as string.
         /// </summary>
@@ -97,10 +98,11 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
            
         }
 
-        internal frmGetSalesOrder(OrderListModel data)
+        internal frmGetSalesOrder(OrderListModel data, int orderType = 0)
             : this()
         {
             this.dataModel = data;
+            this.orderTypeSO = orderType;
         }
   
         protected override void OnLoad(EventArgs e)
@@ -836,7 +838,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
         {
             GetSelectedRow();
 
-            CP_frmPackingSlipDetail packingSlipDetails = new CP_frmPackingSlipDetail(SalesOrder.InternalApplication, this.SelectedSalesOrderId.ToString());
+            CP_frmPackingSlipDetail packingSlipDetails = new CP_frmPackingSlipDetail(SalesOrder.InternalApplication, this.SelectedSalesOrderId.ToString(), orderTypeSO);
             packingSlipDetails.ShowDialog();
             RefreshGrid();
             GetSelectedRow();  // to reload "selectedOrderStatus" object.

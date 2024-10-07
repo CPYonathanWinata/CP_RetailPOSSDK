@@ -34,7 +34,9 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 
 		private List<LineItemViewModel> viewModels;
 		private ReadOnlyCollection<LineItemViewModel> lineItems;
-
+        //add order type - Yonathan 04102024
+        int orderType = 0;
+        //end
 		protected void SetTransaction(CustomerOrderTransaction custTransaction)
 		{
 			this.transaction = custTransaction;
@@ -52,12 +54,13 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 			}
 		}
 		 
-		public CP_frmPackingSlipDetail(IApplication _application, string _salesId)
+		public CP_frmPackingSlipDetail(IApplication _application, string _salesId, int _orderType = 0)
 		{
 			InitializeComponent();
 			txtSalesOrder.Text = _salesId;
 			salesID = _salesId;
 			application = _application;
+            orderType = _orderType;
 			//posTransaction = _posTransaction;
 			transaction = SalesOrderActions.GetCustomerOrder(salesID, LSRetailPosis.Transaction.CustomerOrderType.SalesOrder, LSRetailPosis.Transaction.CustomerOrderMode.Edit);
 			ItemDetailsViewModel(transaction);
@@ -338,6 +341,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                             {
                                 flagError = 6;
                             }
+                            
                             //if (Convert.ToDecimal(row.Cells["QtyDO"].Value) <= Convert.ToDecimal(row.Cells["QtySO"].Value))
                             else
                             {
@@ -349,6 +353,17 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                                     string deliverNow = row.Cells["QtyDO"].Value.ToString();
 
                                     //check if this is stocked item
+
+                                    if (orderType == 1 && qtyReceive != qtySO)   //if receive qty is different than the qty SO - add by Yonathan 04102024                               
+                                    {
+                                        flagError = 7;
+                                        break;
+                                    }
+                                    else if (orderType == 1 && qtyReceive == 0)
+                                    {
+                                        flagError = 8;
+                                        break;
+                                    }
                                     positiveStatus = checkPositiveStatus(itemId);
                                     if (positiveStatus == "1")
                                     {
@@ -383,10 +398,18 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 
                                         availQty = availQtyStock + availQtyStockSO; //
                                         remainQty = availQty - Convert.ToDecimal(row.Cells["QtyDO"].Value);
+
+
+
+                                     
+
+
                                         if (remainQty < 0)
                                         {
                                             flagError = 5;
-                                            itemIdStock += itemIdStock == "" ? string.Format("Itemid-NamaBarang-Stok\n{0} - {1} - (Qty {2})\n", itemId, itemName, availQty.ToString()) : string.Format("{0} - {1} - Qty {2}\n", itemId, itemName, availQty.ToString());
+                                            //itemIdStock += itemIdStock == "" ? string.Format("Itemid-NamaBarang-Stok\n{0} - {1} - (Qty {2})\n", itemId, itemName, availQty.ToString()) : string.Format("{0} - {1} - Qty {2}\n", itemId, itemName, availQty.ToString());
+
+                                            itemIdStock += "{" + itemId + ";" + itemName + ";" + row.Cells["QtyDO"].Value + ";" + availQty.ToString() + "}";
 
                                         }
                                         else
@@ -407,7 +430,8 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                                         root.AppendChild(salesLine);
                                     }
                                 }
-                                else
+                                
+                                else //if receive qty is bigger
                                 {
                                     flagError = 1;
                                     break;
@@ -503,14 +527,41 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                     {
                         FlexibleMessageBox.FONT = new Font("Segoe", 16, FontStyle.Regular);
                         //itemIdStock += "Itemid-ProductName-Stok\n";
-                        itemIdStock += string.Format("\nStok item diatas no SO: {0} tidak mencukupi", salesID);
-                        var result = FlexibleMessageBox.Show(itemIdStock, "Infolog Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+
+                        //itemIdStock += string.Format("\nStok item diatas no SO: {0} tidak mencukupi", salesID);
+                        //var result = FlexibleMessageBox.Show(itemIdStock, "Infolog Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+
+                        //add new check stock UI - Yonathan 04102024
+                        using (CP_frmStockInfolog customDialog = new CP_frmStockInfolog(itemIdStock))//, transaction))
+                        {
+                             
+                                customDialog.ShowDialog(this);
+
+                            
+
+
+
+
+                        }
+                        //end
+
                         //SalesOrder.InternalApplication.Services.Dialog.ShowMessage(string.Format("Stock item tidak cukup\nTidak bisa melakukan packing slip\nItem Id : {0}",itemIdStock), MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     else if (flagError == 6)
                     {
                         SalesOrder.InternalApplication.Services.Dialog.ShowMessage("QtyDO tidak boleh minus / negatif.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
+                    else if (flagError == 7)
+                    {
+                        SalesOrder.InternalApplication.Services.Dialog.ShowMessage("QtyDO dengan QtySO untuk SO Online tidak boleh berbeda", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else if (flagError == 8)
+                    {
+                        SalesOrder.InternalApplication.Services.Dialog.ShowMessage("QtyDO untuk SO Online tidak boleh 0", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
 				}
 			}
 		}
