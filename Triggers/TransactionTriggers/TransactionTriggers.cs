@@ -40,6 +40,7 @@ using Microsoft.Dynamics.Retail.Pos.Contracts;
 using System.Xml;
 using LSRetailPosis.POSProcesses;
 using System.Collections.ObjectModel;
+using System.Globalization;
 
 namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 {
@@ -1027,7 +1028,9 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 							PurchaserName = reader[7] + "";
 							PurchaserPhone = reader[8] + "";
 							store = reader[9] + "";
-							transDate = String.Format("{0:yyyy/MM/dd HH:mm:ss.fff}", reader[10]) + ""; // reader[10].ToString("yyyy-mm-dd hh:mm:ss:ms") + ""; //2022/09/20 16:10:27
+							//transDate = String.Format("{0:yyyy/MM/dd HH:mm:ss.fff}", reader[10]) + ""; // reader[10].ToString("yyyy-mm-dd hh:mm:ss:ms") + ""; //2022/09/20 16:10:27
+                            transDate = ((DateTime)reader[10]).ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture); //change to this to match the globalization format - yonathan 14102024
+
 							dataareaID = reader[11] + "";
 							partition = reader[12] + "";
 						}

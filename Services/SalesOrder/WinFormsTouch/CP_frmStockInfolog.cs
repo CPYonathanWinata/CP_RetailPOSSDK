@@ -43,7 +43,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             {
                 // Split each item by ';' to extract itemId, itemName, and availQty
                 string[] parts = item.Split(';');
-                if (parts.Length == 3)
+                if (parts.Length == 4)
                 {
                     itemId = parts[0];
                     itemName = parts[1];
@@ -53,7 +53,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                     remainQty = decimal.Parse(parts[3], culture);
                     //remainQty = int.Parse(parts[2]);
 
-                     
+                    gridViewItem.Rows.Add(itemId, itemName, qtyDo, remainQty);
                 }
             
 
@@ -67,7 +67,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 ////add for test
 
 
-                gridViewItem.Rows.Add(itemId, itemName, qtyDo, remainQty);
+                
                      
             }
                          

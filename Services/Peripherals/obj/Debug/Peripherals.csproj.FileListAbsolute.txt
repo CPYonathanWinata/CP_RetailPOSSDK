@@ -22,3 +22,10 @@ C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\Peripherals\o
 C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\Peripherals\obj\Debug\Peripherals.csproj.GenerateResource.Cache
 C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\Peripherals\obj\Debug\Peripherals.dll
 C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\Peripherals\obj\Debug\Peripherals.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\POS\bin\Debug\services\Peripherals.dll
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\POS\bin\Debug\services\Peripherals.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Peripherals\obj\Debug\Peripherals.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Peripherals\obj\Debug\Microsoft.Dynamics.Retail.Pos.Services.DualDisplayForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Peripherals\obj\Debug\Peripherals.csproj.GenerateResource.Cache
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Peripherals\obj\Debug\Peripherals.dll
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Peripherals\obj\Debug\Peripherals.pdb

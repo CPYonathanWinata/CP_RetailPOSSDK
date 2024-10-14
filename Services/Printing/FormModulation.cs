@@ -34,6 +34,8 @@ using Microsoft.Dynamics.Retail.Pos.Contracts.DataEntity;
 using Microsoft.Dynamics.Retail.Pos.Contracts.Services;
 using Microsoft.Dynamics.Retail.Pos.Contracts;
 using System.Collections.ObjectModel;
+using System.Globalization;
+using System.Xml.Linq;
 
 
 namespace Microsoft.Dynamics.Retail.Pos.Printing
@@ -83,6 +85,14 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
         decimal amountAmbilTunai = 0; //declare ambilTunai variable
         decimal amountAdmFee = 0;//add adm fee Yonathan 13/06/2024 //CPIADMFEE
         string invoiceId = ""; //add for invoice id Yonathan 10092024
+        decimal amountPerLine = 0;
+        decimal qtyPerLine = 0;
+        decimal grandTotal = 0;
+
+        ReadOnlyCollection<object> containerArray; //add for invoice detail - Yonathan 07102024
+        XDocument xdoc;
+        XElement xml;
+        int countInfo = 0;
         #endregion
 
         #endregion
@@ -199,9 +209,52 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                                 return cot.OrderId;
                             }*/
                     //add by Yonathan 10092024
-                    if ((cot = theTransaction as CustomerOrderTransaction) != null)
+                    if ((cot = theTransaction as CustomerOrderTransaction) != null && invoiceId == "" && countInfo  == 0)
                     {
-                        invoiceId = getInvoiceId(cot.OrderId);
+                        getInvoiceId(cot.OrderId);
+                        string returnString = containerArray[3].ToString();
+                        // Load XML into XDocument
+                        if (containerArray[1].ToString() != "False")
+                        {
+                            xdoc = XDocument.Parse(returnString);
+                            xml = XElement.Parse(returnString);
+                            /*
+                                var cultureInfo = new CultureInfo("id-ID");
+                                var groupedData = xdoc.Descendants("CustInvoiceTrans")
+                                    .Where(e => e.Attribute("ItemLines") != null)
+                                    .Select(e => e.Attribute("ItemLines").Value.Split(';'))
+                                    .GroupBy(
+                                        fields => new { ItemId = fields[0], ItemName = fields[1] }, // Group by ItemId and ItemName
+                                        fields => new
+                                        {
+                                            Quantity = decimal.Parse(fields[2], NumberStyles.Number, cultureInfo),
+                                            LineAmount = decimal.Parse(fields[3], NumberStyles.Number, cultureInfo),
+                                            SalesId = fields[4]
+                                        }
+                                    )
+                                    .Select(group => new
+                                    {
+                                        group.Key.ItemId,
+                                        group.Key.ItemName,
+                                    
+                                        //SalesIdCount = group.Select(x => x.SalesId).Distinct().Count()
+                                    });
+
+                                            // Output the results
+                                            foreach (var data in groupedData)
+                                            {
+
+                                                reportLayout.AppendLine(string.Format("{0} - {1}", data.ItemId.ToString(), data.ItemName.ToString()));
+
+                                                reportLayout.AppendLine(string.Format("{0} - {1}", data.TotalQty, RoundDecimal(Convert.ToDecimal(data.TotalLineAmount))));
+                                                totalAmount += data.TotalLineAmount;
+                                                //totalSales = data.SalesIdCount;
+                                            }
+                            }*/
+                            
+                        }
+                        countInfo++;
+
                     }
 
                     //end
@@ -994,10 +1047,10 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
             return string.Empty;
         }
 
-        private string getInvoiceId(string _salesId)
+        private void getInvoiceId(string _salesId)
         {
             SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
-            string invoiceId = "";
+            //string invoiceId = "";
             try
             {
                 string queryString = @"SELECT INVOICECOMMENT,SALESORDERID,RECEIPTID FROM [ax].[RETAILTRANSACTIONTABLE]  where SALESORDERID = '"+_salesId+"'";
@@ -1039,7 +1092,11 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                 }
             }
 
-            return invoiceId;
+
+            //get info invoice item from AX - Yonathan 07102024
+            containerArray = Printing.InternalApplication.TransactionServices.InvokeExtension("getInvoiceSalesOrder", _salesId);
+            //end
+            //return invoiceId;
         }
 
         private string checkDiscPayment(string infocodeId)
@@ -1194,7 +1251,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
         {
 
             string returnValue = string.Empty;
-
+            CustomerOrderTransaction cot;
             if (saleLine == null)
             {
                 return returnValue;
@@ -1228,7 +1285,70 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                         returnValue = saleLine.BarcodeId;
                         break;
                     case "QTY":
-                        returnValue = Printing.InternalApplication.Services.Rounding.RoundQuantity(saleLine.Quantity, saleLine.SalesOrderUnitOfMeasure);
+                        if ((cot = theTransaction as CustomerOrderTransaction) != null && invoiceId != "")
+                        {
+                              
+                                // Lookup the matching XML node for the current salesLine.ItemId
+                            var matchingNode = xml.Elements("CustInvoiceTrans")
+                                                    .FirstOrDefault(x => x.Attribute("ItemLines")
+                                                    .Value.Split(';')[0] == saleLine.ItemId);
+
+                            if (matchingNode != null)
+                            {
+                                // Split the ItemLines attribute by semicolons
+                                string[] itemDetails = matchingNode.Attribute("ItemLines").Value.Split(';');
+
+                                // Retrieve ItemName and Qty
+                                string itemName = itemDetails[1];
+                                string qtyString = itemDetails[2];
+                                decimal qty = decimal.Parse(qtyString, System.Globalization.CultureInfo.GetCultureInfo("id-ID"));
+
+                                returnValue = Printing.InternalApplication.Services.Rounding.RoundQuantity(qty, saleLine.SalesOrderUnitOfMeasure);
+                                qtyPerLine = qty;
+                            }
+                            else
+                            {
+                                returnValue = Printing.InternalApplication.Services.Rounding.RoundQuantity(saleLine.Quantity, saleLine.SalesOrderUnitOfMeasure);
+                            }
+                                
+                            
+                            
+                            //var groupedData = xdoc.Descendants("CustInvoiceTrans")
+                            //   .Where(e => e.Attribute("ItemLines") != null)
+                            //   .Select(e => e.Attribute("ItemLines").Value.Split(';'))
+                            //   .GroupBy(
+                            //       fields => new { ItemId = fields[0], ItemName = fields[1] }, // Group by ItemId and ItemName
+                            //       fields => new
+                            //       {
+                            //           Quantity = decimal.Parse(fields[2], NumberStyles.Number, cultureInfo),
+                            //           LineAmount = decimal.Parse(fields[3], NumberStyles.Number, cultureInfo),
+                            //           SalesId = fields[4]
+                            //       }
+                            //   )
+                            //   .Select(group => new
+                            //   {
+                            //       group.Key.ItemId,
+                            //       group.Key.ItemName,
+
+                            //       //SalesIdCount = group.Select(x => x.SalesId).Distinct().Count()
+                            //   });
+
+                            //// Output the results
+                            //foreach (var data in groupedData)
+                            //{
+
+                            //    reportLayout.AppendLine(string.Format("{0} - {1}", data.ItemId.ToString(), data.ItemName.ToString()));
+
+                            //    reportLayout.AppendLine(string.Format("{0} - {1}", data.TotalQty, RoundDecimal(Convert.ToDecimal(data.TotalLineAmount))));
+                            //    totalAmount += data.TotalLineAmount;
+                            //    //totalSales = data.SalesIdCount;
+                            //}
+                        }
+                        else
+                        {
+                            returnValue = Printing.InternalApplication.Services.Rounding.RoundQuantity(saleLine.Quantity, saleLine.SalesOrderUnitOfMeasure);
+                        }
+                        
                         break;
                     case "UNITPRICE":
                         returnValue = Printing.InternalApplication.Services.Rounding.Round(saleLine.Price, false);
@@ -1237,7 +1357,15 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                         returnValue = Printing.InternalApplication.Services.Rounding.Round(saleLine.NetAmountWithTax / saleLine.Quantity, false);
                         break;
                     case "TOTALPRICE":
-                        returnValue = Printing.InternalApplication.Services.Rounding.Round(saleLine.GrossAmount, false);
+                        if ((cot = theTransaction as CustomerOrderTransaction) != null && invoiceId != "")
+                        {
+                            returnValue = Printing.InternalApplication.Services.Rounding.Round(qtyPerLine * saleLine.Price, false);
+                        }
+                        else
+                        {
+                            returnValue = Printing.InternalApplication.Services.Rounding.Round(saleLine.GrossAmount, false);
+                        }
+                        
                         break;
                     case "TOTALPRICEWITHTAX":
                         returnValue = Printing.InternalApplication.Services.Rounding.Round(saleLine.NetAmountWithTax, false);

@@ -498,8 +498,8 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             // Subtract the offset to get the UTC time
             DateTime fromUtcDateTime = fromDatelocalDateTimeOffset.UtcDateTime;
             DateTime toUtcDateTime = toDateLocalDateTimeOffset.UtcDateTime;
-            fromDateUtc = fromUtcDateTime.ToString("yyyy-MM-dd HH:mm:ss");
-            toDateUtc = toUtcDateTime.ToString("yyyy-MM-dd HH:mm:ss");
+            fromDateUtc = fromUtcDateTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture); //add invariantculter for global datetime format - yonathan 14102024
+            toDateUtc = toUtcDateTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture); //add invariantculter for global datetime format - yonathan 14102024
             // Format the UTC datetime to a string
 
             salesOrderParam = getCustOrderTransaction(fromDateUtc, toDateUtc);
