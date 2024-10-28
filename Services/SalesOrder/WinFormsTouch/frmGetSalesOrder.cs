@@ -479,7 +479,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             
             // Add By Erwin 13 March 2019 - Start
             //modified by Yonathan 5/JAN/2023
-            if(this.selectedOrderDocumentStatus == SalesStatus.Created)
+            if (this.selectedOrderSalesStatus == SalesStatus.Created) //selectedOrderDocumentStatus //-CHange to Check selectedOrderSalesStatus 
             {
                 enableEdit = true;
                 enablePickup = false;
@@ -489,8 +489,9 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 enablePackSlip = true;
                 enableInvoice = false;
             }
-            else if (this.selectedOrderDocumentStatus == SalesStatus.Delivered)
-            {
+            else if (this.selectedOrderDocumentStatus == SalesStatus.Delivered) //selectedOrderDocumentStatus //-CHange to Check selectedOrderSalesStatus
+            
+            { 
                 enableEdit = false;
                 enablePickup = false;
                 enableReturn = false;

@@ -48,7 +48,16 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
         private const string StoreIDParameterCRT = "@STOREID";
         private const string DataareaIDParameterCRT = "@DATAAREAID";
         private const string ExpirationDaysParameterCRT = "@EXPIRATIONDAYS";
-        
+
+        //add by Yonathan 16102024
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.Button btnOk;
+        private System.Windows.Forms.Button btnCancel;
+        string selectedBatchId ;
+        string selectedTerminalId ;
+        long batchId = 0;
+        //end
+
         #endregion
 
         #region Properties
@@ -453,20 +462,48 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
         /// <param name="transaction"></param>
         public void PrintZReport(IPosTransaction transaction)
         {
+            selectedBatchId = "";
+            batchId = 0;
             ApplicationLog.Log("EOD.PrintZReport", "Printing Z report.", LogTraceLevel.Trace);
-
+            
+            
+            OpenList(); 
             BatchData batchData = new BatchData(Application.Settings.Database.Connection, Application.Settings.Database.DataAreaID);
-            Batch batch = batchData.ReadRecentlyClosedBatch(ApplicationSettings.Terminal.TerminalId);
+            batchId = Convert.ToInt16(selectedBatchId);
+            //Batch batch = batchData.ReadRecentlyClosedBatch(ApplicationSettings.Terminal.TerminalId);
+            if(batchId!=0)
+            {
+                Batch batch = batchData.ReadBatch(ApplicationSettings.Terminal.TerminalId, batchId);
+                if (batch != null)
+                {
+                    // Print batch.
+                    POSFormsManager.ShowPOSMessageWithBackgroundWorker(99, delegate { batch.Print(ReportType.ZReport); });
+                }
+                else
+                {
+                    NetTracer.Information("EDO::PrintZReport: batch is null");
+                }
+            }
 
-            if (batch != null)
+            
+        }
+
+        private void OpenList()
+        {
+            string storeId = ApplicationSettings.Database.StoreID; // Pass the store ID dynamically if needed
+            using (CPBatchForm batchForm = new CPBatchForm(storeId)) // Open as a temporary form
             {
-                // Print batch.
-                POSFormsManager.ShowPOSMessageWithBackgroundWorker(99, delegate { batch.Print(ReportType.ZReport); });
+                if (batchForm.ShowDialog() == DialogResult.OK)
+                {
+                    // Retrieve the selected values from the BatchForm
+                      selectedBatchId = batchForm.SelectedBatchId;
+                      selectedTerminalId = batchForm.SelectedTerminalId;
+
+                    // Show the selected values (you can use them however you need)
+                    //MessageBox.Show("Selected Batch ID: " + selectedBatchId + "\nSelected Terminal ID: " + selectedTerminalId);
+                }
             }
-            else
-            {
-                NetTracer.Information("EDO::PrintZReport: batch is null");
-            }
+
         }
 
         #endregion

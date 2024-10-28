@@ -328,8 +328,8 @@ namespace Microsoft.Dynamics.Retail.Pos.Services
                     pd.Document = printDoc;
                     pd.Document.DefaultPageSettings.PaperSize = psize;
                     printDoc.DefaultPageSettings.PaperSize.Width = 400;
-                    //change the margin for thermal- yonathan 11102024 - development only
-                    //printDoc.DefaultPageSettings.Margins = new Margins(1, 1, 1, 1);  // Left, Right, Top, Bottom margins in 100ths of an inch
+                    //change the margin for thermal- yonathan 11102024 - development only #THERMAL
+                    printDoc.DefaultPageSettings.Margins = new Margins(0, 0, 0, 0);  // Left, Right, Top, Bottom margins in 100ths of an inch
                     //end 
                     //End add NEC
                     if (SupportedCountryRegion.BR == Functions.CountryRegion)

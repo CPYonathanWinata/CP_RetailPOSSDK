@@ -46,8 +46,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
         string merchantId = "";
         string nameCust, phoneCust = "";
         int exponent = 0;
-        //string gmTID = "19"; //DEV
-        string gmTID = "16"; //Prod
+        string gmTID = "19"; //DEV
+        //string gmTID = "16"; //Prod
         public CPGrabOrder(IPosTransaction _posTransaction, IApplication _application)
         {
             InitializeComponent(); 
@@ -321,12 +321,12 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                 {
                     APIAccess.APIParameter.Data[] order = APIAccess.APIFunction.MyJsonConverter.Deserialize<APIAccess.APIParameter.Data[]>(responseAPI.data);
 
-                    var groupedData = order.Where(item => item.state != "").GroupBy(item => item.orderID).Select(group => new
+                    var groupedData = order.GroupBy(item => item.orderID).Select(group => new
                     {
                         OrderID = group.Key,
                         Items = group.ToList()
                     });
-
+                    //Where(item => item.state != "")
 
                     //DataGridViewButtonColumn c = (DataGridViewButtonColumn)grabMartList.Columns["Details"];
                     //c.FlatStyle = FlatStyle.System;

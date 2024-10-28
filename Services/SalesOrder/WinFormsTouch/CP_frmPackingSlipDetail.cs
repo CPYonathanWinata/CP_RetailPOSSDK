@@ -107,52 +107,16 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 		//}
 		private void button1_Click(object sender, EventArgs e)
 		{
-			// The XML string returned from the API
-			//ReadOnlyCollection<object> containerArray = Application.TransactionServices.Invoke("getSalesOrderDetail", txtSalesOrder.Text, LSRetailPosis.Settings.ApplicationSettings.Terminal.StoreId);
-			//string xmlString = containerArray[3].ToString(); 
-			//"<?xml version=\"1.0\" encoding=\"utf-8\"?><SalesTable SalesId=\"SO/23/0000000286\" RecId=\"5637666603\" SalesName=\"CUST KANVAS\" CustAccount=\"C000000003\"><SalesLine RecId=\"5647976870\" ItemId=\"11310034\" InventDimId=\"D/22/000005241\" SalesQty=\"3.00\" SalesDeliverNow=\"0.00\" InventBatchId=\"\" wmsLocationId=\"\" wmsPalletId=\"\" InventSiteId=\"JKT\" InventLocationId=\"WH_KUJHUB5\" ConfigId=\"\" InventSizeId=\"\" InventColorId=\"\" InventStyleId=\"\" InventSerialId=\"\" Guid=\"{AE2D6F5A-68A4-4E53-AAF4-98D4CB8CD092}\" UpdatedInAx=\"false\" Message=\"\" /><SalesLine RecId=\"5647976871\" ItemId=\"13030502\" InventDimId=\"D/22/000005241\" SalesQty=\"1.00\" SalesDeliverNow=\"0.00\" InventBatchId=\"\" wmsLocationId=\"\" wmsPalletId=\"\" InventSiteId=\"JKT\" InventLocationId=\"WH_KUJHUB5\" ConfigId=\"\" InventSizeId=\"\" InventColorId=\"\" InventStyleId=\"\" InventSerialId=\"\" Guid=\"{8E4788A6-39DE-4EA5-9AAD-19B08200B629}\" UpdatedInAx=\"false\" Message=\"\" /><SalesLine RecId=\"5647976869\" ItemId=\"11310014\" InventDimId=\"D/22/000005241\" SalesQty=\"2.00\" SalesDeliverNow=\"0.00\" InventBatchId=\"\" wmsLocationId=\"\" wmsPalletId=\"\" InventSiteId=\"JKT\" InventLocationId=\"WH_KUJHUB5\" ConfigId=\"\" InventSizeId=\"\" InventColorId=\"\" InventStyleId=\"\" InventSerialId=\"\" Guid=\"{52F58EED-F517-4B88-842E-1DE3A5FC3963}\" UpdatedInAx=\"false\" Message=\"\" /></SalesTable>";
-			int numberLines = 0;
-			XmlDocument doc = new XmlDocument();
-			//doc.LoadXml(xmlString);
-
-			// Create a new DataTable with two columns: ItemId and SalesQty
-			DataTable table = new DataTable();
-
-			table.Columns.Add("NO.");
-			table.Columns.Add("ItemID");
-			table.Columns.Add("ItemName");
-			table.Columns.Add("Unit");
-			table.Columns.Add("QtySO");
-			table.Columns.Add("QtyDO");
-
-			//// Loop through the SalesLine elements and extract the values of ItemId and SalesQty
-			//XmlNodeList salesLines = doc.GetElementsByTagName("SalesLine");
-			//foreach (XmlNode salesLine in salesLines)
-			//{
-			//    numberLines++;
-			//    string itemId = salesLine.Attributes["ItemId"].Value;
-			//    string salesQty = salesLine.Attributes["SalesQty"].Value;
-
-			//    // Add the pair of values to the DataTable
-			//    table.Rows.Add(numberLines, itemId, salesQty);
-			//}
-
-			foreach (var salesLine in this.lineItems)
-			{
-				numberLines++;
-				string itemId = salesLine.ItemId.ToString(); //salesLine.Attributes["ItemId"].Value;
-				string salesQty = salesLine.QuantityOrdered.ToString();//salesLine.Attributes["SalesQty"].Value;
-				string itemName = salesLine.Description.ToString();
-				// Add the pair of values to the DataTable
-				table.Rows.Add(numberLines, itemId, itemName, salesQty);
-			}
-			//foreach(var salesLine in this.transaction.lineitem)
-
-			// Bind the DataTable to the DataGridView
-			dataGridView1.DataSource = table; 
-			changeGridStyles();
-
-			lblSalesOrder.Text = txtSalesOrder.Text;
+            // Loop through each row in the dataGridView1
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                // Make sure the row is not the new row
+                if (!row.IsNewRow)
+                {
+                    // Get the value from the QtySO column and assign it to QtyDO column
+                    row.Cells["QtyDO"].Value = row.Cells["QtySO"].Value;
+                }
+            }
 			
 		}
 

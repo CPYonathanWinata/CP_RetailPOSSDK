@@ -302,7 +302,28 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                         case "SALESPERSONNAMEONRECEIPT":
                             return theTransaction.SalesPersonNameOnReceipt;
                         case "TOTALWITHTAX":
-                            return Printing.InternalApplication.Services.Rounding.Round(theTransaction.NetAmountWithTaxAndCharges, theTransaction.StoreCurrencyCode, true);
+                            //for Customer order - Yonathan 22102024
+                            if ((cot = theTransaction as CustomerOrderTransaction) != null && invoiceId != "")
+                            {
+
+                                var totalNode = xdoc.Descendants("Total").FirstOrDefault();
+                                if (totalNode != null)
+                                {
+                                    string totalAmount = totalNode.Attribute("TotalAmount").Value;
+                                    decimal totalAmountDecimal = decimal.Parse(totalAmount, System.Globalization.CultureInfo.GetCultureInfo("id-ID"));
+
+                                    return  Printing.InternalApplication.Services.Rounding.Round(decimal.Negate(totalAmountDecimal), false);
+                                }
+                                else
+                                {
+                                    return Printing.InternalApplication.Services.Rounding.Round(theTransaction.NetAmountWithTaxAndCharges, theTransaction.StoreCurrencyCode, true);
+                                }
+                            }
+                            else
+                            {
+                                return Printing.InternalApplication.Services.Rounding.Round(theTransaction.NetAmountWithTaxAndCharges, theTransaction.StoreCurrencyCode, true);
+                            }
+                            //return Printing.InternalApplication.Services.Rounding.Round(theTransaction.NetAmountWithTaxAndCharges, theTransaction.StoreCurrencyCode, true);
                         case "REMAININGBALANCE":
                             return Printing.InternalApplication.Services.Rounding.Round(eftInfo.RemainingBalance, theTransaction.StoreCurrencyCode, true);
                         case "TOTAL":
@@ -862,13 +883,13 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                             {
                                 return "Grab Order No";
                             }
-                            return "";
+                            return string.Empty;
                         case "NOORDER":
                             if (OrderName == "GRABMART") //add by yonathan 04/12/2023 to show no order id from Grabmart
                             {
                                 return OrderNo;
                             }
-                            return "";
+                            return string.Empty;
                         case "NAMEORDER ":
 
                             return OrderName;
@@ -1377,7 +1398,41 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                         returnValue = saleLine.SalesOrderUnitOfMeasureName;
                         break;
                     case "LINEDISCOUNTAMOUNT":
-                        returnValue = Printing.InternalApplication.Services.Rounding.Round(decimal.Negate(saleLine.LineDiscount), false);
+
+                        //for Customer order - Yonathan 22102024
+                        if ((cot = theTransaction as CustomerOrderTransaction) != null && invoiceId != "")
+                        {
+
+                            // Lookup the matching XML node for the current salesLine.ItemId
+                            var matchingNode = xml.Elements("CustInvoiceTrans")
+                                                    .FirstOrDefault(x => x.Attribute("ItemLines")
+                                                    .Value.Split(';')[0] == saleLine.ItemId);
+
+                            if (matchingNode != null)
+                            {
+                                // Split the ItemLines attribute by semicolons
+                                string[] itemDetails = matchingNode.Attribute("ItemLines").Value.Split(';');
+
+                                // Retrieve ItemName and Qty
+                                string itemName = itemDetails[1];
+                                string qtyString = itemDetails[2];
+                                decimal discAmount = decimal.Parse(itemDetails[4], System.Globalization.CultureInfo.GetCultureInfo("id-ID"));
+                                decimal qty = decimal.Parse(qtyString, System.Globalization.CultureInfo.GetCultureInfo("id-ID"));
+                                returnValue = Printing.InternalApplication.Services.Rounding.Round(decimal.Negate(discAmount) * qty, false);
+                                
+                            }
+                            else
+                            {
+                                returnValue = Printing.InternalApplication.Services.Rounding.Round(decimal.Negate(saleLine.LineDiscount), false);
+                            }
+
+                            //returnValue = ""; //lineamountinctax //Printing.InternalApplication.Services.Rounding.Round(qtyPerLine * decimal.Negate(saleLine.LineDiscount), false);
+                        }
+                        else
+                        {
+                            returnValue = Printing.InternalApplication.Services.Rounding.Round(decimal.Negate(saleLine.LineDiscount), false);
+                        }
+                        //returnValue = Printing.InternalApplication.Services.Rounding.Round(decimal.Negate(saleLine.LineDiscount), false); //original
                         break;
                     case "LINEDISCOUNTPERCENT":
                         returnValue = Printing.InternalApplication.Services.Rounding.Round(saleLine.LinePctDiscount, false);
@@ -3317,17 +3372,25 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                 // Getting a dataset containing the headerpart of the current form
                 ds = formInfo.HeaderTemplate;
                 formInfo.Header = ReadDataset(ds, null, theTransaction);
+                //formInfo.Header = RemoveEmptyLines(formInfo.Header); //add by yonathan 18102024 #THERMAL
                 formInfo.HeaderLines = ds.Tables[0].Rows.Count;
+
+                
 
                 // Getting a dataset containing the linepart of the current form
                 ds = formInfo.DetailsTemplate;
                 formInfo.Details = ReadItemDataSet(ds, theTransaction);
+                //formInfo.Details = RemoveEmptyLines(formInfo.Details); //add by yonathan 18102024 #THERMAL
                 formInfo.DetailLines = ds.Tables[0].Rows.Count;
 
                 // Getting a dataset containing the footerpart of the current form
                 ds = formInfo.FooterTemplate;
                 formInfo.Footer = ReadDataset(ds, null, theTransaction);
+                //formInfo.Footer = RemoveEmptyLines(formInfo.Footer); //add by yonathan 18102024 #THERMAL
                 formInfo.FooterLines = ds.Tables[0].Rows.Count;
+
+
+
 
                 if (LSRetailPosis.Settings.ApplicationSettings.Terminal.TrainingMode == true)
                 {
@@ -3371,6 +3434,46 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                 throw;
             }
         }
+
+
+        //test for removing white space -- yonathan 18102024 #THERMAL
+        public static string RemoveEmptyLines(string receipt)
+        {
+            // Split the receipt into lines
+            var lines = receipt.Split(new[] { '\n' }, StringSplitOptions.None);
+            var formattedReceipt = new StringBuilder();
+
+            foreach (var line in lines)
+            {
+                // Initialize variables to track whether the line is considered empty
+                bool isEmptyLine = true;
+
+                // Split the line by the control characters |1C, |2C, and |4C
+                string[] parts = line.Split(new[] { "|1C", "|2C", "|4C" }, StringSplitOptions.None);
+                // Iterate through parts to check for meaningful content
+                foreach (var part in parts)
+                {
+                    // Trim whitespace from each part
+                    string content = part.Trim();
+                    if (!string.IsNullOrWhiteSpace(content))
+                    {
+                        isEmptyLine = false; // Found meaningful content
+                        break; // No need to check further
+                    }
+                }
+
+                // If the line is not empty, format and append it to the result
+                if (!isEmptyLine)
+                {
+                    // Append the original line to retain formatting, and then add a new line
+                    formattedReceipt.AppendLine(line.TrimEnd());
+                }
+            }
+
+            // Return the final formatted receipt string
+            return formattedReceipt.ToString();
+        }
+        //end
 
         /// <summary>
         /// Returns transformed tender data as string.

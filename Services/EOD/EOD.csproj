@@ -65,6 +65,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BatchCalculation.cs" />
+    <Compile Include="CPBatchForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CPBatchForm.Designer.cs">
+      <DependentUpon>CPBatchForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="EOD.cs" />
     <Compile Include="BatchPrinting.cs" />
     <Compile Include="Forms\BlindClosedShiftsForm.cs">
