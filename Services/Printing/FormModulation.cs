@@ -303,7 +303,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                             return theTransaction.SalesPersonNameOnReceipt;
                         case "TOTALWITHTAX":
                             //for Customer order - Yonathan 22102024
-                            if ((cot = theTransaction as CustomerOrderTransaction) != null && invoiceId != "")
+                            if ((cot = theTransaction as CustomerOrderTransaction) != null && invoiceId != "") 
                             {
 
                                 var totalNode = xdoc.Descendants("Total").FirstOrDefault();
@@ -1310,7 +1310,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                         {
                               
                                 // Lookup the matching XML node for the current salesLine.ItemId
-                            var matchingNode = xml.Elements("CustInvoiceTrans")
+                            var matchingNode = xml.Elements("CustInvoiceTrans")  
                                                     .FirstOrDefault(x => x.Attribute("ItemLines")
                                                     .Value.Split(';')[0] == saleLine.ItemId);
 
@@ -1399,12 +1399,12 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                         break;
                     case "LINEDISCOUNTAMOUNT":
 
-                        //for Customer order - Yonathan 22102024
+                        //for Customer order - Yonathan 22102024  
                         if ((cot = theTransaction as CustomerOrderTransaction) != null && invoiceId != "")
                         {
 
                             // Lookup the matching XML node for the current salesLine.ItemId
-                            var matchingNode = xml.Elements("CustInvoiceTrans")
+                            var matchingNode = xml.Elements("CustInvoiceTrans")  
                                                     .FirstOrDefault(x => x.Attribute("ItemLines")
                                                     .Value.Split(';')[0] == saleLine.ItemId);
 
