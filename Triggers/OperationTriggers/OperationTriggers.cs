@@ -26,6 +26,7 @@ using Microsoft.Dynamics.Retail.Pos.Contracts.BusinessObjects;
 using LSRetailPosis.Settings;
 using System.Collections.ObjectModel;
 using LSRetailPosis.Transaction.Line.Discount;
+using LSRetailPosis.Transaction.Line.SaleItem;
 
 
 namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
@@ -240,6 +241,18 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
 				
 				//end
 			}
+
+            if (APIAccess.APIAccessClass.isB2b == "0" && (posisOperation == PosisOperations.CustomerOrderDetails || posisOperation == PosisOperations.ConvertCustomerOrder))
+            {
+                using (frmMessage dialog = new frmMessage("Customer ini tidak ada di dalam daftar Customer B2B.\nTidak bisa membuat customer order", MessageBoxButtons.OK, MessageBoxIcon.Error))
+                {
+                    POSFormsManager.ShowPOSForm(dialog);
+                    posTransaction.OperationCancelled = true;
+                    preTriggerResult.ContinueOperation = false;
+                    return;
+                }
+            }
+            
 		}
 
 		/// <summary>
@@ -330,6 +343,43 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
 
                             if (posisOperation == PosisOperations.ProcessInput || posisOperation == PosisOperations.BlankOperation || posisOperation == PosisOperations.Customer || posisOperation == PosisOperations.CustomerSearch || posisOperation == PosisOperations.SetQty || posisOperation == PosisOperations.ConvertCustomerOrder)
                             {
+
+                                // joined duplicate item cause of the mixmatch discount - yonathan 23102024
+                                var itemsToRemove = new List<SaleLineItem>(); // To track items to remove
+                                var seenItemIds = new HashSet<string>(); // To track unique ItemIds
+
+
+                                foreach (SaleLineItem saleLineItems in transaction.SaleItems)
+                                {
+                                    var itemId = saleLineItems.ItemId;
+                                    var quantity = saleLineItems.Quantity;
+
+                                    // Check if the ItemId has been seen before
+                                    if (seenItemIds.Contains(itemId))
+                                    {
+                                        // If it has been seen, it's a duplicate
+                                        var existingItem = transaction.SaleItems.FirstOrDefault(item => item.ItemId == itemId);
+
+                                        // If found, add the quantity of the duplicate to the existing item's quantity
+                                        if (existingItem != null)
+                                        {
+                                            existingItem.Quantity += quantity; // Add the quantity of the duplicate
+                                            itemsToRemove.Add(saleLineItems); // Mark the duplicate for removal
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // If it hasn't been seen, add it to seenItemIds
+                                        seenItemIds.Add(itemId);
+                                    }
+                                }
+                                // Remove duplicate items from the original SaleItems
+                                foreach (var item in itemsToRemove)
+                                {
+                                    transaction.SaleItems.Remove(item);
+                                }
+
+                                // joined duplicate item cause of the mixmatch discount end
 
 
 
