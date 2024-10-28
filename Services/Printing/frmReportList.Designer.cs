@@ -126,7 +126,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
             this.printWindow.Location = new System.Drawing.Point(40, 145);
             this.printWindow.Margin = new System.Windows.Forms.Padding(10);
             this.printWindow.Name = "printWindow";
-            this.printWindow.Properties.Appearance.Font = new System.Drawing.Font("Courier New", 8.25F);
+            this.printWindow.Properties.Appearance.Font = new System.Drawing.Font("Courier New", 8.25F); //("Calibri", 10F); //
             this.printWindow.Properties.Appearance.ForeColor = System.Drawing.Color.Black;
             this.printWindow.Properties.Appearance.Options.UseFont = true;
             this.printWindow.Properties.Appearance.Options.UseForeColor = true;

@@ -489,8 +489,9 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 enablePackSlip = true;
                 enableInvoice = false;
             }
-            else if (this.selectedOrderDocumentStatus == SalesStatus.Delivered)
-            {
+            else if (this.selectedOrderDocumentStatus == SalesStatus.Delivered) //selectedOrderDocumentStatus //-CHange to Check selectedOrderSalesStatus
+            
+            { 
                 enableEdit = false;
                 enablePickup = false;
                 enableReturn = false;

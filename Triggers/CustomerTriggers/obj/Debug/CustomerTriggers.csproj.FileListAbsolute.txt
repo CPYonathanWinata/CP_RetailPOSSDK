@@ -31,3 +31,6 @@ C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Triggers\CustomerTrigg
 C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Triggers\CustomerTriggers\obj\Debug\CustomerTriggers.pdb
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Triggers\CustomerTriggers\obj\Debug\CustomerTriggers.csprojResolveAssemblyReference.cache
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Triggers\CustomerTriggers\obj\Debug\CustomerTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\POS\bin\Debug\CustomerTriggers.dll
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\POS\bin\Debug\CustomerTriggers.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Triggers\CustomerTriggers\obj\Debug\CustomerTriggers.pdb

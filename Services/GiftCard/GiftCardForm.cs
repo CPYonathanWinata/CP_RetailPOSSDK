@@ -833,7 +833,7 @@ namespace Microsoft.Dynamics.Retail.Pos.GiftCard
              * Barcode scanner usually takes less than 17 milliseconds to read, increase this if neccessary of your barcode scanner is slower
              * also assuming human can not type faster than 17 milliseconds
              */
-            if (elapsed > 20)
+            if (elapsed > 100)
                 _barcode.Clear();
 
             // Do not push in array if Enter/Return is pressed, since it is not any Character that need to be read

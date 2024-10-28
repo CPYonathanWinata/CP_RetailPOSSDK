@@ -36,6 +36,5 @@ C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Triggers\OperationTrig
 C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Triggers\OperationTriggers\obj\Debug\OperationTriggers.pdb
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\POS\bin\Debug\OperationTriggers.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\POS\bin\Debug\OperationTriggers.pdb
-C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Triggers\OperationTriggers\obj\Debug\OperationTriggers.csprojResolveAssemblyReference.cache
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Triggers\OperationTriggers\obj\Debug\OperationTriggers.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Triggers\OperationTriggers\obj\Debug\OperationTriggers.pdb

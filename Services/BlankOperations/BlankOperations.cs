@@ -610,8 +610,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                             RetailTransaction transaction = posTransaction as RetailTransaction;
 
                              
-                            //string tenderId = "19"; //for DEV 
-                            string tenderId = "16"; //for PROD
+                            string tenderId = "19"; //for DEV 
+                            //string tenderId = "16"; //for PROD
                             if (!validateCustomer(posTransaction, tenderId))
                             {
                                 using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Please Choose Correct Customer", MessageBoxButtons.OK, MessageBoxIcon.Stop))
@@ -1312,14 +1312,66 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     break;
                 case "101":
                     {
+                        SaleLineItem saleLineItem;
+                        RetailTransaction transaction = posTransaction as RetailTransaction;
 
-                        ReadOnlyCollection<object> containerArray;
-                        string fromDate = "21/06/2024 00:00:00";
-                        string toDate = "21/06/2024 16:00:00";
-                        containerArray = Application.TransactionServices.InvokeExtension("getSalesOrderSummary", "JKT", "WH_JDELIMA", fromDate,toDate);
+                        var itemsToRemove = new List<SaleLineItem>(); // To track items to remove
+                        var seenItemIds = new HashSet<string>(); // To track unique ItemIds
+
+
+                        foreach (SaleLineItem saleLineItems in transaction.SaleItems)
+                        {
+                            var itemId = saleLineItems.ItemId;
+                            var quantity = saleLineItems.Quantity;
+
+                            // Check if the ItemId has been seen before
+                            if (seenItemIds.Contains(itemId))
+                            {
+                                // If it has been seen, it's a duplicate
+                                var existingItem = transaction.SaleItems.FirstOrDefault(item => item.ItemId == itemId);
+
+                                // If found, add the quantity of the duplicate to the existing item's quantity
+                                if (existingItem != null)
+                                {
+                                    existingItem.Quantity += quantity; // Add the quantity of the duplicate
+                                    itemsToRemove.Add(saleLineItems); // Mark the duplicate for removal
+                                }
+                            }
+                            else
+                            {
+                                // If it hasn't been seen, add it to seenItemIds
+                                seenItemIds.Add(itemId);
+                            }
+                        }
+                        // Remove duplicate items from the original SaleItems
+                        foreach (var item in itemsToRemove)
+                        {
+                            transaction.SaleItems.Remove(item);
+                        }
+
+                        
+                        
+
+                       
+                        //Application.BusinessLogic.ItemSystem.cal(retailTransaction);
+                        //retailTransaction.calc
+                        transaction.CalcTotals();
+                        /*//LinkedList<SaleLineItem> backup = new LinkedList<SaleLineItem>(retailTrans.SaleItems);
+				//foreach (SaleLineItem item in backup.Where(x => x.Comment != parm.comment))
+				//{
+				//    if (item.ItemId == parm.itemid) retailTrans.SaleItems.Remove(item);
+				//}*/
+                        //ReadOnlyCollection<object> containerArray;
+                        //string fromDate = "21/06/2024 00:00:00";
+                        //string toDate = "21/06/2024 16:00:00";
+                        //containerArray = Application.TransactionServices.InvokeExtension("getSalesOrderSummary", "JKT", "WH_JDELIMA", fromDate,toDate);
                         //MessageBox.Show(string.Format("{0} - {1}",DateTime.Now.ToString(), containerArray[3].ToString()));
+
+
                     }
                     break;
+
+
                 //Application.RunOperation(PosisOperations.PayCard, string.Empty, posTransaction);
                 //CP_SalesOrderDetail cpSalesDetail = new CP_SalesOrderDetail(Application);
                 //cpSalesDetail.ShowDialog();
