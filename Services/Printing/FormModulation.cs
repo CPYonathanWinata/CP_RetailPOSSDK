@@ -1115,7 +1115,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
 
 
             //get info invoice item from AX - Yonathan 07102024
-            containerArray = Printing.InternalApplication.TransactionServices.InvokeExtension("getInvoiceSalesOrder", _salesId);
+            containerArray = Printing.InternalApplication.TransactionServices.InvokeExtension("getInvoiceSalesOrder", _salesId); 
             //end
             //return invoiceId;
         }
