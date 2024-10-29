@@ -299,6 +299,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             this.lblOrder.Size = new System.Drawing.Size(94, 25);
             this.lblOrder.TabIndex = 4;
             this.lblOrder.Text = "Order type:";
+            this.lblOrder.Visible = false; //dihide dulu
             // 
             // orderBox
             // 
@@ -312,6 +313,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             this.orderBox.Name = "orderBox";
             this.orderBox.Size = new System.Drawing.Size(271, 33);
             this.orderBox.TabIndex = 6;
+            this.orderBox.Visible = false; //dihide dulu
             // 
             // btnCustomerSearch
             // 
