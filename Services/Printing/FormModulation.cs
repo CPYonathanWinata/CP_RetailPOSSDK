@@ -264,7 +264,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                     {
 
                         case "DATE":
-                            return ((IPosTransactionV1)theTransaction).BeginDateTime.ToShortDateString();
+                            return ((IPosTransactionV1)theTransaction).BeginDateTime.ToShortDateString(); 
                         case "TIME24H":
                             return ((IPosTransactionV1)theTransaction).BeginDateTime.ToString("HH:mm");
                         case "EFTDATE":
@@ -312,7 +312,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                                     string totalAmount = totalNode.Attribute("TotalAmount").Value;
                                     decimal totalAmountDecimal = decimal.Parse(totalAmount, System.Globalization.CultureInfo.GetCultureInfo("id-ID"));
 
-                                    return  Printing.InternalApplication.Services.Rounding.Round(decimal.Negate(totalAmountDecimal), false);
+                                    return Printing.InternalApplication.Services.Rounding.Round(totalAmountDecimal,theTransaction.StoreCurrencyCode, true);
                                 }
                                 else
                                 {
