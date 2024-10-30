@@ -170,8 +170,15 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
         private string GetInfoFromTransaction(FormItemInfo itemInfo, IEFTInfo eftInfo, ITenderLineItem tenderItem, RetailTransaction theTransaction)
         {
             CustomerOrderTransaction cot;
-            
-            
+
+            //start by Yonathan 29102024
+            decimal lineAmountIncTaxDecimal = 0;
+            string lineAmountIncTax;
+            decimal subtotal = 0;
+            string lineTaxAmountMST;
+            decimal lineTaxAmountMSTDecimal = 0;
+            string taxItemGroup = "";
+            //end
 			try
 			{
                 if (theTransaction != null)
@@ -262,6 +269,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                      
                     switch (itemInfo.Variable.ToUpperInvariant().Replace(" ", string.Empty))
                     {
+                        
 
                         case "DATE":
                             return ((IPosTransactionV1)theTransaction).BeginDateTime.ToShortDateString(); 
@@ -845,12 +853,123 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
 
                         //Edit By Erwin 23 July 2019
                         //case "DPP": return GetTotalNetAmount(theTransaction);
-                        case "DPP": return String.Format("{0:#,0}", 
-                            GetTotalNetAmount(theTransaction) - GetTotalPB1(theTransaction));
+                        case "DPP": 
+                             
+                            if ((cot = theTransaction as CustomerOrderTransaction) != null && invoiceId != "")
+                            {
+                                lineAmountIncTaxDecimal = 0;
+                                lineAmountIncTax = "";
+                                subtotal = 0;
+                                lineTaxAmountMST = "";
+                                lineTaxAmountMSTDecimal = 0;
+                                // Lookup the matching XML node for the current salesLine.ItemId
+                                foreach (SaleLineItem saleLine in theTransaction.SaleItems)
+                                {
+                                    var matchingNode = xml.Elements("CustInvoiceTrans")
+                                                        .FirstOrDefault(x => x.Attribute("ItemLines")
+                                                        .Value.Split(';')[0] == saleLine.ItemId);
+
+                                    if (matchingNode != null)
+                                    {
+                                        // Split the ItemLines attribute by semicolons
+                                        string[] itemDetails = matchingNode.Attribute("ItemLines").Value.Split(';');
+
+                                        lineAmountIncTax = itemDetails[3];
+                                        lineTaxAmountMST = itemDetails[6];
+
+                                        lineAmountIncTaxDecimal += decimal.Parse(lineAmountIncTax, System.Globalization.CultureInfo.GetCultureInfo("id-ID"));
+                                        lineTaxAmountMSTDecimal += decimal.Parse(lineTaxAmountMST, System.Globalization.CultureInfo.GetCultureInfo("id-ID"));
+
+
+                                    }
+                                    else
+                                    {
+                                        subtotal = 0;
+                                    }
+                                }
+                                return String.Format("{0:#,0}", subtotal = lineAmountIncTaxDecimal - lineTaxAmountMSTDecimal);
+
+
+                            }
+                            else
+                            {
+                                return String.Format("{0:#,0}",
+                                GetTotalNetAmount(theTransaction) - GetTotalPB1(theTransaction));
+                            }
+                            
+                            
                         //End Edit By Erwin 23 July 2019
                         //case "DPP": return String.Format("{0:0,0}", totalCustom);
-                        case "PPN": return GetTotalPPN(theTransaction);
-                        case "PB1": return String.Format("{0:#,0}",GetTotalPB1(theTransaction));
+                        case "PPN": 
+                             
+                            if ((cot = theTransaction as CustomerOrderTransaction) != null && invoiceId != "")
+                            {
+                                lineAmountIncTaxDecimal = 0;
+                                lineAmountIncTax = "";
+                                subtotal = 0;
+                                lineTaxAmountMST = "";
+                                lineTaxAmountMSTDecimal = 0;
+                                // Lookup the matching XML node for the current salesLine.ItemId
+                                foreach (SaleLineItem saleLine in theTransaction.SaleItems)
+                                {
+                                    var matchingNode = xml.Elements("CustInvoiceTrans")
+                                                        .FirstOrDefault(x => x.Attribute("ItemLines")
+                                                        .Value.Split(';')[0] == saleLine.ItemId);
+
+                                    if (matchingNode != null)
+                                    {
+                                        // Split the ItemLines attribute by semicolons
+                                        string[] itemDetails = matchingNode.Attribute("ItemLines").Value.Split(';');
+
+                                       
+                                        lineTaxAmountMST = itemDetails[6];
+                                        taxItemGroup = itemDetails[7];
+                                        
+                                        if(taxItemGroup == "PPN")
+                                        lineTaxAmountMSTDecimal += decimal.Parse(lineTaxAmountMST, System.Globalization.CultureInfo.GetCultureInfo("id-ID"));
+
+
+                                    }
+                                    
+                                }
+                                return String.Format("{0:#,0}", subtotal =  lineTaxAmountMSTDecimal);
+                            }
+                            else
+                            { 
+                                return GetTotalPPN(theTransaction);
+                            }
+
+                        case "PB1": if ((cot = theTransaction as CustomerOrderTransaction) != null && invoiceId != "")
+                            {
+                                // Lookup the matching XML node for the current salesLine.ItemId
+                                foreach (SaleLineItem saleLine in theTransaction.SaleItems)
+                                {
+                                    var matchingNode = xml.Elements("CustInvoiceTrans")
+                                                        .FirstOrDefault(x => x.Attribute("ItemLines")
+                                                        .Value.Split(';')[0] == saleLine.ItemId);
+
+                                    if (matchingNode != null)
+                                    {
+                                        // Split the ItemLines attribute by semicolons
+                                        string[] itemDetails = matchingNode.Attribute("ItemLines").Value.Split(';');
+
+                                       
+                                        lineTaxAmountMST = itemDetails[6];
+                                        taxItemGroup = itemDetails[7];
+
+                                        if (taxItemGroup == "PB1")
+                                        lineTaxAmountMSTDecimal += decimal.Parse(lineTaxAmountMST, System.Globalization.CultureInfo.GetCultureInfo("id-ID"));
+
+
+                                    }
+                                    
+                                }
+                                return String.Format("{0:#,0}", subtotal = lineTaxAmountMSTDecimal);
+                            }
+                            else
+                            {
+                                return String.Format("{0:#,0}", GetTotalPB1(theTransaction));
+                            }
 
                         // India receipt tax summary
                         case "COMPANYPANNO_IN":
@@ -1176,28 +1295,35 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
         //</summary>
         private decimal GetTotalNetAmount(RetailTransaction theTransaction)
         {
-            try
-            {
-                decimal subtotal = 0;
-                foreach (SaleLineItem s in theTransaction.SaleItems)
+            //custom by Yonathan 29102024 for invoice
+            CustomerOrderTransaction cot;
+            decimal subtotal = 0;
+            
+                try
                 {
-                    if (s.TaxGroupId == "PPN" && !s.Voided)
-                        subtotal += s.NetAmountWithNoTax;
-                    else if (s.TaxGroupId != "PPN" && !s.Voided) //NECI_YNWA start modified because code change in CU10 regarding the column NetAmountWithNoTax is zero if the item type is BKTP
-                        subtotal += s.NetAmount; //NECI_YNWA end modified
+                    
+                    foreach (SaleLineItem s in theTransaction.SaleItems)
+                    {
+                        if (s.TaxGroupId == "PPN" && !s.Voided)
+                            subtotal += s.NetAmountWithNoTax;
+                        else if (s.TaxGroupId != "PPN" && !s.Voided) //NECI_YNWA start modified because code change in CU10 regarding the column NetAmountWithNoTax is zero if the item type is BKTP
+                            subtotal += s.NetAmount; //NECI_YNWA end modified
+                    }
+                    //Edit By Erwin 23 July 2019
+                    //return String.Format("{0:0,0}", subtotal);
+                    return subtotal;
+                    //End Edit By Erwin 23 July 2019
                 }
-                //Edit By Erwin 23 July 2019
-                //return String.Format("{0:0,0}", subtotal);
-                return subtotal;
-                //End Edit By Erwin 23 July 2019
-            }
-            catch
-            {
-                //Edit By Erwin 23 July 2019
-                //return string.Empty;
-                return 0;
-                //End Edit By Erwin 23 July 2019
-            }
+                catch
+                {
+                    //Edit By Erwin 23 July 2019
+                    //return string.Empty;
+                    return 0;
+                    //End Edit By Erwin 23 July 2019
+                }
+            
+
+            
         }
         private string GetTotalPPN(RetailTransaction theTransaction)
         {
@@ -3372,7 +3498,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                 // Getting a dataset containing the headerpart of the current form
                 ds = formInfo.HeaderTemplate;
                 formInfo.Header = ReadDataset(ds, null, theTransaction);
-                //formInfo.Header = RemoveEmptyLines(formInfo.Header); //add by yonathan 18102024 #THERMAL
+                formInfo.Header = RemoveEmptyLines(formInfo.Header); //add by yonathan 18102024 #THERMAL
                 formInfo.HeaderLines = ds.Tables[0].Rows.Count;
 
                 
@@ -3380,13 +3506,13 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                 // Getting a dataset containing the linepart of the current form
                 ds = formInfo.DetailsTemplate;
                 formInfo.Details = ReadItemDataSet(ds, theTransaction);
-                //formInfo.Details = RemoveEmptyLines(formInfo.Details); //add by yonathan 18102024 #THERMAL
+                formInfo.Details = RemoveEmptyLines(formInfo.Details); //add by yonathan 18102024 #THERMAL
                 formInfo.DetailLines = ds.Tables[0].Rows.Count;
 
                 // Getting a dataset containing the footerpart of the current form
                 ds = formInfo.FooterTemplate;
                 formInfo.Footer = ReadDataset(ds, null, theTransaction);
-                //formInfo.Footer = RemoveEmptyLines(formInfo.Footer); //add by yonathan 18102024 #THERMAL
+                formInfo.Footer = RemoveEmptyLines(formInfo.Footer); //add by yonathan 18102024 #THERMAL
                 formInfo.FooterLines = ds.Tables[0].Rows.Count;
 
 
