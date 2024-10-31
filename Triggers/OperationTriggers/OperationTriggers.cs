@@ -316,12 +316,15 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
                         {
                             try
                             {
-                                ReadOnlyCollection<object> containerArray = Application.TransactionServices.InvokeExtension("getB2bRetailParam", transaction.Customer.CustomerId.ToString());
-                                //APIAccess.APIAccessClass.userID = "";
-                                APIAccess.APIAccessClass.custId = transaction.Customer.CustomerId.ToString();
-                                APIAccess.APIAccessClass.isB2b = containerArray[6].ToString();
-                                APIAccess.APIAccessClass.priceGroup = containerArray[4].ToString();
-                                APIAccess.APIAccessClass.lineDiscGroup = containerArray[5].ToString();
+                                //CHANGE TO LOCAL 30102024 - YONATHAN
+                                getB2BParameter(transaction.Customer.CustomerId);
+                                //ReadOnlyCollection<object> containerArray = Application.TransactionServices.InvokeExtension("getB2bRetailParam", transaction.Customer.CustomerId.ToString());
+                                ////APIAccess.APIAccessClass.userID = "";
+                                //APIAccess.APIAccessClass.custId = transaction.Customer.CustomerId.ToString();
+                                //APIAccess.APIAccessClass.isB2b = containerArray[6].ToString();
+                                //APIAccess.APIAccessClass.priceGroup = containerArray[4].ToString();
+                                //APIAccess.APIAccessClass.lineDiscGroup = containerArray[5].ToString();
+                                
                             }
                             catch (Exception ex)
                             {
@@ -334,8 +337,13 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
                         if (isB2bCust == "1" || isB2bCust == "2")
                         {
                             //get customer group ppnValidation
-                            ReadOnlyCollection<object> containerArray = Application.TransactionServices.InvokeExtension("getPPNValidate", transaction.Customer.CustomerId.ToString());
-                            ppnValidate = containerArray[3].ToString();
+                            //CHANGE TO LOCAL 30102024 - YONATHAN
+                            getB2BParameter(transaction.Customer.CustomerId);
+
+                            //OLD
+                            //ReadOnlyCollection<object> containerArray = Application.TransactionServices.InvokeExtension("getPPNValidate", transaction.Customer.CustomerId.ToString());
+                            //ppnValidate = containerArray[3].ToString();
+                            //OLD
 
                             custId = transaction.Customer.CustomerId;
                             //List<string> itemIds = transaction.CalculableSalesLines.Select(salesLine => salesLine.ItemId).ToList();
@@ -642,7 +650,7 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
                     //case PosisOperations.con
                     //case PosisOperations.q
                     {
-                        APIAccess.APIAccessClass.isB2b = null;
+                        APIAccess.APIAccessClass.isB2b = null; 
                         APIAccess.APIAccessClass.priceGroup = null;
                         APIAccess.APIAccessClass.lineDiscGroup = null;
                         APIAccess.APIAccessClass.ppnValidation = null;
@@ -654,6 +662,70 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
 			 //end add
 
 		}
+
+        public void getB2BParameter(string _custId)
+        {
+            //APIAccess.APIAccessClass.custId = transaction.Customer.CustomerId.ToString();
+            //APIAccess.APIAccessClass.isB2b = containerArray[6].ToString();
+            //APIAccess.APIAccessClass.priceGroup = containerArray[4].ToString();
+            //APIAccess.APIAccessClass.lineDiscGroup = containerArray[5].ToString();
+
+            SqlConnection connectionStore = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+            try
+            {
+
+                string queryString = @"SELECT CT.ACCOUNTNUM,CT.CUSTGROUP, CG.CPPPNVALIDATE, CG.CPPPNDIBEBASKAN, CT.PRICEGROUP,CT.LINEDISC, B2BSETUP.CP_CUSTCLASSIFICATION,B2BSETUP.AUTOMATICRESERVE
+                                      FROM  [ax].[CUSTTABLE] CT
+                                      LEFT JOIN AX.CP_CPCUSTORDERB2BSETUP B2BSETUP
+                                      ON CT.ACCOUNTNUM = B2BSETUP.ACCOUNTNUM
+                                      LEFT JOIN AX.CUSTGROUP CG
+                                      ON CT.CUSTGROUP = CG.CUSTGROUP 
+                                      WHERE CT.ACCOUNTNUM = @CUSTACCOUNT";
+
+
+                //RetailTransaction retailTransaction = (RetailTransaction)this.posTransaction;
+
+                using (SqlCommand command = new SqlCommand(queryString, connectionStore))
+                {
+
+                    command.Parameters.AddWithValue("@CUSTACCOUNT", _custId);
+                    
+
+                    if (connectionStore.State != ConnectionState.Open)
+                    {
+                        connectionStore.Open();
+                    }
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            APIAccess.APIAccessClass.isB2b = reader["CP_CUSTCLASSIFICATION"].ToString();
+                            APIAccess.APIAccessClass.priceGroup = reader["PRICEGROUP"].ToString();
+                            APIAccess.APIAccessClass.lineDiscGroup = reader["LINEDISC"].ToString();
+                            APIAccess.APIAccessClass.ppnValidation = reader["CPPPNVALIDATE"].ToString();
+                            APIAccess.APIAccessClass.custId = _custId;
+                            //stringList.Add(reader["AMOUNT"].ToString());
+                            //stringList.Add(reader["ACCOUNTRELATION"].ToString());
+
+
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+            finally
+            {
+                if (connectionStore.State != ConnectionState.Closed)
+                {
+                    connectionStore.Close();
+                }
+            }
+
+        }
 
         private void findPriceAgreementForCustomer(IPosTransaction posTransaction)
         {

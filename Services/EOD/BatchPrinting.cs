@@ -880,6 +880,19 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             reportLayout.AppendLine();
             reportLayout.AppendReportHeaderLine(7005, ApplicationLocalizer.Language.Translate(206, batch.TerminalId, batch.BatchId), true);
             reportLayout.AppendLine();
+            //custom by Yonathan 31102024
+            string openBy = "";
+            string closeBy = "";
+            getOpenCloseBy(batch, out openBy, out closeBy);
+            reportLayout.AppendLine("Printed By    : " + ApplicationSettings.Terminal.TerminalOperator.OperatorId);
+            reportLayout.AppendLine("Print Date    : " + DateTime.UtcNow.ToLocalTime().ToString());
+            reportLayout.AppendLine("OpenShift By  : " + openBy);//, true);
+            if (reportType == ReportType.ZReport)
+            {
+            reportLayout.AppendLine("CloseShift By : " + closeBy);//, true);
+            }
+            //end
+            reportLayout.AppendLine();
             reportLayout.AppendReportHeaderLine(7008, batch.StartDateTime.ToShortDateString(), true);
 
             if (reportType == ReportType.ZReport)
@@ -902,6 +915,51 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             }
 
             reportLayout.AppendLine();
+        }
+
+        private static void getOpenCloseBy(Batch _batch, out string openBy, out string closeBy)
+        {
+            SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+            openBy = "";
+            closeBy = "";
+            try
+            {
+               
+                string queryString = @"SELECT BATCHID, OPENBY, CLOSEBY
+                                      FROM  [ax].[CPRETAILPOSBATCHTABLEEXTEND]
+                                      where BATCHID = @BATCHID";
+
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+                    command.Parameters.Add(new SqlParameter("@BATCHID", _batch.BatchId));
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+                    }
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+
+                            openBy = reader[1].ToString();
+                            closeBy = reader[2].ToString();
+                            
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //LSRetailPosis.ApplicationExceptionHandler.HandleException();
+                throw;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+                }
+            }
         }
 
         /// <summary>

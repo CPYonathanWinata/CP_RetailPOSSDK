@@ -38,6 +38,24 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     string query = "SELECT BATCHID, STARTDATE, CLOSEDATE, TERMINALID, STOREID, STAFFID FROM [ax].[RETAILPOSBATCHTABLE] WHERE STOREID = @StoreId ORDER BY BATCHID DESC";
+                    query = @" SELECT 
+                                    BATCH.BATCHID AS BATCHID, 
+                                    DATEADD(HOUR, 7, STARTDATETIMEUTC) AS STARTDATE,  -- Convert to UTC+7
+                                    DATEADD(HOUR, 7, CLOSEDATETIMEUTC) AS CLOSEDATE,  -- Convert to UTC+7
+                                    BATCH.TERMINALID AS TERMINALID, 
+                                    BATCH.STOREID AS STOREID, 
+                                    ISNULL(OPENBY, '') AS OPENBY, 
+                                    ISNULL(CLOSEBY, '') AS CLOSEBY
+                                FROM 
+                                    [ax].[RETAILPOSBATCHTABLE] BATCH
+                                LEFT JOIN 
+                                    [ax].[CPRETAILPOSBATCHTABLEEXTEND] EXT ON BATCH.BATCHID = EXT.BATCHID
+                                WHERE 
+                                    BATCH.STOREID = @StoreId
+                                    AND CLOSEDATETIMEUTC >= DATEADD(DAY, -7, GETDATE()) 
+                                ORDER BY 
+                                    BATCHID DESC;
+                                ";
                     SqlCommand cmd = new SqlCommand(query, conn);
                     cmd.Parameters.AddWithValue("@StoreId", storeId);
 
@@ -46,12 +64,14 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
                     da.Fill(dt);
 
                     dataGridView1.DataSource = dt;   
-                    dataGridView1.Columns["BATCHID"].HeaderText = "Batch";
+                    dataGridView1.Columns["BATCHID"].HeaderText  = "Batch";
+                    dataGridView1.Columns["BATCHID"].Visible = false;// = "Batch";
                     dataGridView1.Columns["STARTDATE"].HeaderText = "Mulai Shift";
                     dataGridView1.Columns["CLOSEDATE"].HeaderText = "Tutup Shift";
                     dataGridView1.Columns["TERMINALID"].HeaderText = "Terminal ID";
                     dataGridView1.Columns["STOREID"].HeaderText = "Store ID";
-                    dataGridView1.Columns["STAFFID"].HeaderText = "Staff ID";
+                    dataGridView1.Columns["OPENBY"].HeaderText = "Open By";
+                    dataGridView1.Columns["CLOSEBY"].HeaderText = "Close By";
                 }
             }
             catch (Exception ex)

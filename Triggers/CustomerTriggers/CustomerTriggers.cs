@@ -22,7 +22,7 @@ using System.Data;
 using System.Windows.Forms;
 using System.Collections.ObjectModel;
 using Microsoft.Dynamics.Retail.Pos.Contracts;
-
+ 
 using APIAccess;
 using LSRetailPosis.POSProcesses;
 namespace Microsoft.Dynamics.Retail.Pos.CustomerTriggers
@@ -36,10 +36,11 @@ namespace Microsoft.Dynamics.Retail.Pos.CustomerTriggers
         
         //add customization to compare old vs new customer by Yonathan 18/01/2024
         string oldCustId = "";
-
+        OperationTriggers.OperationTriggers localOperationTrigger = new OperationTriggers.OperationTriggers();
 
         public CustomerTriggers()
         {
+            
 
             // Get all text through the Translation function in the ApplicationLocalizer
             // TextID's for CustomerTriggers are reserved at 65000 - 65999
@@ -95,13 +96,19 @@ namespace Microsoft.Dynamics.Retail.Pos.CustomerTriggers
 			{ 
 			    try
 			    {
-                    ReadOnlyCollection<object> containerArray = Application.TransactionServices.InvokeExtension("getB2bRetailParam", transaction.Customer.CustomerId.ToString());
-                    //APIAccess.APIAccessClass.userID = "";
-                    APIAccess.APIAccessClass.custId = transaction.Customer.CustomerId.ToString();
-                    APIAccess.APIAccessClass.isB2b = containerArray[6].ToString(); //containerArray[3].ToString(); //change to index 6 because to get if its canvas or b2b
-                    APIAccess.APIAccessClass.priceGroup = containerArray[4].ToString();
-                    APIAccess.APIAccessClass.lineDiscGroup = containerArray[5].ToString();
-                    APIAccess.APIAccessClass.ppnValidation = containerArray[7].ToString(); 
+                    //CHANGE TO LOCAL 30102024 - YONATHAN
+                    localOperationTrigger.getB2BParameter(transaction.Customer.CustomerId);
+                    //END
+
+                    //OLD
+                    //ReadOnlyCollection<object> containerArray = Application.TransactionServices.InvokeExtension("getB2bRetailParam", transaction.Customer.CustomerId.ToString());
+                    ////APIAccess.APIAccessClass.userID = "";
+                    //APIAccess.APIAccessClass.custId = transaction.Customer.CustomerId.ToString();
+                    //APIAccess.APIAccessClass.isB2b = containerArray[6].ToString(); //containerArray[3].ToString(); //change to index 6 because to get if its canvas or b2b
+                    //APIAccess.APIAccessClass.priceGroup = containerArray[4].ToString();
+                    //APIAccess.APIAccessClass.lineDiscGroup = containerArray[5].ToString();
+                    //APIAccess.APIAccessClass.ppnValidation = containerArray[7].ToString(); 
+                    //END OLD
                 }
                 catch (Exception ex)
                 {
@@ -210,12 +217,22 @@ namespace Microsoft.Dynamics.Retail.Pos.CustomerTriggers
             {
                 try
                 {
-                    ReadOnlyCollection<object> containerArray = Application.TransactionServices.InvokeExtension("getB2bRetailParam", customerId.ToString());
+                    //CHANGE TO LOCAL 30102024 - YONATHAN
+                    localOperationTrigger.getB2BParameter(customerId.ToString());
+                    //END
+                    //OLD
+                    //ReadOnlyCollection<object> containerArray = Application.TransactionServices.InvokeExtension("getB2bRetailParam", customerId.ToString());
 
-                    //APIAccess.APIAccessClass.userID = "";
-                    //APIAccess.APIAccessClass.custId = transaction.Customer.CustomerId.ToString();
-                    APIAccess.APIAccessClass.isB2b = containerArray[6].ToString();
-                    APIAccess.APIAccessClass.custBlocked = containerArray[8].ToString();//containerArray[3].ToString(); //change to index 6 because to get if its canvas or b2b
+                    ////APIAccess.APIAccessClass.userID = "";
+                    ////APIAccess.APIAccessClass.custId = transaction.Customer.CustomerId.ToString();
+
+                    
+                    //APIAccess.APIAccessClass.isB2b = containerArray[6].ToString();
+                    //APIAccess.APIAccessClass.custBlocked = containerArray[8].ToString();//containerArray[3].ToString(); //change to index 6 because to get if its canvas or b2b
+
+                    //old
+
+
                     //APIAccess.APIAccessClass.priceGroup = containerArray[4].ToString();
                     //APIAccess.APIAccessClass.lineDiscGroup = containerArray[5].ToString();
                     //APIAccess.APIAccessClass.ppnValidation = containerArray[7].ToString();
