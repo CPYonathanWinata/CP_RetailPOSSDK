@@ -94,7 +94,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                 // Note: This is allowed now that we have multiple printers...
                 result = false;
             }
-            else if (PrintingActions.ShouldWePrint(formInfo, formType, copyReceipt, printerMap))
+            else if (PrintingActions.ShouldWePrint(formInfo, formType, copyReceipt, printerMap, posTransaction))
             {
                 result = true;
                 try
@@ -345,7 +345,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
         /// <param name="copyReceipt">if set to <c>true</c> [copy receipt].</param>
         /// <param name="printerAssociation">The printer association.</param>
         /// <returns></returns>
-        private static bool ShouldWePrint(FormInfo formInfo, FormType formType, bool copyReceipt, PrinterAssociation printerAssociation)
+        private static bool ShouldWePrint(FormInfo formInfo, FormType formType, bool copyReceipt, PrinterAssociation printerAssociation, IPosTransaction posTransaction = null)
         {
             bool retval = true;
 
@@ -377,7 +377,12 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
             {
                 retval = false;
             }
+            //don't print if its customer order - Yonathan 06112024
+            if (posTransaction != null && posTransaction.ToString() == "LSRetailPosis.Transaction.CustomerOrderTransaction")
+            {
+                retval = false;
 
+            }
             return retval;
         }
 

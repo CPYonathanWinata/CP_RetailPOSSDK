@@ -156,8 +156,15 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             colTotalAmount.Caption = ApplicationLocalizer.Language.Translate(56210); //Total
             colCustomerAccount.Caption = ApplicationLocalizer.Language.Translate(56224); //Customer Account
             colCustomerName.Caption = ApplicationLocalizer.Language.Translate(56225); //Customer
-            colEmail.Caption = ApplicationLocalizer.Language.Translate(56236); //E-mail
-
+            colEmail.Caption = "Online Order"; //ApplicationLocalizer.Language.Translate(56236); //E-mail
+            if (orderTypeSO == 1)
+            {
+                colEmail.Visible = true;
+            }
+            else
+            {
+                colEmail.Visible = false;
+            }
             //title
             this.Text = ApplicationLocalizer.Language.Translate(56106); //Sales orders
             lblHeading.Text = ApplicationLocalizer.Language.Translate(56106); //Sales orders

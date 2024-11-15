@@ -972,7 +972,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     }
                 case "89":
                     {
-                        Application.RunOperation(PosisOperations.LoyaltyCardBalance, posTransaction);
+                        Application.RunOperation(PosisOperations.LoyaltyCardBalance,"", posTransaction);
                         break;
                     }
 				case "90":

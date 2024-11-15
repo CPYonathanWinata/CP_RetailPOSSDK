@@ -39,6 +39,10 @@ namespace APIAccess
         public static string grabCustPhone = "";
         public static string grabOrderState = "";
         public static string grabOrderIdLong = "";
+
+        public static string xmlString1 = "";
+        public static string xmlString2 = "";
+        public static string xmlString3 = "";
         //grabmart
         public static string merchantId { get; set; }
 

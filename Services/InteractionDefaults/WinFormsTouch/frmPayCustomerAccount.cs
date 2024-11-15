@@ -120,7 +120,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 		private Label lblWaitingRespond;
 		public string transType;
 		public int tenderQRIS = 30; //prod 30, dev 31
-		public int tenderGrabMartDev = 0;//for Grabmart DEV by Yonathan 10/11/2023
+        public int tenderGrabMartDev = 19;//for Grabmart DEV by Yonathan 10/11/2023
 		public int tenderGrabMart = 16;//for Grabmart PROD by Yonathan 10/11/2023 
 		public int tenderShopee = 15;
 		public int tenderShopeeDev = 15;

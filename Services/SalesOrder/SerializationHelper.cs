@@ -440,6 +440,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder
                 SalesOrder.InternalApplication.Settings.Database.DataAreaID);
 
             DE.ICustomer customer = customerSystem.GetCustomerInfo(orderInfo.CustomerAccount);
+           
 
             // try to get the customer from transaction service
             if (customer == null || customer.IsEmptyCustomer())
@@ -584,8 +585,10 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder
             }
 
             
+             //online number - yonathan 05112024
+            transaction.ChannelReferenceId = orderInfo.CPOrderNumber != ""? orderInfo.CPOrderNumber : orderInfo.ChannelReferenceId;
 
-            transaction.ChannelReferenceId = orderInfo.ChannelReferenceId;
+
             if (transaction.LoyaltyItem != null && !string.IsNullOrEmpty(orderInfo.LoyaltyCardId))
             {
                 transaction.LoyaltyItem.LoyaltyCardNumber = orderInfo.LoyaltyCardId;

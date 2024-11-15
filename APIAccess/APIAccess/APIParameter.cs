@@ -230,7 +230,24 @@ namespace APIAccess
             public string partnerMerchantID { get; set; }
         }
 
+        public class parmRequestOnlineOrder
+        {
+            public string legal { get; set; }
+            public string warehouse { get; set; }
+        }
 
+        public class parmResponseOnlineOrder
+        {
+            public int status { get; set; }
+            public bool error { get; set; }
+            public string message { get; set; }
+            public dataOnlineOrder data { get; set; }
+        }
+
+        public class dataOnlineOrder
+        {
+            public int total_order { get; set; }
+        }
         
         //
         public static MySql.Data.MySqlClient.MySqlConnection mySqlConnString;

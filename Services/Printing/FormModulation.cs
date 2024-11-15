@@ -36,7 +36,8 @@ using Microsoft.Dynamics.Retail.Pos.Contracts;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Xml.Linq;
-
+using APIAccess;
+ 
 
 namespace Microsoft.Dynamics.Retail.Pos.Printing
 {
@@ -225,6 +226,33 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                         {
                             xdoc = XDocument.Parse(returnString);
                             xml = XElement.Parse(returnString);
+
+                            if (invoiceId == "")
+                            {
+                                foreach (SaleLineItem saleLine in theTransaction.SaleItems)
+                                {
+                                    var matchingNode = xml.Elements("CustInvoiceTrans")
+                                                        .FirstOrDefault(x => x.Attribute("ItemLines")
+                                                        .Value.Split(';')[0] == saleLine.ItemId);
+
+                                    if (matchingNode != null)
+                                    {
+                                        // Split the ItemLines attribute by semicolons
+                                        string[] itemDetails = matchingNode.Attribute("ItemLines").Value.Split(';');
+
+                                        
+                                        invoiceId = itemDetails[8].ToString();
+
+                                       
+
+                                    }
+                                    else
+                                    {
+                                        invoiceId = "";
+                                    }
+                                }
+                                
+                            }
                             /*
                                 var cultureInfo = new CultureInfo("id-ID");
                                 var groupedData = xdoc.Descendants("CustInvoiceTrans")
@@ -924,8 +952,8 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                                        
                                         lineTaxAmountMST = itemDetails[6];
                                         taxItemGroup = itemDetails[7];
-                                        
-                                        if(taxItemGroup == "PPN")
+
+                                        if (taxItemGroup == "PPN" || taxItemGroup == "PKP")
                                         lineTaxAmountMSTDecimal += decimal.Parse(lineTaxAmountMST, System.Globalization.CultureInfo.GetCultureInfo("id-ID"));
 
 
@@ -1156,6 +1184,67 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                         //return "Ambil Tunai";
                         case "AMOUNTTUNAIFEE":
                             return amountAmbilTunai <= 0 ? "" : Printing.InternalApplication.Services.Rounding.Round(amountAdmFee, false); //CPIADMFEE
+
+                            //add by Yonathan 06112024
+                        case "LABELORDERID":
+                            if (APIAccessClass.xmlString1.ToString() != "")
+                            {
+                               
+
+                                return "Order Id :";
+
+
+                            }
+                            else
+                            {
+                                return "";
+                            }
+                        case "TEXTORDERID":
+                            //APIAccessClass.xmlString1 = "";
+                            if (APIAccessClass.xmlString1.ToString() != "")
+                            {
+                                XDocument doc = XDocument.Parse(APIAccessClass.xmlString1);
+                                // Get the value of <CPOrderNumber>
+                                string CPOrderNumber = "";
+                                return CPOrderNumber = doc.Root.Element("CPOrderNumber") != null ? doc.Root.Element("CPOrderNumber").Value : "";
+                            }
+                            else
+                            {
+                                return "";
+                            }
+                        case "LABELDELIVERYORDER":
+                            if (APIAccessClass.xmlString1.ToString() != "")
+                            {
+                                
+
+                                return "Deliver To :";    
+
+                              
+                            }
+                            else
+                            {
+                                return "";
+                            }
+                                                   
+
+                        case "TEXTDELIVERYORDER":
+                            //APIAccessClass.xmlString1 = "";
+                            if (APIAccessClass.xmlString1.ToString() != "")
+                            {
+                                XDocument doc = XDocument.Parse(APIAccessClass.xmlString1);
+                                 // Get the value of <CPOrderNumber>
+                                string CPBuyerName = doc.Root.Element("CPBuyerName") != null ? doc.Root.Element("CPBuyerName").Value : "";
+                                string CPPhoneNumber = doc.Root.Element("CPPhone") != null ? doc.Root.Element("CPPhone").Value : "";
+                                string CustomDeliveryAdd = doc.Root.Element("CustomerDeliveryAddress") != null ? doc.Root.Element("CustomerDeliveryAddress").Value : "";
+
+
+                                return CPBuyerName + "(" + CPPhoneNumber + ")" + "\n" + CustomDeliveryAdd;
+                            }
+                            else
+                            {
+                                return "";
+                            }
+                            
                         #endregion
                     }
 
@@ -1711,7 +1800,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                         returnValue = "      " + saleLine.Dimension.VariantId;
                         break;
                     //end
-                        
+                    
 
 
                 }

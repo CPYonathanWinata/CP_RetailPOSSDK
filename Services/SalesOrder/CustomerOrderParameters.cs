@@ -247,12 +247,19 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.CustomerOrderParameters
 
         //Custom by Yonathan 25/07/2024
         /// <summary>
-        /// Worker ID for sales person.
+        /// Order Number
         /// </summary>
         /// <remarks>Note this is not the same as operator ID</remarks>
         [XmlElement("CPOrderNumber")]
         public string CPOrderNumber;
 
+        //Custom by Yonathan 05112024
+        /// <summary>
+        /// Customer Delivery Address
+        /// </summary>
+        /// <remarks>Note this is not the same as operator ID</remarks>
+        [XmlElement("CustomerDeliveryAddress")]
+        public string CustomerDeliveryAddress;
         /// <summary> 
         /// Items
         /// </summary>

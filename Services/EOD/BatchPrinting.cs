@@ -868,7 +868,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             reportLayout.AppendReportHeaderLine(7006, DateTime.Now.ToShortDateString(), false);
             reportLayout.AppendReportHeaderLine(7003, ApplicationSettings.Terminal.TerminalId, true);
             reportLayout.AppendReportHeaderLine(7007, DateTime.Now.ToShortTimeString(), false);
-            reportLayout.AppendReportHeaderLine(7004, ApplicationSettings.Terminal.TerminalOperator.OperatorId, true);
+            //reportLayout.AppendReportHeaderLine(7004, ApplicationSettings.Terminal.TerminalOperator.OperatorId, true);
             if (LSRetailPosis.Settings.FunctionalityProfiles.Functions.CountryRegion == LSRetailPosis.Settings.FunctionalityProfiles.SupportedCountryRegion.SE)
             {
                 reportLayout.AppendLine();
@@ -876,20 +876,22 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
                 reportLayout.AppendLine();
                 reportLayout.AppendReportHeaderLine(7070, ApplicationSettings.Terminal.TaxIdNumber, true);
             }
-            reportLayout.AppendLine();
-            reportLayout.AppendLine();
+            //reportLayout.AppendLine();
+            //reportLayout.AppendLine();
             reportLayout.AppendReportHeaderLine(7005, ApplicationLocalizer.Language.Translate(206, batch.TerminalId, batch.BatchId), true);
             reportLayout.AppendLine();
             //custom by Yonathan 31102024
             string openBy = "";
             string closeBy = "";
             getOpenCloseBy(batch, out openBy, out closeBy);
-            reportLayout.AppendLine("Printed By    : " + ApplicationSettings.Terminal.TerminalOperator.OperatorId);
+            reportLayout.AppendLine("Printed By    : " + operatorName(ApplicationSettings.Terminal.TerminalOperator.OperatorId));
             reportLayout.AppendLine("Print Date    : " + DateTime.UtcNow.ToLocalTime().ToString());
-            reportLayout.AppendLine("OpenShift By  : " + openBy);//, true);
+            reportLayout.AppendLine("OpenShift By  : " );
+            reportLayout.AppendLine( openBy + "-" + operatorName(openBy) );//, true);
             if (reportType == ReportType.ZReport)
             {
-            reportLayout.AppendLine("CloseShift By : " + closeBy);//, true);
+            reportLayout.AppendLine("CloseShift By : " );//, true);
+            reportLayout.AppendLine(closeBy + "-" + operatorName(closeBy));//, true);
             }
             //end
             reportLayout.AppendLine();
@@ -915,6 +917,51 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             }
 
             reportLayout.AppendLine();
+        }
+
+        private static string operatorName(string openBy)
+        {
+            SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+            string opName = "";
+            try
+            {
+            string queryString = @"SELECT WORKER.PERSONNELNUMBER, DIRPARTY.NAME FROM AX.HCMWORKER WORKER
+                                  LEFT JOIN AX.DIRPARTYTABLE DIRPARTY
+                                  ON WORKER.PERSON = DIRPARTY.RECID
+                                  WHERE PERSONNELNUMBER = @STAFFID";
+            using (SqlCommand command = new SqlCommand(queryString, connection))
+            {
+                command.Parameters.Add(new SqlParameter("@STAFFID", openBy));
+                if (connection.State != ConnectionState.Open)
+                {
+                    connection.Open();
+                }
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+
+                        opName = reader[1].ToString();
+                       
+
+                    }
+                }
+            }
+            }
+            catch (Exception ex)
+            {
+                //LSRetailPosis.ApplicationExceptionHandler.HandleException();
+                throw;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+                }
+            }
+            return opName;
+
         }
 
         private static void getOpenCloseBy(Batch _batch, out string openBy, out string closeBy)

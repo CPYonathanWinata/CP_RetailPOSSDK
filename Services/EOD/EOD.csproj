@@ -126,6 +126,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="CPBatchForm.resx">
+      <DependentUpon>CPBatchForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\BlindClosedShiftsForm.resx">
       <DependentUpon>BlindClosedShiftsForm.cs</DependentUpon>
       <SubType>Designer</SubType>

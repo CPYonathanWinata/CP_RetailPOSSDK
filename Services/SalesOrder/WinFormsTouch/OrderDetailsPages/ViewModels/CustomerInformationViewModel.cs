@@ -57,7 +57,22 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder
                        : this.Transaction.Customer.Email;
             }
         }
+
+        /////<summary>
+        /////Gets the Email id of the customer
+        /////</summary>
+        //public string CustomerDeliveryAddress
+        //{
+        //    get
+        //    {
+        //        return (this.Transaction.Customer == null)
+        //               ? string.Empty
+        //               : this.CustomerDeliveryAddress;
+        //    }
+        //}
+
         #region Commands
+
 
         /// <summary>
         /// Command to clear this.Transaction.Customer and billing info

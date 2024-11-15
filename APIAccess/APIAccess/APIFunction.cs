@@ -10,6 +10,8 @@ using LSRetailPosis;
 using System.Collections.ObjectModel;
 using Microsoft.Dynamics.Retail.Pos.Contracts;
 using System.Xml;
+using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace APIAccess
 {
@@ -408,6 +410,95 @@ namespace APIAccess
 
 			//return result;
 		}
+
+        //get sales order for online order store
+        public string getOnlineOrder(string _legalEntity, string _warehouse, string url)
+        {
+
+
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |
+                                           SecurityProtocolType.Tls11 |
+                                           SecurityProtocolType.Tls12;
+
+            System.Net.ServicePointManager.ServerCertificateValidationCallback = (senderX, certificate, chain, sslPolicyErrors) => { return true; };
+
+            var httpRequest = (HttpWebRequest)WebRequest.Create(url);
+            string result = "";
+            httpRequest.Method = "POST";
+            httpRequest.ContentType = "application/json";
+            httpRequest.Headers.Add("Authorization", "PFM");
+
+
+
+            var pack = new APIParameter.parmRequestOnlineOrder()
+            {
+                legal =  _legalEntity,
+                warehouse = _warehouse
+            };
+
+
+            var data = MyJsonConverter.Serialize(pack);
+            using (var streamWriter = new StreamWriter(httpRequest.GetRequestStream()))
+            {
+                streamWriter.Write(data);
+            }
+
+            try
+            {
+                var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    result = streamReader.ReadToEnd();
+                }
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+
+
+            return result;
+        }
+
+        //to convert string to decimal despite difference between regional format settings -> ex "1,000.00" or "1.000,00"
+        public static decimal ParseDecimal(string input)
+        {
+
+            var regex = new Regex("^[^\\d-]*(-?(?:\\d|(?<=\\d)\\.(?=\\d{3}))+(?:,\\d+)?|-?(?:\\d|(?<=\\d),(?=\\d{3}))+(?:\\.\\d+)?)[^\\d]*$");
+
+            char decimalChar;
+            char thousandsChar;
+
+            // Get the numeric part from the string
+            var numberPart = regex.Match(input).Groups[1].Value;
+
+            // Try to guess which character is used for decimals and which is used for thousands
+            if (numberPart.LastIndexOf(',') > numberPart.LastIndexOf('.'))
+            {
+                decimalChar = ',';
+                thousandsChar = '.';
+            }
+            else
+            {
+                decimalChar = '.';
+                thousandsChar = ',';
+            }
+
+            // Remove thousands separators as they are not needed for parsing
+            numberPart = numberPart.Replace(thousandsChar.ToString(), string.Empty);
+
+            // Replace decimal separator with the one from InvariantCulture
+            // This makes sure the decimal parses successfully using InvariantCulture
+            numberPart = numberPart.Replace(decimalChar.ToString(),
+                CultureInfo.InvariantCulture.NumberFormat.CurrencyDecimalSeparator);
+
+            // Voilá
+            var result = decimal.Parse(numberPart, NumberStyles.AllowDecimalPoint | NumberStyles.Number, CultureInfo.InvariantCulture);
+
+            return result;
+        }
 
         public static void invalidateQRShopeePay(string url, string parmStoreId, string parmTerminalId, string parmTransId, out APIAccess.APIParameter.parmResponseShopeePay responseShopeePay )
         {

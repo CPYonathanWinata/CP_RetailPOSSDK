@@ -1504,6 +1504,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder
                     // Only set the Id if we successfully created the order/quote
                     string xmlString = containerArray[3].ToString();
 
+                    APIAccess.APIAccessClass.xmlString1 = xmlString; //save the returnValue from RTS - Yonathan 06112024
                     CustomerOrderInfo orderInfo = CustomerOrderInfo.FromXml(xmlString);
                     CustomerOrderTransaction customerOrder = SerializationHelper.GetTransactionFromInfo(orderInfo, this);
 
@@ -1778,6 +1779,10 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder
             salesOrders.Columns.Add("ISOPEN", typeof(string));
             salesOrders.Columns.Add("JOURNALID", typeof(string));
             salesOrders.Columns.Add("INVOICEAMOUNT", typeof(decimal));
+            if (orderType == 1)
+            { 
+                salesOrders.Columns.Add("ORDERNUMBER", typeof(string));
+            }
 
             for (int i = 3; i < containerArray.Count; i++)
             {
@@ -1858,8 +1863,16 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder
                 {
                     row["INVOICEAMOUNT"] = SerializationHelper.ConvertToStringAtIndex(salesRecord, 28);
                 }
-                //end
 
+                if (orderType == 1)
+                {
+                    //add OrderNumber
+                    if (salesRecord.Count > 29)
+                    {
+                        row["ORDERNUMBER"] = SerializationHelper.ConvertToStringAtIndex(salesRecord, 29);
+                    }
+                    //end
+                }
                 //add by Yonathan to prevent other store's sales order to appear in form 19/01/2023
                 string inventLocationId = "WH_"+ApplicationSettings.Database.StoreID;
                 //end
