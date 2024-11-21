@@ -542,18 +542,42 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
         private void OpenList()
         {
             string storeId = ApplicationSettings.Database.StoreID; // Pass the store ID dynamically if needed
-            using (CPBatchForm batchForm = new CPBatchForm(storeId)) // Open as a temporary form
-            {
-                if (batchForm.ShowDialog() == DialogResult.OK)
-                {
-                    // Retrieve the selected values from the BatchForm
-                      selectedBatchId = batchForm.SelectedBatchId;
-                      selectedTerminalId = batchForm.SelectedTerminalId;
+            
+            APIAccess.APIFunction.DatabaseHelper dbHelper = new APIAccess.APIFunction.DatabaseHelper(ApplicationSettings.Database.LocalConnectionString);
+            //check additional table first - yonathan 18112024
+            string tableName = "ax.CPRETAILPOSBATCHTABLEEXTEND";
+            bool exists = dbHelper.CheckExistTable(tableName);
 
-                    // Show the selected values (you can use them however you need)
-                    //MessageBox.Show("Selected Batch ID: " + selectedBatchId + "\nSelected Terminal ID: " + selectedTerminalId);
+            if (exists)
+            {
+                using (CPBatchForm batchForm = new CPBatchForm(storeId)) // Open as a temporary form
+                {
+
+                    if (batchForm.ShowDialog() == DialogResult.OK)
+                    {
+                        // Retrieve the selected values from the BatchForm
+                        selectedBatchId = batchForm.SelectedBatchId;
+                        selectedTerminalId = batchForm.SelectedTerminalId;
+
+                        // Show the selected values (you can use them however you need)
+                        //MessageBox.Show("Selected Batch ID: " + selectedBatchId + "\nSelected Terminal ID: " + selectedTerminalId);
+                    }
+
+
                 }
             }
+            else
+            {
+                using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage(string.Format("Gagal memuat data karena table {0} tidak ditemukan.\nSilakan hubungi IT Support.", tableName), MessageBoxButtons.OK, MessageBoxIcon.Error))
+                {
+                    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+
+                }
+                
+
+            }
+
+           
 
         }
 

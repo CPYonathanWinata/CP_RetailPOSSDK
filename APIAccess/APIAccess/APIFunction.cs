@@ -12,7 +12,9 @@ using Microsoft.Dynamics.Retail.Pos.Contracts;
 using System.Xml;
 using System.Text.RegularExpressions;
 using System.Globalization;
-
+ 
+using System.Data.SqlClient;
+using System.Data;
 namespace APIAccess
 {
 	public  class APIFunction
@@ -613,6 +615,63 @@ namespace APIAccess
             //connection = new MySql.Data.MySqlClient.MySqlConnection(connectionString);
             APIAccess.APIParameter.mySqlConnString = new MySql.Data.MySqlClient.MySqlConnection(connectionString); ;
         }
+
+
+
+
+        public class DatabaseHelper
+        {
+            private string _connectionString;
+
+            public DatabaseHelper(string connectionString)
+            {
+                _connectionString = connectionString;
+            }
+
+            public bool CheckExistTable(string tableName)
+            {
+                using (SqlConnection connection = new SqlConnection(_connectionString))
+                {
+                    try
+                    {
+                        connection.Open();
+
+                        // Split schema and table name if needed
+                        string[] tableParts = tableName.Split('.');
+                        string schema = tableParts.Length > 1 ? tableParts[0] : "dbo"; // Default to "dbo" if no schema provided
+                        string table = tableParts.Length > 1 ? tableParts[1] : tableParts[0];
+
+                        // Query to check if the table exists
+                        string checkTableQuery = @"
+                            SELECT COUNT(1) 
+                            FROM INFORMATION_SCHEMA.TABLES 
+                            WHERE TABLE_SCHEMA = @Schema AND TABLE_NAME = @TableName";
+
+                        using (SqlCommand command = new SqlCommand(checkTableQuery, connection))
+                        {
+                            command.Parameters.AddWithValue("@Schema", schema);
+                            command.Parameters.AddWithValue("@TableName", table);
+
+                            int result = (int)command.ExecuteScalar();
+                            return result > 0;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        //Console.WriteLine($"Error checking table existence: {ex.Message}");
+                        return false; // You might handle this differently based on requirements
+                    }
+                    finally
+                    {
+                        if (connection.State != ConnectionState.Closed)
+                        {
+                            connection.Close();
+                        }
+                    }
+                }
+            }
+        }
+
 
 
         public class GrabMartAPI

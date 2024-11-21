@@ -347,7 +347,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
             switch ((PosisOperations)posOperation)
             {
                 case PosisOperations.PayCash:
-                    // Insert code here...
+                    //   code here...
                     //      int amount = (int)((RetailTransaction)posTransaction).NetAmountWithTax;
                     //     CP_CheckPayment();
                     break;

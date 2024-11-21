@@ -515,7 +515,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             {
 
                 reportLayout.AppendLine("-------------------------------------------------------");
-                reportLayout.AppendLine("Customer Order Summary");
+                reportLayout.AppendLine("POS Customer Order Summary");
                 reportLayout.AppendLine("-------------------------------------------------------");
 
                 
@@ -558,34 +558,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
                 XmlDocument xmlDoc = new XmlDocument();
                 //xmlDoc.LoadXml(containerArray[3].ToString());
 
-                //XmlNodeList purchTableNodes = xmlDoc.SelectNodes("/CustInvoiceTrans/CustInvoiceTrans");
-                //foreach (XmlNode node in purchTableNodes)
-                //{
-
-                //    itemGroupLines = node.Attributes["ItemLines"].Value;
-                //    //string input = "15010102;FIESTA SHOESTRING 1000 GR;1,00;31.216,00;SO/24/0001198728";
-                //    string[] parts = itemGroupLines.Split(';');
-
-                //    // Assign each part to a variable
-                //    string ItemId = parts[0];
-                //    string ItemName = parts[1];
-                //    string Quantity = parts[2];
-                //    string Price = parts[3];
-                //    string SalesId = parts[4];
-
-
-                //    reportLayout.AppendLine(string.Format("{0} - {1}", ItemId.ToString(), ItemName.ToString()));
-
-                //    reportLayout.AppendLine(string.Format("{0} - {1}", Quantity, RoundDecimal(Convert.ToDecimal(Price))));
-
-                //    //reportLayout.AppendLine(string.Format("{0}", itemGroupLines));
-                //    //purchid = node.Attributes["PURCHID"].Value;
-                //    //itemid = node.Attributes["ITEMID"].Value;
-
-                //}
-                //XmlNodeList totalNodes = xmlDoc.SelectNodes("/CustInvoiceTrans/Total");
-                // Load XML into XDocument
-                 
+                
 
                 // Extract distinct SalesId values from the XML
                 var distinctSalesIds = xdoc.Descendants("CustInvoiceTrans")
@@ -600,15 +573,85 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
 
                 //    totalAmount = eachNode.Attributes["TotalAmount"].Value;
                 //    totalAmount.Replace(".", ",");
-                    reportLayout.AppendLine(string.Format("Total Amount Sales Order : {0}", RoundDecimal(Convert.ToDecimal(totalAmount))));
-                 //   totalSales = eachNode.Attributes["TotalSales"].Value;
-                    reportLayout.AppendLine(string.Format("Total Sales Order : {0}", RoundDecimal(distinctSalesIds)));
+                reportLayout.AppendLine(string.Format("Total Amount Sales Order : {0}", RoundDecimal(Convert.ToDecimal(totalAmount))));
+                //   totalSales = eachNode.Attributes["TotalSales"].Value;
+                reportLayout.AppendLine(string.Format("Total Sales Order : {0}", RoundDecimal(distinctSalesIds)));
                     //purchid = node.Attributes["PURCHID"].Value;
                     //itemid = node.Attributes["ITEMID"].Value;
                 //}
+               
+               
+
 
             }
-           
+            //section for online order - Yonathan 19112024
+            salesOrderParam = getCustOrderTransaction(fromDateUtc, toDateUtc);
+            containerArray = EOD.InternalApplication.TransactionServices.InvokeExtension("getInvoiceSalesOrder", salesOrderParam);
+            returnString = containerArray[3].ToString();
+            returnValue = containerArray[1].ToString();
+
+
+            totalAmount = 0;
+            totalSales = 0;
+            if (containerArray[1].ToString() != "False")
+            {
+                reportLayout.AppendLine("-------------------------------------------------------");
+                reportLayout.AppendLine("Online Order Summary");
+                reportLayout.AppendLine("-------------------------------------------------------");
+                returnString = containerArray[3].ToString();
+                // Load XML into XDocument
+                XDocument xdoc = XDocument.Parse(returnString);
+                var cultureInfo = new CultureInfo("id-ID");
+                // Parse the XML and group by ItemId and ItemName
+                var groupedData = xdoc.Descendants("CustInvoiceTrans")
+                    .Where(e => e.Attribute("ItemLines") != null)
+                    .Select(e => e.Attribute("ItemLines").Value.Split(';'))
+                    .GroupBy(
+                        fields => new { ItemId = fields[0], ItemName = fields[1] }, // Group by ItemId and ItemName
+                        fields => new
+                        {
+                            Quantity = decimal.Parse(fields[2], NumberStyles.Number, cultureInfo),
+                            LineAmount = decimal.Parse(fields[3], NumberStyles.Number, cultureInfo),
+                            SalesId = fields[4]
+                        }
+                    )
+                    .Select(group => new
+                    {
+                        group.Key.ItemId,
+                        group.Key.ItemName,
+                        TotalQty = group.Sum(x => x.Quantity),
+                        TotalLineAmount = group.Sum(x => x.LineAmount),
+                        //SalesIdCount = group.Select(x => x.SalesId).Distinct().Count()
+                    });
+
+                // Output the results
+                foreach (var data in groupedData)
+                {
+
+                    reportLayout.AppendLine(string.Format("{0} - {1}", data.ItemId.ToString(), data.ItemName.ToString()));
+
+                    reportLayout.AppendLine(string.Format("{0} - {1}", data.TotalQty, RoundDecimal(Convert.ToDecimal(data.TotalLineAmount))));
+                    totalAmount += data.TotalLineAmount;
+                    //totalSales = data.SalesIdCount;
+                }
+                XmlDocument xmlDoc = new XmlDocument();
+              
+                var distinctSalesIds = xdoc.Descendants("CustInvoiceTrans")
+                    .Where(e => e.Attribute("ItemLines") != null)
+                    .Select(e => e.Attribute("ItemLines").Value.Split(';').Last()) // Extract the last part (SalesId)
+                    .Distinct() // Get distinct SalesId values
+                    .Count(); // Count the number of distinct SalesId values
+
+                reportLayout.AppendLine("-------------------------------------------------------");
+             
+                reportLayout.AppendLine(string.Format("Total Amount Sales Order : {0}", RoundDecimal(Convert.ToDecimal(totalAmount))));
+              
+                reportLayout.AppendLine(string.Format("Total Sales Order : {0}", RoundDecimal(distinctSalesIds)));
+                 
+            }
+            
+
+            
 
             //end
 
@@ -705,15 +748,14 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             SqlConnection localConnection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
             string salesIdMulti = "" ;
             string salesIds = "";
-            //add by Yonathan C.BANK != 'QRISBCA' for filtering the bank not QRIS
+             
             decimal totalTunai = 0;
             try
             {
                 string queryData = @"SELECT SALESORDERID, MODIFIEDDATETIME, TRANSACTIONID FROM ax.RETAILTRANSACTIONTABLE WHERE 
 		                            SALESORDERID !='' 
 		                            AND MODIFIEDDATETIME BETWEEN  '" + fromDate + "'  AND '" + toDate + "' ORDER BY SALESORDERID DESC"; 
-                //DATEADD(HOUR, -(DATEPART(TZOFFSET, SYSDATETIMEOFFSET()) / 60), SYSDATETIME()) 
-                //C.BANK != 'QRISBCA'
+                
                 using (SqlCommand cmd = new SqlCommand(queryData, localConnection))
                 {
 
@@ -744,6 +786,74 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
 
                         // Convert the StringBuilder to a string
                           salesIds = salesIdBuilder.ToString();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //LSRetailPosis.ApplicationExceptionHandler.HandleException();
+                throw;
+            }
+            finally
+            {
+                if (localConnection.State != ConnectionState.Closed)
+                {
+                    localConnection.Close();
+                }
+            }
+
+            return salesIds;
+            //throw new NotImplementedException();
+        }
+
+        private static string getOnlineOrderTransaction(string fromDate, string toDate)
+        {
+            SqlConnection localConnection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+            string salesIdMulti = "";
+            string salesIds = "";
+            
+            decimal totalTunai = 0;
+            try
+            {
+                string queryData = @"SELECT RETAILSTOREID,
+                                            SALESID,
+                                            STAFFID,
+                                            TRANSDATETIME,
+                                            DATAAREAID FROM ax.CPPOSONLINEORDER WHERE 
+		                            SALESID !='' 
+		                            AND TRANSDATETIME BETWEEN  '" + fromDate + "'  AND '" + toDate + "' ORDER BY SALESID DESC";
+                //DATEADD(HOUR, -(DATEPART(TZOFFSET, SYSDATETIMEOFFSET()) / 60), SYSDATETIME()) 
+                //C.BANK != 'QRISBCA'
+                using (SqlCommand cmd = new SqlCommand(queryData, localConnection))
+                {
+
+
+                    if (localConnection.State != ConnectionState.Open)
+                    {
+                        localConnection.Open();
+                    }
+
+                    //int flagFirstItem = 0;
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        StringBuilder salesIdBuilder = new StringBuilder();
+
+                        while (reader.Read())
+                        {
+                            // Retrieve SALESORDERID from the reader
+                            salesIdMulti = reader["SALESID"].ToString();
+
+                            // Append salesOrderId followed by a semicolon
+                            if (salesIdBuilder.Length > 0)
+                            {
+                                salesIdBuilder.Append(";");
+                            }
+                            salesIdBuilder.Append(salesIdMulti);
+                        }
+
+                        // Convert the StringBuilder to a string
+                        salesIds = salesIdBuilder.ToString();
                     }
                 }
             }
