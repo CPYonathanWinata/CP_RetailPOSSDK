@@ -789,8 +789,9 @@ C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Pr
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Printing\bin\Debug\es\DevExpress.Office.v14.2.Core.resources.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Printing\bin\Debug\ja\DevExpress.Office.v14.2.Core.resources.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Printing\bin\Debug\ru\DevExpress.Office.v14.2.Core.resources.dll
-C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Printing\obj\Debug\Printing.csprojResolveAssemblyReference.cache
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Printing\obj\Debug\Microsoft.Dynamics.Retail.Pos.Printing.frmReportList.resources
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Printing\obj\Debug\Printing.csproj.GenerateResource.Cache
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Printing\obj\Debug\Printing.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Printing\obj\Debug\Printing.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Printing\obj\Debug\Printing.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Printing\bin\Debug\APIAccess.dll

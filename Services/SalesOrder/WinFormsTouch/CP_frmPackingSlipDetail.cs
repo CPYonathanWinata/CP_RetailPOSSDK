@@ -475,7 +475,8 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 						{
 							ApplicationExceptionHandler.HandleException(CP_frmPackingSlipDetail.LogSource, x);
 							// "Error creating the packing slip."
-							SalesOrder.InternalApplication.Services.Dialog.ShowMessage(56220, MessageBoxButtons.OK, MessageBoxIcon.Error);
+							SalesOrder.InternalApplication.Services.Dialog.ShowMessage(x.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            this.Close();
 						}
 
 					}
@@ -561,7 +562,8 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 }
                 else
                 {
-                    throw new Exception("Invoice error, please post invoice on AX");
+                    throw new Exception(string.Format("Invoice error, please post invoice on AX"));
+                    //throw new Exception(string.Format("Invoice error, please post invoice on AX\n{0}", statusInvoice));
                 }
             }
             catch (Exception ex)
@@ -574,6 +576,8 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
         private void updateInvoiceId(string _invoiceAx, string _salesId)
         {
             string storeId = "";
+            bool update = false;
+
             SqlConnection connection = ApplicationSettings.Database.LocalConnection;
             storeId = ApplicationSettings.Terminal.StoreId;
             //var retailTransaction = posTransaction as RetailTransaction;
@@ -595,15 +599,10 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                     {
                         connection.Open();
                     }
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
+                    // Execute the query and check affected rows 
+                    int rowsAffected = command.ExecuteNonQuery();
+                    update = rowsAffected > 0; // If rows are affected, update was successful, if not then it's online order = Yonathan 20112024
 
-                            
-                        }
-
-                    }
                 }
             }
             catch (Exception ex)
@@ -618,6 +617,51 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                     connection.Close();
                 }
             }
+
+            if (!update)
+            {
+
+                //treat is as online pos order and insert the data - Yonathan 20112024
+
+                try
+                {
+                    string queryString = @" INSERT INTO  AX.CPPOSONLINEORDER
+                                        (RETAILSTOREID,SALESID,STAFFID,TRANSDATETIME,DATAAREAID,PARTITION)
+                                        VALUES
+                                        (@STOREID,@SALESID,@STAFFID,DATEADD(HOUR, -(DATEPART(TZOFFSET, SYSDATETIMEOFFSET()) / 60), SYSDATETIME()),@DATAAREAID,@PARTITION)"
+                                        ;
+
+                    using (SqlCommand command = new SqlCommand(queryString, connection))
+                    {
+                        command.Parameters.AddWithValue("@STOREID", storeId);
+                        command.Parameters.AddWithValue("@SALESID", _salesId);
+                        command.Parameters.AddWithValue("@STAFFID", ApplicationSettings.Terminal.TerminalOperator.OperatorId);
+                        command.Parameters.AddWithValue("@DATAAREAID", SalesOrder.InternalApplication.Settings.Database.DataAreaID);
+                        command.Parameters.AddWithValue("@PARTITION", 1);
+                        if (connection.State != ConnectionState.Open)
+                        {
+                            connection.Open();
+                        }
+
+                        command.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                    throw;
+                }
+                finally
+                {
+                    if (connection.State != ConnectionState.Closed)
+                    {
+                        connection.Close();
+                    }
+                }
+
+
+            }
+
         }
 		private string getInventSite(string inventLocationId)
 		{

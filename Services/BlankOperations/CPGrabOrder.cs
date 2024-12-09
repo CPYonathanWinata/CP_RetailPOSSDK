@@ -315,12 +315,13 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                 ////Data order = MyJsonConverter.Deserialize<Data>(responseData.data);
                 //APIAccess.APIParameter.Data[] order = APIAccess.APIFunction.MyJsonConverter.Deserialize<APIAccess.APIParameter.Data[]>(responseData.data);
 
+                
 
                 responseAPI = APIAccess.APIFunction.GrabMartAPI.getOrderList(storeId, url);
                 if (responseAPI.data != "")
                 {
                     APIAccess.APIParameter.Data[] order = APIAccess.APIFunction.MyJsonConverter.Deserialize<APIAccess.APIParameter.Data[]>(responseAPI.data);
-
+                    // Open status emptystring agar bis ditransaksikan selama belum distrukin - Yonathan 11112024
                     var groupedData = order.GroupBy(item => item.orderID).Select(group => new
                     {
                         OrderID = group.Key,
@@ -892,7 +893,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                 APIAccess.APIParameter.DataStatusOrder resultStatus = APIAccess.APIFunction.MyJsonConverter.Deserialize<APIAccess.APIParameter.DataStatusOrder>(responseData.data);
                 driverState = resultStatus.state;
 
-                if (driverState == "DRIVER_ARRIVED" || driverState == "COLLECTED")
+                if (driverState == "DRIVER_ARRIVED" || driverState == "COLLECTED" || driverState == "DELIVERED") // tambah status delivered agar bis ditransaksikan selama belum distrukin - Yonathan 11112024
                 {
                     //add to cart & pay
                     
@@ -1053,14 +1054,22 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     pay.RunOperation();*/
                     this.Close();
                 }
-                else
+                else //if (driverState == "")
                 {
-                    using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Driver belum sampai, tidak bisa melanjutkan order", MessageBoxButtons.OK, MessageBoxIcon.Stop))
+                    using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Driver belum sampai.\nJika driver sudah sampai, pastikan :\n1. Driver sudah update status 'Sudah Sampai Toko'\n2. Kemudian lakukan refresh list dan coba proses kembali.", MessageBoxButtons.OK, MessageBoxIcon.Stop))
                     {
                         LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
                         return;
-                    }
+                    } //"Driver belum sampai, jika driver sudah sampai pastikan driver sudah update status sampai toko lalu kemudian lakukan refresh list!"
                 }
+                //else
+                //{
+                //    using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Driver belum sampai, tidak bisa melanjutkan order", MessageBoxButtons.OK, MessageBoxIcon.Stop))
+                //    {
+                //        LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                //        return;
+                //    }
+                //}
                
             }
             else if (findFalse == 1)

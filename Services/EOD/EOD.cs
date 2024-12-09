@@ -298,6 +298,11 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
                 BatchData batchData = new BatchData(Application.Settings.Database.Connection, Application.Settings.Database.DataAreaID);
                 batchData.CloseBatch(batch);
                 transaction.Shift.Status = PosBatchStatus.Closed;
+
+                //close shift
+                updateCustomBatchTable(batch);
+                //
+
                 ShiftUsersCache.Remove(transaction.Shift);
 
                 // Check the Print X/Z report on POS function whether is available. 
@@ -329,6 +334,51 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             {
                 NetTracer.Information("Setting status of the transaction to 'cancelled'");
                 ((PosTransaction)transaction).EntryStatus = PosTransaction.TransactionStatus.Cancelled;
+            }
+        }
+
+        private void updateCustomBatchTable(Batch _batch)
+        {
+             // Establish the database connection
+            SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+
+            try
+            {
+                // Define the SQL UPDATE query
+                string queryString = @"
+                    UPDATE [ax].[CPRETAILPOSBATCHTABLEEXTEND]
+                    SET [CLOSEBY] = @CloseBy
+                    WHERE [BATCHID] = @BatchId";
+
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+                    // Set parameter values for the UPDATE statement
+                    command.Parameters.AddWithValue("@BatchId", _batch.BatchId);
+                    command.Parameters.AddWithValue("@CloseBy", ApplicationSettings.Terminal.TerminalOperator.OperatorId);
+
+                    // Open the connection if it’s not already open
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+                    }
+
+                    // Execute the UPDATE command
+                    int rowsAffected = command.ExecuteNonQuery();
+                     
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions if necessary
+                throw;
+            }
+            finally
+            {
+                // Ensure the connection is closed
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+                }
             }
         }
 
@@ -469,7 +519,8 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             
             OpenList(); 
             BatchData batchData = new BatchData(Application.Settings.Database.Connection, Application.Settings.Database.DataAreaID);
-            batchId = Convert.ToInt16(selectedBatchId);
+
+            batchId = selectedBatchId != "" ? Convert.ToInt16(selectedBatchId) : 0;
             //Batch batch = batchData.ReadRecentlyClosedBatch(ApplicationSettings.Terminal.TerminalId);
             if(batchId!=0)
             {
@@ -491,18 +542,42 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
         private void OpenList()
         {
             string storeId = ApplicationSettings.Database.StoreID; // Pass the store ID dynamically if needed
-            using (CPBatchForm batchForm = new CPBatchForm(storeId)) // Open as a temporary form
-            {
-                if (batchForm.ShowDialog() == DialogResult.OK)
-                {
-                    // Retrieve the selected values from the BatchForm
-                      selectedBatchId = batchForm.SelectedBatchId;
-                      selectedTerminalId = batchForm.SelectedTerminalId;
+            
+            APIAccess.APIFunction.DatabaseHelper dbHelper = new APIAccess.APIFunction.DatabaseHelper(ApplicationSettings.Database.LocalConnectionString);
+            //check additional table first - yonathan 18112024
+            string tableName = "ax.CPRETAILPOSBATCHTABLEEXTEND";
+            bool exists = dbHelper.CheckExistTable(tableName);
 
-                    // Show the selected values (you can use them however you need)
-                    //MessageBox.Show("Selected Batch ID: " + selectedBatchId + "\nSelected Terminal ID: " + selectedTerminalId);
+            if (exists)
+            {
+                using (CPBatchForm batchForm = new CPBatchForm(storeId)) // Open as a temporary form
+                {
+
+                    if (batchForm.ShowDialog() == DialogResult.OK)
+                    {
+                        // Retrieve the selected values from the BatchForm
+                        selectedBatchId = batchForm.SelectedBatchId;
+                        selectedTerminalId = batchForm.SelectedTerminalId;
+
+                        // Show the selected values (you can use them however you need)
+                        //MessageBox.Show("Selected Batch ID: " + selectedBatchId + "\nSelected Terminal ID: " + selectedTerminalId);
+                    }
+
+
                 }
             }
+            else
+            {
+                using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage(string.Format("Gagal memuat data karena table {0} tidak ditemukan.\nSilakan hubungi IT Support.", tableName), MessageBoxButtons.OK, MessageBoxIcon.Error))
+                {
+                    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+
+                }
+                
+
+            }
+
+           
 
         }
 
@@ -676,7 +751,9 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
                             batchData.CreateBatch(newPosBatch);
                         }
                         shift = newPosBatch;
-
+                        //ADD SHIFT OPEN
+                        writeBatchTableExt(newPosBatch);
+                        //
                         result = true;
                     }
                     break;
@@ -726,6 +803,52 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             }
 
             return result;
+        }
+
+        private void writeBatchTableExt(PosBatchStaging _batch)
+        {
+            //ADD BY ERWIN
+            SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+            var tenderID = new List<string>();
+ 
+           
+            try
+            {
+                //to do change to RETAILTRANSACTIONPAYMENTTRANS FOR TENDERID DISTINCT YONATHAN
+                string queryString = @"
+                INSERT INTO [ax].[CPRETAILPOSBATCHTABLEEXTEND]
+                    ([BATCHID], [CLOSEBY], [OPENBY], [STOREID], [TERMINALID], [DATAAREAID],[PARTITION])
+                VALUES
+                    (@BatchId, @CloseBy, @OpenBy, @StoreId, @TerminalId, @DataAreaId, @PARTITION)";
+
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+                    command.Parameters.AddWithValue("@BatchId", _batch.BatchId);
+                    command.Parameters.AddWithValue("@CloseBy", "");
+                    command.Parameters.AddWithValue("@OpenBy", _batch.StaffId);
+                    command.Parameters.AddWithValue("@StoreId", _batch.StoreId);
+                    command.Parameters.AddWithValue("@TerminalId", _batch.TerminalId);
+                    command.Parameters.AddWithValue("@DataAreaId", Application.Settings.Database.DataAreaID);
+                    command.Parameters.AddWithValue("@PARTITION", 1);
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+                    }
+                    int rowsAffected = command.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                //LSRetailPosis.ApplicationExceptionHandler.HandleException();
+                throw;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+                }
+            }
         }
 
         #endregion

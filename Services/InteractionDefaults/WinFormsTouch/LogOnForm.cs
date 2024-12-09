@@ -32,6 +32,7 @@ using Microsoft.Dynamics.Retail.Pos.Contracts.UI;
 using Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch;
 using Microsoft.Dynamics.Retail.Pos.SystemCore;
 using EF = Microsoft.Dynamics.Retail.Pos.DataEntity;
+using System.Collections;
 
 namespace Microsoft.Dynamics.Retail.Pos.Interaction
 {
@@ -158,6 +159,26 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
                     grdUsers.Visible = true;
                     tableLayoutPanel2.SetColumnSpan(grdUsers, 3);
                     lblUser.Visible = false;
+
+                    //add for exit immediately if no cashier has assigned - Yonathan 20112024
+                    //var list = grdUsers.DataSource as IList;
+                    DataTable table = grdUsers.DataSource as DataTable;
+
+                    if (table.Rows.Count == 0)
+                    {
+                        // DataSource is empty
+                         
+                        using (frmMessage dialog = new frmMessage("Belum ada staff yang ditugaskan di toko ini.\nSilakan hubungi IT Support.", MessageBoxButtons.OK, MessageBoxIcon.Error)) // Unauthorized
+                        {
+                            POSFormsManager.ShowPOSForm(dialog);
+                        }
+                         
+                        
+                        status = LogOnStatus.Exit;
+                        dlgResult = DialogResult.OK;
+                        Close();
+                    }
+                    
                 }
                 else
                 {
@@ -1018,8 +1039,21 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 
             if (logonMode == LogonModes.UserList)
             {
-                operatorId = grvUserData.GetDataRow(grvUserData.GetSelectedRows()[0])["STAFFID"].ToString();
+                //if (operatorId == null || operatorId == "")
+                //{
+                //    using (frmMessage dialog = new frmMessage("Belum ada staff yang ditugaskan di toko ini.\nHubungi IT Support",MessageBoxButtons.OK,MessageBoxIcon.Error)) // Unauthorized
+                //    {
+                //        POSFormsManager.ShowPOSForm(dialog);
+                //    }
 
+                //    userHasAccess = true;
+                //    return userHasAccess;
+                //}
+                //else
+                //{
+                    operatorId = grvUserData.GetDataRow(grvUserData.GetSelectedRows()[0])["STAFFID"].ToString();
+                //}
+                
                 if (!PosApplication.Instance.BusinessLogic.UserAccessSystem.UserHasAccess(operatorId, OperationID))
                 {
                     using (frmMessage dialog = new frmMessage(1322)) // Unauthorized

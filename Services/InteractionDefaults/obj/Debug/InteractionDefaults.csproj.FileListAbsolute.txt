@@ -283,7 +283,6 @@ C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\InteractionDe
 C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\InteractionDefaults\obj\Debug\InteractionDefaults.dll.licenses
 C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\InteractionDefaults\obj\Debug\InteractionDefaults.dll
 C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\InteractionDefaults\obj\Debug\InteractionDefaults.pdb
-C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csprojResolveAssemblyReference.cache
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\InteractionDefaults\obj\Debug\LSRetailPosis.ButtonGrid.frmBarcodeSelect.resources
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.Properties.Resources.resources
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\InteractionDefaults\obj\Debug\Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch.CP_frmWaitingRespond.resources
@@ -318,3 +317,6 @@ C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\In
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\InteractionDefaults\obj\Debug\InteractionDefaults.dll.licenses
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\InteractionDefaults\obj\Debug\InteractionDefaults.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\InteractionDefaults\obj\Debug\InteractionDefaults.pdb
+C:\Users\yonathan.winata\Documents\GitHub\AX\Retail POS\Extensions\InteractionDefaults.dll
+C:\Users\yonathan.winata\Documents\GitHub\AX\Retail POS\Extensions\InteractionDefaults.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csprojResolveAssemblyReference.cache

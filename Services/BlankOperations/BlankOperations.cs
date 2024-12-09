@@ -33,6 +33,7 @@ using System.Net;
 using System.Configuration;
 using System.Linq;
 using System.ServiceModel;
+using System.Threading.Tasks;
 using CRTDM = Microsoft.Dynamics.Commerce.Runtime.DataModel;
 
 using CRSPE = Microsoft.Dynamics.Commerce.Runtime.Services.PricingEngine;
@@ -628,8 +629,45 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                                     isIntegrated = validateIntegrationGrabMart();
                                     if (isIntegrated == true) 
                                     {
-                                        CPGrabOrder CPGrabOrder = new CPGrabOrder(posTransaction, Application);
-                                        CPGrabOrder.ShowDialog();
+                                        //check the RTS Connection - Yonathan 05122024
+                                        bool status = false;
+                                        string functionName = "GetGRABMARTAPI";
+                                        string url = "";
+                                        APIAccess.APIFunction apiFunction = new APIAccess.APIFunction();
+                                        //try
+                                        //{
+                                        //    Application.TransactionServices.CheckConnection();
+                                        //}
+                                        //catch (Exception x)
+                                        //{
+                                        //    using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Tidak bisa terhubung dengan jaringan.\nCek koneksi API atau RTS", MessageBoxButtons.OK, MessageBoxIcon.Error))
+                                        //    {
+                                        //        LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                                        //    }
+                                        //    return;
+                                        //}
+                                        
+                                        
+                                        APIAccess.APIAccessClass APIClass = new APIAccess.APIAccessClass();
+                                        url = APIClass.getURLAPIByFuncName(functionName);
+                                        //bool isApiAvailable = apiFunction.CheckApiAvailability(url).Result;
+                                        status = apiFunction.CheckForInternetConnection(Application,url);
+                                        if (status == true)
+                                        {
+
+                                            CPGrabOrder CPGrabOrder = new CPGrabOrder(posTransaction, Application);
+                                            CPGrabOrder.ShowDialog();
+                                        }
+                                        else
+                                        {
+                                            using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Tidak bisa terhubung dengan jaringan.\nCek koneksi API atau RTS", MessageBoxButtons.OK, MessageBoxIcon.Error))
+                                            {
+                                                LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                                            }
+                                             
+                                        }
+                                        
+                                        
                                     }
                                     else
                                     {
@@ -972,7 +1010,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     }
                 case "89":
                     {
-                        Application.RunOperation(PosisOperations.LoyaltyCardBalance, posTransaction);
+                        Application.RunOperation(PosisOperations.LoyaltyCardBalance,"", posTransaction);
                         break;
                     }
 				case "90":
@@ -1416,15 +1454,22 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 
         private void checkB2bCust(string _custId)
         {
-             
+            //todo to change to local - Yonathan #b2bparam
                 string isB2bCust = "";
-                if (Application.TransactionServices.CheckConnection())
-                {
+                //if (Application.TransactionServices.CheckConnection())
+                //{
                     try
                     {
-                        ReadOnlyCollection<object> containerArray = Application.TransactionServices.InvokeExtension("getB2bRetailParam", _custId);
+                        //ReadOnlyCollection<object> containerArray = Application.TransactionServices.InvokeExtension("getB2bRetailParam", _custId);
 
-                        APIAccess.APIAccessClass.isB2b = containerArray[6].ToString();
+                        //APIAccess.APIAccessClass.isB2b = containerArray[6].ToString();
+
+                        
+
+
+                        //change to local 05122024
+                        APIAccess.APIFunction apiFunction = new APIAccess.APIFunction();
+                        APIAccess.APIAccessClass.isB2b = apiFunction.getCustomerClass(_custId.ToString());
 
                     }
                     catch (Exception ex)
@@ -1432,7 +1477,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                         LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
                         throw;
                     }
-                }
+                //}
 
                  
 
@@ -1827,18 +1872,48 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 		}
 
 
-		public static bool CheckForInternetConnection()
+		public   bool CheckForInternetConnection(string _url)
 		{
+            string checkConn = "api/connection/check";
+
+           
+            Uri uri = new Uri(_url);
+            string siteName = uri.GetLeftPart(UriPartial.Authority);
+
+            _url = siteName + "/" + checkConn;
+
+            //check RTS
+            try
+            {
+                Application.TransactionServices.CheckConnection();
+                
+            }
+            catch 
+            {
+                //using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Tidak bisa terhubung dengan jaringan.\nCek koneksi RTS", MessageBoxButtons.OK, MessageBoxIcon.Error))
+                //{
+                //    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                //}
+                return false;
+            }
+
+            //check API
 			try
 			{
 				using (var client = new WebClient())
-				using (client.OpenRead("https://pfm.cp.co.id/api/connection/check"))
+                using (client.OpenRead(_url))//"https://pfm.cp.co.id/api/connection/check"))
 					return true;
 			}
 			catch
 			{
+                //using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Tidak bisa terhubung dengan jaringan.\nCek koneksi API", MessageBoxButtons.OK, MessageBoxIcon.Error))
+                //{
+                //    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                //}
 				return false;
 			}
+
+
 		}
 /*
 		private int duplicateRedeem(IPosTransaction posTransaction)

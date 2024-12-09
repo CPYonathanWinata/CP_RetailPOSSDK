@@ -338,14 +338,21 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             this.colTotalAmount.Name = "colTotalAmount";
             this.colTotalAmount.Visible = true;
             this.colTotalAmount.VisibleIndex = 6;
-            this.colTotalAmount.Width = 176;
+            this.colTotalAmount.Width = 140;
             // 
             // colEmail
             // 
-            this.colEmail.Caption = "E-mail";
-            this.colEmail.FieldName = "EMAIL";
-            this.colEmail.Name = "colEmail";
-            this.colEmail.Width = 120;
+            
+
+            this.colEmail.AppearanceCell.Options.UseTextOptions = true;
+            this.colEmail.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
+            this.colEmail.Caption = "OrderNumber";
+            this.colEmail.FieldName = "ORDERNUMBER";
+            this.colEmail.Name = "colOrderNumber";
+             
+            this.colEmail.Visible = false;
+            this.colEmail.VisibleIndex = 7;
+            this.colEmail.Width = 110;
             // 
             // gridColumn1
             // 

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\..\vs.settings" />
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
@@ -8,6 +8,8 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Microsoft.Dynamics.Retail.Pos.EOD</RootNamespace>
     <AssemblyName>EOD</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>$(SDKOutputPath)\bin\Debug\</OutputPath>
@@ -19,7 +21,7 @@
   <ItemGroup>
     <Reference Include="APIAccess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\yonathan.winata\Documents\Visual Studio 2013\Projects\APIAccess\APIAccess\bin\Debug\APIAccess.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Extensions\APIAccess.dll</HintPath>
     </Reference>
     <Reference Include="DevExpress.Data.v14.2">
       <HintPath>$(PosInstallPath)\DevExpress.Data.v14.2.dll</HintPath>
@@ -126,6 +128,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="CPBatchForm.resx">
+      <DependentUpon>CPBatchForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\BlindClosedShiftsForm.resx">
       <DependentUpon>BlindClosedShiftsForm.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -141,6 +146,9 @@
       <DependentUpon>ShiftActionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

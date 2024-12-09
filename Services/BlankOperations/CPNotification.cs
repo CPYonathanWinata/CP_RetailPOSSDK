@@ -22,6 +22,7 @@ using System.Net;
 using System.Media;
 using System.Xml;
 using System.IO;
+using APIAccess;
 
 namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 {
@@ -36,55 +37,82 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 
         //test yonathan for timer 19/12/2023
         private Timer timer;
+        private Timer timerOnlineOrder;
+
         private int notificationIntervalInMinutes = 1; // Change this value to set the interval
         public string PathDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Extensions\\", "APIConfig.xml");
 
-
-        public class CustomMessageBox : Form
+        public class CustomPopupForm : Form
         {
-            private Button okButton;
-            private Label messageLabel;
-
-            public CustomMessageBox(string message)
+            private static CustomPopupForm currentPopup;
+            private Timer timer;
+            public IApplication thisApplication { get; set; }
+            // This is now a constructor
+            public CustomPopupForm(string message, string title, Timer timer, IApplication application)
             {
-                // Set properties of the custom message box form
-                FormBorderStyle = FormBorderStyle.FixedDialog;
-                MaximizeBox = false;
-                MinimizeBox = false;
-                StartPosition = FormStartPosition.CenterScreen;
-                Text = "GRABMART ORDER NOTIFICATION";
+                thisApplication = application;
+                this.timer = timer;
 
-                // Create controls
-                okButton = new Button
-                {
-                    Text = "OK",
-                    DialogResult = DialogResult.OK,
-                    Dock = DockStyle.Bottom
-                };
+                // Set up the form's properties
+                this.Text = title;
+                this.Size = new System.Drawing.Size(400, 250); // Increase form size
+                this.StartPosition = FormStartPosition.CenterScreen;
 
-                messageLabel = new Label
-                {
-                    Text = message,
-                    Dock = DockStyle.Fill,
-                    Padding = new Padding(10)
-                };
+                // Label to display the message
+                Label messageLabel = new Label();
+                messageLabel.Text = message;
+                messageLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14); // Set font size
+                messageLabel.Size = new System.Drawing.Size(360, 100); // Increase label size to fit form
+                messageLabel.Location = new System.Drawing.Point(20, 20);
+                this.Controls.Add(messageLabel);
 
-                // Add controls to the form
-                Controls.Add(messageLabel);
-                Controls.Add(okButton);
+                // Button to trigger the action
+                Button actionButton = new Button();
+                actionButton.Text = "BUKA ORDER";
+                actionButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 14); // Set font size
+                actionButton.Size = new System.Drawing.Size(240, 50); // Increase button size
+                actionButton.Location = new System.Drawing.Point(80, 140); // Adjust button location
+                actionButton.Click += ActionButton_Click;
+                this.Controls.Add(actionButton);
 
-                // Event handler for the form load event
-                Load += (sender, e) => CenterToScreen();
             }
 
-            public static DialogResult Show(string message)
+            // Method to show the form with a check for duplicates
+            public static void ShowPopup(string message, string title, Timer timer, IApplication application)
             {
-                using (var customMessageBox = new CustomMessageBox(message))
+                // Check if the form is already open
+                if (currentPopup == null || currentPopup.IsDisposed)
                 {
-                    return customMessageBox.ShowDialog();
+                    currentPopup = new CustomPopupForm(message, title, timer, application);
+                    currentPopup.Show();
+                }
+                else
+                {
+                    // Bring the already open form to the front
+                    currentPopup.BringToFront();
                 }
             }
+
+            private void ActionButton_Click(object sender, EventArgs e)
+            {
+                // Close the current popup form
+                this.Close();
+                // Restart the timer
+                timer.Start();
+                // Perform the operation
+                thisApplication.RunOperation(PosisOperations.SalesOrder, "ONLINE");
+            }
+
+            // Override OnClosed to reset the static reference when the form is closed
+            protected override void OnClosed(EventArgs e)
+            {
+                base.OnClosed(e);
+                currentPopup = null;  // Clear the reference when form is closed
+            }
         }
+
+        
+
         private bool validateIntegration()
         {
             bool integrationStatus = false;
@@ -172,9 +200,54 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     timer.Start();
                 }
             }
-            
+
+           //online Order - yonathan 08112024
+            int notifOnlineInterval = Convert.ToInt16(getFolderPathConfig(PathDirectory, "notifOnlineInterval"));
+            if (notifOnlineInterval != 0)
+            {
+                // Create a timer with the specified interval
+                timerOnlineOrder = new Timer();
+                timerOnlineOrder.Interval = notifOnlineInterval * 60 * 1000; // Convert minutes to milliseconds
+                timerOnlineOrder.Tick += Timer_TickOnlineOrder;
+
+                // Start the timer 
+                timerOnlineOrder.Start();
+            }
+           //end
             
         }
+
+       private void Timer_TickOnlineOrder(object sender, EventArgs e)
+       {
+        APIAccess.APIAccessClass APIClass = new APIAccess.APIAccessClass();
+        APIAccess.APIFunction APIFunction = new APIAccess.APIFunction();
+        string responseAPI;
+        bool detectDelivered = false;
+          
+        //"https://devpfm.cp.co.id/api/grab/listOrder"
+        string url = "https://apiqrisdev.cp.co.id/api/jbl/getTotalSalesOrder";
+        APIAccess.APIParameter.Receiver receiverParm;
+        //string functionName = "GetGRABMARTAPI";
+         
+        //url = APIClass.getURLAPIByFuncName(functionName);
+
+        System.Net.ServicePointManager.ServerCertificateValidationCallback = (senderX, certificate, chain, sslPolicyErrors) => { return true; };
+
+        //ServicePointManager.Expect100Continue = true;
+        //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+        responseAPI = APIFunction.getOnlineOrder(Application.Settings.Database.DataAreaID, ApplicationSettings.Terminal.InventLocationId, url);
+        APIParameter.parmResponseOnlineOrder responseOnlineOrder = APIFunction.MyJsonConverter.Deserialize<APIParameter.parmResponseOnlineOrder>(responseAPI);
+        int resultData = responseOnlineOrder.data.total_order;
+
+        if (resultData != 0 )
+        {
+            ShowPopupMessage("ONLINE ORDER NOTIFICATION", string.Format("Ada {0} Pesanan Online untuk toko ini.\nKlik tombol 'BUKA ORDER' untuk memproses Pesanan Online dan pilih Order Type 'Online Order'.", resultData));
+        }
+
+        
+ 
+       }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
@@ -212,10 +285,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
             {
                 APIAccess.APIParameter.Data[] order = APIAccess.APIFunction.MyJsonConverter.Deserialize<APIAccess.APIParameter.Data[]>(responseAPI.data);
 
-                foreach (var orderList in order)
-                {
-                    detectDelivered = orderList.state == "DELIVERED" ? true : false;
-                }
+                //disable untuk membuka status delivered agar masuk notif - yonathan 11112024
+                //foreach (var orderList in order)
+                //{
+                //    detectDelivered = orderList.state == "DELIVERED" ? true : false;
+                //}
 
 
 
@@ -280,26 +354,44 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 
         private void ShowPopupMessage(string title, string message)
         {
-            // Display a MessageBox with the specified title and message
-            //MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+           
 
-            timer.Stop();
 
-            // Show the popup message
-            DialogResult result = MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
-            // Check the result and restart the timer accordingly
-            if (result == DialogResult.OK)
+            if (title =="GRABMART ORDER NOTIFICATION" )
             {
-                // User clicked OK, restart the timer
-                timer.Start();
+                // Display a MessageBox with the specified title and message
+                //MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+                timer.Stop();
+
+                // Show the popup message
+                DialogResult result = MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+                // Check the result and restart the timer accordingly
+                if (result == DialogResult.OK)
+                {
+                    // User clicked OK, restart the timer
+                    timer.Start();
+                }
+                else if (result == DialogResult.Cancel)
+                {
+                    timer.Start();
+                }
             }
-            else if (result == DialogResult.Cancel)
+            else if (title == "ONLINE ORDER NOTIFICATION")
             {
-                timer.Start();  
+                timer.Stop();
+              
+                //CustomPopupForm popup = new CustomPopupForm(message, "ONLINE ORDER", timer, Application);
+
+                CustomPopupForm.ShowPopup(message, "ONLINE ORDER", timer, Application);
+                //popup.ShowDialog();
+                
             }
         }
 
+        
+        
         //end
 
         public CPNotification()

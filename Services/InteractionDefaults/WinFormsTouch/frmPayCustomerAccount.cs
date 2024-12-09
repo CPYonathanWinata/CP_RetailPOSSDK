@@ -120,7 +120,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 		private Label lblWaitingRespond;
 		public string transType;
 		public int tenderQRIS = 30; //prod 30, dev 31
-		public int tenderGrabMartDev = 0;//for Grabmart DEV by Yonathan 10/11/2023
+        public int tenderGrabMartDev = 19;//for Grabmart DEV by Yonathan 10/11/2023
 		public int tenderGrabMart = 16;//for Grabmart PROD by Yonathan 10/11/2023 
 		public int tenderShopee = 15;
 		public int tenderShopeeDev = 15;
@@ -128,6 +128,8 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 		public bool isIntegrated = false;
 		public Bitmap croppedQRCodeImage;
 		bool timesUp = false;
+        public int retryCountGrab = 0;
+
 
 		public string urlCreate, urlInvalidate, urlNotify;
 
@@ -1797,6 +1799,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 
 		private void btnOk_Click_1(object sender, EventArgs e)
 		{
+            
 			if (this.customerID == null)
 			{
 				using (frmMessage dialog = new frmMessage("Must Choose Customer to Continue this Operation", MessageBoxButtons.OK, MessageBoxIcon.Stop))
@@ -2051,21 +2054,84 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 					if (int.Parse(this.tenderInfo.TenderID) == tenderGrabMart
 				|| int.Parse(this.tenderInfo.TenderID) == tenderGrabMartDev)
 					{
-						string result = "";
-						result = updateStatusOrderGrabMart(APIAccess.APIAccessClass.merchantId, APIAccess.APIAccessClass.grabOrderIdLong.ToString(), this.posTransaction.TransactionId);
 
-						APIAccess.APIParameter.ApiResponseGrabmart responseData = APIAccess.APIFunction.MyJsonConverter.Deserialize<APIAccess.APIParameter.ApiResponseGrabmart>(result); //MyJsonConverter.Deserialize<parmResponse>(result);
+                        //check connection first - yonathan 06122024
+                        bool status = false;
+                        string functionName = "GetGRABMARTAPI";
+                        string url = "";
+                        APIAccess.APIFunction apiFunction = new APIAccess.APIFunction();
 
-						//Data order = MyJsonConverter.Deserialize<Data>(responseData.data);
-						if (responseData.error != false)
-						{
+                        APIAccess.APIAccessClass APIClass = new APIAccess.APIAccessClass();
+                        url = APIClass.getURLAPIByFuncName(functionName);
+                        //bool isApiAvailable = apiFunction.CheckApiAvailability(url).Result;
+                        status = apiFunction.CheckForInternetConnection(PosApplication.Instance, url);
+                        if (status == true)
+                        {
+
+                            string result = "";
+                            result = updateStatusOrderGrabMart(APIAccess.APIAccessClass.merchantId, APIAccess.APIAccessClass.grabOrderIdLong.ToString(), this.posTransaction.TransactionId); 
+
+                            APIAccess.APIParameter.ApiResponseGrabmart responseData = APIAccess.APIFunction.MyJsonConverter.Deserialize<APIAccess.APIParameter.ApiResponseGrabmart>(result); //MyJsonConverter.Deserialize<parmResponse>(result);
+
+                            //Data order = MyJsonConverter.Deserialize<Data>(responseData.data);
+                            if (responseData.error != false)
+                            {
+
+                            }
+                            //empty the graborder variable
+                            APIAccess.APIAccessClass.grabOrderState = "";
+                            APIAccess.APIAccessClass.grabCustName = "";
+                            APIAccess.APIAccessClass.grabCustPhone = "";
+                            APIAccess.APIAccessClass.grabOrderIdLong = "";
+                        }
+                        else
+                        {
+                            string errText = "Tidak bisa terhubung dengan jaringan API.\nSilakan cek koneksi jaringan\ndan coba secara berkala.";
+                            if (retryCountGrab == 2)
+                            {
+                                errText = "Tidak bisa terhubung dengan jaringan.\nSilakan batalkan transaksi ini dan coba proses ulang dari menu Grab Order.";
+                            }
+                            using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage(errText, MessageBoxButtons.OK, MessageBoxIcon.Error))
+                            {
+                                LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                                retryCountGrab++;
+
+                                if (retryCountGrab >= 3)
+                                {
+                                    btnCancel.Enabled = true;
+                                    btnOk.Enabled = false;
+                                }
+                                else
+                                {
+                                    btnCancel.Enabled = false;
+                                    btnOk.Enabled = true;
+                                }
+
+                                return;
+
+
+                                //btnOk.Enabled = false;
+                                
+                            }
+
+                        }
+
+                        //original
+                        //string result = "";
+                        //result = updateStatusOrderGrabMart(APIAccess.APIAccessClass.merchantId, APIAccess.APIAccessClass.grabOrderIdLong.ToString(), this.posTransaction.TransactionId);
+
+                        //APIAccess.APIParameter.ApiResponseGrabmart responseData = APIAccess.APIFunction.MyJsonConverter.Deserialize<APIAccess.APIParameter.ApiResponseGrabmart>(result); //MyJsonConverter.Deserialize<parmResponse>(result);
+
+                        ////Data order = MyJsonConverter.Deserialize<Data>(responseData.data);
+                        //if (responseData.error != false)
+                        //{
 						
-						}
-						//empty the graborder variable
-						APIAccess.APIAccessClass.grabOrderState = "";
-						APIAccess.APIAccessClass.grabCustName = "";
-						APIAccess.APIAccessClass.grabCustPhone = "";
-						APIAccess.APIAccessClass.grabOrderIdLong = "";
+                        //}
+                        ////empty the graborder variable
+                        //APIAccess.APIAccessClass.grabOrderState = "";
+                        //APIAccess.APIAccessClass.grabCustName = "";
+                        //APIAccess.APIAccessClass.grabCustPhone = "";
+                        //APIAccess.APIAccessClass.grabOrderIdLong = "";
 					}
 				}
 				catch (Exception ex)

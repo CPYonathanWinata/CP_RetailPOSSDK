@@ -156,8 +156,15 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             colTotalAmount.Caption = ApplicationLocalizer.Language.Translate(56210); //Total
             colCustomerAccount.Caption = ApplicationLocalizer.Language.Translate(56224); //Customer Account
             colCustomerName.Caption = ApplicationLocalizer.Language.Translate(56225); //Customer
-            colEmail.Caption = ApplicationLocalizer.Language.Translate(56236); //E-mail
-
+            colEmail.Caption = "Online Order"; //ApplicationLocalizer.Language.Translate(56236); //E-mail
+            if (orderTypeSO == 1)
+            {
+                colEmail.Visible = true;
+            }
+            else
+            {
+                colEmail.Visible = false;
+            }
             //title
             this.Text = ApplicationLocalizer.Language.Translate(56106); //Sales orders
             lblHeading.Text = ApplicationLocalizer.Language.Translate(56106); //Sales orders
@@ -397,12 +404,22 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 //get customer classification type
                 ReadOnlyCollection<object> containerArray;
                 var custId = gridView1.GetRowCellValue(gridView1.GetFocusedDataSourceRowIndex(), "CUSTOMERACCOUNT");
-                if (SalesOrder.InternalApplication.TransactionServices.CheckConnection())
-                {
+                //if (SalesOrder.InternalApplication.TransactionServices.CheckConnection())
+                //{
                     try
                     {
-                        containerArray = SalesOrder.InternalApplication.TransactionServices.InvokeExtension("getB2bRetailParam", custId);
-                        isB2bCust = containerArray[6].ToString();
+                        //todo to change to local - Yonathan #b2bparam
+                        //containerArray = SalesOrder.InternalApplication.TransactionServices.InvokeExtension("getB2bRetailParam", custId);
+                        //isB2bCust = containerArray[6].ToString();
+
+                        //CHECK B2B by Yonathan 06/05/2024
+
+                        string isB2bCust = "0";
+                         
+                        
+                        //change to local 05122024
+                        APIAccess.APIFunction apiFunction = new APIAccess.APIFunction();
+                        isB2bCust = apiFunction.getCustomerClass(custId.ToString());
 
 
                     }
@@ -411,7 +428,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                         LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
                         throw;
                     }
-                }
+                //}
                 
                 //
                 this.EnableButtons();
@@ -1106,6 +1123,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
         private void updateInvoiceId(string _invoiceAx, string _salesId)
         {
             string storeId = "";
+            bool update = false;
             SqlConnection connection = ApplicationSettings.Database.LocalConnection;
             storeId = ApplicationSettings.Terminal.StoreId;
             //var retailTransaction = posTransaction as RetailTransaction;
@@ -1127,15 +1145,10 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                     {
                         connection.Open();
                     }
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
 
-
-                        }
-
-                    }
+                    // Execute the query and check affected rows 
+                    int rowsAffected = command.ExecuteNonQuery();
+                    update = rowsAffected > 0; // If rows are affected, update was successful, if not then it's online order = Yonathan 20112024
                 }
             }
             catch (Exception ex)
@@ -1149,6 +1162,50 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 {
                     connection.Close();
                 }
+            }
+
+            if (!update)
+            {
+
+                //treat is as online pos order and insert the data - Yonathan 20112024
+
+                try
+                {
+                    string queryString = @" INSERT INTO  AX.CPPOSONLINEORDER
+                                        (RETAILSTOREID,SALESID,STAFFID,TRANSDATETIME,DATAAREAID,PARTITION)
+                                        VALUES
+                                        (@STOREID,@SALESID,@STAFFID,DATEADD(HOUR, -(DATEPART(TZOFFSET, SYSDATETIMEOFFSET()) / 60), SYSDATETIME()),@DATAAREAID,@PARTITION)"
+                                        ;
+
+                    using (SqlCommand command = new SqlCommand(queryString, connection))
+                    {
+                        command.Parameters.AddWithValue("@STOREID", storeId);
+                        command.Parameters.AddWithValue("@SALESID", _salesId);
+                        command.Parameters.AddWithValue("@STAFFID", ApplicationSettings.Terminal.TerminalOperator.OperatorId);
+                        command.Parameters.AddWithValue("@DATAAREAID", SalesOrder.InternalApplication.Settings.Database.DataAreaID);
+                        command.Parameters.AddWithValue("@PARTITION", 1);
+                        if (connection.State != ConnectionState.Open)
+                        {
+                            connection.Open();
+                        }
+
+                        command.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                    throw;
+                }
+                finally
+                {
+                    if (connection.State != ConnectionState.Closed)
+                    {
+                        connection.Close();
+                    }
+                }
+
+
             }
         }
     }

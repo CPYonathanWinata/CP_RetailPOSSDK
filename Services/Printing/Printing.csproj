@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\..\vs.settings" />
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
@@ -8,6 +8,8 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Microsoft.Dynamics.Retail.Pos.Printing</RootNamespace>
     <AssemblyName>Printing</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -18,6 +20,11 @@
     <OutputPath>$(SDKOutputPath)\bin\Release\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="APIAccess">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Extensions\APIAccess.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="DevExpress.Data.v14.2">
       <HintPath>..\AX\Retail POS\DevExpress.Data.v14.2.dll</HintPath>
       <Private>False</Private>

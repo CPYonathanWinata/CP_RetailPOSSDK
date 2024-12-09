@@ -837,21 +837,25 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 
                     string isB2bCust = "0";
                     ReadOnlyCollection<object> containerArray;
-                    if (SalesOrder.InternalApplication.TransactionServices.CheckConnection())
-                    {
-                        try
-                        {
-                            containerArray = SalesOrder.InternalApplication.TransactionServices.InvokeExtension("getB2bRetailParam", cot.Customer.CustomerId.ToString());
-                            isB2bCust = containerArray[6].ToString();
+                    //if (SalesOrder.InternalApplication.TransactionServices.CheckConnection())
+                    //{
+                    //    try
+                    //    {
+                    //        //todo to change to local - Yonathan #b2bparam
+                    //        containerArray = SalesOrder.InternalApplication.TransactionServices.InvokeExtension("getB2bRetailParam", cot.Customer.CustomerId.ToString());
+                    //        isB2bCust = containerArray[6].ToString();
 
 
-                        }
-                        catch (Exception ex)
-                        {
-                            //LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
-                            throw;
-                        }
-                    }
+                    //    }
+                    //    catch (Exception ex)
+                    //    {
+                    //        //LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                    //        throw;
+                    //    }
+                    //}
+                    
+                    APIAccess.APIFunction apiFunction = new APIAccess.APIFunction();
+                    isB2bCust = apiFunction.getCustomerClass(cot.Customer.CustomerId.ToString());
 
                     //Check to validate B2B or Regular customer by Yonathan 2024
                     if ((isB2bCust == "1" || isB2bCust == "2") && hasSO == false) //if B2B but no SO yet

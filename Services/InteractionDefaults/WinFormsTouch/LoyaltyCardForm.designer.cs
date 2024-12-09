@@ -40,35 +40,56 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
         //    base.Dispose(disposing);
         //}
 
+        //protected override void Dispose(bool disposing)
+        //{
+        //    try
+        //    {
+        //        if (disposing)
+        //        {
+        //            // Your existing code
+
+        //            if (components != null)
+        //            {
+        //                components.Dispose();
+        //            }
+
+        //            if (ViewModel != null)
+        //            {
+        //                ViewModel.UnHookPeripherals();
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("Exception Occured While Printing", ex);
+        //    }
+        //    finally
+        //    {
+        //        base.Dispose(disposing);
+        //    }
+        //}
+        private bool isDisposed = false;
+
         protected override void Dispose(bool disposing)
         {
-            try
+            if (!isDisposed)
             {
                 if (disposing)
                 {
-                    // Your existing code
-
-                    if (components != null)
+                    // Dispose managed resources here
+                    if (this.components != null)
                     {
-                        components.Dispose();
-                    }
-
-                    if (ViewModel != null)
-                    {
-                        ViewModel.UnHookPeripherals();
+                        this.components.Dispose();
+                        this.components = null;
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Exception Occured While Printing", ex);
-            }
-            finally
-            {
-                base.Dispose(disposing);
-            }
-        }
+                // Dispose unmanaged resources here
 
+                isDisposed = true;
+            }
+
+            base.Dispose(disposing);
+        }
 
 
         #region Windows Form Designer generated code

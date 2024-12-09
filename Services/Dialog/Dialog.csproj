@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\..\vs.settings" />
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
@@ -8,6 +8,8 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Microsoft.Dynamics.Retail.Pos.Dialog</RootNamespace>
     <AssemblyName>Dialog</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>$(SDKOutputPath)\bin\Debug\</OutputPath>
@@ -17,6 +19,14 @@
     <OutputPath>$(SDKOutputPath)\bin\Release\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="APIAccess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Extensions\APIAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="BlankOperations, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Extensions\BlankOperations.dll</HintPath>
+    </Reference>
     <Reference Include="DevExpress.BonusSkins.v14.2">
       <HintPath>$(PosInstallPath)\DevExpress.BonusSkins.v14.2.dll</HintPath>
       <Private>False</Private>
@@ -281,6 +291,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

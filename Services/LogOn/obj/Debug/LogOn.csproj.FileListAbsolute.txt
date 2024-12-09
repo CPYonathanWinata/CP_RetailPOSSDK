@@ -11,3 +11,6 @@ C:\Users\yonathan.winata\Documents\GitHub\Retail-SDK-Collected\Services\LogOn\ob
 C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\LogOn\obj\Debug\LogOn.csprojResolveAssemblyReference.cache
 C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\LogOn\obj\Debug\LogOn.dll
 C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\LogOn\obj\Debug\LogOn.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\LogOn\obj\Debug\LogOn.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\LogOn\obj\Debug\LogOn.dll
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\LogOn\obj\Debug\LogOn.pdb

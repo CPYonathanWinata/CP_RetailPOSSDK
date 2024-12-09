@@ -92,3 +92,4 @@ C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\EO
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\EOD\obj\Debug\EOD.dll.licenses
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\EOD\obj\Debug\EOD.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\EOD\obj\Debug\EOD.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\EOD\obj\Debug\Microsoft.Dynamics.Retail.Pos.EOD.CPBatchForm.resources

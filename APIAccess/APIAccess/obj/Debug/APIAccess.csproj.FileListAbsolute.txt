@@ -422,7 +422,6 @@ C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\A
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\DataAccess.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\Transaction.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\Microsoft.Dynamics.AX.Efd.dll
-C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\Microsoft.Practices.Prism.Interactivity.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\DevExpress.Utils.v14.2.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\Microsoft.Dynamics.Commerce.Runtime.Framework.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\Microsoft.Dynamics.Retail.Notification.Contracts.dll
@@ -448,15 +447,12 @@ C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\A
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\Microsoft.Dynamics.Commerce.Runtime.DataAccess.SqlServer.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\Microsoft.Dynamics.Commerce.Runtime.DataManagers.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\Microsoft.Dynamics.Retail.MatrixPivotGrid.dll
-C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\System.Windows.Interactivity.dll
-C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\Microsoft.Practices.Prism.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\DevExpress.Printing.v14.2.Core.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\DevExpress.Sparkline.v14.2.Core.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\DevExpress.XtraPrinting.v14.2.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\Microsoft.Dynamics.Commerce.Runtime.Data.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\Microsoft.Dynamics.Commerce.Runtime.DataServices.Messages.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\Microsoft.Dynamics.Commerce.Runtime.Services.Messages.dll
-C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\Microsoft.Practices.ServiceLocation.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\DevExpress.RichEdit.v14.2.Core.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\DevExpress.XtraBars.v14.2.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\DevExpress.XtraTreeList.v14.2.dll

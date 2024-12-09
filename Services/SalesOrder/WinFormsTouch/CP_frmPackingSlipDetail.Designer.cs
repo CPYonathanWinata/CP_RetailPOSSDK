@@ -80,7 +80,7 @@
             this.btnReceiveAll.Name = "btnReceiveAll";
             this.btnReceiveAll.Size = new System.Drawing.Size(346, 57);
             this.btnReceiveAll.TabIndex = 11;
-            this.btnReceiveAll.Text = "Receive All";
+            this.btnReceiveAll.Text = "Delivery All";
             this.btnReceiveAll.UseVisualStyleBackColor = false;
             this.btnReceiveAll.Click += new System.EventHandler(this.button1_Click);
             // 
