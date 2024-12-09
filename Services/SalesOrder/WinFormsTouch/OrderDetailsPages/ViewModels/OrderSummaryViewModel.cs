@@ -53,7 +53,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder
         public override void Refresh()
         {
             // Ensure totals are up to date
-            SalesOrder.InternalApplication.BusinessLogic.ItemSystem.RecalcPriceTaxDiscount(this.Transaction, false);
+            //SalesOrder.InternalApplication.BusinessLogic.ItemSystem.RecalcPriceTaxDiscount(this.Transaction, false); //test - disable - Yonathan 22112024 -#duplicate
             this.Transaction.CalcTotals();
             //add trigger Yonathan 17/07/2023
             try

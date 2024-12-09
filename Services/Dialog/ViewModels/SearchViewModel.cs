@@ -35,7 +35,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
-
+using APIAccess;
+using LSRetailPosis.Transaction;
 namespace Microsoft.Dynamics.Retail.Pos.Dialog.ViewModels
 {
     /// <summary>
@@ -513,17 +514,61 @@ namespace Microsoft.Dynamics.Retail.Pos.Dialog.ViewModels
                         items.Add(new SaleLineItem() { LineId = x, ItemId = this.Results[x].Number, SalesOrderUnitOfMeasure = (string)this.Results[x].Tag });
                     }
                 }
-
+                //custom price for customer order - Yonathan 29112024
+                
                 if (items.Count > 0)
                 {
+                    IPosTransaction posTransaction = BlankOperations.BlankOperations.globalposTransaction;
+                    RetailTransaction transaction = posTransaction as RetailTransaction;
+                    string isB2b = APIAccess.APIAccessClass.isB2b;
                     // Obtain prices for the items and repopulate the results grid with those prices.
-                    var pricedItems = Dialog.InternalApplication.Services.Price.GetItemPrices(items, null).ToDictionary(p => p.LineId);
+                    SqlConnection connectionStore = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+                    string accountRelation = "";
+                    long channelId = 0;
+                    //List<APIParameter.SaleLineItemData> itemData =  new List<APIParameter.SaleLineItemData>();
+                    // Convert List<ISaleLineItem> to List<SaleLineItemData>
 
-                    for (int x = 0; x < this.Results.Count; x++)
+                    if (isB2b != "0" || isB2b !="")
                     {
-                        if (this.Results[x].SearchType == SearchType.Item && this.Results[x].ItemPrice == null)
+                        List<APIParameter.SaleLineItemData> itemData = items
+                                               .Select(item => new APIParameter.SaleLineItemData
+                                               {
+                                                   ItemId = item.ItemId,            // Extract ItemId from ISaleLineItem
+                                                   UnitId = item.SalesOrderUnitOfMeasure, // Extract UnitId from ISaleLineItem
+                                                   LineId = item.LineId
+                                               })
+                                               .ToList();
+                        APIAccess.APIFunction APIFunction = new APIAccess.APIFunction();
+
+                        var stringList = APIFunction.findPriceAgreementCustom(Dialog.InternalApplication, connectionStore, transaction.ChannelId, itemData, APIAccess.APIAccessClass.custId, "", 0);//.ToDictionary(p => p.LineId); 
+                        //add customization to get item price for customer order item - yonathan 28112024
+                        
+                        var pricedItemsCustom = stringList.ToDictionary(p => p.LineId);//Dialog.InternalApplication.Services.Price.GetItemPrices(items, null).ToDictionary(p => p.LineId);
+
+
+                        for (int x = 0; x < this.Results.Count; x++)
                         {
-                            this.Results[x].ItemPrice = Dialog.InternalApplication.Services.Rounding.RoundForDisplay(pricedItems[x].Price, true, false);
+                            if (this.Results[x].SearchType == SearchType.Item && this.Results[x].ItemPrice == null)
+                            {
+                                //this.Results[x].ItemPrice = Dialog.InternalApplication.Services.Rounding.RoundForDisplay(pricedItems[x].Price, true, false); //original
+
+                                this.Results[x].ItemPrice = Dialog.InternalApplication.Services.Rounding.RoundForDisplay(pricedItemsCustom[x].Price, true, false);
+
+                            }
+                        }
+                    }
+                    else
+                    {
+                        
+                        var pricedItems = Dialog.InternalApplication.Services.Price.GetItemPrices(items, null).ToDictionary(p => p.LineId);
+                        for (int x = 0; x < this.Results.Count; x++)
+                        {
+                            if (this.Results[x].SearchType == SearchType.Item && this.Results[x].ItemPrice == null)
+                            {
+                                this.Results[x].ItemPrice = Dialog.InternalApplication.Services.Rounding.RoundForDisplay(pricedItems[x].Price, true, false); //original
+                                 
+
+                            }
                         }
                     }
                 }

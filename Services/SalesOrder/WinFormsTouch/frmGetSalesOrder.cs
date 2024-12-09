@@ -404,12 +404,22 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 //get customer classification type
                 ReadOnlyCollection<object> containerArray;
                 var custId = gridView1.GetRowCellValue(gridView1.GetFocusedDataSourceRowIndex(), "CUSTOMERACCOUNT");
-                if (SalesOrder.InternalApplication.TransactionServices.CheckConnection())
-                {
+                //if (SalesOrder.InternalApplication.TransactionServices.CheckConnection())
+                //{
                     try
                     {
-                        containerArray = SalesOrder.InternalApplication.TransactionServices.InvokeExtension("getB2bRetailParam", custId);
-                        isB2bCust = containerArray[6].ToString();
+                        //todo to change to local - Yonathan #b2bparam
+                        //containerArray = SalesOrder.InternalApplication.TransactionServices.InvokeExtension("getB2bRetailParam", custId);
+                        //isB2bCust = containerArray[6].ToString();
+
+                        //CHECK B2B by Yonathan 06/05/2024
+
+                        string isB2bCust = "0";
+                         
+                        
+                        //change to local 05122024
+                        APIAccess.APIFunction apiFunction = new APIAccess.APIFunction();
+                        isB2bCust = apiFunction.getCustomerClass(custId.ToString());
 
 
                     }
@@ -418,7 +428,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                         LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
                         throw;
                     }
-                }
+                //}
                 
                 //
                 this.EnableButtons();
@@ -1162,9 +1172,9 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 try
                 {
                     string queryString = @" INSERT INTO  AX.CPPOSONLINEORDER
-                                        (RETAILSTOREID,SALESID,STAFFID,TRANSDATETIME,DATAAREAID)
+                                        (RETAILSTOREID,SALESID,STAFFID,TRANSDATETIME,DATAAREAID,PARTITION)
                                         VALUES
-                                        (@STOREID,@SALESID,@STAFFID,DATEADD(HOUR, -(DATEPART(TZOFFSET, SYSDATETIMEOFFSET()) / 60), SYSDATETIME()),@DATAAREAID)"
+                                        (@STOREID,@SALESID,@STAFFID,DATEADD(HOUR, -(DATEPART(TZOFFSET, SYSDATETIMEOFFSET()) / 60), SYSDATETIME()),@DATAAREAID,@PARTITION)"
                                         ;
 
                     using (SqlCommand command = new SqlCommand(queryString, connection))
@@ -1173,6 +1183,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                         command.Parameters.AddWithValue("@SALESID", _salesId);
                         command.Parameters.AddWithValue("@STAFFID", ApplicationSettings.Terminal.TerminalOperator.OperatorId);
                         command.Parameters.AddWithValue("@DATAAREAID", SalesOrder.InternalApplication.Settings.Database.DataAreaID);
+                        command.Parameters.AddWithValue("@PARTITION", 1);
                         if (connection.State != ConnectionState.Open)
                         {
                             connection.Open();

@@ -247,8 +247,15 @@ namespace APIAccess
         public class dataOnlineOrder
         {
             public int total_order { get; set; }
+        } 
+        public class SaleLineItemData
+        {
+            public string ItemId { get; set; }
+            public string UnitId { get; set; }
+            public decimal Price { get; set; }
+            public int LineId { get; set; }
+
         }
-        
         //
         public static MySql.Data.MySqlClient.MySqlConnection mySqlConnString;
     }

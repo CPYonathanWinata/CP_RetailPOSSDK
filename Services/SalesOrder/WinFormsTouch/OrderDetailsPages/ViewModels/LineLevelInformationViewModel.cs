@@ -507,7 +507,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder
             }
 
             // Trigger new price,tax and discount for the customer (do NOT reset item prices because we should preserve any existing Price Overrides)
-            SalesOrder.InternalApplication.BusinessLogic.ItemSystem.RecalcPriceTaxDiscount(trans, false);
+            //SalesOrder.InternalApplication.BusinessLogic.ItemSystem.RecalcPriceTaxDiscount(trans, false); //disable test yonathan 22112024 #duplicate
             trans.CalcTotals();
         }
 

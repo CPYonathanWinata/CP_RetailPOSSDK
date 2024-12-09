@@ -15,6 +15,8 @@ using System.Globalization;
  
 using System.Data.SqlClient;
 using System.Data;
+using Microsoft.Dynamics.Retail.Pos.Contracts.DataEntity;
+using System.Net.Http;
 namespace APIAccess
 {
 	public  class APIFunction
@@ -616,8 +618,297 @@ namespace APIAccess
             APIAccess.APIParameter.mySqlConnString = new MySql.Data.MySqlClient.MySqlConnection(connectionString); ;
         }
 
+        //find price for customer order 
+        public  List<APIAccess.APIParameter.SaleLineItemData> findPriceAgreementCustom(
+        IApplication _application,
+        SqlConnection _connectionString,
+        long _channelId,
+        List<APIAccess.APIParameter.SaleLineItemData> _items,
+        string _accountRelations,
+        string _unitId,
+        decimal _qty = 0)
+        {
+            List<APIAccess.APIParameter.SaleLineItemData> stringList = new List<APIAccess.APIParameter.SaleLineItemData>();
+            SqlConnection connectionStore = _connectionString;
+
+            try
+            {
+                string queryString = @"SELECT TOP 1 ITEMRELATION, ACCOUNTRELATION, AMOUNT, QUANTITYAMOUNTFROM, QUANTITYAMOUNTTO, FROMDATE, TODATE, UNITID
+                               FROM PRICEDISCTABLE TA
+                               INNER JOIN [ax].RETAILCHANNELTABLE AS c
+                               ON c.INVENTLOCATIONDATAAREAID = ta.DATAAREAID AND c.RECID = @CHANNELID
+                               LEFT JOIN [ax].INVENTDIM invdim 
+                               ON ta.INVENTDIMID = invdim.INVENTDIMID AND ta.DATAAREAID = c.INVENTLOCATIONDATAAREAID
+                               WHERE ITEMRELATION = @ItemRelation
+                               AND TA.ACCOUNTRELATION = @AccountRelations
+                               AND TA.RELATION = 4
+                               AND TA.UNITID = @UnitId
+                               AND (
+                                (1 BETWEEN QUANTITYAMOUNTFROM AND QUANTITYAMOUNTTO) OR
+                                (QUANTITYAMOUNTFROM = 0 AND QUANTITYAMOUNTTO = 0)
+                                )
+                               AND (@ActiveDate BETWEEN TA.FROMDATE AND TA.TODATE)";
+
+                if (connectionStore.State != ConnectionState.Open)
+                {
+                    connectionStore.Open();
+                }
+
+                foreach (var item in _items)
+                {
+                    using (SqlCommand command = new SqlCommand(queryString, connectionStore))
+                    {
+                        // Bind parameters
+                        command.Parameters.AddWithValue("@CHANNELID", _channelId);
+                        command.Parameters.AddWithValue("@Quantity", _qty.ToString());
+                        command.Parameters.AddWithValue("@ItemRelation", item.ItemId); // Dynamically bind ItemId
+                        command.Parameters.AddWithValue("@AccountRelations", _accountRelations);
+                        command.Parameters.AddWithValue("@UnitId", item.UnitId);
+                        command.Parameters.AddWithValue("@ActiveDate", DateTime.Now.ToString("yyyy-MM-dd"));
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                APIAccess.APIParameter.SaleLineItemData newItem = new APIAccess.APIParameter.SaleLineItemData
+                                {
+                                    ItemId = reader["ITEMRELATION"].ToString(),
+                                    UnitId = reader["UNITID"].ToString(),
+                                    Price = Convert.ToDecimal(reader["AMOUNT"].ToString()),
+                                    LineId = item.LineId
+                                };
+
+                                stringList.Add(newItem);
+                                // Add the price (AMOUNT) to the result list
+                                //stringList.Add(reader["ITEMRELATION"].ToString() + ";"+reader["AMOUNT"].ToString());
+                                
+                            }
+                            else
+                            {
+                                // Add a default value if no price is found
+
+                                decimal price = _application.Services.Price.GetItemPrice(item.ItemId, item.UnitId);
+                                //
+                                APIAccess.APIParameter.SaleLineItemData newItem = new APIAccess.APIParameter.SaleLineItemData
+                                {
+                                    ItemId = item.ItemId,
+                                    UnitId = item.UnitId,
+                                    Price = price,
+                                    LineId = item.LineId
+                                };
+
+                                stringList.Add(newItem);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+            finally
+            {
+                if (connectionStore.State != ConnectionState.Closed)
+                {
+                    connectionStore.Close();
+                }
+            }
+
+            return stringList;
+        }
+
+        //get B2B Parameter
+        public void getB2BParameter(string _custId)
+        {
+            //APIAccess.APIAccessClass.custId = transaction.Customer.CustomerId.ToString();
+            //APIAccess.APIAccessClass.isB2b = containerArray[6].ToString();
+            //APIAccess.APIAccessClass.priceGroup = containerArray[4].ToString();
+            //APIAccess.APIAccessClass.lineDiscGroup = containerArray[5].ToString();
+
+            SqlConnection connectionStore = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+            try
+            {
+
+                string queryString = @"SELECT CT.ACCOUNTNUM,CT.CUSTGROUP, CG.CPPPNVALIDATE, CG.CPPPNDIBEBASKAN, CT.PRICEGROUP,CT.LINEDISC, B2BSETUP.CP_CUSTCLASSIFICATION,B2BSETUP.AUTOMATICRESERVE
+                                      FROM  [ax].[CUSTTABLE] CT
+                                      LEFT JOIN AX.CP_CPCUSTORDERB2BSETUP B2BSETUP
+                                      ON CT.ACCOUNTNUM = B2BSETUP.ACCOUNTNUM
+                                      LEFT JOIN AX.CUSTGROUP CG
+                                      ON CT.CUSTGROUP = CG.CUSTGROUP 
+                                      WHERE CT.ACCOUNTNUM = @CUSTACCOUNT";
 
 
+                //RetailTransaction retailTransaction = (RetailTransaction)this.posTransaction;
+
+                using (SqlCommand command = new SqlCommand(queryString, connectionStore))
+                {
+
+                    command.Parameters.AddWithValue("@CUSTACCOUNT", _custId);
+
+
+                    if (connectionStore.State != ConnectionState.Open)
+                    {
+                        connectionStore.Open();
+                    }
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            APIAccess.APIAccessClass.isB2b = reader["CP_CUSTCLASSIFICATION"].ToString();
+                            APIAccess.APIAccessClass.priceGroup = reader["PRICEGROUP"].ToString();
+                            APIAccess.APIAccessClass.lineDiscGroup = reader["LINEDISC"].ToString();
+                            APIAccess.APIAccessClass.ppnValidation = reader["CPPPNVALIDATE"].ToString();
+                            APIAccess.APIAccessClass.custId = _custId;
+                            //stringList.Add(reader["AMOUNT"].ToString());
+                            //stringList.Add(reader["ACCOUNTRELATION"].ToString());
+
+
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+            finally
+            {
+                if (connectionStore.State != ConnectionState.Closed)
+                {
+                    connectionStore.Close();
+                }
+            }
+
+        }
+
+        public string getCustomerClass(string _custId)
+        {
+            //APIAccess.APIAccessClass.custId = transaction.Customer.CustomerId.ToString();
+            //APIAccess.APIAccessClass.isB2b = containerArray[6].ToString();
+            //APIAccess.APIAccessClass.priceGroup = containerArray[4].ToString();
+            //APIAccess.APIAccessClass.lineDiscGroup = containerArray[5].ToString();
+
+            string customerClass = "";
+            SqlConnection connectionStore = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+            try
+            {
+
+                string queryString = @"SELECT CT.ACCOUNTNUM,CT.CUSTGROUP, CG.CPPPNVALIDATE, CG.CPPPNDIBEBASKAN, CT.PRICEGROUP,CT.LINEDISC, B2BSETUP.CP_CUSTCLASSIFICATION,B2BSETUP.AUTOMATICRESERVE
+                                      FROM  [ax].[CUSTTABLE] CT
+                                      LEFT JOIN AX.CP_CPCUSTORDERB2BSETUP B2BSETUP
+                                      ON CT.ACCOUNTNUM = B2BSETUP.ACCOUNTNUM
+                                      LEFT JOIN AX.CUSTGROUP CG
+                                      ON CT.CUSTGROUP = CG.CUSTGROUP 
+                                      WHERE CT.ACCOUNTNUM = @CUSTACCOUNT";
+
+
+                //RetailTransaction retailTransaction = (RetailTransaction)this.posTransaction;
+
+                using (SqlCommand command = new SqlCommand(queryString, connectionStore))
+                {
+
+                    command.Parameters.AddWithValue("@CUSTACCOUNT", _custId);
+
+
+                    if (connectionStore.State != ConnectionState.Open)
+                    {
+                        connectionStore.Open();
+                    }
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            customerClass  = reader["CP_CUSTCLASSIFICATION"].ToString();
+                             
+                            //stringList.Add(reader["AMOUNT"].ToString());
+                            //stringList.Add(reader["ACCOUNTRELATION"].ToString());
+
+
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+            finally
+            {
+                if (connectionStore.State != ConnectionState.Closed)
+                {
+                    connectionStore.Close();
+                }
+            }
+            return customerClass;
+
+        }
+
+
+
+        public async Task<bool> CheckApiAvailability(string url)
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    client.Timeout = TimeSpan.FromSeconds(5);
+                    HttpResponseMessage response = await client.SendAsync(new HttpRequestMessage(HttpMethod.Head, url));
+                    return response.IsSuccessStatusCode;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public   bool CheckForInternetConnection(IApplication _application, string _url)
+		{
+            string checkConn = "api/connection/check";
+
+           
+            Uri uri = new Uri(_url);
+            string siteName = uri.GetLeftPart(UriPartial.Authority);
+
+            _url = siteName + "/" + checkConn;
+
+            //check RTS
+            try
+            {
+                _application.TransactionServices.CheckConnection();
+                
+            }
+            catch 
+            {
+                //using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Tidak bisa terhubung dengan jaringan.\nCek koneksi RTS", MessageBoxButtons.OK, MessageBoxIcon.Error))
+                //{
+                //    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                //}
+                return false;
+            }
+
+            //check API
+			try
+			{
+				using (var client = new WebClient())
+                using (client.OpenRead(_url))//"https://pfm.cp.co.id/api/connection/check"))
+					return true;
+			}
+			catch
+			{
+                //using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Tidak bisa terhubung dengan jaringan.\nCek koneksi API", MessageBoxButtons.OK, MessageBoxIcon.Error))
+                //{
+                //    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                //}
+				return false;
+			}
+
+
+		}
 
         public class DatabaseHelper
         {
@@ -671,6 +962,7 @@ namespace APIAccess
                 }
             }
         }
+
 
 
 

@@ -38,6 +38,7 @@ using LSRetailPosis.Transaction;
 using Microsoft.Dynamics.Retail.Pos.Contracts.Triggers;
 using System.ComponentModel.Composition;
 using Microsoft.Dynamics.Retail.Pos.Contracts;
+using APIAccess;
 
 namespace Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch
 {
@@ -1381,6 +1382,56 @@ namespace Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch
 
 					if (items.Count > 0)
 					{
+
+                        //custom to provide customer order price
+                        IPosTransaction posTransaction = BlankOperations.BlankOperations.globalposTransaction;
+                        RetailTransaction transaction = posTransaction as RetailTransaction;
+                        string isB2b = APIAccess.APIAccessClass.isB2b;
+                        // Obtain prices for the items and repopulate the results grid with those prices.
+                        SqlConnection connectionStore = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+                        string accountRelation = "";
+                        long channelId = 0;
+                        //List<APIParameter.SaleLineItemData> itemData =  new List<APIParameter.SaleLineItemData>();
+                        // Convert List<ISaleLineItem> to List<SaleLineItemData>
+
+                        if (isB2b != "0" || isB2b != "")
+                        {
+                            List<APIParameter.SaleLineItemData> itemData = items
+                                                   .Select(item => new APIParameter.SaleLineItemData
+                                                   {
+                                                       ItemId = item.ItemId,            // Extract ItemId from ISaleLineItem
+                                                       UnitId = item.SalesOrderUnitOfMeasure, // Extract UnitId from ISaleLineItem
+                                                       LineId = item.LineId
+                                                   })
+                                                   .ToList();
+                            APIAccess.APIFunction APIFunction = new APIAccess.APIFunction();
+
+                            var stringList = APIFunction.findPriceAgreementCustom(Dialog.InternalApplication, connectionStore, transaction.ChannelId, itemData, APIAccess.APIAccessClass.custId, "", 0);//.ToDictionary(p => p.LineId); 
+                            //add customization to get item price for customer order item - yonathan 28112024
+
+                            var pricedItemsCustom = stringList.ToDictionary(p => p.LineId);//Dialog.InternalApplication.Services.Price.GetItemPrices(items, null).ToDictionary(p => p.LineId);
+
+
+                            for (int i = grdView.TopRowIndex; i <= grdView.TopRowIndex + visibleItems && i < itemTable.Rows.Count; i++)
+                            {
+                                mappedRow = grdView.GetDataSourceRowIndex(i);
+                                itemTable.Rows[mappedRow][colItemPrice.FieldName] = Dialog.InternalApplication.Services.Rounding.RoundForDisplay(pricedItemsCustom[i].Price, true, false);
+                            }
+                           
+                        }
+                        else
+                        {
+                            // Obtain prices for the items and repopulate the results grid with those prices.
+                            var pricedItems = Dialog.InternalApplication.Services.Price.GetItemPrices(items, null).ToDictionary(p => p.LineId);
+
+                            for (int i = grdView.TopRowIndex; i <= grdView.TopRowIndex + visibleItems && i < itemTable.Rows.Count; i++)
+                            {
+                                mappedRow = grdView.GetDataSourceRowIndex(i);
+                                itemTable.Rows[mappedRow][colItemPrice.FieldName] = Dialog.InternalApplication.Services.Rounding.RoundForDisplay(pricedItems[i].Price, true, false);
+                            }
+                        }
+                        //original
+                        /*
 						// Obtain prices for the items and repopulate the results grid with those prices.
 						var pricedItems = Dialog.InternalApplication.Services.Price.GetItemPrices(items, null).ToDictionary(p => p.LineId);
 
@@ -1388,7 +1439,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch
 						{
 							mappedRow = grdView.GetDataSourceRowIndex(i);
 							itemTable.Rows[mappedRow][colItemPrice.FieldName] = Dialog.InternalApplication.Services.Rounding.RoundForDisplay(pricedItems[i].Price, true, false);
-						}
+						}*/
 					}
 
 					grItems.DataSource = itemTable;

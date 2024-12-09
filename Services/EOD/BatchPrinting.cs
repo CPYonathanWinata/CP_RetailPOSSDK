@@ -585,7 +585,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
 
             }
             //section for online order - Yonathan 19112024
-            salesOrderParam = getCustOrderTransaction(fromDateUtc, toDateUtc);
+            salesOrderParam = getOnlineOrderTransaction(fromDateUtc, toDateUtc);
             containerArray = EOD.InternalApplication.TransactionServices.InvokeExtension("getInvoiceSalesOrder", salesOrderParam);
             returnString = containerArray[3].ToString();
             returnValue = containerArray[1].ToString();
@@ -595,6 +595,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             totalSales = 0;
             if (containerArray[1].ToString() != "False")
             {
+                reportLayout.AppendLine("");
                 reportLayout.AppendLine("-------------------------------------------------------");
                 reportLayout.AppendLine("Online Order Summary");
                 reportLayout.AppendLine("-------------------------------------------------------");
