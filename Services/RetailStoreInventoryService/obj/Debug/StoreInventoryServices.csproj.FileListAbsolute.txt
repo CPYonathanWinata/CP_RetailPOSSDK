@@ -23,3 +23,8 @@ C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\POS\bin\Debug\StoreInv
 C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\RetailStoreInventoryService\obj\Debug\StoreInventoryServices.csprojResolveAssemblyReference.cache
 C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\RetailStoreInventoryService\obj\Debug\StoreInventoryServices.dll
 C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\RetailStoreInventoryService\obj\Debug\StoreInventoryServices.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\POS\bin\Debug\StoreInventoryServices.dll
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\POS\bin\Debug\StoreInventoryServices.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\RetailStoreInventoryService\obj\Debug\StoreInventoryServices.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\RetailStoreInventoryService\obj\Debug\StoreInventoryServices.dll
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\RetailStoreInventoryService\obj\Debug\StoreInventoryServices.pdb

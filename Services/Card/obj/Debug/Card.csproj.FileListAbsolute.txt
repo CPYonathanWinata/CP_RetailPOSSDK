@@ -19,3 +19,10 @@ C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Card\obj
 C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Card\obj\Debug\Card.csproj.GenerateResource.Cache
 C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Card\obj\Debug\Card.dll
 C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Card\obj\Debug\Card.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\POS\bin\Debug\Card.dll
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\POS\bin\Debug\Card.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Card\obj\Debug\Card.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Card\obj\Debug\Microsoft.Dynamics.Retail.Pos.Card.frmSelectCardType.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Card\obj\Debug\Card.csproj.GenerateResource.Cache
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Card\obj\Debug\Card.dll
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Card\obj\Debug\Card.pdb

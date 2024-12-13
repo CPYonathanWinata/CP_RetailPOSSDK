@@ -20,3 +20,11 @@ C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Infocode
 C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Infocodes\obj\Debug\Infocodes.csproj.GenerateResource.Cache
 C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Infocodes\obj\Debug\InfoCodes.dll
 C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Infocodes\obj\Debug\InfoCodes.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Infocodes\obj\Debug\Infocodes.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Infocodes\obj\Debug\Microsoft.Dynamics.Retail.Pos.Services.InfoCodes.Properties.Resources.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Infocodes\obj\Debug\Microsoft.Dynamics.Retail.Pos.Services.InfoCodes.FormInfoCodeSubCodeBase.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Infocodes\obj\Debug\Microsoft.Dynamics.Retail.Pos.Services.InfoCodes.FormInfoCodeSubCodeList.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Infocodes\obj\Debug\Microsoft.Dynamics.Retail.Pos.Services.InfoCodes.FormInfoSubCode.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Infocodes\obj\Debug\Infocodes.csproj.GenerateResource.Cache
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Infocodes\obj\Debug\InfoCodes.dll
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Infocodes\obj\Debug\InfoCodes.pdb

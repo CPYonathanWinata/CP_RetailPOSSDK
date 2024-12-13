@@ -8,3 +8,8 @@ C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\Loyalty\obj\D
 C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\POS\bin\Debug\Loyalty.dll
 C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\POS\bin\Debug\Loyalty.pdb
 C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\Loyalty\obj\Debug\Loyalty.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\POS\bin\Debug\Loyalty.dll
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\POS\bin\Debug\Loyalty.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Loyalty\obj\Debug\Loyalty.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Loyalty\obj\Debug\Loyalty.dll
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Loyalty\obj\Debug\Loyalty.pdb

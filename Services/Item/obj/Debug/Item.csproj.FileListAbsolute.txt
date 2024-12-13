@@ -15,3 +15,10 @@ C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Item\obj
 C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Item\obj\Debug\Item.csproj.GenerateResource.Cache
 C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Item\obj\Debug\Item.dll
 C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Item\obj\Debug\Item.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\POS\bin\Debug\Item.dll
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\POS\bin\Debug\Item.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Item\obj\Debug\Item.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Item\obj\Debug\Microsoft.Dynamics.Retail.Pos.Item.WinFormsTouch.frmSerialIdSearch.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Item\obj\Debug\Item.csproj.GenerateResource.Cache
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Item\obj\Debug\Item.dll
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Item\obj\Debug\Item.pdb

@@ -8,3 +8,8 @@ C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\POS\bin\Debug\Dim
 C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Dimension\obj\Debug\Dimension.csprojResolveAssemblyReference.cache
 C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Dimension\obj\Debug\Dimension.dll
 C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\Dimension\obj\Debug\Dimension.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\POS\bin\Debug\Dimension.dll
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\POS\bin\Debug\Dimension.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Dimension\obj\Debug\Dimension.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Dimension\obj\Debug\Dimension.dll
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Dimension\obj\Debug\Dimension.pdb

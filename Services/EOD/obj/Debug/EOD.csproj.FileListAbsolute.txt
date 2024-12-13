@@ -84,6 +84,7 @@ C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\Services\EOD\obj\Debug
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\POS\bin\Debug\EOD.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\POS\bin\Debug\EOD.pdb
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\EOD\obj\Debug\EOD.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\EOD\obj\Debug\Microsoft.Dynamics.Retail.Pos.EOD.CPBatchForm.resources
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\EOD\obj\Debug\Microsoft.Dynamics.Retail.Pos.EOD.BlindClosedShiftsForm.resources
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\EOD\obj\Debug\Microsoft.Dynamics.Retail.Pos.EOD.CashDrawerSelectionForm.resources
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\EOD\obj\Debug\Microsoft.Dynamics.Retail.Pos.EOD.ResumeShiftForm.resources
@@ -92,4 +93,3 @@ C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\EO
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\EOD\obj\Debug\EOD.dll.licenses
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\EOD\obj\Debug\EOD.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\EOD\obj\Debug\EOD.pdb
-C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\EOD\obj\Debug\Microsoft.Dynamics.Retail.Pos.EOD.CPBatchForm.resources

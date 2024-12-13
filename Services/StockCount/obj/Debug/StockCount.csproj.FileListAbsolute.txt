@@ -12,3 +12,8 @@ C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\StockCou
 C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\StockCount\obj\Debug\Microsoft.Dynamics.Retail.Pos.StockCount.frmStockCount.resources
 C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\StockCount\obj\Debug\StockCount.csproj.GenerateResource.Cache
 C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\StockCount\obj\Debug\StockCount.dll.licenses
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\StockCount\obj\Debug\StockCount.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\StockCount\obj\Debug\Microsoft.Dynamics.Retail.Pos.StockCount.frmStockCountJournals.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\StockCount\obj\Debug\Microsoft.Dynamics.Retail.Pos.StockCount.frmStockCount.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\StockCount\obj\Debug\StockCount.csproj.GenerateResource.Cache
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\StockCount\obj\Debug\StockCount.dll.licenses

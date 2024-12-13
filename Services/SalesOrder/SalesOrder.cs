@@ -1756,7 +1756,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder
 
             //add by Yonathan to specified warehouse id for this store only 20082024
             string wareHouse = "WH_"+ApplicationSettings.Database.StoreID;
-            containerArray = SalesOrder.InternalApplication.TransactionServices.Invoke("searchCustomerOrderList", customerSearchTerm, orderSearchTerm, fromDateString, toDateString, wareHouse, resultMaxCount);//, orderType); //disable for futureupdate
+            containerArray = SalesOrder.InternalApplication.TransactionServices.Invoke("searchCustomerOrderList", customerSearchTerm, orderSearchTerm, fromDateString, toDateString, wareHouse, resultMaxCount, orderType); //disable for futureupdate
 
             retValue = SerializationHelper.ConvertToBooleanAtIndex(containerArray, 1);
             comment = SerializationHelper.ConvertToStringAtIndex(containerArray, 2);
