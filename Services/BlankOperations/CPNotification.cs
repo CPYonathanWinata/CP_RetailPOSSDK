@@ -225,11 +225,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
         bool detectDelivered = false;
           
         //"https://devpfm.cp.co.id/api/grab/listOrder"
-        string url = "https://apiqrisdev.cp.co.id/api/jbl/getTotalSalesOrder";
+        string url = "";//    https://apiqrisdev.cp.co.id/api/jbl/getTotalSalesOrder";
         APIAccess.APIParameter.Receiver receiverParm;
-        //string functionName = "GetGRABMARTAPI";
+        string functionName = "GetOnlineOrderAPI";
          
-        //url = APIClass.getURLAPIByFuncName(functionName);
+        url = APIClass.getURLAPIByFuncName(functionName);
 
         System.Net.ServicePointManager.ServerCertificateValidationCallback = (senderX, certificate, chain, sslPolicyErrors) => { return true; };
 

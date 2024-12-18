@@ -526,7 +526,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 			else if ((int.Parse(this.tenderInfo.TenderID) == tenderShopee
 				|| int.Parse(this.tenderInfo.TenderID) == tenderShopeeDev) && isIntegrated == true)
 			{
-				//getURLAPI(); //disable temporarily for testing JOFFICE 11092024
+				getURLAPI(); //disable temporarily for testing JOFFICE 11092024
 
                 //temp code to define URL for SHOPEE
                 //urlCreate = "https://partnerpfm.cp.co.id/api/shopeePay/snap/createDynamicQR";//reader["URLCREATE"].ToString();
@@ -2481,7 +2481,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 
 				APIAccess.APIParameter.parmResponseShopeePay responseShopeePay;
 				APIAccess.APIParameter.ListResultData listData;
-
+                //MessageBox.Show(string.Format("{0},{1},{2},{3},{4}", url, this.registeredAmount, this.posTransaction.StoreId, this.posTransaction.TerminalId, this.posTransaction.TransactionId));
 				APIAccess.APIFunction.generateQRShopeePay(url, this.registeredAmount, this.posTransaction.StoreId, this.posTransaction.TerminalId, this.posTransaction.TransactionId,out responseShopeePay, out listData);
 
 
@@ -3887,6 +3887,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 
 							}
 
+                           // MessageBox.Show(string.Format("{0},{1},{2}", urlCreate, urlInvalidate, urlNotify));
 							//connection.Dispose();
 
 						}
