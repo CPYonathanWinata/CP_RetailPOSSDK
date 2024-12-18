@@ -12,6 +12,7 @@ using System.Data.SqlClient;
 using LSRetailPosis.Transaction;
 using Microsoft.Dynamics.Retail.Pos.Contracts.DataEntity;
 using DE = Microsoft.Dynamics.Retail.Pos.Contracts.DataEntity;
+using LSRetailPosis.Settings;
 
 namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 {
@@ -52,8 +53,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
             SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
             try
             {
-
-                string queryString = @" SELECT 
+                //change lookup tender to RETAILSTORETENDERTYPETABLE instead of CPNEWPAYMENTPOS - Yonathan 18122024
+                /*string queryString = @" SELECT 
                                             'Rp ' + REPLACE(CONVERT(VARCHAR, CONVERT(MONEY, SUM(c.AMOUNTMST)), 1), '.00', '') AS [Payment Amount],
 	                                        CASE 
 		                                        WHEN c.TENDERTYPE = 1 THEN 'Cash'
@@ -85,13 +86,28 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                                                 WHEN c.TENDERTYPE = 14 THEN 'Ezeelink Card'
 		                                        ELSE
 			                                        b.TenderName	
-	                                        END ";
+	                                        END ";*/
+                string queryString = @"SELECT 
+	                                        'Rp ' + REPLACE(CONVERT(VARCHAR, CONVERT(MONEY, SUM(c.AMOUNTMST)), 1), '.00', '') AS [Payment Amount],
+	                                        d.NAME as [Tender Name]   
+                                        FROM 
+	                                        AX.[RETAILTRANSACTIONTABLE] a
+	                                        LEFT JOIN AX.[CPNEWPAYMENTPOS] b ON a.TRANSACTIONID = b.TransactionID
+	                                        LEFT JOIN AX.[RETAILTRANSACTIONPAYMENTTRANS] c on a.TRANSACTIONID = c.TRANSACTIONID
+	                                        LEFT JOIN AX.RETAILSTORETENDERTYPETABLE d on c.TENDERTYPE = d.TENDERTYPEID
+                                        WHERE 
+	                                        a.RECEIPTID  != '' AND 
+	                                        TYPE = 2 AND
+	                                        d.CHANNEL = @channelId AND
+	                                        a.TRANSDATE BETWEEN  @from AND @to
+                                        GROUP BY
+	                                        d.NAME";
 
                 using (SqlCommand command = new SqlCommand(queryString, connection))
                 {
                     command.Parameters.AddWithValue("@from", date_from.AddDays(-1));
                     command.Parameters.AddWithValue("@to", date_to);
-                    
+                    command.Parameters.AddWithValue("@channelId", ApplicationSettings.Terminal.StorePrimaryId);
                     if (connection.State != ConnectionState.Open)
                     {
                         connection.Open();
@@ -140,8 +156,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
             SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
             try
             {
-
-                string queryString = @" SELECT 
+                //change lookup tender to RETAILSTORETENDERTYPETABLE instead of CPNEWPAYMENTPOS - Yonathan 18122024
+                /*string queryString = @" SELECT 
                                             a.CREATEDDATETIME AS [Date],
                                             a.STAFF as [Operator ID],
                                             a.TERMINAL as [Register],
@@ -171,7 +187,32 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                                             TYPE = 2 AND
                                             a.TRANSDATE BETWEEN @from AND @to
                                         ORDER BY 
-                                            a.CREATEDDATETIME DESC ";
+                                            a.CREATEDDATETIME DESC ";*/
+                string queryString = @"
+
+                                     SELECT 
+                                        a.CREATEDDATETIME AS [Date],
+                                        a.STAFF as [Operator ID],
+                                        a.TERMINAL as [Register],
+                                        a.RECEIPTID as [Receipt], 
+                                        'Sale' as [Type], 
+                                        STR(GROSSAMOUNT * -1 ,16,0) AS [Amount] ,
+                                        'Rp ' + REPLACE(CONVERT(VARCHAR, CONVERT(MONEY, c.AMOUNTMST), 1), '.00', '') AS [Payment Amount],
+                                        b.NoReffTransaction as [Reference Number],
+                                        d.NAME as [Tender Name]   ,
+                                        b.PurchaserName as [Purchaser Name]     
+                                    FROM 
+                                    AX.[RETAILTRANSACTIONTABLE] a
+                                        LEFT JOIN AX.[CPNEWPAYMENTPOS] b ON a.TRANSACTIONID = b.TransactionID
+                                        LEFT JOIN AX.[RETAILTRANSACTIONPAYMENTTRANS] c on a.TRANSACTIONID = c.TRANSACTIONID
+                                        LEFT JOIN AX.RETAILSTORETENDERTYPETABLE d on c.TENDERTYPE = d.TENDERTYPEID
+                                    WHERE 
+                                        a.RECEIPTID  != '' AND 
+                                        TYPE = 2 AND
+                                        d.CHANNEL = @channelId  AND
+                                        a.TRANSDATE BETWEEN @from AND @to
+                                    ORDER BY 
+                                    a.CREATEDDATETIME DESC ";
 
                 /*
                  CPNOORDER as [No Order],
@@ -184,7 +225,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                 {
                     command.Parameters.AddWithValue("@from", date_from.AddDays(-1));
                     command.Parameters.AddWithValue("@to", date_to);
-
+                    command.Parameters.AddWithValue("@channelId", ApplicationSettings.Terminal.StorePrimaryId);
                     DataTable dataTable1 = new DataTable();
                     // command.Parameters.AddWithValue("@TRANSACTIONID", posTransaction.TransactionId);
 
