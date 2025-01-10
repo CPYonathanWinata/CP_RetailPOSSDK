@@ -915,7 +915,9 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                                         subtotal = 0;
                                     }
                                 }
-                                return String.Format("{0:#,0}", subtotal = lineAmountIncTaxDecimal - lineTaxAmountMSTDecimal);
+                                subtotal = lineAmountIncTaxDecimal - lineTaxAmountMSTDecimal; //#PPN12
+                                //return String.Format("{0:#,0}", subtotal);
+                                return String.Format("{0:#,0}", subtotal * 11 / 12); //03012025 #PPN12
 
 
                             }
@@ -924,8 +926,12 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                                 return String.Format("{0:#,0}",
                                 GetTotalNetAmount(theTransaction) - GetTotalPB1(theTransaction));
                             }
-                            
-                            
+
+                        case "LABELDPPOTHER":
+                            return "DPP Nilai Lain";
+                        case "TEXTDPPOTHER":
+                            return String.Format("{0:#,0}",
+                                GetTotalNetAmountDPPLain(theTransaction) - GetTotalPB1(theTransaction));
                         //End Edit By Erwin 23 July 2019
                         //case "DPP": return String.Format("{0:0,0}", totalCustom);
                         case "PPN": 
@@ -1400,7 +1406,8 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                     }
                     //Edit By Erwin 23 July 2019
                     //return String.Format("{0:0,0}", subtotal);
-                    return subtotal;
+                    
+                    return subtotal; //03012025 #PPN12;
                     //End Edit By Erwin 23 July 2019
                 }
                 catch
@@ -1414,6 +1421,41 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
 
             
         }
+
+        private decimal GetTotalNetAmountDPPLain(RetailTransaction theTransaction)
+        {
+            //custom by Yonathan 29102024 for invoice
+            CustomerOrderTransaction cot;
+            decimal subtotal = 0;
+            
+                try
+                {
+                    
+                    foreach (SaleLineItem s in theTransaction.SaleItems)
+                    {
+                        if (s.TaxGroupId == "PPN" && !s.Voided)
+                            subtotal += s.NetAmountWithNoTax;
+                        /*else if (s.TaxGroupId != "PPN" && !s.Voided) //NECI_YNWA start modified because code change in CU10 regarding the column NetAmountWithNoTax is zero if the item type is BKTP
+                            subtotal += s.NetAmount; //NECI_YNWA end modified*/
+                    }
+                    //Edit By Erwin 23 July 2019
+                    //return String.Format("{0:0,0}", subtotal);
+                    subtotal = subtotal*11/12;
+                    return subtotal; //03012025 #PPN12;
+                    //End Edit By Erwin 23 July 2019
+                }
+                catch
+                {
+                    //Edit By Erwin 23 July 2019
+                    //return string.Empty;
+                    return 0;
+                    //End Edit By Erwin 23 July 2019
+                }
+            
+
+            
+        }
+
         private string GetTotalPPN(RetailTransaction theTransaction)
         {
             try
@@ -2246,7 +2288,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
 
             if (itemInfo.IsVariable)
             {
-                tmpString = GetInfoFromTransaction(itemInfo, null, tenderItem, theTransaction);
+                tmpString = GetInfoFromTransaction(itemInfo, null, tenderItem, theTransaction); 
             }
             else
             {

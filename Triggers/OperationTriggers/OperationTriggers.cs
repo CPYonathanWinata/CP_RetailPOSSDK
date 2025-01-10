@@ -699,7 +699,7 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
                     {
                         if (reader.Read())
                         {
-                            APIAccess.APIAccessClass.isB2b = reader["CP_CUSTCLASSIFICATION"].ToString();
+                            APIAccess.APIAccessClass.isB2b = reader["CP_CUSTCLASSIFICATION"].ToString() == "" ? "0" : reader["CP_CUSTCLASSIFICATION"].ToString();
                             APIAccess.APIAccessClass.priceGroup = reader["PRICEGROUP"].ToString();
                             APIAccess.APIAccessClass.lineDiscGroup = reader["LINEDISC"].ToString();
                             APIAccess.APIAccessClass.ppnValidation = reader["CPPPNVALIDATE"].ToString();
@@ -708,6 +708,14 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
                             //stringList.Add(reader["ACCOUNTRELATION"].ToString());
 
 
+                        }
+                        else
+                        {
+                            APIAccess.APIAccessClass.isB2b = "0";
+                            APIAccess.APIAccessClass.priceGroup = "";
+                            APIAccess.APIAccessClass.lineDiscGroup = "";
+                            APIAccess.APIAccessClass.ppnValidation = "";
+                            APIAccess.APIAccessClass.custId = _custId;
                         }
                     }
                 }

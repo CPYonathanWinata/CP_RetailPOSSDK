@@ -145,8 +145,13 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 				string salesQty = salesLine.QuantityOrdered.ToString();//salesLine.Attributes["SalesQty"].Value;
 				string itemName = salesLine.Description.ToString();
 				string unitItem = salesLine.lineItem.BackofficeSalesOrderUnitOfMeasure.ToString();
+
+                //add line number - Yonathan 07012025
+                int lineNumber = salesLine.lineItem.LineId;
+                //end
 				// Add the pair of values to the DataTable
-				table.Rows.Add(numberLines, itemId, itemName, unitItem, salesQty);
+                //table.Rows.Add(numberLines, itemId, itemName, unitItem, salesQty);
+                table.Rows.Add(lineNumber, itemId, itemName, unitItem, salesQty);
 			}
 		   
 
@@ -315,7 +320,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                                     string itemId = row.Cells["ItemId"].Value.ToString();
                                     string itemName = row.Cells["ItemName"].Value.ToString();
                                     string deliverNow = row.Cells["QtyDO"].Value.ToString();
-
+                                    string lineNumber = row.Cells["NO."].Value.ToString();
                                     //check if this is stocked item
 
                                     if (orderType == 1 && qtyReceive != qtySO)   //if receive qty is different than the qty SO - add by Yonathan 04102024                               
@@ -382,6 +387,9 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                                             XmlElement salesLine = xmlDoc.CreateElement("SalesLine");
                                             salesLine.SetAttribute("ItemId", itemId);
                                             salesLine.SetAttribute("QtyRcv", deliverNow);
+                                            //add lineNumber 08012025 yonathan
+                                            salesLine.SetAttribute("LineNum", lineNumber);
+                                            //end
                                             root.AppendChild(salesLine);
 
                                         }
@@ -391,6 +399,11 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                                         XmlElement salesLine = xmlDoc.CreateElement("SalesLine");
                                         salesLine.SetAttribute("ItemId", itemId);
                                         salesLine.SetAttribute("QtyRcv", deliverNow);
+                                        
+                                        //add lineNumber 08012025 yonathan
+                                        salesLine.SetAttribute("LineNum", lineNumber);
+                                        //end
+                                        
                                         root.AppendChild(salesLine);
                                     }
                                 }
@@ -416,7 +429,10 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 							CreatePackingSlip(out retValue, out comment, out splitInvoice, salesID, updatedXmlString);
 							if (retValue == false)
 							{
-								SalesOrder.InternalApplication.Services.Dialog.ShowMessage(comment, MessageBoxButtons.OK, MessageBoxIcon.Error);
+								//SalesOrder.InternalApplication.Services.Dialog.ShowMessage(comment, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                //
+                                throw new Exception(comment);
+
 							}
 							else
 							{
