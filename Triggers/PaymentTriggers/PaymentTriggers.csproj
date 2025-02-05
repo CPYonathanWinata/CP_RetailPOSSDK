@@ -64,6 +64,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CP_CustomerDetail.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CP_CustomerDetail.Designer.cs">
+      <DependentUpon>CP_CustomerDetail.cs</DependentUpon>
+    </Compile>
     <Compile Include="CP_FormPayment.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -90,6 +96,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="CP_CustomerDetail.resx">
+      <DependentUpon>CP_CustomerDetail.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CP_FormPayment.resx">
       <DependentUpon>CP_FormPayment.cs</DependentUpon>
       <SubType>Designer</SubType>

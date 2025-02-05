@@ -214,10 +214,16 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             try
             {
                 //to do change to RETAILTRANSACTIONPAYMENTTRANS FOR TENDERID DISTINCT YONATHAN
-                string queryString = @" SELECT DISTINCT TenderID FROM ax.CPNewPaymentPOS";
-
+                //string queryString = @" SELECT DISTINCT TenderID FROM ax.CPNewPaymentPOS";
+                //CHANGE TO TENDERTYPE ID FROM TABLE MASTER - 18122024 YONATHAN
+                string queryString = @"
+                                        SELECT TENDERTYPEID FROM AX.RETAILSTORETENDERTYPETABLE
+                                        WHERE CHANNEL = @channelId AND
+	                                        TENDERTYPEID!=1
+                                        ORDER BY CAST(TENDERTYPEID AS INT)";
                 using (SqlCommand command = new SqlCommand(queryString, connection))
                 {
+                    command.Parameters.AddWithValue("@channelId", ApplicationSettings.Terminal.StorePrimaryId);
                     if (connection.State != ConnectionState.Open)
                     {
                         connection.Open();
@@ -265,8 +271,8 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
 
                 try
                 {
-                  //to do change to LOOKUP TENDERNAME FROM MASTER - YONATHAN
-                    string queryCustAccount = @"
+                  //to do change to LOOKUP TENDERNAME FROM MASTER - YONATHAN 
+                    /*string queryCustAccount = @"
                                                 SELECT  
                                                     C.TenderName, 
                                                     sum(L.AMOUNTCUR)
@@ -288,7 +294,32 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
                                                     AND L.TENDERTYPE = C.TenderID 
                                                     AND L.TRANSACTIONSTATUS = 0
                                                 GROUP BY
-                                                    C.TenderName";
+                                                    C.TenderName";*/
+
+                    string queryCustAccount = @"    SELECT  
+                                                        C.NAME, 
+                                                        sum(L.AMOUNTCUR)
+                                                    FROM 
+                                                        RETAILTRANSACTIONPAYMENTTRANS AS L 
+                                                        INNER JOIN RETAILTRANSACTIONTABLE AS H 
+                                                            ON H.TRANSACTIONID = L.TRANSACTIONID  
+                                                            AND H.STORE = L.STORE 
+                                                            AND H.TERMINAL = L.TERMINAL 
+                                                            AND H.DATAAREAID = L.DATAAREAID 
+	                                                    INNER JOIN AX.RETAILSTORETENDERTYPETABLE AS C
+                                                        --INNER JOIN ax.CPNEWPAYMENTPOS AS C 
+                                                            ON C.TENDERTYPEID = L.TENDERTYPE 
+                                                            and C.CHANNEL = @channelId
+                                                    WHERE 
+                                                         H.BATCHTERMINALID = @BATCHTERMINALID  
+                                                        AND H.DATAAREAID = @DATAAREAID 
+                                                        AND H.BATCHID = @BATCHID 
+                                                        AND C.TENDERTYPEID = @TenderID  
+                                                        AND L.TENDERTYPE = C.TENDERTYPEID 
+                                                        AND L.TRANSACTIONSTATUS = 0
+                                                    GROUP BY
+                                                        C.NAME
+                                                    ";
 
                     using (SqlCommand cmdCustomerAcc = new SqlCommand(queryCustAccount, conCustAccount))
                     {
@@ -296,7 +327,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
                         cmdCustomerAcc.Parameters.Add(new SqlParameter("@BATCHID", batch.BatchId));
                         cmdCustomerAcc.Parameters.Add(new SqlParameter("@DATAAREAID", EOD.InternalApplication.Settings.Database.DataAreaID));
                         cmdCustomerAcc.Parameters.Add(new SqlParameter("@TenderID", tender));
-
+                        cmdCustomerAcc.Parameters.Add(new SqlParameter("@channelId", ApplicationSettings.Terminal.StorePrimaryId));
                         if (conCustAccount.State != ConnectionState.Open)
                         {
                             conCustAccount.Open();

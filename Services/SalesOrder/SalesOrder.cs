@@ -1779,11 +1779,14 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder
             salesOrders.Columns.Add("ISOPEN", typeof(string));
             salesOrders.Columns.Add("JOURNALID", typeof(string));
             salesOrders.Columns.Add("INVOICEAMOUNT", typeof(decimal));
+            
             if (orderType == 1)
             { 
                 salesOrders.Columns.Add("ORDERNUMBER", typeof(string));
+                //add by Yonathan 03022025 
+               
             }
-
+            salesOrders.Columns.Add("DISABLEINVOICE", typeof(string));
             for (int i = 3; i < containerArray.Count; i++)
             {
                 IList salesRecord = (IList)containerArray[i];
@@ -1871,7 +1874,15 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder
                     {
                         row["ORDERNUMBER"] = SerializationHelper.ConvertToStringAtIndex(salesRecord, 29);
                     }
+
+                    
                     //end
+                }
+
+                //add DISABLE invoice for online order - Yonathan 04022025
+                if (salesRecord.Count > 30)
+                {
+                    row["DISABLEINVOICE"] = SerializationHelper.ConvertToStringAtIndex(salesRecord, 30);
                 }
                 //add by Yonathan to prevent other store's sales order to appear in form 19/01/2023
                 string inventLocationId = "WH_"+ApplicationSettings.Database.StoreID;
