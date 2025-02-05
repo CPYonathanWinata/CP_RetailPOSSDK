@@ -164,6 +164,13 @@ namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
             }
             else
             {
+                //add new form to ask customer detail //13012025 CPPOSPAYMENT
+                //using (CP_CustomerDetail customerDetail = new CP_CustomerDetail())
+                //{                   
+                //    customerDetail.ShowDialog();
+                
+                //}
+                //end
                 //   MessageBox.Show("pre payment");
                 LSRetailPosis.ApplicationLog.Log("PaymentTriggers.PrePayment", "On the start of a payment operation...", LSRetailPosis.LogTraceLevel.Trace);
                 if (posTransaction.ToString() == "LSRetailPosis.Transaction.RetailTransaction")

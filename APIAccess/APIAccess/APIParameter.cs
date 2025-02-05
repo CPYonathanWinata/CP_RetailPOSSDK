@@ -256,6 +256,9 @@ namespace APIAccess
             public int LineId { get; set; }
 
         }
+
+        
+
         //
         public static MySql.Data.MySqlClient.MySqlConnection mySqlConnString;
     }

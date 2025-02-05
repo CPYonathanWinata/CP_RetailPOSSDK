@@ -32,6 +32,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
     using System.Xml;
     using Microsoft.Dynamics.Retail.Pos.SalesOrder.CustomerOrderParameters;
     using Microsoft.Dynamics.Retail.Pos.Contracts.BusinessLogic;
+    using System.Diagnostics;
    
 
     public partial class frmGetSalesOrder : LSRetailPosis.POSProcesses.frmTouchBase
@@ -49,6 +50,9 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
         private const string InvoiceIdString = "INVOICEID";
         private const string IsOpenString = "ISOPEN";
         private const string JournalIdString = "JOURNALID";
+
+        //additional field by Yonathan 03022025 CP_CUSTORDERB2BSETUP
+        private const string DisableInvoice = "DISABLEINVOICE";
         //private const string TotalAmountDecimal = "TOTALAMOUNT";
         //end
         private const string FilterFormat =
@@ -64,6 +68,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
         //add by yonathan 21/06/2023
         private string invoiceId;
         private string isOpen;
+        private string disableInvoice;
         //add by yonathan 21/06/2024
         string isB2bCust = "0";
         //add by Yonathan order type - 04102024
@@ -392,6 +397,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             invoiceId = row.Field<string>(InvoiceIdString); //containerArray[2].ToString(); //getInvoiceId(containerArray[2].ToString());
             //ReadOnlyCollection<object> containerArrayInvoice = SalesOrder.InternalApplication.TransactionServices.Invoke("getSalesInvoice", invoiceId);
             isOpen = row.Field<string>(IsOpenString);
+            disableInvoice = row.Field<string>(DisableInvoice); 
             //end
         }
 
@@ -515,11 +521,15 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 enableCancel = false;
                 enablePickList = false;
                 enablePackSlip = false;
-                enableInvoice = true;
+                enableInvoice = true; 
 
                 //disable invoice & payment feature right now
-                enableInvoice = true;
+                
                 //enableReturn = false;
+                if (disableInvoice == "true")
+                {
+                    enableInvoice = false;
+                }
             }
             else if (this.selectedOrderDocumentStatus == SalesStatus.Invoiced)
             {
@@ -856,7 +866,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
         {
             GetSelectedRow();
 
-            CP_frmPackingSlipDetail packingSlipDetails = new CP_frmPackingSlipDetail(SalesOrder.InternalApplication, this.SelectedSalesOrderId.ToString(), orderTypeSO);
+            CP_frmPackingSlipDetail packingSlipDetails = new CP_frmPackingSlipDetail(SalesOrder.InternalApplication, this.SelectedSalesOrderId.ToString(), orderTypeSO, disableInvoice);
             packingSlipDetails.ShowDialog();
             RefreshGrid();
             GetSelectedRow();  // to reload "selectedOrderStatus" object.
@@ -1110,7 +1120,19 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 }
                 else
                 {
-	                throw new Exception("Invoice error, please post invoice on AX");
+                    // Log error message to Event Viewer
+                    APIAccess.APIAccessClass APIClass = new APIAccess.APIAccessClass();
+                    APIAccess.APIFunction APIFunction = new APIAccess.APIFunction();
+                    APIFunction.LogErrorToEventViewer(statusInvoice);
+                    SalesOrder.InternalApplication.Services.Dialog.ShowMessage("Error occurred, check event viewer for details", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    // Show a user-friendly message
+                    //MessageBox.Show("Error occurred, check event viewer for details", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                    // Throw the exception (optional if you want further processing)
+                    //throw new Exception(statusInvoice);
+                    //throw new Exception("Invoice error, please post invoice on AX");
+                    //throw new Exception(statusInvoice.ToString());
+                    //throw new Exception(string.Format("Invoice error, please post invoice on AX\n{0}", statusInvoice));
                 }                
             }
             catch (Exception ex)
@@ -1119,6 +1141,9 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 throw;
             }
         }
+
+        
+
         //update invoice id yonathan 06092024
         private void updateInvoiceId(string _invoiceAx, string _salesId)
         {

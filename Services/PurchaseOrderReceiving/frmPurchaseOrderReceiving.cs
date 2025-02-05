@@ -654,8 +654,10 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                 PaperSize psize = new PaperSize("Custom", 100, Offset + 236);
                 Margins margins = new Margins(0, 0, 0, 0);
 
-                Font normalFont = new Font("Courier New", 8);
-                Font biggerFont = new Font("Courier New", 20);
+                int normal = 7;
+                int bigger = 10;
+                Font normalFont = new Font("Courier New", normal);
+                Font biggerFont = new Font("Courier New", bigger);
 
                 pd.Document = p;
                 pd.Document.DefaultPageSettings.PaperSize = psize;
@@ -738,19 +740,21 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                 // Remove rows that are successfully submitted
                 List<DataRow> removeRows = new List<DataRow>();
 
-                string sHeader =   "     -------------- " + Environment.NewLine +
-                                   "         REPRINT " + Environment.NewLine +
-                                   "     --------------" + Environment.NewLine;
+                //string sHeader =   "     -------------- " + Environment.NewLine +
+                //                   "         REPRINT " + Environment.NewLine +
+                //                   "     --------------" + Environment.NewLine;
 
+                string sHeader = "** REPRINT ** \r\n";
                 string sPrint = this.ReceiveDocumentFormat("REPRINT");
 
                 PrintDocument p = new PrintDocument();
                 PrintDialog pd = new PrintDialog();
                 PaperSize psize = new PaperSize("Custom", 100, Offset + 236);
                 Margins margins = new Margins(0, 0, 0, 0);
-
-                Font normalFont = new Font("Courier New", 8);
-                Font biggerFont = new Font("Courier New", 20);
+                int normal = 7;
+                int bigger = 12;
+                Font normalFont = new Font("Courier New", normal);
+                Font biggerFont = new Font("Courier New", bigger);
 
                 pd.Document = p;
                 pd.Document.DefaultPageSettings.PaperSize = psize;

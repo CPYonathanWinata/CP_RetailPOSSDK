@@ -90,6 +90,12 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
         decimal qtyPerLine = 0;
         decimal grandTotal = 0;
 
+        decimal DPPPKP = 0;
+        decimal DPPBebas = 0;
+        decimal DPPNonPajak = 0;
+        bool DPPNilaiLainStatus = true;
+        string statusDPP2025Print = "False";
+
         ReadOnlyCollection<object> containerArray; //add for invoice detail - Yonathan 07102024
         XDocument xdoc;
         XElement xml;
@@ -216,7 +222,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
 
                                 return cot.OrderId;
                             }*/
-                    //add by Yonathan 10092024
+                    //add by Yonathan 10092024 for invoice of cust order
                     if ((cot = theTransaction as CustomerOrderTransaction) != null && invoiceId == "" && countInfo  == 0)
                     {
                         getInvoiceId(cot.OrderId);
@@ -891,6 +897,149 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                                 lineTaxAmountMST = "";
                                 lineTaxAmountMSTDecimal = 0;
                                 // Lookup the matching XML node for the current salesLine.ItemId
+
+                                if (ApplicationSettings.Terminal.StoreTaxGroup == "TAX")
+                                {
+                                    foreach (SaleLineItem saleLine in theTransaction.SaleItems)
+                                    {
+                                        var matchingNode = xml.Elements("CustInvoiceTrans")
+                                                            .FirstOrDefault(x => x.Attribute("ItemLines")
+                                                            .Value.Split(';')[0] == saleLine.ItemId);
+
+                                        if (matchingNode != null)
+                                        {
+                                            // Split the ItemLines attribute by semicolons
+                                            string[] itemDetails = matchingNode.Attribute("ItemLines").Value.Split(';');
+
+                                            lineAmountIncTax = itemDetails[3];
+                                            lineTaxAmountMST = itemDetails[6];
+                                            taxItemGroup = itemDetails[7];
+                                            if (taxItemGroup == "PPN")
+                                            {
+                                                lineAmountIncTaxDecimal += decimal.Parse(lineAmountIncTax, System.Globalization.CultureInfo.GetCultureInfo("id-ID"));
+                                                lineTaxAmountMSTDecimal += decimal.Parse(lineTaxAmountMST, System.Globalization.CultureInfo.GetCultureInfo("id-ID"));
+                                            }
+
+                                            //    lineTaxAmountMSTDecimal += decimal.Parse(lineTaxAmountMST, System.Globalization.CultureInfo.GetCultureInfo("id-ID"));
+
+                                            
+
+
+                                        }
+                                        //else
+                                        //{
+                                        //    subtotal = 0;
+                                        //}
+                                    }
+                                    subtotal = lineAmountIncTaxDecimal - lineTaxAmountMSTDecimal; //#PPN12
+
+                                    DPPPKP = subtotal;
+                                    return String.Format("{0:#,0}", DPPPKP);
+                                }
+                                else //if (ApplicationSettings.Terminal.StoreTaxGroup == "NonPKP")
+                                {
+                                    foreach (SaleLineItem saleLine in theTransaction.SaleItems)
+                                    {
+                                        var matchingNode = xml.Elements("CustInvoiceTrans")
+                                                            .FirstOrDefault(x => x.Attribute("ItemLines")
+                                                            .Value.Split(';')[0] == saleLine.ItemId);
+
+                                        if (matchingNode != null)
+                                        {
+                                            // Split the ItemLines attribute by semicolons
+                                            string[] itemDetails = matchingNode.Attribute("ItemLines").Value.Split(';');
+
+                                            lineAmountIncTax = itemDetails[3];
+                                            lineTaxAmountMST = itemDetails[6];
+                                            
+                                            lineAmountIncTaxDecimal += decimal.Parse(lineAmountIncTax, System.Globalization.CultureInfo.GetCultureInfo("id-ID"));
+                                            lineTaxAmountMSTDecimal += decimal.Parse(lineTaxAmountMST, System.Globalization.CultureInfo.GetCultureInfo("id-ID"));
+
+
+                                        }
+                                        //else
+                                        //{
+                                        //    subtotal = 0;
+                                        //}
+                                    }
+                                    subtotal = lineAmountIncTaxDecimal;// -lineTaxAmountMSTDecimal; //#PPN12
+                                    DPPPKP = subtotal;
+                                    return String.Format("{0:#,0}", DPPPKP);
+                                }
+
+                               
+                                //return String.Format("{0:#,0}", subtotal * 11 / 12); //03012025 #PPN12
+
+
+                            }
+                            else
+                            {
+                                DPPPKP = GetTotalNetAmount(theTransaction);
+                                return String.Format("{0:#,0}",
+                                DPPPKP); //- GetTotalPB1(theTransaction));
+                            }
+                        //additional info receipt for TAX - Yonathan 21012024
+                        case "LABELITEMBKP":
+                            return "Kena Pajak";
+                        case "LABELDPPOTHER":
+                            if (statusDPP2025Print == "True")
+                            {
+                                return "DPP Nilai Lain :";
+                            }
+                            else
+                            {
+                                return string.Empty;
+                            }
+                           
+                            
+                        case "LABELITEMBEBAS":
+                            return "Pajak Dibebaskan";
+                        case "LABELDPPBEBAS":
+                            return "DPP :";
+                        case "LABELDPPLAINBEBAS":
+                            if (statusDPP2025Print == "True")
+                            {
+                                return "DPP Nilai Lain :";
+                            }
+                            else
+                            {
+                                return string.Empty;
+                            }
+                        case "LABELPPNBEBAS":
+                            return "PPN :";
+                        case "LABELITEMNON":
+                            return "Non Pajak";
+                        case "LABELDPPNON":
+                            return "DPP :";
+                        case "LABELDPPLAINNON":
+                            if (statusDPP2025Print == "True")
+                            {
+                                return "DPP Nilai Lain :";
+                            }
+                            else
+                            {
+                                return string.Empty;
+                            } 
+                        case "LABELPPNNON":
+                            return "PPN :";
+
+                        //case "TEXTITEMBKP":
+                            //return String.Format("{0:#,0}", getTotalBKP(theTransaction));
+                        //case "TEXTDPPOTHER":
+                        //    return "DPP Nilai Lain :";
+                        //case "TEXTITEMBEBAS":
+                            //return String.Format("{0:#,0}", getTotalBebas(theTransaction));
+                        case "TEXTDPPBEBAS":
+                            //check DPP dibebaskan
+                            if ((cot = theTransaction as CustomerOrderTransaction) != null && invoiceId != "")
+                            {
+                                lineAmountIncTaxDecimal = 0;
+                                lineAmountIncTax = "";
+                                subtotal = 0;
+                                lineTaxAmountMST = "";
+                                lineTaxAmountMSTDecimal = 0;
+                                // Lookup the matching XML node for the current salesLine.ItemId
+
                                 foreach (SaleLineItem saleLine in theTransaction.SaleItems)
                                 {
                                     var matchingNode = xml.Elements("CustInvoiceTrans")
@@ -904,10 +1053,91 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
 
                                         lineAmountIncTax = itemDetails[3];
                                         lineTaxAmountMST = itemDetails[6];
+                                        taxItemGroup = itemDetails[7];
+                                        if (taxItemGroup == "Dibebaskan")
+                                        {
+                                            lineAmountIncTaxDecimal += decimal.Parse(lineAmountIncTax, System.Globalization.CultureInfo.GetCultureInfo("id-ID"));
+                                            lineTaxAmountMSTDecimal += decimal.Parse(lineTaxAmountMST, System.Globalization.CultureInfo.GetCultureInfo("id-ID"));
+                                        }
 
-                                        lineAmountIncTaxDecimal += decimal.Parse(lineAmountIncTax, System.Globalization.CultureInfo.GetCultureInfo("id-ID"));
-                                        lineTaxAmountMSTDecimal += decimal.Parse(lineTaxAmountMST, System.Globalization.CultureInfo.GetCultureInfo("id-ID"));
+                                        
 
+
+                                    }
+                                    //else
+                                    //{
+                                    //    subtotal = 0;
+                                    //}
+                                }
+                                subtotal = lineAmountIncTaxDecimal - lineTaxAmountMSTDecimal; //#PPN12
+
+                                DPPBebas = subtotal;
+                                return String.Format("{0:#,0}", DPPBebas);
+                                //return String.Format("{0:#,0}", subtotal * 11 / 12); //03012025 #PPN12
+
+
+                            }
+                            else
+                            {
+                                DPPBebas = getDPPBebas(theTransaction);
+                                return String.Format("{0:#,0}", DPPBebas);
+                            }
+                            
+                            //}
+                             
+                        case "TEXTDPPLAINBEBAS":
+                            if (statusDPP2025Print == "True")
+                            {
+                                //validate status
+                                if (DPPNilaiLainStatus == true)
+                                {
+                                    return String.Format("{0:#,0}", DPPBebas * 11 / 12);
+                                }
+                                else
+                                {
+                                    return "0";
+                                }
+                            }
+                            else
+                            {
+                                return string.Empty;
+                            }
+                           
+                             
+                        case "TEXTPPNBEBAS":
+                            return String.Format("{0:#,0}", getPPNBebas(theTransaction)); ;
+                            
+                        case "TEXTITEMNON":
+                            return "0";
+                        case "TEXTDPPNON":
+                            //check DPP dibebaskan
+                            if ((cot = theTransaction as CustomerOrderTransaction) != null && invoiceId != "")
+                            {
+                                lineAmountIncTaxDecimal = 0;
+                                lineAmountIncTax = "";
+                                subtotal = 0;
+                                lineTaxAmountMST = "";
+                                lineTaxAmountMSTDecimal = 0;
+                                // Lookup the matching XML node for the current salesLine.ItemId
+                                foreach (SaleLineItem saleLine in theTransaction.SaleItems)
+                                {
+                                    var matchingNode = xml.Elements("CustInvoiceTrans")
+                                                        .FirstOrDefault(x => x.Attribute("ItemLines")
+                                                        .Value.Split(';')[0] == saleLine.ItemId);
+
+                                    if (matchingNode != null)
+                                    {
+                                        // Split the ItemLines attribute by semicolons
+                                        string[] itemDetails = matchingNode.Attribute("ItemLines").Value.Split(';');
+
+                                        lineAmountIncTax = itemDetails[3];
+                                        lineTaxAmountMST = itemDetails[6];
+                                        taxItemGroup = itemDetails[7];
+                                        if (taxItemGroup == "PPN")
+                                        {
+                                            lineAmountIncTaxDecimal += decimal.Parse(lineAmountIncTax, System.Globalization.CultureInfo.GetCultureInfo("id-ID"));
+                                            lineTaxAmountMSTDecimal += decimal.Parse(lineTaxAmountMST, System.Globalization.CultureInfo.GetCultureInfo("id-ID"));
+                                        }
 
                                     }
                                     else
@@ -916,22 +1146,44 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                                     }
                                 }
                                 subtotal = lineAmountIncTaxDecimal - lineTaxAmountMSTDecimal; //#PPN12
-                                //return String.Format("{0:#,0}", subtotal);
-                                return String.Format("{0:#,0}", subtotal * 11 / 12); //03012025 #PPN12
+                                DPPNonPajak = subtotal;
+                                return String.Format("{0:#,0}", DPPNonPajak);
+                                //return String.Format("{0:#,0}", subtotal * 11 / 12); //03012025 #PPN12
 
 
                             }
                             else
                             {
-                                return String.Format("{0:#,0}",
-                                GetTotalNetAmount(theTransaction) - GetTotalPB1(theTransaction));
+                                DPPNonPajak = getDPPNonPajak(theTransaction);
+                                return String.Format("{0:#,0}", DPPNonPajak);
                             }
-
-                        case "LABELDPPOTHER":
-                            return "DPP Nilai Lain";
+                            
+                            //}
+                        case "TEXTDPPLAINNON":
+                            if (statusDPP2025Print == "True")
+                            {
+                                return "0";
+                            }
+                            else
+                            {
+                                return string.Empty;
+                            }
+                            //return "0";
+                        case "TEXTPPNNON":
+                            return "0";
+                        
                         case "TEXTDPPOTHER":
-                            return String.Format("{0:#,0}",
-                                GetTotalNetAmountDPPLain(theTransaction) - GetTotalPB1(theTransaction));
+                            if (statusDPP2025Print == "True")
+                            {
+
+                                return String.Format("{0:#,0}", DPPPKP *11/12);
+                               //GetTotalNetAmountDPPLain(theTransaction) - GetTotalPB1(theTransaction));
+                            }
+                            else
+                            {
+                                return string.Empty;
+                            }
+                           
                         //End Edit By Erwin 23 July 2019
                         //case "DPP": return String.Format("{0:0,0}", totalCustom);
                         case "PPN": 
@@ -1282,6 +1534,192 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
             return string.Empty;
         }
 
+        private decimal getPPNBebas(RetailTransaction theTransaction)
+        {
+            //custom by Yonathan 29102024 for invoice
+            CustomerOrderTransaction cot;
+            decimal subtotal = 0;
+            decimal ppnPct = 0;
+            if (ApplicationSettings.Terminal.StoreTaxGroup == "TAX")
+            {
+                try
+                {
+
+                    foreach (SaleLineItem s in theTransaction.SaleItems)
+                    {
+                        if (s.TaxGroupId == "Dibebaskan" && !s.Voided)
+                        {
+                            ppnPct = getTaxPct("PPN");
+                            subtotal += Math.Round(s.NetAmount * (ppnPct / 100));
+                        }/* ppnPct = Math.Round(((s.NetAmountWithTax - s.NetAmount) / s.NetAmount) * 100);
+
+                        subtotal += Math.Round((ppnPct/100) * s.NetAmount);*/
+
+                    }
+                    //Edit By Erwin 23 July 2019
+                    //return String.Format("{0:0,0}", subtotal);
+
+                    return subtotal; //03012025 #PPN12;
+                    //End Edit By Erwin 23 July 2019
+                }
+                catch
+                {
+                    //Edit By Erwin 23 July 2019
+                    //return string.Empty;
+                    return 0;
+                    //End Edit By Erwin 23 July 2019
+                }
+            }
+            else //if (ApplicationSettings.Terminal.StoreTaxGroup == "NON")
+            {
+                return 0;
+            }
+           
+        }
+
+        private decimal getTaxPct(string p)
+        {
+            decimal taxPct = 0;
+            SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+            //string invoiceId = "";
+            try
+            {
+                string queryString = @"SELECT TAXVALUE
+                                        FROM [ax].[TAXDATA]
+                                        WHERE TAXCODE = 'PPN'
+                                          AND GETDATE() BETWEEN TAXFROMDATE AND TAXTODATE";
+                //string queryString = @"SELECT ITEMID,POSITIVESTATUS,DATAAREAID FROM ax.CPITEMONHANDSTATUS where ITEMID=@ITEMID";
+
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+
+                    //command.Parameters.AddWithValue("@SALESID", _salesId);
+
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+
+                                taxPct = reader.GetDecimal(0);
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            catch (Exception ex)
+            {
+                //LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+
+                }
+            }
+            return taxPct;
+        }
+
+        private decimal getDPPNonPajak(RetailTransaction theTransaction)
+        {
+            //custom by Yonathan 29102024 for invoice
+            CustomerOrderTransaction cot;
+            decimal subtotal = 0;
+
+            try
+            {
+
+                foreach (SaleLineItem s in theTransaction.SaleItems)
+                {
+                    if (s.TaxGroupId == "NonPPN" && !s.Voided)
+                        subtotal += s.NetAmountWithNoTax;
+
+                }
+                //Edit By Erwin 23 July 2019
+                //return String.Format("{0:0,0}", subtotal);
+
+                return subtotal; //03012025 #PPN12;
+                //End Edit By Erwin 23 July 2019
+            }
+            catch
+            {
+                //Edit By Erwin 23 July 2019
+                //return string.Empty;
+                return 0;
+                //End Edit By Erwin 23 July 2019
+            }
+        }
+
+        private decimal getDPPBebas(RetailTransaction theTransaction)
+        {
+            //custom by Yonathan 29102024 for invoice
+            CustomerOrderTransaction cot;
+            decimal subtotal = 0;
+
+            try
+            {
+
+                foreach (SaleLineItem s in theTransaction.SaleItems)
+                {
+                    if (s.TaxGroupId == "Dibebaskan" && !s.Voided)
+                        subtotal += s.NetAmountWithNoTax;
+                     
+                }
+                //Edit By Erwin 23 July 2019
+                //return String.Format("{0:0,0}", subtotal);
+
+                return subtotal; //03012025 #PPN12;
+                //End Edit By Erwin 23 July 2019
+            }
+            catch
+            {
+                //Edit By Erwin 23 July 2019
+                //return string.Empty;
+                return 0;
+                //End Edit By Erwin 23 July 2019
+            }
+        }
+
+        private string getTotalBebas(RetailTransaction theTransaction)
+        {
+            throw new NotImplementedException();
+        }
+
+        private decimal getTotalBKP(RetailTransaction theTransaction)
+        {
+            try
+            {
+                decimal subTotalBKP = 0;
+                foreach (SaleLineItem s in theTransaction.SaleItems)
+                {
+                    if (s.TaxGroupId != "PPN" && !s.Voided)
+                    {
+                        subTotalBKP = s.NetAmountWithTax;
+                    }
+                }
+                //Edit By Erwin 23 July 2019
+                //return String.Format("{0:0,0}", subTotalPB1);  
+                return subTotalBKP;
+                //return "12";
+                //End Edit By Erwin 23 July 2019
+            }
+            catch
+            {
+                //Edit By Erwin 23 July 2019                
+                //return string.Empty;
+                return 0;
+                //End Edit By Erwin 23 July 2019
+            }
+        }
+
         private void getInvoiceId(string _salesId)
         {
             SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
@@ -1393,33 +1831,67 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
             //custom by Yonathan 29102024 for invoice
             CustomerOrderTransaction cot;
             decimal subtotal = 0;
-            
+
+            if (ApplicationSettings.Terminal.StoreTaxGroup == "TAX")
+            {
                 try
                 {
-                    
+
                     foreach (SaleLineItem s in theTransaction.SaleItems)
                     {
                         if (s.TaxGroupId == "PPN" && !s.Voided)
                             subtotal += s.NetAmountWithNoTax;
-                        else if (s.TaxGroupId != "PPN" && !s.Voided) //NECI_YNWA start modified because code change in CU10 regarding the column NetAmountWithNoTax is zero if the item type is BKTP
-                            subtotal += s.NetAmount; //NECI_YNWA end modified
+
+                        //disable for PPN only, other tax group will be splitted - 22012025
+                        //else if (s.TaxGroupId != "PPN" && !s.Voided) //NECI_YNWA start modified because code change in CU10 regarding the column NetAmountWithNoTax is zero if the item type is BKTP
+                        //subtotal += s.NetAmount; //NECI_YNWA end modified
                     }
                     //Edit By Erwin 23 July 2019
                     //return String.Format("{0:0,0}", subtotal);
-                    
-                    return subtotal; //03012025 #PPN12;
+
+                    //return subtotal; //03012025 #PPN12;
                     //End Edit By Erwin 23 July 2019
                 }
                 catch
                 {
                     //Edit By Erwin 23 July 2019
                     //return string.Empty;
-                    return 0;
+                    subtotal =  0;
                     //End Edit By Erwin 23 July 2019
                 }
             
+            }
+            else if (ApplicationSettings.Terminal.StoreTaxGroup == "NonPKP")
+            {
+                try
+                {
 
-            
+                    foreach (SaleLineItem s in theTransaction.SaleItems)
+                    {
+                        if (s.TaxGroupId == "PPN" && !s.Voided)
+                            subtotal += s.NetAmount;
+
+                        //disable for PPN only, other tax group will be splitted - 22012025
+                        //else if (s.TaxGroupId != "PPN" && !s.Voided) //NECI_YNWA start modified because code change in CU10 regarding the column NetAmountWithNoTax is zero if the item type is BKTP
+                        //subtotal += s.NetAmount; //NECI_YNWA end modified
+                    }
+                    //Edit By Erwin 23 July 2019
+                    //return String.Format("{0:0,0}", subtotal);
+
+                    //return subtotal; //03012025 #PPN12;
+                    //End Edit By Erwin 23 July 2019
+                }
+                catch
+                {
+                    //Edit By Erwin 23 July 2019
+                    //return string.Empty;
+                    subtotal = 0;
+                    //End Edit By Erwin 23 July 2019
+                }
+            }
+
+
+            return subtotal;
         }
 
         private decimal GetTotalNetAmountDPPLain(RetailTransaction theTransaction)
@@ -1427,10 +1899,11 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
             //custom by Yonathan 29102024 for invoice
             CustomerOrderTransaction cot;
             decimal subtotal = 0;
-            
+            if (ApplicationSettings.Terminal.StoreTaxGroup == "TAX")
+            {
                 try
                 {
-                    
+
                     foreach (SaleLineItem s in theTransaction.SaleItems)
                     {
                         if (s.TaxGroupId == "PPN" && !s.Voided)
@@ -1440,7 +1913,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                     }
                     //Edit By Erwin 23 July 2019
                     //return String.Format("{0:0,0}", subtotal);
-                    subtotal = subtotal*11/12;
+                    subtotal = subtotal * 11 / 12;
                     return subtotal; //03012025 #PPN12;
                     //End Edit By Erwin 23 July 2019
                 }
@@ -1449,8 +1922,41 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                     //Edit By Erwin 23 July 2019
                     //return string.Empty;
                     return 0;
+                    //End Edit By Erwin 23 July 2019 
+                }
+
+            } 
+            else //if (ApplicationSettings.Terminal.StoreTaxGroup == "NON")
+            {
+                try
+                {
+
+                    foreach (SaleLineItem s in theTransaction.SaleItems)
+                    {
+                        if (s.TaxGroupId == "PPN" && !s.Voided)
+                            subtotal += s.NetAmount;
+
+                        //disable for PPN only, other tax group will be splitted - 22012025
+                        //else if (s.TaxGroupId != "PPN" && !s.Voided) //NECI_YNWA start modified because code change in CU10 regarding the column NetAmountWithNoTax is zero if the item type is BKTP
+                        //subtotal += s.NetAmount; //NECI_YNWA end modified
+                    }
+                    subtotal = subtotal * 11 / 12;
+                    return subtotal; 
+                    //Edit By Erwin 23 July 2019
+                    //return String.Format("{0:0,0}", subtotal);
+
+                    //return subtotal; //03012025 #PPN12;
                     //End Edit By Erwin 23 July 2019
                 }
+                catch
+                {
+                    //Edit By Erwin 23 July 2019
+                    //return string.Empty;
+                    return subtotal = 0;
+                    //End Edit By Erwin 23 July 2019
+                }
+            }
+               
             
 
             
@@ -1458,21 +1964,33 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
 
         private string GetTotalPPN(RetailTransaction theTransaction)
         {
-            try
+            if (ApplicationSettings.Terminal.StoreTaxGroup == "TAX")
             {
-                decimal subTotalPPN = 0;
-                foreach (SaleLineItem s in theTransaction.SaleItems)
+                try
                 {
-                    if (s.TaxGroupId == "PPN" && !s.Voided)
-                        subTotalPPN += s.TaxAmount;
-                }
+                    decimal subTotalPPN = 0;
+                    foreach (SaleLineItem s in theTransaction.SaleItems)
+                    {
+                        if (s.TaxGroupId == "PPN" && !s.Voided)
+                            subTotalPPN += s.TaxAmount;
+                    }
 
-                return String.Format("{0:#,0}", subTotalPPN);
+                    return String.Format("{0:#,0}", subTotalPPN);
+                }
+                catch
+                {
+                    return String.Format("{0:#,0}", 0); // string.Empty;
+                }
             }
-            catch
+            else if (ApplicationSettings.Terminal.StoreTaxGroup == "NonPKP")
             {
-                return string.Empty;
+                return String.Format("{0:#,0}", 0);
             }
+            else
+            {
+                return String.Format("{0:#,0}", 0);
+            }
+            
         }
         private decimal GetTotalPB1(RetailTransaction theTransaction)
         {
@@ -3641,6 +4159,9 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                 formInfo.DetailLines = ds.Tables[0].Rows.Count;
 
                 // Getting a dataset containing the footerpart of the current form
+                //get DPP2025 printing status 23012025 getDPP2025Status
+                ReadOnlyCollection<object> containerArray = Printing.InternalApplication.TransactionServices.InvokeExtension("getDPP2025Status", ApplicationSettings.Database.DATAAREAID);
+                statusDPP2025Print = containerArray[3].ToString(); 
                 ds = formInfo.FooterTemplate;
                 formInfo.Footer = ReadDataset(ds, null, theTransaction);
                 formInfo.Footer = RemoveEmptyLines(formInfo.Footer); //add by yonathan 18102024 #THERMAL

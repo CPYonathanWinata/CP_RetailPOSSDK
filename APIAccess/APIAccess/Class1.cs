@@ -43,6 +43,16 @@ namespace APIAccess
         public static string xmlString1 = "";
         public static string xmlString2 = "";
         public static string xmlString3 = "";
+
+
+        public static string idTypeBox { get; set; }
+        public static string idText { get; set; }
+        public static string custText { get; set; }
+        public static string genderBox { get; set; }
+        public static int ageText { get; set; }
+        public static int nationalityIndex { get; set; }
+        public static string nationality { get; set; }
+
         //grabmart
         public static string merchantId { get; set; }
 
@@ -50,6 +60,8 @@ namespace APIAccess
         {
             return "^" + Regex.Escape(value).Replace("_", ".").Replace("%", ".*") + "$";
         }*/
+
+        
 
         public string getURLAPIByFuncName(string _funcName)
         {

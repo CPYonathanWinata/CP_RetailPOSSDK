@@ -320,7 +320,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 				//labelCustomerId.Text = ApplicationLocalizer.Language.Translate(1448); //Customer id
 				//labelCustomerName.Text = ApplicationLocalizer.Language.Translate(1449); //Customer Name
 				//labelAccountInfo.Text = ApplicationLocalizer.Language.Translate(1451); //Account information
-
+                txtCustName.Text = APIAccess.APIAccessClass.custText != "" && APIAccess.APIAccessClass.custText != null ? APIAccess.APIAccessClass.custText : "";
 
 				numPad1.SetEnteredValueFocus();
 
@@ -516,7 +516,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 				lblReff.Text = "Reference No.";
 				lblPhone.Text = "Phone No.";
 				txtReff.ReadOnly = false;
-				txtPhone.ReadOnly = false;
+				txtPhone.ReadOnly = false; 
 				lblCustName.Visible = true;
 				txtCustName.Visible = true;
 				btnRequest.Visible = true;
@@ -2054,7 +2054,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 					if (int.Parse(this.tenderInfo.TenderID) == tenderGrabMart
 				|| int.Parse(this.tenderInfo.TenderID) == tenderGrabMartDev)
 					{
-
+                        
                         //check connection first - yonathan 06122024
                         bool status = false;
                         string functionName = "GetGRABMARTAPI";

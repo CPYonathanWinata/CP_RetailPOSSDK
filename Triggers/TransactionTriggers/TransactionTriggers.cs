@@ -41,6 +41,8 @@ using System.Xml;
 using LSRetailPosis.POSProcesses;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using LSRetailPosis.Transaction.Line.SaleItem;
+using LSRetailPosis.Settings;
 
 namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 {
@@ -49,6 +51,9 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 	{
 		[Import]
 		public IApplication Application { get; set; }
+        //APIAccess.APIParameter.RetailTransactionExtended retailExtended ;//= new APIAccess.APIParameter.RetailTransactionExtended();
+
+        
 		static SerialPort mySerialPort;
 		//Generate Hex For Request, starts with 4 static bytes
 		byte[] bytestosend = { 0x02, 0x42, 0x4E, 0x49 };
@@ -306,6 +311,8 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 
 		public void PostEndTransaction(IPosTransaction posTransaction)
 		{
+            APIAccess.APIFunction APIFunction = new APIAccess.APIFunction();
+            //MessageBox.Show(APIAccess.APIAccessClass.idText.ToString(), "Confirmation", MessageBoxButtons.OKCancel, MessageBoxIcon.Information); ;
 			LSRetailPosis.ApplicationLog.Log("TransactionTriggers.PostEndTransaction", "When concluding the transaction, after printing and saving", LSRetailPosis.LogTraceLevel.Trace);
             bool foundGiftCardPayment = false; //add by Yoanthan 10092024
 			if (posTransaction.ToString() == "LSRetailPosis.Transaction.RetailTransaction")
@@ -313,7 +320,7 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 
 
 				// CPNEWPAYMENTPOS CUSTOMIZATION
-				CPNEWPAYMENTPOS();
+                CPNEWPAYMENTPOS(posTransaction);
 				// END CPNEWPAYMENTPOS CUSTOMIZATION
 
 				//Top Up BNI Tapcash CUSTOMIZATION - ES 09092019
@@ -354,11 +361,9 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
                 
 
 			}
-            APIAccess.APIAccessClass.isB2b = null;
-            APIAccess.APIAccessClass.priceGroup = null;
-            APIAccess.APIAccessClass.lineDiscGroup = null;
-            APIAccess.APIAccessClass.ppnValidation = null;
-            APIAccess.APIAccessClass.custId = null;
+            //clear the value - 16012025
+            APIFunction.clearRetailTransExtended();
+            
 		 
 		}
 
@@ -965,10 +970,11 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
             amountAdmFee = (Math.Truncate(Convert.ToDecimal(admFee) * 1000m) / 1000m);
             return amountAdmFee;
         }
-	
 
-		private void CPNEWPAYMENTPOS()
+
+        private void CPNEWPAYMENTPOS(IPosTransaction posTransaction)
 		{
+            //add new field to this //16012025 
 			SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
 			int id = 0;
 			string transactionID = "";
@@ -1145,6 +1151,8 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
                         //decimal admFee = 0;
                         //admFee = GetAdmFee(TenderID);
                         //ADD ADMFEE FOR INSERT BY YONATHAN 13/06/2024 //CPIADMFEE
+
+
 						string queryString = @"
 											INSERT INTO AX.CPAMBILTUNAI (
 																			TRANSACTIONID, 
@@ -1280,11 +1288,12 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 			}
 			#endregion
 
-			if (id != 0)
-			{
-				try
-				{
-					string queryString = @"
+            if (id != 0)
+            {
+                try
+                {
+                    //add type, number, gender, country - yonathan 17012025
+                    string queryString = @"
 											INSERT INTO AX.CPNEWPAYMENTPOS (
 																			ID,
 																			TransactionID, 
@@ -1296,7 +1305,7 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 																			PurchaserName, 
 																			PurchaserPhone, 
 																			Store, 
-																			TransDate,
+																			TransDate,                                                                             
 																			[DATAAREAID],
 																			[PARTITION]
 																			)
@@ -1311,70 +1320,435 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 													@PurchaserName, 
 													@PurchaserPhone, 
 													@Store, 
-													@TransDate,
+													@TransDate,                                                    
 													@DataAreaID,
 													@Partition
 													)";
 
-					using (SqlCommand command = new SqlCommand(queryString, connection))
-					{
-						command.Parameters.AddWithValue("@ID", id);
-						command.Parameters.AddWithValue("@TransactionID", transactionID);
-						command.Parameters.AddWithValue("@ReceiptID", receiptID);
-						command.Parameters.AddWithValue("@PaymentAmount", PaymentAmount);
-						command.Parameters.AddWithValue("@NoReffTransaction", NoReffTransaction);
-						command.Parameters.AddWithValue("@TenderID", TenderID);
-						command.Parameters.AddWithValue("@TenderName", TenderName);
-						command.Parameters.AddWithValue("@PurchaserName", PurchaserName);
-						command.Parameters.AddWithValue("@PurchaserPhone", PurchaserPhone);
-						command.Parameters.AddWithValue("@Store", store);
-						command.Parameters.AddWithValue("@TransDate", transDate);
-						command.Parameters.AddWithValue("@DataAreaID", dataareaID);
-						command.Parameters.AddWithValue("@Partition", partition);
+                    using (SqlCommand command = new SqlCommand(queryString, connection))
+                    {
+                        command.Parameters.AddWithValue("@ID", id);
+                        command.Parameters.AddWithValue("@TransactionID", transactionID); 
+                        command.Parameters.AddWithValue("@ReceiptID", receiptID);
+                        command.Parameters.AddWithValue("@PaymentAmount", PaymentAmount);
+                        command.Parameters.AddWithValue("@NoReffTransaction", NoReffTransaction);
+                        command.Parameters.AddWithValue("@TenderID", TenderID);
+                        command.Parameters.AddWithValue("@TenderName", TenderName);
+                        command.Parameters.AddWithValue("@PurchaserName", PurchaserName);
+                        command.Parameters.AddWithValue("@PurchaserPhone", PurchaserPhone);
+                        command.Parameters.AddWithValue("@Store", store);
+                        command.Parameters.AddWithValue("@TransDate", transDate);
+                        //CPPOSPAYMENT 
+                        //command.Parameters.AddWithValue("@TYPEID", APIAccess.APIAccessClass.idTypeBox);
+                        //command.Parameters.AddWithValue("@NUMBERID", APIAccess.APIAccessClass.idText.ToString());
+                        //command.Parameters.AddWithValue("@GENDER", APIAccess.APIAccessClass.genderBox);
+                        //command.Parameters.AddWithValue("@COUNTRY", APIAccess.APIAccessClass.nationality.ToString());
+                        //command.Parameters.AddWithValue("@AGE", APIAccess.APIAccessClass.ageText);
+                        command.Parameters.AddWithValue("@DataAreaID", dataareaID);
+                        command.Parameters.AddWithValue("@Partition", partition);
 
-						if (connection.State != ConnectionState.Open)
-						{
-							connection.Open();
-						}
+                        if (connection.State != ConnectionState.Open)
+                        {
+                            connection.Open();
+                        }
 
-						command.ExecuteNonQuery();
-					}
-				}
-				catch (Exception ex)
-				{
-					LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
-					throw;
-				}
-				finally
-				{
-					try
-					{
-						string queryStringDelete = @"DELETE FROM AX.[CPNEWPAYMENTPOSTMP]";
+                        command.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                    throw;
+                }
+                finally
+                {
+                    try
+                    {
+                        string queryStringDelete = @"DELETE FROM AX.[CPNEWPAYMENTPOSTMP]";
 
-						SqlCommand commandDelete = new SqlCommand(queryStringDelete, connection);
+                        SqlCommand commandDelete = new SqlCommand(queryStringDelete, connection);
 
-						if (connection.State != ConnectionState.Open)
-						{
-							connection.Open();
-						}
+                        if (connection.State != ConnectionState.Open)
+                        {
+                            connection.Open();
+                        }
 
-						commandDelete.ExecuteNonQuery();
-					}
-					catch (Exception ex)
-					{
-						LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
-						throw;
-					}
-					finally
-					{
-						if (connection.State != ConnectionState.Closed)
-						{
-							connection.Close();
-						}
-					}
-				}
-			}
+                        commandDelete.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                        throw;
+                    }
+                    finally
+                    {
+                        if (connection.State != ConnectionState.Closed)
+                        {
+                            connection.Close();
+                        }
+                    }
+                }
+            }
+
+
+            //add write to field DPPNLNONPPN  & DPPNLDIBEBASKAN & DPPNILAILAIN 
+            writeDPPTransExtended(posTransaction);
+            //disable CPPOSPAYMENT
+//            else //if cash payment method
+//            {
+
+
+//                SqlConnection connectionID = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+//                try
+//                {
+//                    string queryStringID = @"
+//											SELECT TOP 1 REPLICATIONCOUNTERFROMORIGIN FROM AX.[CPNEWPAYMENTPOS] ORDER BY REPLICATIONCOUNTERFROMORIGIN DESC";
+
+                     
+
+//                    using (SqlCommand command = new SqlCommand(queryStringID, connectionID))
+//                    {
+
+//                        if (connectionID.State != ConnectionState.Open)
+//                        {
+//                            connectionID.Open();
+//                        }
+//                        using (SqlDataReader reader = command.ExecuteReader())
+//                        {
+//                            if (reader.Read())
+//                            {
+//                                id = (int)reader[0];
+//                            }
+//                        }
+//                    }
+//                }
+//                catch (Exception ex)
+//                {
+//                    LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+//                    throw;
+//                }
+//                finally
+//                {
+//                    if (connectionID.State != ConnectionState.Closed)
+//                    {
+//                        connectionID.Close();
+//                    }
+//                }
+
+//                // input the insert query here
+                
+//                RetailTransaction retailTrans = posTransaction as RetailTransaction;
+//                transactionID = posTransaction.TransactionId;
+//                receiptID = posTransaction.ReceiptId;
+//                //PaymentAmount = retailTrans.Payment.ToString() ;
+//                NoReffTransaction = "";
+//                TenderID = 1;
+//                TenderName =    "CASH";
+//                partition = "1";
+                 
+//                //PurchaserName = reader[7] + "";
+//                PurchaserPhone = "";
+//                store = posTransaction.StoreId;
+                
+//                try
+//                {
+//                    //add type, number, gender, country - yonathan 17012025
+//                    string queryString = @"
+//											INSERT INTO AX.CPNEWPAYMENTPOS (
+//																			ID,
+//																			TransactionID, 
+//																			ReceiptID, 
+//																			PaymentAmount, 
+//																			NoReffTransaction, 
+//																			TenderID, 
+//																			TenderName, 
+//																			PurchaserName, 
+//																			PurchaserPhone, 
+//																			Store, 
+//																			TransDate, 
+//                                                                            TypeId,
+//                                                                            NumberId,
+//                                                                            Gender,
+//                                                                            Country,
+//                                                                            Age,
+//																			[DATAAREAID],
+//																			[PARTITION]
+//																			)
+//											VALUES (
+//													@ID,
+//													@TransactionID,
+//													@ReceiptID, 
+//													@PaymentAmount, 
+//													@NoReffTransaction, 
+//													@TenderID, 
+//													@TenderName, 
+//													@PurchaserName, 
+//													@PurchaserPhone, 
+//													@Store, 
+//													@TransDate,
+//                                                    @TYPEID,
+//                                                    @NUMBERID,
+//                                                    @GENDER,
+//                                                    @COUNTRY,
+//                                                    @AGE,
+//													@DataAreaID,
+//													@Partition
+//													)";
+
+//                    using (SqlCommand command = new SqlCommand(queryString, connection))
+//                    {
+//                        command.Parameters.AddWithValue("@ID", ++id);
+//                        command.Parameters.AddWithValue("@TransactionID", transactionID);
+//                        command.Parameters.AddWithValue("@ReceiptID", receiptID);
+//                        command.Parameters.AddWithValue("@PaymentAmount", retailTrans.Payment);
+//                        command.Parameters.AddWithValue("@NoReffTransaction", NoReffTransaction);
+//                        command.Parameters.AddWithValue("@TenderID", TenderID);
+//                        command.Parameters.AddWithValue("@TenderName", TenderName);
+//                        command.Parameters.AddWithValue("@PurchaserName", APIAccess.APIAccessClass.custText.ToString());
+//                        command.Parameters.AddWithValue("@PurchaserPhone", PurchaserPhone);
+//                        command.Parameters.AddWithValue("@Store", store);
+//                        command.Parameters.AddWithValue("@TransDate", DateTime.Now);
+//                        command.Parameters.AddWithValue("@TYPEID", APIAccess.APIAccessClass.idTypeBox);
+//                        command.Parameters.AddWithValue("@NUMBERID", APIAccess.APIAccessClass.idText.ToString());
+//                        command.Parameters.AddWithValue("@GENDER", APIAccess.APIAccessClass.genderBox);
+//                        command.Parameters.AddWithValue("@COUNTRY", APIAccess.APIAccessClass.nationality.ToString());
+//                        command.Parameters.AddWithValue("@AGE", APIAccess.APIAccessClass.ageText);
+//                        command.Parameters.AddWithValue("@DataAreaID", Application.Settings.Database.DataAreaID);
+//                        command.Parameters.AddWithValue("@Partition", partition);
+
+//                        if (connection.State != ConnectionState.Open)
+//                        {
+//                            connection.Open();
+//                        }
+
+//                        command.ExecuteNonQuery();
+//                    }
+//                }
+//                catch (Exception ex)
+//                {
+//                    LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+//                    throw;
+//                }
+//                finally
+//                {
+//                    try
+//                    {
+//                        string queryStringDelete = @"DELETE FROM AX.[CPNEWPAYMENTPOSTMP]";
+
+//                        SqlCommand commandDelete = new SqlCommand(queryStringDelete, connection);
+
+//                        if (connection.State != ConnectionState.Open)
+//                        {
+//                            connection.Open();
+//                        }
+
+//                        commandDelete.ExecuteNonQuery();
+//                    }
+//                    catch (Exception ex)
+//                    {
+//                        LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+//                        throw;
+//                    }
+//                    finally
+//                    {
+//                        if (connection.State != ConnectionState.Closed)
+//                        {
+//                            connection.Close();
+//                        }
+//                    }
+//                }
+
+//                //++id
+//            }
 		}
+
+        private void writeDPPTransExtended(IPosTransaction posTransaction)
+        {
+            SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+            decimal dppNilaiLain = getDPPLain(posTransaction);  
+            string receiptId = posTransaction.ReceiptId;
+            string store = posTransaction.StoreId;
+            string terminal = posTransaction.TerminalId;
+            string transactionId = posTransaction.TransactionId;
+            DateTime transDate = DateTime.Now.Date;   
+            decimal dppNLDibebaskan = getDPPBebas(posTransaction);//500.00m;   
+            decimal dppNLNonPpn = getDPPNLNon(posTransaction);  
+            string dataAreaId = Application.Settings.Database.DataAreaID;
+            long partition = 1; 
+
+            try
+            {
+                string queryString = @" INSERT INTO 
+                        ax.CPRETAILTRANSACTIONTABLEEXT (
+                            DPPNILAILAIN,
+                            RECEIPTID,
+                            STORE,
+                            TERMINAL,
+                            TRANSACTIONID,
+                            TRANSDATE,
+                            DPPNLDIBEBASKAN,
+                            DPPNLNONPPN,
+                            [DATAAREAID],
+                            [PARTITION])
+
+                        VALUES (
+                            @DPPNILAILAIN,
+                            @RECEIPTID,
+                            @STORE,
+                            @TERMINAL,
+                            @TRANSACTIONID,
+                            @TRANSDATE,
+                            @DPPNLDIBEBASKAN,
+                            @DPPNLNONPPN,
+                            @DATAAREAID,
+                            @PARTITION
+                        )";
+
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+                    command.Parameters.AddWithValue("@DPPNILAILAIN", dppNilaiLain);
+                    command.Parameters.AddWithValue("@RECEIPTID", receiptId);
+                    command.Parameters.AddWithValue("@STORE", store);
+                    command.Parameters.AddWithValue("@TERMINAL", terminal);
+                    command.Parameters.AddWithValue("@TRANSACTIONID", transactionId);
+                    command.Parameters.AddWithValue("@TRANSDATE", transDate);
+                    command.Parameters.AddWithValue("@DPPNLDIBEBASKAN", dppNLDibebaskan);
+                    command.Parameters.AddWithValue("@DPPNLNONPPN", dppNLNonPpn);
+                    command.Parameters.AddWithValue("@DATAAREAID", dataAreaId);
+                    command.Parameters.AddWithValue("@PARTITION", partition);
+
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+                    }
+
+                    command.ExecuteNonQuery();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+            finally
+            {                   
+                if (connection.State != ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+            
+        }
+
+        private decimal getDPPNLNon(IPosTransaction posTransaction)
+        {
+            RetailTransaction theTransaction = posTransaction as RetailTransaction;
+           
+            CustomerOrderTransaction cot;
+            decimal subtotal = 0;
+
+            try
+            {
+
+                foreach (SaleLineItem s in theTransaction.SaleItems)
+                {
+                    if (s.TaxGroupId == "NonPPN" && !s.Voided)
+                        subtotal += s.NetAmountWithNoTax;
+
+                }
+
+
+                return subtotal * 11 / 12; 
+            }
+            catch
+            {
+                 
+                return 0;
+                
+            }
+        }
+
+        private decimal getDPPLain(IPosTransaction posTransaction)
+        {
+             
+            RetailTransaction theTransaction = posTransaction as RetailTransaction;
+            
+            CustomerOrderTransaction cot;
+            decimal subtotal = 0;
+
+            if (ApplicationSettings.Terminal.StoreTaxGroup == "TAX")
+            {
+                try
+                {
+
+                    foreach (SaleLineItem s in theTransaction.SaleItems)
+                    {
+                        if (s.TaxGroupId == "PPN" && !s.Voided)
+                            subtotal += s.NetAmountWithNoTax;
+
+                         
+                    }
+                    subtotal = subtotal * 11 / 12;
+                    
+                }
+                catch
+                { 
+                    subtotal = 0;
+                   
+                }
+
+            }
+            else if (ApplicationSettings.Terminal.StoreTaxGroup == "NonPKP")
+            {
+                try
+                {
+
+                    foreach (SaleLineItem s in theTransaction.SaleItems)
+                    {
+                        if (s.TaxGroupId == "PPN" && !s.Voided)
+                            subtotal += s.NetAmount;
+ 
+                    }
+                    subtotal = subtotal * 11 / 12;
+                }
+                catch
+                { 
+                    subtotal = 0; 
+                }
+            }
+            return subtotal;
+        }
+
+        private decimal getDPPBebas(IPosTransaction posTransaction)
+        {
+            RetailTransaction theTransaction = posTransaction as RetailTransaction;
+            
+            CustomerOrderTransaction cot;
+            decimal subtotal = 0;
+
+            try
+            {
+
+                foreach (SaleLineItem s in theTransaction.SaleItems)
+                {
+                    if (s.TaxGroupId == "Dibebaskan" && !s.Voided)
+                        subtotal += s.NetAmountWithNoTax;
+                     
+                }
+
+
+                return subtotal = subtotal * 11 / 12;
+                
+            }
+            catch
+            {
+                 
+                return 0;
+                
+            }
+        
+        }
 
 		private void CPTOPUPBNI(IPosTransaction posTransaction)
 		{

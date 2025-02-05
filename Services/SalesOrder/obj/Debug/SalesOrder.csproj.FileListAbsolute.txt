@@ -148,6 +148,7 @@ C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Sa
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.formPickupInformation.resources
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.frmSalesOrder.resources
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.formShippingInformation.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.CP_frmStockInfolog.resources
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.CancellationChargePage.resources
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.CustomerInformationPage.resources
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.OrderDetailsPages.DeliveryInformationPage.resources
@@ -162,4 +163,3 @@ C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Sa
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\SalesOrder\obj\Debug\SalesOrder.dll.licenses
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\SalesOrder\obj\Debug\SalesOrder.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\SalesOrder\obj\Debug\SalesOrder.pdb
-C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\SalesOrder\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch.CP_frmStockInfolog.resources

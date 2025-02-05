@@ -17,6 +17,7 @@ using System.Data.SqlClient;
 using System.Data;
 using Microsoft.Dynamics.Retail.Pos.Contracts.DataEntity;
 using System.Net.Http;
+using System.Diagnostics;
 namespace APIAccess
 {
 	public  class APIFunction
@@ -910,6 +911,45 @@ namespace APIAccess
 
 		}
 
+
+        public void clearRetailTransExtended()
+        {
+            APIAccess.APIAccessClass.idTypeBox = "";
+            APIAccess.APIAccessClass.idText = "";
+            APIAccess.APIAccessClass.custText = "";
+            APIAccess.APIAccessClass.genderBox = "";
+            APIAccess.APIAccessClass.ageText = 0;
+            APIAccess.APIAccessClass.nationality = "";
+            APIAccess.APIAccessClass.nationalityIndex = -1;
+        }
+        public void LogErrorToEventViewer(string errorDetails)
+        {
+            string source = "Microsoft Dynamics AX Retail : Retail POS";
+            string logName = "Application";
+
+            try
+            {
+                // Check if source exists; if not, create it
+                if (!EventLog.SourceExists(source))
+                {
+                    EventLog.CreateEventSource(source, logName);
+                }
+
+                // Write the error details to Event Viewer
+                using (EventLog eventLog = new EventLog(logName))
+                {
+                    eventLog.Source = source;
+                    eventLog.WriteEntry(errorDetails, EventLogEntryType.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions when writing to the Event Viewer (e.g., insufficient permissions)
+                Console.WriteLine("Failed to write to Event Viewer: " + ex.Message);
+            }
+        }
+
+
         public class DatabaseHelper
         {
             private string _connectionString;
@@ -963,7 +1003,7 @@ namespace APIAccess
             }
         }
 
-
+      
 
 
         public class GrabMartAPI

@@ -36,6 +36,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 		private ReadOnlyCollection<LineItemViewModel> lineItems;
         //add order type - Yonathan 04102024
         int orderType = 0;
+        string disableInvoice = "false";
         //end
 		protected void SetTransaction(CustomerOrderTransaction custTransaction)
 		{
@@ -54,13 +55,14 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 			}
 		}
 		 
-		public CP_frmPackingSlipDetail(IApplication _application, string _salesId, int _orderType = 0)
+		public CP_frmPackingSlipDetail(IApplication _application, string _salesId, int _orderType = 0, string _disableInvoice = "false") 
 		{
 			InitializeComponent();
 			txtSalesOrder.Text = _salesId;
 			salesID = _salesId;
 			application = _application;
             orderType = _orderType;
+            disableInvoice = _disableInvoice;
 			//posTransaction = _posTransaction;
 			transaction = SalesOrderActions.GetCustomerOrder(salesID, LSRetailPosis.Transaction.CustomerOrderType.SalesOrder, LSRetailPosis.Transaction.CustomerOrderMode.Edit);
 			ItemDetailsViewModel(transaction);
@@ -448,12 +450,16 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                                     string invoiceAx = "";
                                     //string comboInvoice = "0";
                                     //validate if automatically post invoice after packing slip DO (based on customer master) - Yonathan 17092024
-                                    if(splitInvoice == "0")
+                                    if (disableInvoice == "false") //check if this customer disable invoice = true
                                     {
-                                        CreateInvoice(out invoiceAx);
+                                        if (splitInvoice == "0")
+                                        {
+                                            CreateInvoice(out invoiceAx);
+                                        }
                                     }
                                     
-                                }
+                                    
+                                } 
 								
 								//add to trigger
                                 /* disable adding to API
@@ -578,7 +584,12 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 }
                 else
                 {
-                    throw new Exception(string.Format("Invoice error, please post invoice on AX"));
+                    // Log error message to Event Viewer
+                    APIAccess.APIAccessClass APIClass = new APIAccess.APIAccessClass();
+                    APIAccess.APIFunction APIFunction = new APIAccess.APIFunction();
+                    APIFunction.LogErrorToEventViewer(statusInvoice);
+                    SalesOrder.InternalApplication.Services.Dialog.ShowMessage("Error occurred, check event viewer for details", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ////throw new Exception(string.Format("Invoice error, please post invoice on AX"));
                     //throw new Exception(string.Format("Invoice error, please post invoice on AX\n{0}", statusInvoice));
                 }
             }
