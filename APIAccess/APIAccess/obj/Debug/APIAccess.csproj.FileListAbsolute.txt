@@ -421,3 +421,4 @@ C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\A
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\APIAccess.pdb
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\obj\Debug\APIAccess.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\obj\Debug\APIAccess.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\obj\Debug\APIAccess.csprojResolveAssemblyReference.cache

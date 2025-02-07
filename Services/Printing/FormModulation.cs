@@ -4160,8 +4160,8 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
 
                 // Getting a dataset containing the footerpart of the current form
                 //get DPP2025 printing status 23012025 getDPP2025Status
-                ReadOnlyCollection<object> containerArray = Printing.InternalApplication.TransactionServices.InvokeExtension("getDPP2025Status", ApplicationSettings.Database.DATAAREAID);
-                statusDPP2025Print = containerArray[3].ToString(); 
+                //ReadOnlyCollection<object> containerArray = Printing.InternalApplication.TransactionServices.InvokeExtension("getDPP2025Status", ApplicationSettings.Database.DATAAREAID);
+                statusDPP2025Print = "True";//containerArray[3].ToString(); 
                 ds = formInfo.FooterTemplate;
                 formInfo.Footer = ReadDataset(ds, null, theTransaction);
                 formInfo.Footer = RemoveEmptyLines(formInfo.Footer); //add by yonathan 18102024 #THERMAL
