@@ -1113,7 +1113,6 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                     // "Error creating the packing slip."
                     SalesOrder.InternalApplication.Services.Dialog.ShowMessage(56220, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }*/
-
         internal static int CPGenerateDetails(ref int offset, string orderId, ref string format, string blank_space)
         {
             //string connectionString = ConfigurationManager.ConnectionStrings["CPConnection"].ConnectionString;
@@ -1130,7 +1129,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 								
 							};
 
-                
+
                 ReadOnlyCollection<object> containerArray = SalesOrder.InternalApplication.TransactionServices.InvokeExtension("getPackingSlipInfoDetails", parameterList);
                 xmlResponse = containerArray[3].ToString();
             }
@@ -1141,7 +1140,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 SalesOrder.InternalApplication.Services.Dialog.ShowMessage(56220, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-             //"<PackingSlip><CustConfirmTrans ItemId=\"10150014\" Name=\"LE MINERALE 600 ml\" Qty=\"4\" SalesPrice=\"3500.000\" DiscPercent=\"0\" DiscAmount=\"0.000\" LineAmount=\"12613.000\" /><CustConfirmTrans ItemId=\"12020002\" Name=\"INDOMIE GORENG\" Qty=\"3\" SalesPrice=\"2200.000\" DiscPercent=\"0\" DiscAmount=\"0.000\" LineAmount=\"5946.000\" /></PackingSlip>";
+            //"<PackingSlip><CustConfirmTrans ItemId=\"10150014\" Name=\"LE MINERALE 600 ml\" Qty=\"4\" SalesPrice=\"3500.000\" DiscPercent=\"0\" DiscAmount=\"0.000\" LineAmount=\"12613.000\" /><CustConfirmTrans ItemId=\"12020002\" Name=\"INDOMIE GORENG\" Qty=\"3\" SalesPrice=\"2200.000\" DiscPercent=\"0\" DiscAmount=\"0.000\" LineAmount=\"5946.000\" /></PackingSlip>";
 
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(xmlResponse);
@@ -1151,9 +1150,9 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             foreach (XmlNode node in custConfirmTransNodes)
             {
                 string itemId = node.Attributes["ItemId"].Value;
-                string name = node.Attributes["Name"].Value.PadRight(16).Substring(0, 15); 
+                string name = node.Attributes["Name"].Value.PadRight(16).Substring(0, 15);
                 string qty = decimal.Parse(node.Attributes["Qty"].Value).ToString("0");
-                string price = node.Attributes["SalesPrice"].Value.Replace(".000",""); // decimal.Parse(node.Attributes["SalesPrice"].Value).ToString("0");
+                string price = node.Attributes["SalesPrice"].Value.Replace(".000", ""); // decimal.Parse(node.Attributes["SalesPrice"].Value).ToString("0");
                 string discPercent = node.Attributes["DiscPercent"].Value.Replace(".000", ""); ;
                 string discAmount = node.Attributes["DiscAmount"].Value.Replace(".000", ""); ;
                 string subTotalDB = node.Attributes["LineAmount"].Value.Replace(".000", ""); ;
@@ -1197,7 +1196,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                     //{
                     for (int i = 1; i < lines.Length; i++)
                     {
-                        
+
                         lines[i] = lines[i].StartsWith(" ") ? lines[i].TrimStart() : lines[i];
                         itemDetails += blank_space +
                                     string.Empty.PadRight(9) +
@@ -1231,79 +1230,177 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             }
 
 
-//            try
-//            {
-//                string queryDetails = @"SELECT 
-//                                            C.ITEMID,
-//	                                        C.NAME,
-//	                                        CAST(C.QTY AS INT) AS QTY,
-//	                                        CAST(C.SALESPRICE AS INT) AS SALESPRICE,
-//	                                        CAST(C.DISCPERCENT AS decimal(18,1)) AS DISCPERCENT,
-//	                                        CAST(C.DISCAMOUNT AS INT) AS DISCAMOUNT,
-//                                            CAST(C.LINEAMOUNT AS INT) AS LINEAMOUNT
-//                                        FROM
-//	                                        CUSTCONFIRMTRANS C
-//                                        WHERE
-//	                                        C.SALESID = @SALESID
-//	                                        AND C.DATAAREAID = @DATAAREAID
-//                                            AND C.CONFIRMID = (
-//                                                SELECT TOP 1 CONFIRMID 
-//                                                FROM CUSTCONFIRMJOUR J 
-//                                                WHERE J.SALESID = @SALESID AND DATAAREAID = @DATAAREAID 
-//                                                ORDER BY CONFIRMID DESC)";
+            //            try
+            //            {
+            //                string queryDetails = @"SELECT 
+            //                                            C.ITEMID,
+            //	                                        C.NAME,
+            //	                                        CAST(C.QTY AS INT) AS QTY,
+            //	                                        CAST(C.SALESPRICE AS INT) AS SALESPRICE,
+            //	                                        CAST(C.DISCPERCENT AS decimal(18,1)) AS DISCPERCENT,
+            //	                                        CAST(C.DISCAMOUNT AS INT) AS DISCAMOUNT,
+            //                                            CAST(C.LINEAMOUNT AS INT) AS LINEAMOUNT
+            //                                        FROM
+            //	                                        CUSTCONFIRMTRANS C
+            //                                        WHERE
+            //	                                        C.SALESID = @SALESID
+            //	                                        AND C.DATAAREAID = @DATAAREAID
+            //                                            AND C.CONFIRMID = (
+            //                                                SELECT TOP 1 CONFIRMID 
+            //                                                FROM CUSTCONFIRMJOUR J 
+            //                                                WHERE J.SALESID = @SALESID AND DATAAREAID = @DATAAREAID 
+            //                                                ORDER BY CONFIRMID DESC)";
 
-//                using (SqlCommand commandDetails = new SqlCommand(queryDetails, connection))
-//                {
-//                    commandDetails.Parameters.AddWithValue("@SALESID", orderId);
-//                    commandDetails.Parameters.AddWithValue("@DATAAREAID", ApplicationSettings.Database.DATAAREAID);
+            //                using (SqlCommand commandDetails = new SqlCommand(queryDetails, connection))
+            //                {
+            //                    commandDetails.Parameters.AddWithValue("@SALESID", orderId);
+            //                    commandDetails.Parameters.AddWithValue("@DATAAREAID", ApplicationSettings.Database.DATAAREAID);
 
-//                    if (connection.State != ConnectionState.Open)
-//                    {
-//                        connection.Open();
-//                    }
+            //                    if (connection.State != ConnectionState.Open)
+            //                    {
+            //                        connection.Open();
+            //                    }
 
-//                    using (SqlDataReader readerDetails = commandDetails.ExecuteReader())
-//                    {
-//                        while (readerDetails.Read())
-//                        {
-//                            string itemId = readerDetails["ITEMID"].ToString();
-//                            string name = readerDetails["NAME"].ToString().PadRight(16).Substring(0, 15);
-//                            string qty = readerDetails["QTY"].ToString();
-//                            string price = readerDetails["SALESPRICE"].ToString();
-//                            string discPercent = readerDetails["DISCPERCENT"].ToString();
-//                            string discAmount = readerDetails["DISCAMOUNT"].ToString();
-//                            string subTotalDB = readerDetails["LINEAMOUNT"].ToString();
+            //                    using (SqlDataReader readerDetails = commandDetails.ExecuteReader())
+            //                    {
+            //                        while (readerDetails.Read())
+            //                        {
+            //                            string itemId = readerDetails["ITEMID"].ToString();
+            //                            string name = readerDetails["NAME"].ToString().PadRight(16).Substring(0, 15);
+            //                            string qty = readerDetails["QTY"].ToString();
+            //                            string price = readerDetails["SALESPRICE"].ToString();
+            //                            string discPercent = readerDetails["DISCPERCENT"].ToString();
+            //                            string discAmount = readerDetails["DISCAMOUNT"].ToString();
+            //                            string subTotalDB = readerDetails["LINEAMOUNT"].ToString();
 
-//                            /*int subTotalWithoutDisc = int.Parse(price) * int.Parse(qty);
-//                            int lineDiscAmount = int.Parse(discAmount) * int.Parse(qty);
-//                            int subTotalwithDiscAmount = subTotalWithoutDisc - lineDiscAmount;
-//                            decimal discPercentAmount = subTotalwithDiscAmount * (decimal.Parse(discPercent) / 100);
-//                            int subTotalReal = (int)(subTotalwithDiscAmount - discPercentAmount);*/
+            //                            /*int subTotalWithoutDisc = int.Parse(price) * int.Parse(qty);
+            //                            int lineDiscAmount = int.Parse(discAmount) * int.Parse(qty);
+            //                            int subTotalwithDiscAmount = subTotalWithoutDisc - lineDiscAmount;
+            //                            decimal discPercentAmount = subTotalwithDiscAmount * (decimal.Parse(discPercent) / 100);
+            //                            int subTotalReal = (int)(subTotalwithDiscAmount - discPercentAmount);*/
 
-//                            format += blank_space +
-//                                itemId.PadRight(9) +
-//                                name.PadRight(15) +
-//                                qty.PadLeft(4) +
-//                                price.PadLeft(6) +
-//                                discPercent.PadLeft(5) +
-//                                discAmount.PadLeft(7) +
-//                                subTotalDB.PadLeft(8) +
-//                                Environment.NewLine;
+            //                            format += blank_space +
+            //                                itemId.PadRight(9) +
+            //                                name.PadRight(15) +
+            //                                qty.PadLeft(4) +
+            //                                price.PadLeft(6) +
+            //                                discPercent.PadLeft(5) +
+            //                                discAmount.PadLeft(7) +
+            //                                subTotalDB.PadLeft(8) +
+            //                                Environment.NewLine;
 
-//                            totalQty += int.Parse(qty);
+            //                            totalQty += int.Parse(qty);
 
-//                            offset += 13;
-//                        }
-//                    }
-//                }
-//            }
-//            catch (SqlException ex)
-//            {
-//                throw new Exception("Format Error", ex);
-//            }
+            //                            offset += 13;
+            //                        }
+            //                    }
+            //                }
+            //            }
+            //            catch (SqlException ex)
+            //            {
+            //                throw new Exception("Format Error", ex);
+            //            }
 
             return totalQty;
         }
+
+        internal static int CPGenerateDetailsThermal(ref int offset, string orderId, ref string format, string blank_space)
+        {
+            //string connectionString = ConfigurationManager.ConnectionStrings["CPConnection"].ConnectionString;
+            //SqlConnection connection = new SqlConnection(connectionString);
+            int totalQty = 0;
+            string itemDetails;//add by Yonathan 31/05/2023
+            string xmlResponse = "";
+            try
+            {
+                object[] parameterList = new object[] 
+							{
+								orderId.ToString(),                               
+								ApplicationSettings.Database.DATAAREAID.ToString()
+								
+							};
+
+                
+                ReadOnlyCollection<object> containerArray = SalesOrder.InternalApplication.TransactionServices.InvokeExtension("getPackingSlipInfoDetails", parameterList);
+                xmlResponse = containerArray[3].ToString();
+            }
+            catch (Exception x)
+            {
+                ApplicationExceptionHandler.HandleException(LogSource, x);
+                // "Error creating the packing slip."
+                SalesOrder.InternalApplication.Services.Dialog.ShowMessage(56220, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+             //"<PackingSlip><CustConfirmTrans ItemId=\"10150014\" Name=\"LE MINERALE 600 ml\" Qty=\"4\" SalesPrice=\"3500.000\" DiscPercent=\"0\" DiscAmount=\"0.000\" LineAmount=\"12613.000\" /><CustConfirmTrans ItemId=\"12020002\" Name=\"INDOMIE GORENG\" Qty=\"3\" SalesPrice=\"2200.000\" DiscPercent=\"0\" DiscAmount=\"0.000\" LineAmount=\"5946.000\" /></PackingSlip>";
+
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(xmlResponse);
+
+            XmlNodeList custConfirmTransNodes = xmlDoc.SelectNodes("//CustConfirmTrans");
+
+            foreach (XmlNode node in custConfirmTransNodes)
+            {
+                string itemId = node.Attributes["ItemId"].Value;
+                string name = node.Attributes["Name"].Value;//.PadRight(16).Substring(0, 15); 
+                string qty = decimal.Parse(node.Attributes["Qty"].Value).ToString("0");
+                string price = node.Attributes["SalesPrice"].Value.Replace(".000",""); // decimal.Parse(node.Attributes["SalesPrice"].Value).ToString("0");
+                string discPercent = node.Attributes["DiscPercent"].Value.Replace(".000", ""); ;
+                string discAmount = node.Attributes["DiscAmount"].Value.Replace(".000", ""); ;
+                string subTotalDB = node.Attributes["LineAmount"].Value.Replace(".000", ""); ;
+
+              
+                //modified by Yonathan /31/05/2023 to provide multiline item name
+                itemDetails = blank_space +
+                            itemId.PadRight(9) +
+                            
+                            qty.PadLeft(4) +
+                            price.PadLeft(6) +
+                            discPercent.PadLeft(5) +
+                            discAmount.PadLeft(7) +
+                            subTotalDB.PadLeft(8) +
+                            Environment.NewLine + name;//.PadRight(15);
+
+
+
+                string item = node.Attributes["Name"].Value;
+                int maxLength = 15;
+
+                string[] lines = Enumerable.Range(0, (int)Math.Ceiling((double)item.Length / maxLength))
+                    .Select(i => item.Substring(i * maxLength, Math.Min(maxLength, item.Length - i * maxLength)))
+                    .ToArray();
+                if (lines.Count() > 1)
+                {
+                    //foreach (string line in lines)
+                    //{
+                    for (int i = 1; i < lines.Length; i++)
+                    {
+                        
+                        lines[i] = lines[i].StartsWith(" ") ? lines[i].TrimStart() : lines[i];
+                        itemDetails += blank_space +
+                                    string.Empty.PadRight(9) +
+                                    //lines[i].PadRight(15) +
+                                    string.Empty.PadLeft(4) +
+                                    string.Empty.PadLeft(6) +
+                                    string.Empty.PadLeft(5) +
+                                    string.Empty.PadLeft(7) +
+                                    string.Empty.PadLeft(8) +
+                                    Environment.NewLine;
+                    }
+
+                }
+                format += itemDetails;
+                //end mod
+
+             
+                totalQty += int.Parse(qty);
+
+                offset += 13;
+            }
+ 
+
+            return totalQty;
+        }
+
 
         /*
          * By Erwin 25 March 2019
@@ -1434,6 +1531,48 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             }
         }
 
+        //Mod by Yonathan 19/05/2023 change from CPCONNECTION to using RetailTransactionService class
+        internal static void CPGenerateFooterThermal(string orderId, ref string format, string blank_space, int TotalQty)
+        {
+            string confirmId = "";
+            int confirmAmount = 0;
+            int sumTax = 0;
+            int sumLineDisc = 0;
+            int sumMarkUp = 0;
+
+            string xmlResponse = "";
+            try
+            {
+                object[] parameterList = new object[] 
+							{
+								orderId.ToString(),                               
+								ApplicationSettings.Database.DATAAREAID.ToString()
+								
+							};
+
+
+                ReadOnlyCollection<object> containerArray = SalesOrder.InternalApplication.TransactionServices.InvokeExtension("getPackingSlipInfoFooter", parameterList);
+                //xmlResponse = 
+                confirmId = containerArray[3].ToString();
+                confirmAmount = int.Parse(containerArray[4].ToString());
+                sumTax = int.Parse(containerArray[5].ToString());
+                sumLineDisc = int.Parse(containerArray[6].ToString());
+                sumMarkUp = int.Parse(containerArray[7].ToString());
+
+                format += blank_space + "Total Qty Delivered".PadRight(20) + " : " + TotalQty + Environment.NewLine;
+                format += blank_space + "Total Discount".PadRight(20) + " : " + sumLineDisc + Environment.NewLine;
+                format += blank_space + "Delivery Cost".PadRight(20) + " : " + sumMarkUp + Environment.NewLine;
+                format += blank_space + "Total Tax".PadRight(20) + " : " + sumTax + Environment.NewLine;
+                format += blank_space + "Grand Total".PadRight(20) + " : " + confirmAmount + Environment.NewLine;
+            }
+            catch (Exception x)
+            {
+                ApplicationExceptionHandler.HandleException(LogSource, x);
+                // "Error creating the packing slip."
+                SalesOrder.InternalApplication.Services.Dialog.ShowMessage(56220, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         /*
          * By Erwin 26 March 2019
          * Create method for Generate Printing Footer format
@@ -1506,7 +1645,22 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
         {
             //Initialize printing properties
             int offset = 0;
-            string text_format = CPPrintingFormat(ref offset, orderId, title);
+            string text_format = "";
+            string printerName = "";
+
+            
+            printerName = LSRetailPosis.Settings.HardwareProfiles.Printer.DeviceName;
+            if (printerName == "EPSON LX-310 ESC/P")
+            {
+                text_format = CPPrintingFormat(ref offset, orderId, title);
+            }
+            else
+            {
+                text_format = CPPrintingFormatThermal(ref offset, orderId, title);
+            }
+            
+
+            
 
             PrintDocument print_document = new PrintDocument();
             PrintDialog print_dialog = new PrintDialog();
@@ -1757,6 +1911,178 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             }
 
             format += blank_space + "PrimaFreshmart".PadRight(40) + "Customer" + Environment.NewLine;
+
+            offset += 143;
+
+            //offset plus 120 at the end of document
+            offset += 120;
+
+            return format;
+        }
+        internal static string CPPrintingFormatThermal(ref int offset, string orderId, string title)
+        {
+            string format = "";
+            string blank_space = "";
+            string single_line_break = blank_space;
+            string double_line_break = blank_space;
+            int is_data = 0;
+
+            for (int i = 0; i < 40; i++)
+            {
+                single_line_break += "-";
+                double_line_break += "=";
+            }
+
+            //string connectionString = ConfigurationManager.ConnectionStrings["CPConnection"].ConnectionString;
+            // SqlConnection connection = new SqlConnection(connectionString);
+            try
+            {
+                object[] parameterList = new object[] 
+							{
+								orderId.ToString(),
+                                ApplicationSettings.Database.StoreID.ToString(),
+								ApplicationSettings.Database.DATAAREAID.ToString()
+								
+							};
+
+
+                ReadOnlyCollection<object> containerArray = SalesOrder.InternalApplication.TransactionServices.InvokeExtension("getPackingSlipInfoHeader", parameterList);
+
+                if (containerArray[2].ToString() == "Success")
+                {
+                    //each line use offset = 13
+                    is_data = 1;
+
+                    //Header
+
+                    //format += Environment.NewLine;
+                    //format += Environment.NewLine;
+                    format += blank_space + "PT PRIMAFOOD INTERNATIONAL" + Environment.NewLine;
+                    format += blank_space + "CABANG : " + ApplicationSettings.Terminal.StoreName + Environment.NewLine;
+                    format += blank_space + "NPWP : " + ApplicationSettings.Terminal.TaxIdNumber + Environment.NewLine;
+                    format += blank_space + "==========================" + Environment.NewLine;
+                    format += blank_space + "Receipt Packing Slip" + Environment.NewLine;
+                    format += blank_space + "Delivery Order " + title + Environment.NewLine;
+                    format += blank_space + "==========================" + Environment.NewLine;
+                    format += Environment.NewLine;
+                    format += blank_space + "Sales ID".PadRight(20) + " : " + orderId + Environment.NewLine;
+                    format += blank_space + "Created Date".PadRight(20) + " : " + DateTime.Parse(containerArray[17].ToString()).ToString("dd/MM/yyyy") + Environment.NewLine;
+                    format += blank_space + "Requested Ship Date".PadRight(20) + " : " + DateTime.Parse(containerArray[8].ToString()).ToString("dd/MM/yyyy") + Environment.NewLine;
+                    format += blank_space + "Delivery Date".PadRight(20) + " : " + DateTime.Parse(containerArray[6].ToString()).ToString("dd/MM/yyyy") + Environment.NewLine + Environment.NewLine;
+
+                    format += blank_space + "Ship To " + Environment.NewLine;
+                    format += blank_space + "-------" + Environment.NewLine;
+
+                    string full_address = "";
+                    int address_length = 0;
+
+                    if (containerArray[13].ToString() != "") //13
+                    {
+                        format += blank_space + "Account : " + containerArray[9].ToString() + Environment.NewLine; //8
+                        format += blank_space + "Nama Pembeli : " + containerArray[11].ToString(); //10
+                        format += "(" + containerArray[13].ToString() + ")" + Environment.NewLine; //12
+                        format += blank_space + "Info : " + containerArray[10].ToString() + Environment.NewLine; //9
+                        //format += blank_space + "Alamat Kirim : " + reader.GetString(reader.GetOrdinal("CPDELIVERYADDR")) + Environment.NewLine;
+                        full_address = containerArray[12].ToString(); //11
+                        address_length = containerArray[12].ToString().Length;
+                    }
+                    else
+                    {
+                        full_address = containerArray[19].ToString(); //18
+                        address_length = containerArray[19].ToString().Length;
+                        format += blank_space + "Nama Pembeli : " + containerArray[20].ToString() + Environment.NewLine; //19
+                    }
+
+                    int start_index = 0;
+                    full_address = Regex.Replace(full_address, @"\r\n?|\n", " ");
+
+                    if (address_length <= 25)
+                    {
+                        format += blank_space + "Alamat Kirim : " + full_address + Environment.NewLine;
+                    }
+                    else
+                    {
+                        format += blank_space + "Alamat Kirim : " + full_address.Substring(start_index, 25) + Environment.NewLine;
+                        address_length -= 25;
+                        start_index += 25;
+                        blank_space = "               ";
+                        while (address_length > 0)
+                        {
+                            if (address_length <= 35)
+                            {
+                                format += blank_space + full_address.Substring(start_index) + Environment.NewLine;
+                            }
+                            else
+                            {
+                                format += blank_space + full_address.Substring(start_index, 35) + Environment.NewLine;
+                            }
+
+                            address_length -= 35;
+                            start_index += 35;
+                            offset += 13;
+                        }
+                        blank_space = "";
+                    }
+
+                    format += Environment.NewLine;
+
+                    offset += 182;
+                }
+            }
+            catch (Exception ex)
+            {
+                ApplicationExceptionHandler.HandleException(LogSource, ex);
+                throw;
+            }
+
+
+
+
+            int TotalQty = 0;
+
+            if (is_data != 0)
+            {
+                // Data Exists, proceed to generate details
+                // Generate Details Label
+                string labelItemID = "ID";
+                string labelItemName = "Name";
+                string labelQty = "Qty";
+                string labelPrice = "Prc";
+                string labelDiscPercent = "Dsc%";
+                string labelDiscAmount = "DscAmt";
+                string labelSubTotal = "SubTtl";
+
+                format += blank_space +
+                    labelItemID.PadRight(9) +
+                    //labelItemName.PadRight(15) +
+                    labelQty.PadLeft(4) +
+                    labelPrice.PadLeft(6) +
+                    labelDiscPercent.PadLeft(5) +
+                    labelDiscAmount.PadLeft(7) +
+                    labelSubTotal.PadLeft(8) +
+                    Environment.NewLine;
+
+                format += single_line_break + Environment.NewLine;
+
+                // Generate Details Data
+                TotalQty = CPGenerateDetailsThermal(ref offset, orderId, ref format, blank_space);
+            }
+
+            //Footer
+            format += Environment.NewLine + double_line_break + Environment.NewLine;
+
+            CPGenerateFooterThermal(orderId, ref format, blank_space, TotalQty);
+
+            format += double_line_break + Environment.NewLine;
+
+            format += Environment.NewLine;
+            format += blank_space + "Created,".PadRight(25) + "Receive," + Environment.NewLine;
+            for (int i = 0; i < 6; i++)
+            {
+                format += Environment.NewLine;
+            }
+
+            format += blank_space + "PrimaFreshmart".PadRight(25) + "Customer" + Environment.NewLine;
 
             offset += 143;
 

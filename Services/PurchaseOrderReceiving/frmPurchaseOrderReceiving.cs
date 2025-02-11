@@ -745,8 +745,18 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                 //                   "     --------------" + Environment.NewLine;
 
                 string sHeader = "** REPRINT ** \r\n";
-                string sPrint = this.ReceiveDocumentFormat("REPRINT");
-
+                string printerName = "";
+                string sPrint = "";
+            
+                printerName = LSRetailPosis.Settings.HardwareProfiles.Printer.DeviceName;
+                if (printerName == "EPSON LX-310 ESC/P")
+                {
+                    sPrint = this.ReceiveDocumentFormat("REPRINT");
+                }
+                else
+                {
+                    sPrint = this.ReceiveDocumentFormatThermal("REPRINT"); 
+                }
                 PrintDocument p = new PrintDocument();
                 PrintDialog pd = new PrintDialog();
                 PaperSize psize = new PaperSize("Custom", 100, Offset + 236);
@@ -1464,7 +1474,239 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
             return s;
         }
 
+        private string ReceiveDocumentFormatThermal(string statusReceipt)
+        {
+            int totalQty = 0;
+            decimal totalQtyDec = 0;
+            string s = "";
+            string namatoko = "";
+            string deliverynote = "";
+            string receiptDate = "";
+            string qtyString = "";
+            string qtyStringMod = "";
+            string itemName = "";
+            string itemNumber = "";
+            decimal qty = 0;
 
+            //string sumUnit, ItemName, ItemNumber, QtyReceivedNow = "";
+            string connectionString = GetSettingFromConfigFile();
+            string storeid = GetStoreId();
+            //start modification by Yonathan 11/10/2022 to ease when debugging the PO/TO Receipt format 
+            int a, b, c, d, e, f = 0;
+            a = 30;
+            b = 4;
+            c = 18;
+            d = 12;
+            e = 20;
+            f = 0;
+            // end 
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlDataReader reader, reader2, reader3 = null;
+                    SqlCommand command = new SqlCommand("Select ItemNumber, ItemName, Unit,QuantityReceived, QuantityReceivedNow from POSPURCHASEORDERRECEIPTLINE where PONumber = '" + this.PONumber + "'", connection);
+                    SqlCommand command2 = new SqlCommand("Select RETAILSTORETABLE.StoreNumber, DIRADDRESSBOOK.Description from RETAILSTORETABLE inner join DIRADDRESSBOOK ON RETAILSTORETABLE.STORENUMBER = DIRADDRESSBOOK.name where RETAILSTORETABLE.StoreNumber = '" + storeid + "'", connection);
+                    SqlCommand command3;
+
+                    command3 = new SqlCommand(@"SELECT TOP (1) LINE.PONUMBER, LINE.RECEIPTDATE, HEADER.DELIVERYNOTENUMBER  FROM POSPURCHASEORDERRECEIPT HEADER
+JOIN POSPURCHASEORDERRECEIPTLINE LINE ON HEADER.PONUMBER = LINE.PONUMBER
+where HEADER.PONumber = '" + this.PONumber + "'", connection);
+
+                    //command3 = new SqlCommand("Select DeliveryNoteNumber from POSPURCHASEORDERRECEIPT where PONumber = '" + this.PONumber + "'", connection);
+
+
+                    using (reader2 = command2.ExecuteReader())
+                    {
+                        while (reader2.Read())
+                        {
+                            namatoko = reader2["Description"].ToString();
+                        }
+                    }
+
+                    using (reader3 = command3.ExecuteReader())
+                    {
+                        while (reader3.Read())
+                        {
+                            deliverynote = reader3["DeliveryNoteNumber"].ToString();
+                            receiptDate = reader3["RECEIPTDATE"].ToString();
+                        }
+                    }
+
+                    if (deliverynote == string.Empty || receiptDate == string.Empty)
+                    {
+                        object[] parameterList = new object[] 
+							{
+								this.PONumber,
+                                ApplicationSettings.Database.DATAAREAID.ToString()
+								
+								
+							};
+
+                        try
+                        {
+                            ReadOnlyCollection<object> containerArray = PurchaseOrderReceiving.InternalApplication.TransactionServices.InvokeExtension("getPackingSlipInfoPO", parameterList);
+
+
+                            if (containerArray[2].ToString() == "Success")
+                            {
+                                deliverynote = containerArray[3].ToString();
+                                receiptDate = containerArray[4].ToString();
+                            }
+
+                        }
+                        catch (Exception ex)
+                        {
+                            LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                            throw;
+                        }
+
+                    }
+                    //"=========================="
+                    if (statusReceipt != "REPRINT") //additional code for reprint by Yonathan 16/07/2024
+                    {
+                        s += "-----------------------------------" + Environment.NewLine;
+                        s += "             " + statusReceipt + Environment.NewLine;
+                        s += "-----------------------------------" + Environment.NewLine;
+                    }
+                    //s += "             -----------------------------------" + Environment.NewLine;
+                    //s += "                          " + statusReceipt + Environment.NewLine;
+                    //s += "             -----------------------------------" + Environment.NewLine;
+                    if (statusReceipt == "REPRINT") //additional code for reprint by Yonathan 16/07/2024
+                    {
+                        s += "Tgl Reprint  : " + DateTime.Now.ToString() + Environment.NewLine;
+                    }
+                    s += "Keterangan   : " + namatoko + Environment.NewLine +
+                         "No. Terima   : " + this.ReceiptNumber + Environment.NewLine +
+                         "Tgl Terima   : " + receiptDate + Environment.NewLine + //DateTime.Now.ToString() 
+                         "No. PO/TO    : " + this.PONumber + Environment.NewLine +
+                        //   "Tgl PO       :" + "Tanggal PO" + Environment.NewLine + //Custom field
+                        //  "Supplier     :" + "Supplier" + Environment.NewLine + //Custom Field
+                         "DO No        : " + deliverynote + Environment.NewLine; //delivery note number
+
+
+                    /*s += "-------------------------------------------------------" + Environment.NewLine +
+
+                         "Kode Barang                       Unit              Qty " + Environment.NewLine +
+                         "-------------------------------------------------------" + Environment.NewLine;*/
+
+                    //       s += "------------------------------------------------" + Environment.NewLine;
+                    s += "-----------------------------------" + Environment.NewLine; // modif by Julius 14 07 2017
+                    //s += "Kode Barang".PadRight(25) + "Unit".PadRight(5) + "Qty".PadLeft(4);
+                    //s += "             Kode Barang".PadRight(32) + "Qty".PadLeft(10); //+ "Unit".PadLeft(5); modif by Yonathan 11/10/2022 disable Unit column
+                    s += "Kode Barang".PadRight(a) + "Qty".PadLeft(b); //+ "Unit".PadLeft(5); modif by Yonathan 11/10/2022 disable Unit column
+                    //"Kode Barang                       Unit              Qty " 
+                    s += Environment.NewLine;
+
+                    reader = command.ExecuteReader();
+                    //Offset = Offset + 160;
+                    while (reader.Read())
+                    {
+                        //modif by Yonathan 18/10/2022
+                        itemName = reader["ItemName"].ToString();
+                        itemNumber = reader["ItemNumber"].ToString();
+
+                        if (statusReceipt == "REPRINT")
+                        {
+                            qty = (Math.Truncate(Convert.ToDecimal(reader["QuantityReceived"]) * 1000m) / 1000m);
+                        }
+                        else
+                        {
+                            qty = (Math.Truncate(Convert.ToDecimal(reader["QuantityReceivedNow"]) * 1000m) / 1000m);
+                        }
+                        //mod by Yonathan 25/07/2023 to prevent item 0 qty receive to appear on the receipt.
+                        if (qty != 0)
+                        {
+                            if (itemName.Length >= 18)
+                            {
+                                itemName = itemName.Substring(0, 18).PadRight(18, ' ');
+                            }
+                            else
+                            {
+                                itemName = itemName;
+                                int countItemName = itemName.Length;
+                                int addSpace = 18 - countItemName;
+                                for (int i = 0; i < addSpace; i++)
+                                {
+                                    itemName += " ";
+                                }
+                            }
+                            s += "" + itemNumber + Environment.NewLine;
+                            s +=itemName;
+                            //end add
+                            /*
+                            if (reader["ItemName"].ToString().Length > c)
+                                s += "             " + reader["ItemNumber"].ToString() + "-" + reader["ItemName"].ToString().Substring(0, c).PadRight(d);
+                            else
+                                s += "             " + reader["ItemNumber"].ToString() + "-" + reader["ItemName"].ToString().PadRight(d);*/
+                            //Modify by heron 140817- change the sequence
+
+                            /*s += reader["Unit"].ToString().PadRight(5);
+                            s += Convert.ToInt32(reader["QuantityReceivedNow"]).ToString().PadLeft(4) + Environment.NewLine;*/
+                            /*decimal m = 199.123000000000m;
+                            m = Math.Truncate(m * 1000m) / 1000m;
+                            Console.WriteLine(m);*/
+                            //add by Yonathan 17/10/2022
+
+                            qtyStringMod = qty.ToString();
+                            if (qty.ToString().Length == 7)
+                            {
+                                qtyString = qty.ToString();
+                            }
+                            else
+                            {
+                                qtyString = qty.ToString();
+                                int stringCount = qty.ToString().Length;
+                                int spaceToBeAdded = 7 - stringCount;
+                                for (int i = 0; i < spaceToBeAdded; i++)
+                                {
+                                    qtyString += " ";
+                                }
+                            }
+                            //end
+
+                            //s += (Math.Truncate(Convert.ToDecimal(reader["QuantityReceivedNow"]) * 1000m) / 1000m).ToString().PadLeft(e) + Environment.NewLine;
+                            s += qtyString.PadLeft(e) + Environment.NewLine;
+                            //s += reader["QuantityReceivedNow"].ToString().PadLeft(4); //Convert.ToInt32(reader["QuantityReceivedNow"]).ToString().PadLeft(4);  disable by Yonathan 10/10/2022 because qty supports decimal
+                            //s += reader["Unit"].ToString().PadLeft(4) + Environment.NewLine; modif by Yonathan 11/10/2022 disable Unit column
+
+                            //End Modify by heron 140817- change the sequence
+
+
+
+                            // Convert.ToInt32(reader["QuantityReceivedNow"]); disable by Yonathan 10/10/2022 because qty supports decimal
+                            totalQtyDec += qty; //(Math.Truncate(Convert.ToDecimal(reader["QuantityReceivedNow"]) * 1000m) / 1000m);
+                            Offset = Offset + 13;
+                        }
+
+                    }
+
+                    //     s += "------------------------------------------------" + Environment.NewLine;
+                    s += "-----------------------------------" + Environment.NewLine; // modif by Julius 14 07 2017
+                    //s += "Total Qty    :".PadRight(27) + totalQty.ToString().PadLeft(7) + Environment.NewLine;
+                    //s += "             Total Qty    :".PadRight(22) + totalQty.ToString().PadLeft(7) + Environment.NewLine; //disable by Yonathan to add support for decimal
+                    s += "Total Qty    :".PadRight(18) + totalQtyDec.ToString().PadLeft(15) + Environment.NewLine; //newly modified by yonathan 10/10/2022
+                    //     s += "------------------------------------------------" + Environment.NewLine;
+                    s += "-----------------------------------" + Environment.NewLine; // modif by Julius 14 07 2017
+                    s += Environment.NewLine + Environment.NewLine + Environment.NewLine;
+
+                    s += "Diterima Oleh     Diserahkan Oleh";
+                    s += Environment.NewLine + Environment.NewLine + Environment.NewLine + Environment.NewLine;
+
+                    s += "(_____________)   (_____________)";
+                    //s += Environment.NewLine + Environment.NewLine + Environment.NewLine + Environment.NewLine +
+                    //     Environment.NewLine + Environment.NewLine + Environment.NewLine + Environment.NewLine +
+                    //     Environment.NewLine + Environment.NewLine + Environment.NewLine + Environment.NewLine;
+                    Offset = Offset + 260;
+                }
+                catch (SqlException ex)
+                {
+                    throw new Exception("Format Error", ex);
+                }
+            }
+            return s;
+        }
         //To check qty receive
         private void checkQtyItem()
         {
