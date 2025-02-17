@@ -3441,7 +3441,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 				
 				if (responseShopeePay.message.ToString() == "success")
 				{
-					using (frmMessage dialog = new frmMessage("Payment QRIS Shopee sukses", MessageBoxButtons.OK, MessageBoxIcon.Information))
+					using (frmMessage dialog = new frmMessage("Payment QRIS ShopeePay sukses", MessageBoxButtons.OK, MessageBoxIcon.Information))
 					{
 						POSFormsManager.ShowPOSForm(dialog);
 					}

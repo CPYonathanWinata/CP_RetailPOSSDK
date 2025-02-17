@@ -319,3 +319,4 @@ C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\In
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\InteractionDefaults\obj\Debug\InteractionDefaults.pdb
 C:\Users\yonathan.winata\Documents\GitHub\AX\Retail POS\Extensions\InteractionDefaults.dll
 C:\Users\yonathan.winata\Documents\GitHub\AX\Retail POS\Extensions\InteractionDefaults.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\InteractionDefaults\obj\Debug\InteractionDefaults.csprojResolveAssemblyReference.cache
