@@ -150,12 +150,19 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
 
             foreach (DataRow row in dtItemContainer.Rows)
             {
-                reportLayout.AppendLine(string.Format("{0} - {1}", row[0].ToString(), row[1].ToString()));
+                reportLayout.AppendLine(string.Format("{0}        {1} - {2}", row[0].ToString(),row[2], RoundDecimal(Convert.ToDecimal(row[3]))));
                 if (row[4].ToString() != "")
                 {
                     reportLayout.AppendLine(string.Format("{0}", row[4].ToString())); //added by yonathan for displaying the variant id
                 }
-                reportLayout.AppendLine(string.Format("{0} - {1}", row[2], RoundDecimal(Convert.ToDecimal(row[3]))));
+                reportLayout.AppendLine(string.Format("{0}", row[1].ToString()));
+
+                    /*reportLayout.AppendLine(string.Format("{0} - {1}", row[0].ToString(), row[1].ToString()));
+                if (row[4].ToString() != "")
+                {
+                    reportLayout.AppendLine(string.Format("{0}", row[4].ToString())); //added by yonathan for displaying the variant id
+                }
+                reportLayout.AppendLine(string.Format("{0} - {1}", row[2], RoundDecimal(Convert.ToDecimal(row[3]))));*/
                 
             }
 
@@ -580,9 +587,12 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
                 foreach (var data in groupedData)
                 {
 
-                    reportLayout.AppendLine(string.Format("{0} - {1}", data.ItemId.ToString(), data.ItemName.ToString()));
+                    reportLayout.AppendLine(string.Format("{0}        {1} - {2}", data.ItemId.ToString(), data.TotalQty, RoundDecimal(Convert.ToDecimal(data.TotalLineAmount))));
 
-                    reportLayout.AppendLine(string.Format("{0} - {1}", data.TotalQty, RoundDecimal(Convert.ToDecimal(data.TotalLineAmount))));
+                    reportLayout.AppendLine(string.Format("{0}", data.ItemName.ToString()));
+                    /*reportLayout.AppendLine(string.Format("{0} - {1}", data.ItemId.ToString(), data.ItemName.ToString()));
+
+                    reportLayout.AppendLine(string.Format("{0} - {1}", data.TotalQty, RoundDecimal(Convert.ToDecimal(data.TotalLineAmount))));*/
                     totalAmount += data.TotalLineAmount;
                     //totalSales = data.SalesIdCount;
                 }
@@ -659,10 +669,15 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
                 // Output the results
                 foreach (var data in groupedData)
                 {
+                    reportLayout.AppendLine(string.Format("{0}        {1} - {2}", data.ItemId.ToString(), data.TotalQty, RoundDecimal(Convert.ToDecimal(data.TotalLineAmount))));
 
-                    reportLayout.AppendLine(string.Format("{0} - {1}", data.ItemId.ToString(), data.ItemName.ToString()));
+                    reportLayout.AppendLine(string.Format("{0}", data.ItemName.ToString()));
+                    /*reportLayout.AppendLine(string.Format("{0} - {1}", data.ItemId.ToString(), data.ItemName.ToString()));
 
-                    reportLayout.AppendLine(string.Format("{0} - {1}", data.TotalQty, RoundDecimal(Convert.ToDecimal(data.TotalLineAmount))));
+                    reportLayout.AppendLine(string.Format("{0} - {1}", data.TotalQty, RoundDecimal(Convert.ToDecimal(data.TotalLineAmount))));*/
+                    /*reportLayout.AppendLine(string.Format("{0} - {1}", data.ItemId.ToString(), data.ItemName.ToString()));
+
+                    reportLayout.AppendLine(string.Format("{0} - {1}", data.TotalQty, RoundDecimal(Convert.ToDecimal(data.TotalLineAmount))));*/
                     totalAmount += data.TotalLineAmount;
                     //totalSales = data.SalesIdCount;
                 }
@@ -1007,9 +1022,13 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             }
 
             reportLayout.AppendReportHeaderLine(7002, ApplicationSettings.Terminal.StoreId, true);
-            reportLayout.AppendReportHeaderLine(7006, DateTime.Now.ToShortDateString(), false);
+            reportLayout.AppendLine();
+            reportLayout.AppendReportHeaderLine(7006, DateTime.Now.ToShortDateString(), true);
+            reportLayout.AppendLine();
             reportLayout.AppendReportHeaderLine(7003, ApplicationSettings.Terminal.TerminalId, true);
-            reportLayout.AppendReportHeaderLine(7007, DateTime.Now.ToShortTimeString(), false);
+            reportLayout.AppendLine();
+            reportLayout.AppendReportHeaderLine(7007, DateTime.Now.ToShortTimeString(), true);
+            reportLayout.AppendLine();
             //reportLayout.AppendReportHeaderLine(7004, ApplicationSettings.Terminal.TerminalOperator.OperatorId, true);
             if (LSRetailPosis.Settings.FunctionalityProfiles.Functions.CountryRegion == LSRetailPosis.Settings.FunctionalityProfiles.SupportedCountryRegion.SE)
             {
