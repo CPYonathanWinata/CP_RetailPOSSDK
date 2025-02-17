@@ -1079,6 +1079,7 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 				string dataAreaIdECR = "";
 				string partitionECR = "";
                 string admFeeECR = ""; //add admfee for fee tarik tunai by yonathan //CPIADMFEE
+                string feeECR = ""; //add fee for tarik tunai 12022025
 				try 
 				{
 					string queryString = @"
@@ -1095,6 +1096,7 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 												TRXIDEDC,
 												DATAAREAID,
                                                 ADMFEE,
+                                                FEE,
 												PARTITION
 											FROM
 												AX.CPAMBILTUNAITEMP
@@ -1127,7 +1129,8 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 								trxIdECR = reader[9] + "";
 								dataAreaIdECR = reader[10] + "";
                                 admFeeECR = reader[11] + "";
-							}
+                                feeECR = reader[12] + ""; //add fee 12022025
+							} 
 						}
 					}
 				}
@@ -1203,7 +1206,7 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 							command.Parameters.AddWithValue("@TRANSDATE", Convert.ToDateTime(transDateECR).ToString("yyyy-MM-dd")); //convertdate YYYY-MM-DD 
 							command.Parameters.AddWithValue("@TRANSACTIONSTATUS", transactionStatusECR);
                             command.Parameters.AddWithValue("@ADMFEE", admFeeECR);
-                            command.Parameters.AddWithValue("@FEE", admFeeECR);
+                            command.Parameters.AddWithValue("@FEE", admFeeECR); //add fee 12022025
 							command.Parameters.AddWithValue("@DATAAREAID", dataAreaIdECR);
 							command.Parameters.AddWithValue("@PARTITION", partitionECR);
                             //command.Parameters.AddWithValue("@PARTITION", partitionECR);

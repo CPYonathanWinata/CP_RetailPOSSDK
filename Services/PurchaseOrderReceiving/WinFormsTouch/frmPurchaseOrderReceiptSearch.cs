@@ -993,7 +993,21 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch
 		private void btnListPO_Click(object sender, EventArgs e)
 		{ 
 			Offset = 0;
-			string s = this.ListPOFormat();
+            string printerName = "";
+            string s = "";
+
+            printerName = LSRetailPosis.Settings.HardwareProfiles.Printer.DeviceName;
+            if (printerName == "EPSON LX-310 ESC/P")
+            {
+                s = this.ListPOFormat();
+                
+            }
+            else
+            {
+                s = this.ListPOFormatThermal();
+            }
+
+			
 
 			PrintDocument p = new PrintDocument();
 			PrintDialog pd = new PrintDialog();
@@ -1006,9 +1020,9 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch
 					pd.Document.DefaultPageSettings.Margins = margins;
 					p.DefaultPageSettings.PaperSize.Width = 600;
 					p.PrintPage += delegate(object sender1, PrintPageEventArgs e1)
-					{
+					{ //"Lucida Console"
 						//e1.Graphics.DrawString(s, new Font("Courier New", 9), new SolidBrush(Color.Black), new RectangleF(p.DefaultPageSettings.PrintableArea.Left + 100, 0, p.DefaultPageSettings.PrintableArea.Width, p.DefaultPageSettings.PrintableArea.Height));
-						e1.Graphics.DrawString(s, new Font("Lucida Console", 8), new SolidBrush(Color.Black), new RectangleF(p.DefaultPageSettings.PrintableArea.Left, 0, p.DefaultPageSettings.PrintableArea.Width, p.DefaultPageSettings.PrintableArea.Height));
+                        e1.Graphics.DrawString(s, new Font("Lucida Console", 7), new SolidBrush(Color.Black), new RectangleF(p.DefaultPageSettings.PrintableArea.Left, 0, p.DefaultPageSettings.PrintableArea.Width, p.DefaultPageSettings.PrintableArea.Height));
 
 					};
 					try
@@ -1297,7 +1311,246 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch
 			 }
 		}
 
-		
+        private string ListPOFormatThermal() //using RealTimeService
+        {
+            string purchid, purchid2, itemid, itemname, unit, datecreated, storeName, vendName;
+            string s = "";
+
+            string qtyString = "";
+            string qtyStringMod = "";
+            string totalString = "";
+            string vendCodeName = "";
+            string vendCodeName2 = "";
+            string vendCodeName3 = "";
+            //string connectionString = ConfigurationManager.ConnectionStrings["CPConnection"].ConnectionString;
+            //string connectionString = @"Data Source= DYNAMICS01\DEVPRISQLSVR ;Initial Catalog=DevDynamicsAX; Integrated Security=False;User ID=AXPOS;Password=P@ssw0rd;";//Persist Security Info=False;User ID=USER_NAME;Password=USER_PASS;
+            //string connectionString = @"Data Source= DYNAMICS16\SQLAXDB1 ;Initial Catalog=PRDDynamicsAX; Integrated Security=False;User ID=AXPOS;Password=P@ssw0rd;";
+            object[] parameterList = new object[] 
+							{
+								ApplicationSettings.Terminal.StoreId.ToString(),
+								ApplicationSettings.Database.DATAAREAID.ToString()
+								
+								
+							};
+
+
+            try
+            {
+                ReadOnlyCollection<object> containerArray = PurchaseOrderReceiving.InternalApplication.TransactionServices.InvokeExtension("getListPOFormat", parameterList);
+
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(containerArray[3].ToString());
+
+                XmlNodeList purchTableNodes = xmlDoc.SelectNodes("/PurchTable/PurchTable");
+
+               
+
+                string items;
+             
+                purchid2 = "";
+                //  MessageBox.Show(ApplicationSettings.Terminal.StoreId);
+                //s += Environment.NewLine;
+                //s += Environment.NewLine;
+                s += "" + "Print List PO Outstanding" + Environment.NewLine;
+                s += "" + "Print Date:" + DateTime.Now + Environment.NewLine;
+                s += "" + "Store:" + ApplicationSettings.Terminal.StoreId + Environment.NewLine;
+                decimal qty = 0;//int qty   = 0;
+                decimal total = 0;//int total = 0;
+
+                //Edit by Erwin
+                //Offset = Offset + 50;
+                Offset += 65;
+                //end Edit by Erwin
+
+
+                foreach (XmlNode node in purchTableNodes)
+                {
+                    purchid = node.Attributes["PURCHID"].Value;
+                    itemid = node.Attributes["ITEMID"].Value;
+
+                    //itemname       = reader.GetString(reader.GetOrdinal("ITEMNAME")).PadRight(19, ' '); 
+                    unit = node.Attributes["PURCHUNIT"].Value;
+                    datecreated = node.Attributes["CREATEDDATE"].Value;
+                    DateTime parsedDate = DateTime.ParseExact(datecreated, "M/d/yyyy", CultureInfo.InvariantCulture);
+                    datecreated = parsedDate.ToString("dd/MM/yyyy");
+                    storeName = node.Attributes["STORENAME"].Value;
+                    //qty            = (Math.Truncate(Convert.ToDecimal(node.Attributes["PURCHQTY"].Value) * 1000m) / 100000m);//(int) reader.GetDecimal(reader.GetOrdinal("PURCHQTY"));
+
+                    string purchQty = node.Attributes["PURCHQTY"].Value;//.Replace(",", ".");
+
+
+                    //qty = (Math.Truncate(Convert.ToDecimal(purchQty) * 1000m) / 100000m);//(int) reader.GetDecimal(reader.GetOrdinal("PURCHQTY"));
+
+                    //to convert string to decimal despite difference between regional format settings -> ex "1,000.00" or "1.000,00"
+                    qty = APIAccess.APIFunction.ParseDecimal(purchQty);
+                    //remainQty = Convert.ToDecimal(qtyAvailString.Replace(",", "."), CultureInfo.InvariantCulture);
+
+                    //vendName = node.Attributes["VENDNAME"].Value;
+                    vendName = node.Attributes["VENDNAME"].Value;
+
+                    //add by Yonathan 17/10/2022
+                    qtyStringMod = qty.ToString();
+                    if (qty.ToString().Length == 7)
+                    {
+                        qtyString = qty.ToString();
+                    }
+                    else
+                    {
+                        qtyString = qty.ToString();
+                        int stringCount = qty.ToString().Length;
+                        int spaceToBeAdded = 7 - stringCount;
+                        for (int i = 0; i < spaceToBeAdded; i++)
+                        {
+                            qtyString += " ";
+                        }
+                    }
+                    //end
+                    if (node.Attributes["ITEMNAME"].Value.Length >= 35)
+                    {
+                        itemname = node.Attributes["ITEMNAME"].Value.Substring(0, 35).PadRight(35, ' ');
+                    }
+                    else
+                    {
+                        itemname = node.Attributes["ITEMNAME"].Value;
+                        int countItemName = itemname.Length;
+                        int addSpace = 35 - countItemName;
+                        for (int i = 0; i < addSpace; i++)
+                        {
+                            itemname += " ";
+                        }
+                    }
+
+                    items = itemname;// itemid + Environment.NewLine  + itemname; //.Substring(0, 19);
+                    vendCodeName = "VendAcc: " + vendName;
+                    if (vendCodeName.Length > 32)
+                    {
+                        //break the string
+
+                        if (vendCodeName.Substring(32, 1) != " ")
+                        {
+                            vendCodeName2 = "" + vendCodeName.Substring(32);
+                        }
+                        else
+                        {
+                            vendCodeName2 = "" + vendCodeName.Substring(33);
+                        }
+
+                        if (vendCodeName2.Length > 32)
+                        {
+                            if (vendCodeName2.Substring(32, 1) != " ")
+                            {
+                                vendCodeName3 = "" + vendCodeName2.Substring(32);
+                            }
+                            else
+                            {
+                                vendCodeName3 = "" + vendCodeName2.Substring(33);
+                            }
+
+                            vendCodeName = vendCodeName.Substring(0, 32) + "\n" + vendCodeName2.Substring(0, 32) + "\n" + vendCodeName3;
+                        }
+                        else
+                        {
+                            vendCodeName = vendCodeName.Substring(0, 32) + "\n" + vendCodeName2;
+                        }
+                        
+                    }
+                    if (purchid == purchid2)
+                    {
+                        // continue line
+                        //  MessageBox.Show(purchid + "  " + itemid + " " + itemname + " " + unit + " " + datecreated + " " + storeName + " " + qty);
+                        s += itemid.PadRight(23, ' ') + qtyString.PadLeft(5, ' ') + unit.PadLeft(0, ' ') + Environment.NewLine;
+                        s += "" + itemname.PadRight(23, ' ') + Environment.NewLine; //+ qtyString.PadLeft(8, ' ') + " ".PadLeft(4, ' ') + unit.PadLeft(5, ' ') + Environment.NewLine;
+                        total += qty;
+
+                        //Edit by Erwin
+                        //Offset = Offset + 13;
+                        Offset += 13;
+                        //end Edit by Erwin
+                    }
+                    else
+                    {
+                        if (purchid2 != "")
+                        {
+                            s += Environment.NewLine;
+                            s += "" + "Total QTY  Ordered:".PadRight(23, ' ') + total.ToString().PadLeft(4, ' ') + Environment.NewLine;
+                            //Edit by Erwin
+                            //Offset = Offset + 13;
+                            Offset += 13;
+                            //end Edit by Erwin
+                        }
+
+                        purchid2 = purchid;
+
+                        /*
+                        s += Environment.NewLine;
+                        s += "        " + "VendAcc: " + vendName + Environment.NewLine;
+                        s += "        " + "Date PO Created: " + datecreated + Environment.NewLine;
+                        s += "        " + "No.PO: " + purchid.PadRight(21, ' ') + "Qty".PadLeft(4, ' ') + "Qty".PadLeft(4, ' ') + Environment.NewLine;
+                     //   s += "        "+" ".PadRight(28,' ')+"Qty".PadLeft(4, ' ') + "Qty".PadLeft(4, ' ')+Environment.NewLine;
+							   
+                        s += "        " + "Kode Barang".PadRight(28, ' ') + "Ord".PadLeft(4, ' ') + "Rcv".PadLeft(4, ' ') + "Unit".PadLeft(5, ' ') + Environment.NewLine;
+                        s += "        " + items.PadRight(28, ' ') + qty.ToString().PadLeft(4, ' ') + " ".PadLeft(4, ' ') + unit.PadLeft(5,' ') + Environment.NewLine;*/
+                        s += Environment.NewLine;
+                        s += "" + vendCodeName + Environment.NewLine; //changed by Yonathan 17/10/2022
+                        s += "" + "Created Date: " + datecreated + Environment.NewLine;
+                        s += "" + "No.PO: " + purchid.PadRight(21, ' ') + Environment.NewLine; //+ "Qty".PadLeft(4, ' ') + "Qty".PadLeft(8, ' ') + Environment.NewLine;
+                        s += "----------------------------------" + Environment.NewLine; 
+                        s += "" + "Kode Barang".PadRight(23, ' ') + "Order".PadLeft(2, ' ') + "Unit".PadLeft(6, ' ') + Environment.NewLine; 
+                        s += "----------------------------------" + Environment.NewLine;
+                        s += itemid.PadRight(23, ' ') + qtyString.PadLeft(5, ' ') + unit.PadLeft(0, ' ') + Environment.NewLine;
+                        s += "" + itemname.PadRight(23, ' ') + Environment.NewLine;
+                        //s += "" + items.PadRight(25, ' ') + qtyString.PadLeft(8, ' ')  + unit.PadLeft(4, ' ') + Environment.NewLine;
+                        // new line
+                        total = qty;
+
+                        //Edit by Erwin
+                        //Offset = Offset + 52;
+                        Offset += 78;
+                        //end Edit by Erwin
+                    }
+                }
+                //add yonathan 17/10/2022
+                qtyStringMod = total.ToString();
+                if (total.ToString().Length == 7)
+                {
+                    qtyString = total.ToString();
+                }
+                else
+                {
+                    totalString = total.ToString();
+                    int stringCount = total.ToString().Length;
+                    int spaceToBeAdded = 7 - stringCount;
+                    for (int i = 0; i < spaceToBeAdded; i++)
+                    {
+                        totalString += " ";
+                    }
+                }
+                //end add
+                s += Environment.NewLine;
+                //s += "        " + "Total QTY  Ordered:".PadRight(28, ' ') + total.ToString().PadLeft(4, ' ') + Environment.NewLine;
+                s += "" + "Total QTY  Ordered:".PadRight(23, ' ') + total.ToString().PadLeft(6, ' ') + Environment.NewLine;
+                //s += "        " + "Total QTY  Ordered:".PadRight(29, ' ') + total.ToString().PadLeft(4, ' ') + Environment.NewLine;
+
+                s += Environment.NewLine;
+                s += "----------------------------------" + Environment.NewLine; // modif by Julius 
+                //s += Environment.NewLine + Environment.NewLine;
+
+                //Edit by Erwin
+                //Offset = Offset + 30;
+                Offset += 39;
+                //end Edit by Erwin
+                //	 }
+                //}
+                return s;
+
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Format Error", ex);
+            }
+        }
+
+
 		private string ListPOFormatOld() //using CPConnection
 		{
 			string purchid, purchid2, itemid, itemname, unit, datecreated, storeName, vendName;
@@ -1507,7 +1760,21 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch
 		private void btnListTO_Click(object sender, EventArgs e)
 		{
 			Offset = 0;
-			string s = this.ListTOFormat();
+
+            string printerName = "";
+            string s = "";
+
+            printerName = LSRetailPosis.Settings.HardwareProfiles.Printer.DeviceName;
+            if (printerName == "EPSON LX-310 ESC/P") // for differentiate format printing for thermal and non thermal 13022025
+            {
+                 s = this.ListTOFormat();
+                
+
+            }
+            else
+            {
+                s = this.ListTOFormatThermal();
+            }
 
 			PrintDocument p = new PrintDocument();
 			PrintDialog pd = new PrintDialog();
@@ -1522,7 +1789,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch
 			p.PrintPage += delegate(object sender1, PrintPageEventArgs e1)
 			{
 				//e1.Graphics.DrawString(s, new Font("Courier New", 9), new SolidBrush(Color.Black), new RectangleF(p.DefaultPageSettings.PrintableArea.Left + 100, 0, p.DefaultPageSettings.PrintableArea.Width, p.DefaultPageSettings.PrintableArea.Height));
-				e1.Graphics.DrawString(s, new Font("Lucida Console", 8), new SolidBrush(Color.Black), new RectangleF(p.DefaultPageSettings.PrintableArea.Left, 0, p.DefaultPageSettings.PrintableArea.Width, p.DefaultPageSettings.PrintableArea.Height));
+				e1.Graphics.DrawString(s, new Font("Lucida Console", 7), new SolidBrush(Color.Black), new RectangleF(p.DefaultPageSettings.PrintableArea.Left, 0, p.DefaultPageSettings.PrintableArea.Width, p.DefaultPageSettings.PrintableArea.Height));
 
 			};
 			try
@@ -1749,6 +2016,227 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch
 			}
 		  
 		}
+
+        private string ListTOFormatThermal() //using Real-time services
+        {
+            string purchid, purchid2, itemid, itemname, unit, datecreated, storeName;
+            string s = "";
+            string qtyString = "";
+            string qtyStringMod = "";
+            string totalString = "";
+            //string connectionString = ConfigurationManager.ConnectionStrings["CPConnection"].ConnectionString;
+            //string connectionString = @"Data Source= DYNAMICS01\DEVPRISQLSVR ;Initial Catalog=DevDynamicsAX; Integrated Security=False;User ID=AXPOS;Password=P@ssw0rd;";//Persist Security Info=False;User ID=USER_NAME;Password=USER_PASS;
+            //string connectionString = @"Data Source= DYNAMICS16\SQLAXDB1 ;Initial Catalog=PRDDynamicsAX; Integrated Security=False;User ID=AXPOS;Password=P@ssw0rd;";
+
+            //SqlConnection connection = new SqlConnection(connectionString); //LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+
+
+            object[] parameterList = new object[] 
+							{
+								ApplicationSettings.Terminal.StoreId.ToString(),
+								ApplicationSettings.Database.DATAAREAID.ToString()
+								
+								
+							};
+
+
+
+
+
+            //SqlConnection connection = new SqlConnection(connectionString); //LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+
+
+
+            try
+            {
+
+                ReadOnlyCollection<object> containerArray = PurchaseOrderReceiving.InternalApplication.TransactionServices.InvokeExtension("getListTOFormat", parameterList);
+
+
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(containerArray[3].ToString());
+
+                XmlNodeList purchTableNodes = xmlDoc.SelectNodes("/TransferOrder/PurchTable");
+
+
+                /*string createdDate = node.Attributes["CREATEDDATE"].Value;
+                            string transferId = node.Attributes["TRANSFERID"].Value;
+                            string itemId = node.Attributes["ITEMID"].Value;
+                            string itemName = node.Attributes["ITEMNAME"].Value;
+                            string qtyTransfer = node.Attributes["QTYTRANSFER"].Value;
+                            string unitId = node.Attributes["UNITID"].Value;
+                            string storeName = node.Attributes["STORENAME"].Value;
+                */
+
+                string items;
+
+                purchid2 = "";
+                //  MessageBox.Show(ApplicationSettings.Terminal.StoreId);
+                //s += Environment.NewLine;
+                //s += Environment.NewLine;
+                s += "" + "Print List TO Outstanding" + Environment.NewLine;
+                s += "" + "Print Date:" + DateTime.Now + Environment.NewLine;
+                s += "" + "Store:" + ApplicationSettings.Terminal.StoreId + Environment.NewLine;
+                //int qty = 0;
+                //int total = 0;
+                decimal qty = 0;
+                decimal total = 0;
+
+                // add by Erwin
+                Offset += 65;
+                // end add by Erwin
+                foreach (XmlNode node in purchTableNodes)
+                {
+                    purchid = node.Attributes["TRANSFERID"].Value;
+                    itemid = node.Attributes["ITEMID"].Value;
+                    itemname = node.Attributes["ITEMNAME"].Value.PadRight(20, ' ');
+                    unit = node.Attributes["UNITID"].Value;
+                    datecreated = node.Attributes["CREATEDDATE"].Value;
+                    DateTime parsedDate = DateTime.ParseExact(datecreated, "M/d/yyyy", CultureInfo.InvariantCulture);
+                    datecreated = parsedDate.ToString("dd/MM/yyyy");
+                    storeName = node.Attributes["STORENAME"].Value;
+                    //qty = (Math.Truncate(Convert.ToDecimal(node.Attributes["QTYTRANSFER"].Value) * 1000m) / 100000m); //(int)reader.GetDecimal(reader.GetOrdinal("QTYTRANSFER")); //add by yonathan 17/10/2022
+
+                    // change to this 2024 to overcome difference between regional settings on each PC.
+                    string purchQty = node.Attributes["QTYTRANSFER"].Value;//.Replace(",", ".");
+
+
+                    //to convert string to decimal despite difference between regional format settings -> ex "1,000.00" or "1.000,00"
+                    qty = APIAccess.APIFunction.ParseDecimal(purchQty);
+
+
+                    //add by yonathan 17/10/2022
+                    if (qty.ToString().Length == 7)
+                    {
+                        qtyString = qty.ToString();
+                    }
+                    else
+                    {
+                        qtyString = qty.ToString();
+                        int stringCount = qty.ToString().Length;
+                        int spaceToBeAdded = 7 - stringCount;
+                        for (int i = 0; i < spaceToBeAdded; i++)
+                        {
+                            qtyString += " ";
+                        }
+                    }
+
+
+                    if (itemname.Length >= 35)
+                    {
+                        itemname = itemname.Substring(0, 35).PadRight(35, ' ');
+                    }
+                    else
+                    {
+                        itemname = itemname;
+                        int countItemName = itemname.Length;
+                        int addSpace = 35 - countItemName;
+                        for (int i = 0; i < addSpace; i++)
+                        {
+                            itemname += " ";
+                        }
+                    }
+                    //end add
+                    items = itemname;//.Substring(0, 19);
+
+                    if (purchid == purchid2)
+                    {
+                        // continue line
+                        //  MessageBox.Show(purchid + "  " + itemid + " " + itemname + " " + unit + " " + datecreated + " " + storeName + " " + qty);
+                        s += "" + itemid.PadRight(23, ' ') + qtyString.PadLeft(5, ' ') + unit.PadLeft(0, ' ') + Environment.NewLine;
+                        s += "" + itemname.PadRight(23, ' ') + Environment.NewLine; 
+                        total += qty;
+
+                        //edit by Erwin
+                        //Offset = Offset + 13;
+                        Offset += 13;
+                        //end edit by Erwin
+                    }
+                    else
+                    {
+                        if (purchid2 != "")
+                        {
+                            //add by yonathan 17/10/2022
+                            qtyStringMod = total.ToString();
+                            if (total.ToString().Length == 7)
+                            {
+                                totalString = total.ToString();
+                            }
+                            else
+                            {
+                                totalString = total.ToString();
+                                int stringCount = total.ToString().Length;
+                                int spaceToBeAdded = 7 - stringCount;
+                                for (int i = 0; i < spaceToBeAdded; i++)
+                                {
+                                    totalString += " ";
+                                }
+                            }
+                            //end add
+                            s += Environment.NewLine;
+                            s += "" + "Total QTY Transfer:".PadRight(23, ' ') + totalString.PadLeft(4, ' ') + Environment.NewLine;
+                            //edit by Erwin
+                            //Offset = Offset + 13;
+                            Offset += 13;
+                            //end edit by Erwin
+                        }
+
+                        purchid2 = purchid;
+
+                        s += Environment.NewLine;
+                        s += "" + "Created Date: " + datecreated + Environment.NewLine;
+                        s += "" + "No.TO: " + purchid.PadRight(23, ' ')  + Environment.NewLine;
+                        s += "----------------------------------" + Environment.NewLine; 
+                        s += "" + "Kode Barang".PadRight(23, ' ') + "Trf".PadLeft(2, ' ') + " Unit".PadLeft(7, ' ') + Environment.NewLine;// +"Rmk".PadLeft(5, ' ') + Environment.NewLine;
+                        s += "----------------------------------" + Environment.NewLine;
+                        s += "" + itemid.PadRight(23, ' ') + qtyString.PadLeft(5, ' ') + unit.PadLeft(0, ' ') + Environment.NewLine;
+                        s += "" + items.PadRight(23, ' ') + qtyString.PadLeft(5, ' ') + unit.PadLeft(0, ' ')  + Environment.NewLine;
+                        // new line
+                        total = qty;
+
+                        //edit by Erwin
+                        //Offset = Offset + 60;
+                        Offset += 78;
+                        //end edit by Erwin
+                    }
+                }
+                //add by yonathan 17/10/2022
+                qtyStringMod = total.ToString();
+                if (total.ToString().Length == 7)
+                {
+                    totalString = total.ToString();
+                }
+                else
+                {
+                    totalString = total.ToString();
+                    int stringCount = total.ToString().Length;
+                    int spaceToBeAdded = 7 - stringCount;
+                    for (int i = 0; i < spaceToBeAdded; i++)
+                    {
+                        totalString += " ";
+                    }
+                }
+                //end add
+                s += Environment.NewLine;
+                s += "" + "Total QTY Transfer:".PadRight(23, ' ') + totalString.PadLeft(6, ' ') + Environment.NewLine;
+                s += Environment.NewLine;
+                s += "----------------------------------" + Environment.NewLine; // modif by Julius 
+                //s += Environment.NewLine + Environment.NewLine;
+
+                //edit by Erwin
+                //Offset = Offset + 30;
+                Offset += 39;
+                //end edit by Erwin
+
+                return s;
+
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Format Error", ex);
+            }
+
+        }
 
 		private string ListTOFormatOld() //using CPCONNECTION
 		{

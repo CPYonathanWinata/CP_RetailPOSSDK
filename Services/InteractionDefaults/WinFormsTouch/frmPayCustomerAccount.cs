@@ -2752,6 +2752,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 						btnCancel.Enabled = true;
 						btnInquiry.Enabled = false ;
 						lblWaitingRespond.Visible = false ;
+                        decimal fee = 0;
 						//validate response from BCA here
 						switch (GME_Var.respCodeBCA)
 						{
@@ -2770,7 +2771,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
                                 //get ADM fee
                                 if (otherAmount != 0)
                                 {
-                                    admFee = GetAdmFee(int.Parse(this.tenderInfo.TenderID));
+                                    admFee = GetAdmFee(int.Parse(this.tenderInfo.TenderID), out fee); //add 12022025 fee field
                                     
                                     otherAmount = admFee != 0 ? otherAmount - (int)admFee : otherAmount;
 
@@ -2864,6 +2865,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 																			TRANSDATE,
 																			TRANSACTIONSTATUS,
                                                                             ADMFEE,
+                                                                            FEE,
 																			[DATAAREAID],
 																			[PARTITION]
 																			)
@@ -2879,6 +2881,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 													@TRANSDATE,
 													@TRANSACTIONSTATUS,
                                                     @ADMFEE,
+                                                    @FEE,
 													@DATAAREAID,
 													@PARTITION
 													)";
@@ -2896,6 +2899,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 											command.Parameters.AddWithValue("@TRANSDATE", DateTime.Now);
 											command.Parameters.AddWithValue("@TRANSACTIONSTATUS", 0);
                                             command.Parameters.AddWithValue("@ADMFEE", admFee);
+                                            command.Parameters.AddWithValue("@FEE", fee); //add 12022025
 											command.Parameters.AddWithValue("@DATAAREAID", LSRetailPosis.Settings.ApplicationSettings.Database.DATAAREAID);
 											command.Parameters.AddWithValue("@PARTITION", 1);
 
@@ -3978,14 +3982,18 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 		#endregion
 
         //additional for adm fee by Yonathan 10/06/2024 //CPIADMFEE
-        public decimal GetAdmFee(int _tenderId)
+        public decimal GetAdmFee(int _tenderId, out decimal _amountFee)
         {
             string admFee = "0";
+            string fee = "0";
             decimal amountAdmFee = 0;
+            decimal amountFee = 0;
+            _amountFee = 0;
+
             SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
             try
             {
-                string queryString = @"SELECT ADMFEE 
+                string queryString = @"SELECT ADMFEE, FEE
                                         FROM ax.CPBANKADM 
                                         WHERE TENDERTYPEID = @TENDERID 
                                         AND DATAAREAID = @DATAAREAID
@@ -4004,6 +4012,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
                         if (reader.Read())
                         {
                             admFee = reader[0].ToString();
+                            fee = reader[1].ToString();
 
                         }
 
