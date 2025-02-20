@@ -1547,7 +1547,8 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
 
                     foreach (SaleLineItem s in theTransaction.SaleItems)
                     {
-                        if (s.TaxGroupId == "Dibebaskan" && !s.Voided)
+                        //if (s.TaxGroupId == "Dibebaskan" && !s.Voided)
+                        if (s.TaxGroupId.Equals("Dibebaskan", StringComparison.OrdinalIgnoreCase) && !s.Voided)
                         {
                             ppnPct = getTaxPct("PPN");
                             subtotal += Math.Round(s.NetAmount * (ppnPct / 100));
@@ -1639,7 +1640,8 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
 
                 foreach (SaleLineItem s in theTransaction.SaleItems)
                 {
-                    if (s.TaxGroupId == "NonPPN" && !s.Voided)
+                    //if (s.TaxGroupId == "NonPPN" && !s.Voided)
+                    if (s.TaxGroupId.Equals("NonPPN", StringComparison.OrdinalIgnoreCase) && !s.Voided)
                         subtotal += s.NetAmountWithNoTax;
 
                 }
@@ -1669,7 +1671,9 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
 
                 foreach (SaleLineItem s in theTransaction.SaleItems)
                 {
-                    if (s.TaxGroupId == "Dibebaskan" && !s.Voided)
+                    //if (s.TaxGroupId == "Dibebaskan" && !s.Voided)
+                    if (s.TaxGroupId.Equals("Dibebaskan", StringComparison.OrdinalIgnoreCase) && !s.Voided)
+
                         subtotal += s.NetAmountWithNoTax;
                      
                 }
@@ -1700,7 +1704,9 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                 decimal subTotalBKP = 0;
                 foreach (SaleLineItem s in theTransaction.SaleItems)
                 {
-                    if (s.TaxGroupId != "PPN" && !s.Voided)
+                    //if (s.TaxGroupId != "PPN" && !s.Voided)
+                    if (s.TaxGroupId.Equals("PPN", StringComparison.OrdinalIgnoreCase) && !s.Voided)
+
                     {
                         subTotalBKP = s.NetAmountWithTax;
                     }
@@ -1839,7 +1845,8 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
 
                     foreach (SaleLineItem s in theTransaction.SaleItems)
                     {
-                        if (s.TaxGroupId == "PPN" && !s.Voided)
+                        //if (s.TaxGroupId == "PPN" && !s.Voided)
+                            if (s.TaxGroupId.Equals("PPN", StringComparison.OrdinalIgnoreCase) && !s.Voided)
                             subtotal += s.NetAmountWithNoTax;
 
                         //disable for PPN only, other tax group will be splitted - 22012025
@@ -1868,7 +1875,8 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
 
                     foreach (SaleLineItem s in theTransaction.SaleItems)
                     {
-                        if (s.TaxGroupId == "PPN" && !s.Voided)
+                        //if (s.TaxGroupId == "PPN" && !s.Voided)
+                        if (s.TaxGroupId.Equals("PPN", StringComparison.OrdinalIgnoreCase) && !s.Voided)
                             subtotal += s.NetAmount;
 
                         //disable for PPN only, other tax group will be splitted - 22012025
@@ -1906,7 +1914,8 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
 
                     foreach (SaleLineItem s in theTransaction.SaleItems)
                     {
-                        if (s.TaxGroupId == "PPN" && !s.Voided)
+                        //if (s.TaxGroupId == "PPN" && !s.Voided)
+                            if (s.TaxGroupId.Equals("PPN", StringComparison.OrdinalIgnoreCase) && !s.Voided)
                             subtotal += s.NetAmountWithNoTax;
                         /*else if (s.TaxGroupId != "PPN" && !s.Voided) //NECI_YNWA start modified because code change in CU10 regarding the column NetAmountWithNoTax is zero if the item type is BKTP
                             subtotal += s.NetAmount; //NECI_YNWA end modified*/
@@ -1933,7 +1942,8 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
 
                     foreach (SaleLineItem s in theTransaction.SaleItems)
                     {
-                        if (s.TaxGroupId == "PPN" && !s.Voided)
+                        //if (s.TaxGroupId == "PPN" && !s.Voided)
+                            if (s.TaxGroupId.Equals("PPN", StringComparison.OrdinalIgnoreCase) && !s.Voided)
                             subtotal += s.NetAmount;
 
                         //disable for PPN only, other tax group will be splitted - 22012025
@@ -1971,7 +1981,8 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                     decimal subTotalPPN = 0;
                     foreach (SaleLineItem s in theTransaction.SaleItems)
                     {
-                        if (s.TaxGroupId == "PPN" && !s.Voided)
+                        //if (s.TaxGroupId == "PPN" && !s.Voided)
+                            if (s.TaxGroupId.Equals("PPN", StringComparison.OrdinalIgnoreCase) && !s.Voided)
                             subTotalPPN += s.TaxAmount;
                     }
 
@@ -1999,7 +2010,8 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                 decimal subTotalPB1 = 0;
                 foreach (SaleLineItem s in theTransaction.SaleItems)
                 {
-                    if (s.TaxGroupId == "PB1")
+                   // if (s.TaxGroupId == "PB1")
+                    if (s.TaxGroupId.Equals("PB1", StringComparison.OrdinalIgnoreCase) && !s.Voided)
                         subTotalPB1 += s.TaxAmount;
                 }
                 //Edit By Erwin 23 July 2019

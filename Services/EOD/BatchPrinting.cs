@@ -209,8 +209,8 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
                 reportLayout.AppendReportLine(14015, RoundDecimal(totalPoint));
 
             //from payment method
-            if (giftCardTotal != 0)
-                reportLayout.AppendReportLine(14014, RoundDecimal(giftCardTotal));
+            //if (giftCardTotal != 0)
+            //    reportLayout.AppendReportLine(14014, RoundDecimal(giftCardTotal));
             if (loyaltyCardTotal != 0)
                 reportLayout.AppendReportLine(14015, RoundDecimal(loyaltyCardTotal));
 
