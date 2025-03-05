@@ -850,22 +850,22 @@ namespace APIAccess
 
 
 
-        public async Task<bool> CheckApiAvailability(string url)
-        {
-            try
-            {
-                using (HttpClient client = new HttpClient())
-                {
-                    client.Timeout = TimeSpan.FromSeconds(5);
-                    HttpResponseMessage response = await client.SendAsync(new HttpRequestMessage(HttpMethod.Head, url));
-                    return response.IsSuccessStatusCode;
-                }
-            }
-            catch
-            {
-                return false;
-            }
-        }
+        //public async Task<bool> CheckApiAvailability(string url)
+        //{
+        //    try
+        //    {
+        //        using (HttpClient client = new HttpClient())
+        //        {
+        //            client.Timeout = TimeSpan.FromSeconds(5);
+        //            HttpResponseMessage response = await client.SendAsync(new HttpRequestMessage(HttpMethod.Head, url));
+        //            return response.IsSuccessStatusCode;
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        return false;
+        //    }
+        //}
 
         public   bool CheckForInternetConnection(IApplication _application, string _url)
 		{

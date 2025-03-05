@@ -1004,6 +1004,11 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
         /// <param name="reportType"></param>
         private static void PrepareHeader(this StringBuilder reportLayout, Batch batch, ReportType reportType)
         {
+            string openBy = "";
+            string closeBy = "";
+            string setorBy = "";
+            List<string> cashierOnDutyList = new List<string>();
+
             reportLayout.AppendLine(singleLine);
             switch (reportType)
             {
@@ -1042,17 +1047,30 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             reportLayout.AppendReportHeaderLine(7005, ApplicationLocalizer.Language.Translate(206, batch.TerminalId, batch.BatchId), true);
             reportLayout.AppendLine();
             //custom by Yonathan 31102024
-            string openBy = "";
-            string closeBy = "";
-            getOpenCloseBy(batch, out openBy, out closeBy);
+            
+            getOpenCloseBy(batch, out openBy, out closeBy, out setorBy);
+
+            getCashiersOnDuty(batch, out cashierOnDutyList);
             reportLayout.AppendLine("Printed By    : " + operatorName(ApplicationSettings.Terminal.TerminalOperator.OperatorId));
             reportLayout.AppendLine("Print Date    : " + DateTime.UtcNow.ToLocalTime().ToString());
             reportLayout.AppendLine("OpenShift By  : " );
             reportLayout.AppendLine( openBy + "-" + operatorName(openBy) );//, true);
             if (reportType == ReportType.ZReport)
             {
-            reportLayout.AppendLine("CloseShift By : " );//, true);
-            reportLayout.AppendLine(closeBy + "-" + operatorName(closeBy));//, true);
+                reportLayout.AppendLine("CloseShift By : " );//, true);
+                reportLayout.AppendLine(closeBy + "-" + operatorName(closeBy));//, true);
+
+                reportLayout.AppendLine("Setor By : ");
+                reportLayout.AppendLine(setorBy + "-" + operatorName(setorBy));
+
+                reportLayout.AppendLine("Cashiers on Duty : ");//, true);
+                //foreach
+                foreach (var cashier in cashierOnDutyList)
+                {
+                    reportLayout.AppendLine(cashier + "-" + operatorName(cashier));
+                }
+                
+
             }
             //end
             reportLayout.AppendLine();
@@ -1060,17 +1078,21 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
 
             if (reportType == ReportType.ZReport)
             {
-                reportLayout.AppendReportHeaderLine(7010, batch.CloseDateTime.ToShortDateString(), false);
+                reportLayout.AppendLine();
+                reportLayout.AppendReportHeaderLine(7010, batch.CloseDateTime.ToShortDateString(), true);
+                //reportLayout.AppendReportHeaderLine(7010, batch.CloseDateTime.ToShortDateString(), false);
             }
             else
             {
                 reportLayout.AppendLine();
             }
-
+            reportLayout.AppendLine();
             reportLayout.AppendReportHeaderLine(7009, batch.StartDateTime.ToShortTimeString(), true);
             if (reportType == ReportType.ZReport)
             {
-                reportLayout.AppendReportHeaderLine(7011, batch.CloseDateTime.ToShortTimeString(), false);
+                reportLayout.AppendLine();
+                reportLayout.AppendReportHeaderLine(7011, batch.CloseDateTime.ToShortTimeString(), true);
+                //reportLayout.AppendReportHeaderLine(7011, batch.CloseDateTime.ToShortTimeString(), false);
             }
             else
             {
@@ -1078,6 +1100,52 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             }
 
             reportLayout.AppendLine();
+        }
+
+        private static void getCashiersOnDuty(Batch batch, out List<string> cashierOnDutyList)
+        {
+            //batch.StartDateTime - 7
+            //batch.CloseDateTime -7
+
+            cashierOnDutyList = new List<string>();
+            SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+            /*
+             SELECT RETAILTRANSACTIONTABLE WHERE CREATEDDATETIME BETWEEN  
+            //batch.StartDateTime - 7
+            //batch.CloseDateTime -7
+            */
+            try
+            {
+                string query = @"SELECT STAFF, CREATEDDATETIME, RECEIPTID, STORE FROM AX.RETAILTRANSACTIONTABLE 
+                     WHERE  RECEIPTID !='' AND CREATEDDATETIME BETWEEN @StartDate AND @CloseDate";
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@StartDate", batch.StartDateTime.AddHours(-7));
+                    cmd.Parameters.AddWithValue("@CloseDate", batch.CloseDateTime.AddHours(-7));
+
+                    connection.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            cashierOnDutyList.Add(reader[0].ToString() );//+ "|" + reader[2].ToString());
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //LSRetailPosis.ApplicationExceptionHandler.HandleException();
+                throw;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+                }
+            }
         }
 
         private static string operatorName(string openBy)
@@ -1125,15 +1193,16 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
 
         }
 
-        private static void getOpenCloseBy(Batch _batch, out string openBy, out string closeBy)
+        private static void getOpenCloseBy(Batch _batch, out string openBy, out string closeBy, out string setorBy)
         {
             SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
             openBy = "";
             closeBy = "";
+            setorBy = "";
             try
             {
                
-                string queryString = @"SELECT BATCHID, OPENBY, CLOSEBY
+                string queryString = @"SELECT BATCHID, OPENBY, CLOSEBY, SETORBY
                                       FROM  [ax].[CPRETAILPOSBATCHTABLEEXTEND]
                                       where BATCHID = @BATCHID";
 
@@ -1151,6 +1220,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
 
                             openBy = reader[1].ToString();
                             closeBy = reader[2].ToString();
+                            setorBy = reader[3].ToString();
                             
                         }
                     }

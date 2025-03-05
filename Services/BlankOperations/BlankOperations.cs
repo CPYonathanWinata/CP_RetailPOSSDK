@@ -1409,7 +1409,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     }
                     break;
 
-
+                case "102":
+                    {
+                        Application.RunOperation(PosisOperations.PrintShelfLabelReport, "10010024");
+                    }
+                    break;
                 //Application.RunOperation(PosisOperations.PayCard, string.Empty, posTransaction);
                 //CP_SalesOrderDetail cpSalesDetail = new CP_SalesOrderDetail(Application);
                 //cpSalesDetail.ShowDialog();

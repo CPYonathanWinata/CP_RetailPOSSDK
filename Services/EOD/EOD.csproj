@@ -29,7 +29,8 @@
     </Reference>
     <Reference Include="DevExpress.Utils.v14.2, Version=14.2.107.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\DevExpress.Utils.v14.2.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\DevExpress.Utils.v14.2.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="DevExpress.XtraEditors.v14.2, Version=14.2.107.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -39,8 +40,16 @@
       <HintPath>$(PosInstallPath)\DevExpress.XtraGrid.v14.2.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Microsoft.Dynamics.Commerce.Runtime.DataManagers, Version=6.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Microsoft.Dynamics.Commerce.Runtime.DataManagers.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Dynamics.Retail.Diagnostics">
       <HintPath>..\..\..\..\..\Hamzah\Upgrade\POS Plug-ins\POS\bin\Debug\Microsoft.Dynamics.Retail.Diagnostics.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Dynamics.Retail.Pos.DataManager, Version=6.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Microsoft.Dynamics.Retail.Pos.DataManager.DLL</HintPath>
     </Reference>
     <Reference Include="POSControls, Version=6.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -56,9 +65,11 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core">
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
@@ -72,6 +83,12 @@
     </Compile>
     <Compile Include="CPBatchForm.Designer.cs">
       <DependentUpon>CPBatchForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CPCloseShiftUser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CPCloseShiftUser.Designer.cs">
+      <DependentUpon>CPCloseShiftUser.cs</DependentUpon>
     </Compile>
     <Compile Include="EOD.cs" />
     <Compile Include="BatchPrinting.cs" />
@@ -130,6 +147,9 @@
   <ItemGroup>
     <EmbeddedResource Include="CPBatchForm.resx">
       <DependentUpon>CPBatchForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CPCloseShiftUser.resx">
+      <DependentUpon>CPCloseShiftUser.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BlindClosedShiftsForm.resx">
       <DependentUpon>BlindClosedShiftsForm.cs</DependentUpon>
