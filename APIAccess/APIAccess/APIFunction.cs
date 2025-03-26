@@ -16,7 +16,7 @@ using System.Globalization;
 using System.Data.SqlClient;
 using System.Data;
 using Microsoft.Dynamics.Retail.Pos.Contracts.DataEntity;
-using System.Net.Http;
+ 
 using System.Diagnostics;
 namespace APIAccess
 {

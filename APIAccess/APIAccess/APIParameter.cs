@@ -169,6 +169,7 @@ namespace APIAccess
             public string grabItemID { get; set; }
             public int tax { get; set; }
             public string status { get; set; }
+            public decimal discAmt { get; set; }
         }
 
         public class Data
@@ -180,11 +181,32 @@ namespace APIAccess
             public string partnerMerchantID { get; set; }
             public string paymentType { get; set; }
             public string orderTime { get; set; }
+            public List<Campaign> campaigns { get; set; }
             public Price price { get; set; }
             public Currency currency { get; set; }
             public List<Item> items { get; set; }
             public Receiver receiver { get; set; }
         }
+
+        public class Campaign
+        {
+            public string id { get; set; }
+            public string name { get; set; }
+            public int deductedAmount { get; set; }
+            public string deductedPart { get; set; }
+            public List<string> appliedItemIDs { get; set; }
+            public string level { get; set; }
+            public int mexFundedRatio { get; set; }
+            public string type { get; set; }
+            public int usageCount { get; set; }
+            public string campaignNameForMex { get; set; }
+        }
+
+        //public class Campaigns
+        //{
+        //    public List<Campaign> CampaignList { get; set; }
+        //}
+
 
         public class Address
         {

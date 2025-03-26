@@ -141,6 +141,25 @@ namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
         {
             string messageBoxString = "";
 
+            ////add grab discount 24032025 - Yonathan
+            //RetailTransaction transaction = posTransaction as RetailTransaction;
+            //foreach(var itemLines in transaction.CalculableSalesLines)
+            //{
+            //    //add discount Line based on customer master
+            //    LSRetailPosis.Transaction.Line.Discount.CustomerDiscountItem custDiscountManual = new LSRetailPosis.Transaction.Line.Discount.CustomerDiscountItem();
+
+                
+              
+            //    custDiscountManual.Amount = 1000;
+                
+            //    Application.Services.Discount.AddDiscountLine(itemLines, custDiscountManual);
+
+            //    Application.Services.Tax.CalculateTax(itemLines, transaction);
+            //}
+            
+            //transaction.CalcTotals();
+            //transaction.Save();
+            ////end
             //add by Yonathan 13/05/2024 to check B2B Cust cannot pay unless creat a customer order first
             if ((APIAccess.APIAccessClass.isB2b == "1" || APIAccess.APIAccessClass.isB2b == "2") && posTransaction.ToString() == "LSRetailPosis.Transaction.RetailTransaction")
             {

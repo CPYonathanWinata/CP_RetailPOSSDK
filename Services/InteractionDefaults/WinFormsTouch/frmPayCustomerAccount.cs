@@ -595,17 +595,20 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 
 				if (isIntegrated == true && APIAccess.APIAccessClass.grabOrderState != "" )
 				{
-					if (APIAccess.APIAccessClass.grabCustPhone != "")
+                    if (!string.IsNullOrEmpty(APIAccess.APIAccessClass.grabCustPhone))
+                    // if (APIAccess.APIAccessClass.grabCustPhone != "" && APIAccess.APIAccessClass.grabCustPhone != null)
+
 					{
 						txtPhone.Text = APIAccess.APIAccessClass.grabCustPhone.ToString();//"";
 						txtPhone.ReadOnly = true; //false; //tadinya false karena bisa diketik manual
 					}
 
+                    if (!string.IsNullOrEmpty(APIAccess.APIAccessClass.grabCustName))
 
-					if (APIAccess.APIAccessClass.grabCustName != "")
+                    //if (APIAccess.APIAccessClass.grabCustName != "" && APIAccess.APIAccessClass.grabCustName !=null)
 					{ 
 						txtCustName.Text = APIAccess.APIAccessClass.grabCustName.ToString();// "";
-						txtCustName.ReadOnly = true; //false; //tadinya false karena bisa diketik manual
+						txtCustName.ReadOnly = true; //false; //tadinya false karena bisa diketik manual 
 					}
 
 				}

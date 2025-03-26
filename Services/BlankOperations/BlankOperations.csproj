@@ -207,12 +207,6 @@
     <Compile Include="CPDiscountPayment.Designer.cs">
       <DependentUpon>CPDiscountPayment.cs</DependentUpon>
     </Compile>
-    <Compile Include="CPGrabmartOrder.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="CPGrabmartOrder.Designer.cs">
-      <DependentUpon>CPGrabmartOrder.cs</DependentUpon>
-    </Compile>
     <Compile Include="CP_IZone\CPIZone.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -418,9 +412,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CPDiscountPayment.resx">
       <DependentUpon>CPDiscountPayment.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="CPGrabmartOrder.resx">
-      <DependentUpon>CPGrabmartOrder.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CP_IZone\CPIZone.resx">
       <DependentUpon>CPIZone.cs</DependentUpon>

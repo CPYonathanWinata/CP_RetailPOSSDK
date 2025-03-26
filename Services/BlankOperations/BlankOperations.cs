@@ -96,6 +96,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 		public static IBlankOperationInfo globaloperationInfo;
 		public static IPosTransaction globalposTransaction;
         public static IPosTransaction grabPosTransaction;
+        public static IPosTransaction grabPosTransactionDisc;
         public static string itemIdToAdd;
         public static decimal quantityToAdd;
         public static int exponent;
@@ -836,30 +837,30 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                                         }
                                     }
                                 }
-
-                                foreach(var lineItem in transaction.SaleItems)
-                                {
+                                //disable this to combo the discount 11032025 - Yonathan
+                                //foreach(var lineItem in transaction.SaleItems)
+                                //{
                                     
-                                    foreach (var discountLines in lineItem.PeriodicDiscountLines)
-                                    {
-                                        PeriodicDiscountItem periodDiscItem = discountLines as PeriodicDiscountItem;
+                                //    foreach (var discountLines in lineItem.PeriodicDiscountLines)
+                                //    {
+                                //        PeriodicDiscountItem periodDiscItem = discountLines as PeriodicDiscountItem;
 
-                                        if (periodDiscItem.OfferId.StartsWith("ED")) //if (periodDiscItem.OfferId.StartsWith("PDI")) //
-                                        {
-                                             promoID = periodDiscItem.OfferId;
-                                        }
-                                        else
-                                        {
-                                            using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Tidak bisa akses ke menu ini karena sudah mendapat diskon", MessageBoxButtons.OK, MessageBoxIcon.Stop))
-                                            {
-                                                LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
-                                                return;
-                                            }
-                                        }
+                                //        if (periodDiscItem.OfferId.StartsWith("ED")) //if (periodDiscItem.OfferId.StartsWith("PDI")) //
+                                //        {
+                                //             promoID = periodDiscItem.OfferId;
+                                //        }
+                                //        else
+                                //        {
+                                //            using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Tidak bisa akses ke menu ini karena sudah mendapat diskon", MessageBoxButtons.OK, MessageBoxIcon.Stop))
+                                //            {
+                                //                LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                                //                return;
+                                //            }
+                                //        }
                                        
-                                    } 
+                                //    } 
                                     
-                                }
+                                //}
 
                                 CPDiscountItem cpDiscItem = new CPDiscountItem(posTransaction, Application, promoID, operationInfo.OperationId);
 
@@ -942,8 +943,30 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 
                                     foreach (var discountLines in lineItem.PeriodicDiscountLines)
                                     {
-                                        PeriodicDiscountItem periodDiscItem = discountLines as PeriodicDiscountItem;
-                                        //if (!periodDiscItem.OfferId.StartsWith("ED") && !periodDiscItem.OfferId.StartsWith("QS"))
+                                        //disable this to combo the discount 11032025 - Yonathan
+
+                                        //PeriodicDiscountItem periodDiscItem = discountLines as PeriodicDiscountItem;
+
+
+                                        ////if (!periodDiscItem.OfferId.StartsWith("ED") && !periodDiscItem.OfferId.StartsWith("QS"))
+                                        ////{
+                                        ////    using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Tidak bisa akses ke menu ini karena sudah mendapat diskon", MessageBoxButtons.OK, MessageBoxIcon.Stop))
+                                        ////    {
+                                        ////        LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                                        ////        return;
+                                        ////    }
+                                        ////}
+                                        ////else
+                                        ////{
+                                        ////    promoID = periodDiscItem.OfferId;
+                                        ////}
+
+
+                                        //if (periodDiscItem.OfferId.StartsWith("QS")) //if (periodDiscItem.OfferId.StartsWith("PDIS")) //
+                                        //{
+                                        //    promoID = periodDiscItem.OfferId;
+                                        //}
+                                        //else
                                         //{
                                         //    using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Tidak bisa akses ke menu ini karena sudah mendapat diskon", MessageBoxButtons.OK, MessageBoxIcon.Stop))
                                         //    {
@@ -951,22 +974,6 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                                         //        return;
                                         //    }
                                         //}
-                                        //else
-                                        //{
-                                        //    promoID = periodDiscItem.OfferId;
-                                        //}
-                                        if (periodDiscItem.OfferId.StartsWith("QS")) //if (periodDiscItem.OfferId.StartsWith("PDIS")) //
-                                        {
-                                            promoID = periodDiscItem.OfferId;
-                                        }
-                                        else
-                                        {
-                                            using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Tidak bisa akses ke menu ini karena sudah mendapat diskon", MessageBoxButtons.OK, MessageBoxIcon.Stop))
-                                            {
-                                                LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
-                                                return;
-                                            }
-                                        }
                                     }
 
                                 }
@@ -1146,15 +1153,36 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                         //iSale.BarcodeInfo.ItemId = txtSKU.Text;
                         iSale.OperationInfo.NumpadQuantity = quantityToAdd;//orderItem.id
                         iSale.POSTransaction = (LSRetailPosis.Transaction.PosTransaction)posTransaction;
-
                         iSale.RunOperation();
                         grabPosTransaction = iSale.POSTransaction;
+
+
                     }
                     break;
                 case "95":
                     {
-                        PosApplication.Instance.RunOperation(PosisOperations.ItemSale, itemIdToAdd);
-                        //RetailTransaction transaction = globalposTransaction as RetailTransaction;
+                        RetailTransaction transaction;
+                        transaction = grabPosTransaction as RetailTransaction;
+                        LSRetailPosis.Transaction.Line.Discount.LineDiscountItem lineDisc = new LSRetailPosis.Transaction.Line.Discount.LineDiscountItem();
+                        lineDisc.Amount = 1000;
+                        
+                        foreach (var item in transaction.SaleItems)
+                        {
+                            lineDisc.Amount += 1000;
+                            Application.Services.Discount.AddLineDiscountAmount(item,lineDisc);
+
+                            
+
+                        }
+                        Application.BusinessLogic.ItemSystem.CalculatePriceTaxDiscount(transaction);
+                        //globalTransaction.CalcTotals();
+
+                        transaction.CalcTotals();
+                        transaction.Save();
+                        
+
+                        Application.RunOperation(PosisOperations.DisplayTotal, "");
+                         
                     }
                     break;
 
@@ -1180,6 +1208,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 
                         LSRetailPosis.Transaction.Line.Discount.LineDiscountItem lineDisc = new LSRetailPosis.Transaction.Line.Discount.LineDiscountItem();
                         lineDisc.Amount = 1000;
+                        //transaction.CurrentSaleLineItem.EligibleForDiscount = true;
                         Application.Services.Discount.AddLineDiscountAmount(transaction.CurrentSaleLineItem, lineDisc);
 
                         Application.BusinessLogic.ItemSystem.CalculatePriceTaxDiscount(transaction);
@@ -1199,10 +1228,26 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                         SaleLineItem saleLineItem;
                         RetailTransaction transaction = posTransaction as RetailTransaction;
 
-                        decimal priceToOverride = 21300;
+                        decimal priceToOverride = 10000;
                         saleLineItem = RetailTransaction.SetCostPrice(transaction.SaleItems.Last.Value, priceToOverride);
                         Application.BusinessLogic.ItemSystem.CalculatePriceTaxDiscount(posTransaction);
+                        //transaction.CalcTotals();
+
+                        LSRetailPosis.Transaction.Line.Discount.LineDiscountItem lineDisc = new LSRetailPosis.Transaction.Line.Discount.LineDiscountItem();
+                        lineDisc.Amount = 1000;
+                        //transaction.CurrentSaleLineItem.EligibleForDiscount = true;
+                        Application.Services.Discount.AddLineDiscountAmount(transaction.CurrentSaleLineItem, lineDisc);
+
+                        Application.BusinessLogic.ItemSystem.CalculatePriceTaxDiscount(transaction);
+
+                        //globalTransaction.CalcTotals();
+
                         transaction.CalcTotals();
+                        transaction.Save();
+                         
+
+
+                        Application.RunOperation(PosisOperations.DisplayTotal, "");
                     }
                     break;
                 case "98":
@@ -1352,7 +1397,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     {
                         SaleLineItem saleLineItem;
                         RetailTransaction transaction = posTransaction as RetailTransaction;
-
+                         
                         var itemsToRemove = new List<SaleLineItem>(); // To track items to remove
                         var seenItemIds = new HashSet<string>(); // To track unique ItemIds
 
@@ -1411,7 +1456,64 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 
                 case "102":
                     {
-                        Application.RunOperation(PosisOperations.PrintShelfLabelReport, "10010024");
+                      
+                        //add grab discount 24032025 - Yonathan
+                        RetailTransaction grabPosTransactionLocal = BlankOperations.grabPosTransactionDisc as RetailTransaction;
+                        foreach (var itemSale in grabPosTransactionLocal.SaleItems)
+                        {
+                            //#GRABDISCOUNT 
+
+
+
+
+                            //LSRetailPosis.Transaction.Line.Discount.LineDiscountItem lineDisc = new LSRetailPosis.Transaction.Line.Discount.LineDiscountItem();
+                            DiscountItem lineDisc = new LineDiscountItem();
+                            lineDisc.Amount = 1000;
+                            //applicationLoc.Services.Discount.AddLineDiscountAmount(grabPosTransaction.CurrentSaleLineItem, lineDisc);
+
+
+                            LineDiscountItem itemDisc = lineDisc as LineDiscountItem;
+                            itemDisc.Amount = lineDisc.Amount;
+                            itemDisc.LineDiscountType = LineDiscountItem.DiscountTypes.Manual;
+
+
+                            itemSale.DiscountLines.AddFirst(itemDisc);
+
+                            //END
+                        }
+
+                        
+                        //transaction.CalcTotals();
+                        //transaction.Save();
+                        //end
+                    }
+                    break;
+                case "103":
+                    {
+                        RetailTransaction transaction = posTransaction as RetailTransaction;
+                        decimal amountTA = 20000;
+                        decimal amountDisc = 1000;
+                        foreach(var salesLine in transaction.CalculableSalesLines)
+                        {
+
+                            salesLine.CustomerPrice = amountTA;
+                            salesLine.GrossAmount = amountTA;
+                            salesLine.OriginalPrice = amountTA;
+                            salesLine.Price = amountTA;
+                            //salesLine.TradeAgreementPriceGroup = result[1];
+                            salesLine.TradeAgreementPrice = amountTA;
+
+                            LSRetailPosis.Transaction.Line.Discount.CustomerDiscountItem custDiscountManual = new LSRetailPosis.Transaction.Line.Discount.CustomerDiscountItem();
+
+                            custDiscountManual.Amount = amountDisc;
+                            //custDiscountManual.Percentage = Convert.ToDecimal(resultDisc[2]);
+                            Application.Services.Discount.AddDiscountLine(salesLine, custDiscountManual);
+                                        
+                            Application.Services.Tax.CalculateTax(salesLine, transaction);
+                        }
+                        transaction.CalcTotals();
+                        transaction.Save();
+                        //end
                     }
                     break;
                 //Application.RunOperation(PosisOperations.PayCard, string.Empty, posTransaction);
