@@ -1664,7 +1664,15 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 
             PrintDocument print_document = new PrintDocument();
             PrintDialog print_dialog = new PrintDialog();
-            PaperSize paper_size = new PaperSize("Custom", 100, offset + 100);
+            PaperSize paper_size;
+            if (printerName == "EPSON LX-310 ESC/P")
+            {
+                  paper_size = new PaperSize("Custom", 100, offset + 300);
+            }
+            else
+            {
+                  paper_size = new PaperSize("Custom", 100, offset + 100);
+            }
             Margins margin = new Margins(0, 0, 0, 0);
 
             //Processing Print
@@ -1673,20 +1681,42 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             print_dialog.Document.DefaultPageSettings.Margins = margin;
             print_document.DefaultPageSettings.PaperSize.Width = 600;
 
-            print_document.PrintPage += delegate(object sender1, PrintPageEventArgs e1)
+            if (printerName == "EPSON LX-310 ESC/P")
             {
-                e1.Graphics.DrawString(
-                    text_format,
-                    new Font("Lucida Console", 6),
-                    new SolidBrush(Color.Black),
-                    new RectangleF(
-                        print_document.DefaultPageSettings.PrintableArea.Left,
-                        0,
-                        print_document.DefaultPageSettings.PrintableArea.Width,
-                        print_document.DefaultPageSettings.PrintableArea.Height
-                        )
-                    );
-            };
+                print_document.PrintPage += delegate(object sender1, PrintPageEventArgs e1) 
+                {
+                    e1.Graphics.DrawString(
+                        text_format,
+                        new Font("Calibri", 8),
+                        new SolidBrush(Color.Black),
+                        new RectangleF(
+                            print_document.DefaultPageSettings.PrintableArea.Left,
+                            0,
+                            print_document.DefaultPageSettings.PrintableArea.Width,
+                            print_document.DefaultPageSettings.PrintableArea.Height
+                            )
+                        );
+                };
+            }
+            else
+            {
+                print_document.PrintPage += delegate(object sender1, PrintPageEventArgs e1)
+                {
+                    e1.Graphics.DrawString(
+                        text_format,
+                        new Font("Lucida Console", 6),
+                        new SolidBrush(Color.Black),
+                        new RectangleF(
+                            print_document.DefaultPageSettings.PrintableArea.Left,
+                            0,
+                            print_document.DefaultPageSettings.PrintableArea.Width,
+                            print_document.DefaultPageSettings.PrintableArea.Height
+                            )
+                        );
+                };
+            }
+
+            
 
             try
             {
@@ -1882,7 +1912,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 
                 format += blank_space +
                     labelItemID.PadRight(9) +
-                    labelItemName.PadRight(15) +
+                    labelItemName.PadRight(32) +
                     labelQty.PadLeft(4) +
                     labelPrice.PadLeft(6) +
                     labelDiscPercent.PadLeft(5) +
@@ -1890,7 +1920,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                     labelSubTotal.PadLeft(8) +
                     Environment.NewLine;
 
-                format += single_line_break + Environment.NewLine;
+                format += double_line_break + Environment.NewLine;
 
                 // Generate Details Data
                 TotalQty = CPGenerateDetails(ref offset, orderId, ref format, blank_space);

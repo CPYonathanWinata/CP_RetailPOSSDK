@@ -49,6 +49,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using LSRetailPosis.Transaction.Line.InfocodeItem;
+using LSRetailPosis.Transaction.Line.Discount;
 
 
 namespace Microsoft.Dynamics.Retail.Pos.ItemTriggers
@@ -250,6 +251,11 @@ namespace Microsoft.Dynamics.Retail.Pos.ItemTriggers
                 }
             }
             
+            //recalculate the discount
+            //if (retailTransaction.Comment == "PAYMENTDISCOUNT" || retailTransaction.Comment == "PROMOED" || retailTransaction.Comment == "PROMORCPT") //if (transaction.Comment == "PAYMENTDISCOUNT"  || transaction.Comment == "PROMOPDI" || transaction.Comment == "PROMOPDIS")          
+            //{ 
+                calculatePromoDiscount(retailTransaction); 
+            //}
             //posTransaction.OperationCancelled = true;
         }//
 
@@ -1288,5 +1294,232 @@ namespace Microsoft.Dynamics.Retail.Pos.ItemTriggers
 
         }
         #endregion  
+
+
+
+        private void calculatePromoDiscount(RetailTransaction transaction)
+        {
+
+            var matchingLines = transaction.CalculableSalesLines.Where(line => line.Comment != "").ToList();
+            decimal pctDisc = 0;
+            decimal amtDisc = 0;
+            string _promoName = "";
+            DateTime fromDate = DateTime.MinValue;
+            DateTime toDate = DateTime.MinValue;
+            foreach (var line in matchingLines)
+            {
+                pctDisc = 0;
+                amtDisc = 0;
+                _promoName = "";
+                line.IsInfoCodeItem = false;
+                LSRetailPosis.Transaction.Line.Discount.LineDiscountItem lineDisc = new LSRetailPosis.Transaction.Line.Discount.LineDiscountItem();
+
+                selectPromoItem(line.ItemId, line.Comment, out pctDisc, out amtDisc, out fromDate, out toDate, out _promoName);
+                if (_promoName == "")
+                {
+                    selectPromoItemReceipt(line.ItemId, line.Comment, out pctDisc, out amtDisc, out fromDate, out toDate, out _promoName);
+                }
+
+                //check if this line already has a discount with the same promo ID
+
+                foreach (var discountLine in line.DiscountLines.ToList())
+                {
+                    line.DiscountLines.Remove(discountLine);
+                }
+
+                var existingDiscount = line.DiscountLines
+                                        .OfType<PeriodicDiscountItem>()
+                                        .FirstOrDefault(d => d.OfferId == line.Comment);
+
+                if (existingDiscount == null)
+                {
+                    DiscountItem discItem = new PeriodicDiscountItem();
+                    if (pctDisc == 0)
+                    {
+                        discItem.Amount = amtDisc;
+                    }
+                    else if (amtDisc == 0)
+                    {
+                        discItem.Percentage = pctDisc;
+                    }
+
+                    PeriodicDiscountItem periodDiscItem = discItem as PeriodicDiscountItem;
+                    periodDiscItem.OfferId = line.Comment;
+                    periodDiscItem.OfferName = _promoName;
+                    periodDiscItem.QuantityDiscounted = 1;
+                    periodDiscItem.BeginDateTime = fromDate;
+                    periodDiscItem.EndDateTime = toDate;
+
+                    line.DiscountLines.AddFirst(discItem);
+
+
+                }
+
+
+                //DiscountItem discItem = (DiscountItem)new PeriodicDiscountItem();
+                //if (pctDisc == 0)
+                //{
+                //    discItem.Amount = amtDisc;
+                //}
+                //else if (amtDisc == 0)
+                //{
+                //    discItem.Percentage = pctDisc;
+                //}
+
+
+                //PeriodicDiscountItem periodDiscItem = discItem as PeriodicDiscountItem;
+                //periodDiscItem.OfferId = _promoId;
+                //periodDiscItem.OfferName = _promoName;
+                //periodDiscItem.QuantityDiscounted = 1;
+                //periodDiscItem.BeginDateTime = fromDate; //Convert.ToDateTime(dataGridResult.Rows[e.RowIndex].Cells["From Date"].Value.ToString());
+                //periodDiscItem.EndDateTime = toDate; //Convert.ToDateTime(dataGridResult.Rows[e.RowIndex].Cells["To Date"].Value.ToString());
+
+
+                //line.DiscountLines.AddFirst(discItem);
+            }
+
+            //PeriodicDiscountItem periodDiscItem = discItem as PeriodicDiscountItem;
+            //periodDiscItem.OfferId = dataGridResult.Rows[e.RowIndex].Cells["Promo ID"].Value.ToString();
+            //periodDiscItem.OfferName = dataGridResult.Rows[e.RowIndex].Cells["Promo Name"].Value.ToString();
+            //periodDiscItem.QuantityDiscounted = 1;
+            //periodDiscItem.BeginDateTime = Convert.ToDateTime(dataGridResult.Rows[e.RowIndex].Cells["From Date"].Value.ToString());
+            //periodDiscItem.EndDateTime = Convert.ToDateTime(dataGridResult.Rows[e.RowIndex].Cells["To Date"].Value.ToString());
+
+            //transaction.CurrentSaleLineItem.DiscountLines.AddFirst(discItem);
+
+        }
+
+        private void selectPromoItem(string itemId, string promoId, out decimal pctDisc, out decimal amtDisc, out DateTime fromDate, out DateTime toDate, out string promoName)
+        {
+            amtDisc = 0;
+            pctDisc = 0;
+            promoName = "";
+            fromDate = DateTime.Now;
+            toDate = DateTime.Now;
+            SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+            try
+            {
+                string queryString = "";
+                queryString = @"SELECT LINES.[PROMOID]       
+							      ,[ITEMID]     
+							      ,[DISCAMOUNT]
+							      ,[DISCPERCENTAGE]      
+							      ,[RETAILSTOREID]
+							      ,[FROMDATE]
+							      ,[TODATE]
+                                  ,[DESCRIPTION]   
+						      FROM [ax].[CPPROMOEDQTYDETAIL] LINES
+						      LEFT JOIN [AX].[CPPROMOEDQTY] HEADER
+						      ON LINES.PROMOID =  HEADER.PROMOID
+						      WHERE RETAILSTOREID = @STOREID
+						      AND LINES.PROMOID = @PROMOID
+						      AND LINES.ITEMID = @ITEMID";
+
+                //SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+
+                    command.Parameters.AddWithValue("@STOREID", LSRetailPosis.Settings.ApplicationSettings.Database.StoreID);
+                    command.Parameters.AddWithValue("@PROMOID", promoId);
+                    command.Parameters.AddWithValue("@ITEMID", itemId);
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+
+                                pctDisc = Convert.ToDecimal(reader["DISCPERCENTAGE"]);
+                                amtDisc = Convert.ToDecimal(reader["DISCAMOUNT"]);
+                                fromDate = Convert.ToDateTime(reader["FROMDATE"].ToString());
+                                toDate = Convert.ToDateTime(reader["TODATE"].ToString());
+                                promoName = reader["DESCRIPTION"].ToString();
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+
+                }
+            }
+        }
+        private void selectPromoItemReceipt(string itemId, string promoId, out decimal pctDisc, out decimal amtDisc, out DateTime fromDate, out DateTime toDate, out string promoName)
+        {
+            amtDisc = 0;
+            pctDisc = 0;
+            promoName = "";
+            fromDate = DateTime.Now;
+            toDate = DateTime.Now;
+            SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+            try
+            {
+                string queryString = "";
+                queryString = @"SELECT LINES.[PROMOID]       
+							  ,[ITEMID]     
+							  ,[DISCAMOUNT]
+							  ,[DISCPERCENTAGE]      
+							  ,[RETAILSTOREID]
+							  ,[FROMDATE]
+							  ,[TODATE]
+                              ,[DESCRIPTION]
+						  FROM [ax].[CPPROMOEDQTYPERSTRUKDETAIL] LINES
+						  LEFT JOIN [AX].[CPPROMOEDQTYPERSTRUK] HEADER
+						  ON LINES.PROMOID =  HEADER.PROMOID
+						  WHERE RETAILSTOREID = @STOREID
+						  AND LINES.PROMOID = @PROMOID
+						  AND LINES.ITEMID = @ITEMID";
+
+
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+
+                    command.Parameters.AddWithValue("@STOREID", LSRetailPosis.Settings.ApplicationSettings.Database.StoreID);
+                    command.Parameters.AddWithValue("@PROMOID", promoId);
+                    command.Parameters.AddWithValue("@ITEMID", itemId);
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+
+                                pctDisc = Convert.ToDecimal(reader["DISCPERCENTAGE"]);
+                                amtDisc = Convert.ToDecimal(reader["DISCAMOUNT"]);
+                                fromDate = Convert.ToDateTime(reader["FROMDATE"].ToString());
+                                toDate = Convert.ToDateTime(reader["TODATE"].ToString());
+                                promoName = reader["DESCRIPTION"].ToString();
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+
+                }
+            }
+        }
     }
 }

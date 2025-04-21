@@ -1049,28 +1049,31 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             //custom by Yonathan 31102024
             
             getOpenCloseBy(batch, out openBy, out closeBy, out setorBy);
-
-            getCashiersOnDuty(batch, out cashierOnDutyList);
+            getCashiersOnDuty(batch, reportType, out cashierOnDutyList);
+           
             reportLayout.AppendLine("Printed By    : " + operatorName(ApplicationSettings.Terminal.TerminalOperator.OperatorId));
             reportLayout.AppendLine("Print Date    : " + DateTime.UtcNow.ToLocalTime().ToString());
             reportLayout.AppendLine("OpenShift By  : " );
             reportLayout.AppendLine( openBy + "-" + operatorName(openBy) );//, true);
             if (reportType == ReportType.ZReport)
             {
+                
                 reportLayout.AppendLine("CloseShift By : " );//, true);
                 reportLayout.AppendLine(closeBy + "-" + operatorName(closeBy));//, true);
 
                 reportLayout.AppendLine("Setor By : ");
                 reportLayout.AppendLine(setorBy + "-" + operatorName(setorBy));
 
-                reportLayout.AppendLine("Cashiers on Duty : ");//, true);
-                //foreach
-                foreach (var cashier in cashierOnDutyList)
-                {
-                    reportLayout.AppendLine(cashier + "-" + operatorName(cashier));
-                }
+                
                 
 
+            }
+
+            reportLayout.AppendLine("Cashiers on Duty : ");//, true);
+            //foreach
+            foreach (var cashier in cashierOnDutyList)
+            {
+                reportLayout.AppendLine(cashier + "-" + operatorName(cashier));
             }
             //end
             reportLayout.AppendLine();
@@ -1102,41 +1105,49 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             reportLayout.AppendLine();
         }
 
-        private static void getCashiersOnDuty(Batch batch, out List<string> cashierOnDutyList)
+        private static void getCashiersOnDuty(Batch batch, ReportType reportType, out List<string> cashierOnDutyList)
         {
-            //batch.StartDateTime - 7
-            //batch.CloseDateTime -7
-
             cashierOnDutyList = new List<string>();
+            HashSet<string> uniqueCashiers = new HashSet<string>(); // To track unique cashiers
             SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
-            /*
-             SELECT RETAILTRANSACTIONTABLE WHERE CREATEDDATETIME BETWEEN  
-            //batch.StartDateTime - 7
-            //batch.CloseDateTime -7
-            */
+
             try
             {
-                string query = @"SELECT STAFF, CREATEDDATETIME, RECEIPTID, STORE FROM AX.RETAILTRANSACTIONTABLE 
-                     WHERE  RECEIPTID !='' AND CREATEDDATETIME BETWEEN @StartDate AND @CloseDate";
+                string query = @"SELECT STAFF, CREATEDDATETIME, RECEIPTID, STORE 
+                         FROM AX.RETAILTRANSACTIONTABLE 
+                         WHERE RECEIPTID != '' 
+                         AND  STORE = @StoreName
+                         AND CREATEDDATETIME BETWEEN @StartDate AND @CloseDate";
 
                 using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
                     cmd.Parameters.AddWithValue("@StartDate", batch.StartDateTime.AddHours(-7));
-                    cmd.Parameters.AddWithValue("@CloseDate", batch.CloseDateTime.AddHours(-7));
+                    if (reportType == ReportType.ZReport)
+                    {
+                        cmd.Parameters.AddWithValue("@CloseDate", batch.CloseDateTime.AddHours(-7));
+                    }
+                    else
+                    {
+                        cmd.Parameters.AddWithValue("@CloseDate", DateTime.Now);
+                    }
+                    cmd.Parameters.AddWithValue("@StoreName", ApplicationSettings.Terminal.StoreId.ToString());
 
                     connection.Open();
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            cashierOnDutyList.Add(reader[0].ToString() );//+ "|" + reader[2].ToString());
+                            string staffId = reader["STAFF"].ToString();
+                            if (uniqueCashiers.Add(staffId)) // Adds and checks for uniqueness
+                            {
+                                cashierOnDutyList.Add(staffId);
+                            }
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                //LSRetailPosis.ApplicationExceptionHandler.HandleException();
                 throw;
             }
             finally
@@ -1147,6 +1158,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
                 }
             }
         }
+
 
         private static string operatorName(string openBy)
         {

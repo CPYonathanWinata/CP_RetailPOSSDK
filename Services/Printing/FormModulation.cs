@@ -914,7 +914,10 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                                             lineAmountIncTax = itemDetails[3];
                                             lineTaxAmountMST = itemDetails[6];
                                             taxItemGroup = itemDetails[7];
+
                                             if (taxItemGroup == "PPN")
+                                            if (string.Equals(taxItemGroup, "PPN", StringComparison.OrdinalIgnoreCase))
+
                                             {
                                                 lineAmountIncTaxDecimal += decimal.Parse(lineAmountIncTax, System.Globalization.CultureInfo.GetCultureInfo("id-ID"));
                                                 lineTaxAmountMSTDecimal += decimal.Parse(lineTaxAmountMST, System.Globalization.CultureInfo.GetCultureInfo("id-ID"));
@@ -1002,7 +1005,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                                 return "DPP Nilai Lain :";
                             }
                             else
-                            {
+                            { 
                                 return string.Empty;
                             }
                         case "LABELPPNBEBAS":
@@ -1050,11 +1053,15 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                                     {
                                         // Split the ItemLines attribute by semicolons
                                         string[] itemDetails = matchingNode.Attribute("ItemLines").Value.Split(';');
-
+                                        // if (string.Equals(taxItemGroup, 
+                                        // , StringComparison.OrdinalIgnoreCase))
                                         lineAmountIncTax = itemDetails[3];
                                         lineTaxAmountMST = itemDetails[6];
                                         taxItemGroup = itemDetails[7];
-                                        if (taxItemGroup == "Dibebaskan")
+
+                                        if (string.Equals(taxItemGroup, "Dibebaskan", StringComparison.OrdinalIgnoreCase))
+
+                                        //if (taxItemGroup == "Dibebaskan")
                                         {
                                             lineAmountIncTaxDecimal += decimal.Parse(lineAmountIncTax, System.Globalization.CultureInfo.GetCultureInfo("id-ID"));
                                             lineTaxAmountMSTDecimal += decimal.Parse(lineTaxAmountMST, System.Globalization.CultureInfo.GetCultureInfo("id-ID"));
@@ -1133,7 +1140,9 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                                         lineAmountIncTax = itemDetails[3];
                                         lineTaxAmountMST = itemDetails[6];
                                         taxItemGroup = itemDetails[7];
-                                        if (taxItemGroup == "PPN")
+                                        if (string.Equals(taxItemGroup, "PPN", StringComparison.OrdinalIgnoreCase))
+
+                                        //if (taxItemGroup == "PPN")
                                         {
                                             lineAmountIncTaxDecimal += decimal.Parse(lineAmountIncTax, System.Globalization.CultureInfo.GetCultureInfo("id-ID"));
                                             lineTaxAmountMSTDecimal += decimal.Parse(lineTaxAmountMST, System.Globalization.CultureInfo.GetCultureInfo("id-ID"));
@@ -1210,9 +1219,10 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                                        
                                         lineTaxAmountMST = itemDetails[6];
                                         taxItemGroup = itemDetails[7];
-
-                                        if (taxItemGroup == "PPN" || taxItemGroup == "PKP")
-                                        lineTaxAmountMSTDecimal += decimal.Parse(lineTaxAmountMST, System.Globalization.CultureInfo.GetCultureInfo("id-ID"));
+                                        if (string.Equals(taxItemGroup, "PPN", StringComparison.OrdinalIgnoreCase) || string.Equals(taxItemGroup, "PKP", StringComparison.OrdinalIgnoreCase))
+                                            lineTaxAmountMSTDecimal += decimal.Parse(lineTaxAmountMST, System.Globalization.CultureInfo.GetCultureInfo("id-ID"));
+                                        //if (taxItemGroup == "PPN" || taxItemGroup == "PKP")
+                                        
 
 
                                     }
@@ -1242,8 +1252,8 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                                        
                                         lineTaxAmountMST = itemDetails[6];
                                         taxItemGroup = itemDetails[7];
-
-                                        if (taxItemGroup == "PB1")
+                                        if (string.Equals(taxItemGroup, "PB1", StringComparison.OrdinalIgnoreCase))
+                                        //if (taxItemGroup == "PB1")
                                         lineTaxAmountMSTDecimal += decimal.Parse(lineTaxAmountMST, System.Globalization.CultureInfo.GetCultureInfo("id-ID"));
 
 
