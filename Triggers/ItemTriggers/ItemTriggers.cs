@@ -247,7 +247,7 @@ namespace Microsoft.Dynamics.Retail.Pos.ItemTriggers
                         }
                     }
 
-
+                     
                 }
             }
             

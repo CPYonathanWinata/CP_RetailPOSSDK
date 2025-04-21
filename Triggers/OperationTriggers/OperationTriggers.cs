@@ -86,7 +86,7 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
                 //this promo code for Production 18092024
                 if (transaction.Comment == "PAYMENTDISCOUNT"  || transaction.Comment == "PROMOPDI" || transaction.Comment == "PROMOPDIS")                                  
                 {
-
+                     
                     /*
                      * yang boleh = 
                      * - Pay
