@@ -297,7 +297,16 @@ namespace Microsoft.Dynamics.Retail.Pos.ApplicationTriggers
 			}
 			catch (Exception ex)
 			{
-				//LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+				LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+
+
+                using (frmMessage dialogError = new frmMessage(string.Format("{0}", ex.Message), MessageBoxButtons.OK, MessageBoxIcon.Error))
+					{
+						LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialogError);
+						 
+								
+
+					}
 				throw;
 			}
 			finally

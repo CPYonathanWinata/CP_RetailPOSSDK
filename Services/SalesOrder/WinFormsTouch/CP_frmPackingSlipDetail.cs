@@ -273,7 +273,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             decimal qtySO = 0;
 			//decimal qtyReceive = 0;
 			string positiveStatus = "";
-			
+			bool cancelSO = false;
 			string inventLocationId = ApplicationSettings.Terminal.InventLocationId;
 			string inventSiteId = getInventSite(inventLocationId); 
 
@@ -333,6 +333,11 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                                     else if (orderType == 1 && qtyReceive == 0)
                                     {
                                         flagError = 8;
+                                        break;
+                                    }
+                                    else if (orderType == 0 && qtyReceive == 0)
+                                    {
+                                        cancelSO = true;
                                         break;
                                     }
                                     positiveStatus = checkPositiveStatus(itemId);
@@ -445,18 +450,25 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                                 else
                                 {
                                     SalesOrder.InternalApplication.Services.Dialog.ShowMessage("Posting berhasil.", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                    SalesOrderActions.TryPrintPackSlip(LSRetailPosis.Transaction.SalesStatus.Delivered, salesID, "1");
-
-                                    string invoiceAx = "";
-                                    //string comboInvoice = "0";
-                                    //validate if automatically post invoice after packing slip DO (based on customer master) - Yonathan 17092024
-                                    if (disableInvoice == "false") //check if this customer disable invoice = true
+                                    
+                                    //don't print packing slip and invoice if cancel SO
+                                    if (cancelSO == false)
                                     {
-                                        if (splitInvoice == "0")
+                                        SalesOrderActions.TryPrintPackSlip(LSRetailPosis.Transaction.SalesStatus.Delivered, salesID, "1");
+
+                                        string invoiceAx = "";
+                                        //string comboInvoice = "0";
+                                        //validate if automatically post invoice after packing slip DO (based on customer master) - Yonathan 17092024
+                                        if (disableInvoice == "false") //check if this customer disable invoice = true
                                         {
-                                            CreateInvoice(out invoiceAx);
+                                            if (splitInvoice == "0")
+                                            {
+                                                CreateInvoice(out invoiceAx);
+                                            }
                                         }
+
                                     }
+                                    
                                     
                                     
                                 } 

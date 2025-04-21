@@ -270,7 +270,6 @@ C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Bl
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPCustomerStd.resources
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPDiscountItem.resources
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPDiscountPayment.resources
-C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPGrabmartOrder.resources
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPIZone.resources
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPLoveRemittTPT.resources
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPNotification.resources

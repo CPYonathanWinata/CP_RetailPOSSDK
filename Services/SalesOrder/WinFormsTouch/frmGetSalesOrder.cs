@@ -379,26 +379,31 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 
         private void GetSelectedRow()
         {
+            if(gridView1.RowCount != 0)
+            { 
+                DataRow row = gridView1.GetDataRow(gridView1.GetSelectedRows()[0]);
+                this.SelectedSalesOrderId = row.Field<string>(SalesIdString);
+                //this.SelectedSalesTotal = row.Field<decimal>(TotalAmountDecimal);
+                this.selectedOrderSalesStatus = (SalesStatus)row[SalesStatusString];
+                this.selectedOrderDocumentStatus = (SalesStatus)row[DocumentStatusString];
+                this.selectedInvoiceAmount = row.Field<decimal>("INVOICEAMOUNT");
+                // CustomerOrderType does not have default, failing if something else.
+                this.SelectedOrderType = (CustomerOrderType)Enum.Parse(typeof(CustomerOrderType), row[OrderTypeString].ToString());
+
+                this.selectedOrderPickupDeliveryMode = row.Field<string>(DeliveryModeString);
+
+                //add by Yonathan to check whether this invoice has been settle, so the payment invoice button will be disabled 21/06/2023
+                //ReadOnlyCollection<object> containerArray = SalesOrder.InternalApplication.TransactionServices.InvokeExtension("getCustTrans", this.SelectedSalesOrderId.ToString());
+                invoiceId = row.Field<string>(InvoiceIdString); //containerArray[2].ToString(); //getInvoiceId(containerArray[2].ToString());
+                //ReadOnlyCollection<object> containerArrayInvoice = SalesOrder.InternalApplication.TransactionServices.Invoke("getSalesInvoice", invoiceId);
+                isOpen = row.Field<string>(IsOpenString);
+                disableInvoice = row.Field<string>(DisableInvoice);
+                //end
+            }else
+            {
+                btnCreatePackSlip.Enabled = false;
+            }
             
-            DataRow row = gridView1.GetDataRow(gridView1.GetSelectedRows()[0]);
-
-            this.SelectedSalesOrderId = row.Field<string>(SalesIdString);
-            //this.SelectedSalesTotal = row.Field<decimal>(TotalAmountDecimal);
-            this.selectedOrderSalesStatus = (SalesStatus)row[SalesStatusString];
-            this.selectedOrderDocumentStatus = (SalesStatus)row[DocumentStatusString];
-            this.selectedInvoiceAmount = row.Field<decimal>("INVOICEAMOUNT");
-            // CustomerOrderType does not have default, failing if something else.
-            this.SelectedOrderType = (CustomerOrderType)Enum.Parse(typeof(CustomerOrderType), row[OrderTypeString].ToString());
-
-            this.selectedOrderPickupDeliveryMode = row.Field<string>(DeliveryModeString);
-
-            //add by Yonathan to check whether this invoice has been settle, so the payment invoice button will be disabled 21/06/2023
-            //ReadOnlyCollection<object> containerArray = SalesOrder.InternalApplication.TransactionServices.InvokeExtension("getCustTrans", this.SelectedSalesOrderId.ToString());
-            invoiceId = row.Field<string>(InvoiceIdString); //containerArray[2].ToString(); //getInvoiceId(containerArray[2].ToString());
-            //ReadOnlyCollection<object> containerArrayInvoice = SalesOrder.InternalApplication.TransactionServices.Invoke("getSalesInvoice", invoiceId);
-            isOpen = row.Field<string>(IsOpenString);
-            disableInvoice = row.Field<string>(DisableInvoice); 
-            //end
         }
 
         private void gridView1_FocusedRowChanged(object sender, DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventArgs e)
@@ -568,6 +573,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             {
                 enablePickup = false;
                 enableEdit = false;
+                enablePackSlip = false;
             }
             // Add By Erwin 13 March 2019 - End
 

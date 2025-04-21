@@ -150,12 +150,19 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
 
             foreach (DataRow row in dtItemContainer.Rows)
             {
-                reportLayout.AppendLine(string.Format("{0} - {1}", row[0].ToString(), row[1].ToString()));
+                reportLayout.AppendLine(string.Format("{0}        {1} - {2}", row[0].ToString(),row[2], RoundDecimal(Convert.ToDecimal(row[3]))));
                 if (row[4].ToString() != "")
                 {
                     reportLayout.AppendLine(string.Format("{0}", row[4].ToString())); //added by yonathan for displaying the variant id
                 }
-                reportLayout.AppendLine(string.Format("{0} - {1}", row[2], RoundDecimal(Convert.ToDecimal(row[3]))));
+                reportLayout.AppendLine(string.Format("{0}", row[1].ToString()));
+
+                    /*reportLayout.AppendLine(string.Format("{0} - {1}", row[0].ToString(), row[1].ToString()));
+                if (row[4].ToString() != "")
+                {
+                    reportLayout.AppendLine(string.Format("{0}", row[4].ToString())); //added by yonathan for displaying the variant id
+                }
+                reportLayout.AppendLine(string.Format("{0} - {1}", row[2], RoundDecimal(Convert.ToDecimal(row[3]))));*/
                 
             }
 
@@ -202,8 +209,8 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
                 reportLayout.AppendReportLine(14015, RoundDecimal(totalPoint));
 
             //from payment method
-            if (giftCardTotal != 0)
-                reportLayout.AppendReportLine(14014, RoundDecimal(giftCardTotal));
+            //if (giftCardTotal != 0)
+            //    reportLayout.AppendReportLine(14014, RoundDecimal(giftCardTotal));
             if (loyaltyCardTotal != 0)
                 reportLayout.AppendReportLine(14015, RoundDecimal(loyaltyCardTotal));
 
@@ -580,9 +587,12 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
                 foreach (var data in groupedData)
                 {
 
-                    reportLayout.AppendLine(string.Format("{0} - {1}", data.ItemId.ToString(), data.ItemName.ToString()));
+                    reportLayout.AppendLine(string.Format("{0}        {1} - {2}", data.ItemId.ToString(), data.TotalQty, RoundDecimal(Convert.ToDecimal(data.TotalLineAmount))));
 
-                    reportLayout.AppendLine(string.Format("{0} - {1}", data.TotalQty, RoundDecimal(Convert.ToDecimal(data.TotalLineAmount))));
+                    reportLayout.AppendLine(string.Format("{0}", data.ItemName.ToString()));
+                    /*reportLayout.AppendLine(string.Format("{0} - {1}", data.ItemId.ToString(), data.ItemName.ToString()));
+
+                    reportLayout.AppendLine(string.Format("{0} - {1}", data.TotalQty, RoundDecimal(Convert.ToDecimal(data.TotalLineAmount))));*/
                     totalAmount += data.TotalLineAmount;
                     //totalSales = data.SalesIdCount;
                 }
@@ -659,10 +669,15 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
                 // Output the results
                 foreach (var data in groupedData)
                 {
+                    reportLayout.AppendLine(string.Format("{0}        {1} - {2}", data.ItemId.ToString(), data.TotalQty, RoundDecimal(Convert.ToDecimal(data.TotalLineAmount))));
 
-                    reportLayout.AppendLine(string.Format("{0} - {1}", data.ItemId.ToString(), data.ItemName.ToString()));
+                    reportLayout.AppendLine(string.Format("{0}", data.ItemName.ToString()));
+                    /*reportLayout.AppendLine(string.Format("{0} - {1}", data.ItemId.ToString(), data.ItemName.ToString()));
 
-                    reportLayout.AppendLine(string.Format("{0} - {1}", data.TotalQty, RoundDecimal(Convert.ToDecimal(data.TotalLineAmount))));
+                    reportLayout.AppendLine(string.Format("{0} - {1}", data.TotalQty, RoundDecimal(Convert.ToDecimal(data.TotalLineAmount))));*/
+                    /*reportLayout.AppendLine(string.Format("{0} - {1}", data.ItemId.ToString(), data.ItemName.ToString()));
+
+                    reportLayout.AppendLine(string.Format("{0} - {1}", data.TotalQty, RoundDecimal(Convert.ToDecimal(data.TotalLineAmount))));*/
                     totalAmount += data.TotalLineAmount;
                     //totalSales = data.SalesIdCount;
                 }
@@ -989,6 +1004,11 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
         /// <param name="reportType"></param>
         private static void PrepareHeader(this StringBuilder reportLayout, Batch batch, ReportType reportType)
         {
+            string openBy = "";
+            string closeBy = "";
+            string setorBy = "";
+            List<string> cashierOnDutyList = new List<string>();
+
             reportLayout.AppendLine(singleLine);
             switch (reportType)
             {
@@ -1007,9 +1027,13 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             }
 
             reportLayout.AppendReportHeaderLine(7002, ApplicationSettings.Terminal.StoreId, true);
-            reportLayout.AppendReportHeaderLine(7006, DateTime.Now.ToShortDateString(), false);
+            reportLayout.AppendLine();
+            reportLayout.AppendReportHeaderLine(7006, DateTime.Now.ToShortDateString(), true);
+            reportLayout.AppendLine();
             reportLayout.AppendReportHeaderLine(7003, ApplicationSettings.Terminal.TerminalId, true);
-            reportLayout.AppendReportHeaderLine(7007, DateTime.Now.ToShortTimeString(), false);
+            reportLayout.AppendLine();
+            reportLayout.AppendReportHeaderLine(7007, DateTime.Now.ToShortTimeString(), true);
+            reportLayout.AppendLine();
             //reportLayout.AppendReportHeaderLine(7004, ApplicationSettings.Terminal.TerminalOperator.OperatorId, true);
             if (LSRetailPosis.Settings.FunctionalityProfiles.Functions.CountryRegion == LSRetailPosis.Settings.FunctionalityProfiles.SupportedCountryRegion.SE)
             {
@@ -1023,17 +1047,33 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             reportLayout.AppendReportHeaderLine(7005, ApplicationLocalizer.Language.Translate(206, batch.TerminalId, batch.BatchId), true);
             reportLayout.AppendLine();
             //custom by Yonathan 31102024
-            string openBy = "";
-            string closeBy = "";
-            getOpenCloseBy(batch, out openBy, out closeBy);
+            
+            getOpenCloseBy(batch, out openBy, out closeBy, out setorBy);
+            getCashiersOnDuty(batch, reportType, out cashierOnDutyList);
+           
             reportLayout.AppendLine("Printed By    : " + operatorName(ApplicationSettings.Terminal.TerminalOperator.OperatorId));
             reportLayout.AppendLine("Print Date    : " + DateTime.UtcNow.ToLocalTime().ToString());
             reportLayout.AppendLine("OpenShift By  : " );
             reportLayout.AppendLine( openBy + "-" + operatorName(openBy) );//, true);
             if (reportType == ReportType.ZReport)
             {
-            reportLayout.AppendLine("CloseShift By : " );//, true);
-            reportLayout.AppendLine(closeBy + "-" + operatorName(closeBy));//, true);
+                
+                reportLayout.AppendLine("CloseShift By : " );//, true);
+                reportLayout.AppendLine(closeBy + "-" + operatorName(closeBy));//, true);
+
+                reportLayout.AppendLine("Setor By : ");
+                reportLayout.AppendLine(setorBy + "-" + operatorName(setorBy));
+
+                
+                
+
+            }
+
+            reportLayout.AppendLine("Cashiers on Duty : ");//, true);
+            //foreach
+            foreach (var cashier in cashierOnDutyList)
+            {
+                reportLayout.AppendLine(cashier + "-" + operatorName(cashier));
             }
             //end
             reportLayout.AppendLine();
@@ -1041,17 +1081,21 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
 
             if (reportType == ReportType.ZReport)
             {
-                reportLayout.AppendReportHeaderLine(7010, batch.CloseDateTime.ToShortDateString(), false);
+                reportLayout.AppendLine();
+                reportLayout.AppendReportHeaderLine(7010, batch.CloseDateTime.ToShortDateString(), true);
+                //reportLayout.AppendReportHeaderLine(7010, batch.CloseDateTime.ToShortDateString(), false);
             }
             else
             {
                 reportLayout.AppendLine();
             }
-
+            reportLayout.AppendLine();
             reportLayout.AppendReportHeaderLine(7009, batch.StartDateTime.ToShortTimeString(), true);
             if (reportType == ReportType.ZReport)
             {
-                reportLayout.AppendReportHeaderLine(7011, batch.CloseDateTime.ToShortTimeString(), false);
+                reportLayout.AppendLine();
+                reportLayout.AppendReportHeaderLine(7011, batch.CloseDateTime.ToShortTimeString(), true);
+                //reportLayout.AppendReportHeaderLine(7011, batch.CloseDateTime.ToShortTimeString(), false);
             }
             else
             {
@@ -1060,6 +1104,61 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
 
             reportLayout.AppendLine();
         }
+
+        private static void getCashiersOnDuty(Batch batch, ReportType reportType, out List<string> cashierOnDutyList)
+        {
+            cashierOnDutyList = new List<string>();
+            HashSet<string> uniqueCashiers = new HashSet<string>(); // To track unique cashiers
+            SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+
+            try
+            {
+                string query = @"SELECT STAFF, CREATEDDATETIME, RECEIPTID, STORE 
+                         FROM AX.RETAILTRANSACTIONTABLE 
+                         WHERE RECEIPTID != '' 
+                         AND  STORE = @StoreName
+                         AND CREATEDDATETIME BETWEEN @StartDate AND @CloseDate";
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@StartDate", batch.StartDateTime.AddHours(-7));
+                    if (reportType == ReportType.ZReport)
+                    {
+                        cmd.Parameters.AddWithValue("@CloseDate", batch.CloseDateTime.AddHours(-7));
+                    }
+                    else
+                    {
+                        cmd.Parameters.AddWithValue("@CloseDate", DateTime.Now);
+                    }
+                    cmd.Parameters.AddWithValue("@StoreName", ApplicationSettings.Terminal.StoreId.ToString());
+
+                    connection.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string staffId = reader["STAFF"].ToString();
+                            if (uniqueCashiers.Add(staffId)) // Adds and checks for uniqueness
+                            {
+                                cashierOnDutyList.Add(staffId);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+                }
+            }
+        }
+
 
         private static string operatorName(string openBy)
         {
@@ -1106,15 +1205,16 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
 
         }
 
-        private static void getOpenCloseBy(Batch _batch, out string openBy, out string closeBy)
+        private static void getOpenCloseBy(Batch _batch, out string openBy, out string closeBy, out string setorBy)
         {
             SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
             openBy = "";
             closeBy = "";
+            setorBy = "";
             try
             {
                
-                string queryString = @"SELECT BATCHID, OPENBY, CLOSEBY
+                string queryString = @"SELECT BATCHID, OPENBY, CLOSEBY, SETORBY
                                       FROM  [ax].[CPRETAILPOSBATCHTABLEEXTEND]
                                       where BATCHID = @BATCHID";
 
@@ -1132,6 +1232,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
 
                             openBy = reader[1].ToString();
                             closeBy = reader[2].ToString();
+                            setorBy = reader[3].ToString();
                             
                         }
                     }

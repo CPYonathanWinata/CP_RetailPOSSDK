@@ -36,6 +36,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.styleController = new DevExpress.XtraEditors.StyleController(this.components);
             this.styleControllerDailyOnHand = new DevExpress.XtraEditors.StyleController(this.components);
             this.header = new System.Windows.Forms.Label();
@@ -58,16 +59,17 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
             this.btnCancelOrder = new System.Windows.Forms.Button();
             this.btnBack = new System.Windows.Forms.Button();
             this.itemDetailsGrid = new System.Windows.Forms.DataGridView();
+            this.lblOrder = new System.Windows.Forms.Label();
+            this.btnCheck = new System.Windows.Forms.Button();
             this.ItemID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colItem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Specifications = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Quantity = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colDisc = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Subtotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ItemStock = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Stock = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.lblOrder = new System.Windows.Forms.Label();
-            this.btnCheck = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.styleController)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.styleControllerDailyOnHand)).BeginInit();
             this.parentPanel.SuspendLayout();
@@ -332,6 +334,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
             this.Specifications,
             this.Quantity,
             this.colPrice,
+            this.colDisc,
             this.Subtotal,
             this.ItemStock,
             this.Stock});
@@ -345,6 +348,30 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
             this.itemDetailsGrid.Size = new System.Drawing.Size(863, 401);
             this.itemDetailsGrid.TabIndex = 16;
             // 
+            // lblOrder
+            // 
+            this.lblOrder.AutoSize = true;
+            this.lblOrder.Font = new System.Drawing.Font("Tahoma", 14F, System.Drawing.FontStyle.Bold);
+            this.lblOrder.Location = new System.Drawing.Point(37, 3);
+            this.lblOrder.Name = "lblOrder";
+            this.lblOrder.Size = new System.Drawing.Size(165, 23);
+            this.lblOrder.TabIndex = 15;
+            this.lblOrder.Text = "Order Number : ";
+            // 
+            // btnCheck
+            // 
+            this.btnCheck.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(171)))), ((int)(((byte)(194)))), ((int)(((byte)(215)))));
+            this.btnCheck.FlatAppearance.BorderSize = 0;
+            this.btnCheck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCheck.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.btnCheck.Location = new System.Drawing.Point(868, 704);
+            this.btnCheck.Name = "btnCheck";
+            this.btnCheck.Size = new System.Drawing.Size(127, 40);
+            this.btnCheck.TabIndex = 29;
+            this.btnCheck.Text = "Check Stock";
+            this.btnCheck.UseVisualStyleBackColor = false;
+            this.btnCheck.Visible = false;
+            // 
             // ItemID
             // 
             this.ItemID.HeaderText = "SKU";
@@ -357,14 +384,14 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
             this.colItem.HeaderText = "Item Name";
             this.colItem.Name = "colItem";
             this.colItem.ReadOnly = true;
-            this.colItem.Width = 270;
+            this.colItem.Width = 240;
             // 
             // Specifications
             // 
             this.Specifications.HeaderText = "Catatan";
             this.Specifications.Name = "Specifications";
             this.Specifications.ReadOnly = true;
-            this.Specifications.Width = 150;
+            this.Specifications.Width = 100;
             // 
             // Quantity
             // 
@@ -381,6 +408,15 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
             this.colPrice.Name = "colPrice";
             this.colPrice.ReadOnly = true;
             this.colPrice.Width = 85;
+            // 
+            // colDisc
+            // 
+            dataGridViewCellStyle6.Format = "N2";
+            this.colDisc.DefaultCellStyle = dataGridViewCellStyle6;
+            this.colDisc.HeaderText = "Diskon";
+            this.colDisc.Name = "colDisc";
+            this.colDisc.ReadOnly = true;
+            this.colDisc.Width = 80;
             // 
             // Subtotal
             // 
@@ -406,30 +442,6 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
             this.Stock.Name = "Stock";
             this.Stock.ReadOnly = true;
             this.Stock.Width = 65;
-            // 
-            // lblOrder
-            // 
-            this.lblOrder.AutoSize = true;
-            this.lblOrder.Font = new System.Drawing.Font("Tahoma", 14F, System.Drawing.FontStyle.Bold);
-            this.lblOrder.Location = new System.Drawing.Point(37, 3);
-            this.lblOrder.Name = "lblOrder";
-            this.lblOrder.Size = new System.Drawing.Size(165, 23);
-            this.lblOrder.TabIndex = 15;
-            this.lblOrder.Text = "Order Number : ";
-            // 
-            // btnCheck
-            // 
-            this.btnCheck.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(171)))), ((int)(((byte)(194)))), ((int)(((byte)(215)))));
-            this.btnCheck.FlatAppearance.BorderSize = 0;
-            this.btnCheck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCheck.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            this.btnCheck.Location = new System.Drawing.Point(868, 704);
-            this.btnCheck.Name = "btnCheck";
-            this.btnCheck.Size = new System.Drawing.Size(127, 40);
-            this.btnCheck.TabIndex = 29;
-            this.btnCheck.Text = "Check Stock";
-            this.btnCheck.UseVisualStyleBackColor = false;
-            this.btnCheck.Visible = false;
             // 
             // CPGrabOrder
             // 
@@ -504,6 +516,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
         private DataGridViewTextBoxColumn Specifications;
         private DataGridViewTextBoxColumn Quantity;
         private DataGridViewTextBoxColumn colPrice;
+        private DataGridViewTextBoxColumn colDisc;
         private DataGridViewTextBoxColumn Subtotal;
         private DataGridViewTextBoxColumn ItemStock;
         private DataGridViewTextBoxColumn Stock;

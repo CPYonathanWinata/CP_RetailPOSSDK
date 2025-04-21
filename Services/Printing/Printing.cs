@@ -115,6 +115,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
 
             using (frmReportList preview = new frmReportList(textForPreview, signaturePoints))
             {
+                preview.Font = new Font("Calibri", 8); //font
                 this.Application.ApplicationFramework.POSShowForm(preview);
                 if (preview.DialogResult == DialogResult.OK)
                 {

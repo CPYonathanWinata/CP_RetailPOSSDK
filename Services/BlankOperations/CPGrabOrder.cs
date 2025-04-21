@@ -27,6 +27,7 @@ using LSRetailPosis.Transaction.Line.SaleItem;
 using Microsoft.Dynamics.Retail.Pos.Contracts.Services;
 using LSRetailPosis;
 using LSRetailPosis.Transaction.Line;
+using LSRetailPosis.Transaction.Line.Discount;
 
 namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 {
@@ -326,20 +327,17 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     {
                         OrderID = group.Key,
                         Items = group.ToList()
+                        
                     });
-                    //Where(item => item.state != "")
 
-                    //DataGridViewButtonColumn c = (DataGridViewButtonColumn)grabMartList.Columns["Details"];
-                    //c.FlatStyle = FlatStyle.System;
 
-                    //c.DefaultCellStyle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(171)))), ((int)(((byte)(194)))), ((int)(((byte)(215)))));
-                    //c.DefaultCellStyle.Font = 
-                    //c.DefaultCellStyle.BackColor = Color.Yellow;
+
+                   
 
                     // Add data to grabMartList
                     foreach (var group in groupedData)
                     {
-
+                    
                         foreach (var item in group.Items)
                         {
                             merchantId = item.merchantID;
@@ -520,6 +518,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
             
             // Add order details to DataGridView
             itemDetails = item;
+            
             int indexRow=0;
 
             if (item.receiver != null)//|| item.receiver != "")
@@ -653,13 +652,30 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 
             //}
 
-            
+           
+            foreach (var campaign in item.campaigns)
+            {
+               
+                var applicableItems = item.items.Where(i => campaign.appliedItemIDs.Contains(i.id)).ToList();
+
+                int totalQty = applicableItems.Sum(i => i.quantity);
+
+                if (totalQty > 0) 
+                {
+                    foreach (var orderItem in applicableItems)
+                    {                       
+                        decimal itemDiscount = (orderItem.quantity / (decimal)totalQty) * campaign.deductedAmount;
+                        orderItem.discAmt += itemDiscount/orderItem.quantity;
+                    }
+                }
+            }
 
 
 
 
             foreach (var orderItem in item.items)
             {
+                
                 if (isFirstIteration)
                 {
 
@@ -691,14 +707,9 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 
                 decimal.TryParse(priceAfterExponentString, out priceAfterExponent);
                 subTotal = (priceAfterExponent * orderItem.quantity);
-                grandTotal += subTotal;
+                grandTotal += subTotal - (orderItem.discAmt*orderItem.quantity);
 
-
-
-
-
-
-
+                 
                 //add to row
                 itemDetailsGrid.Rows.Add(
                     itemNodes[indexRow].Attributes["ItemId"].Value,
@@ -706,6 +717,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     orderItem.specifications,
                     orderItem.quantity,
                     priceAfterExponent,
+                    orderItem.discAmt*orderItem.quantity,
                     subTotal,
                     remainQty,
                     isAvailable = remainQty - orderItem.quantity < 0 ? "Tidak" : "Ya"
@@ -932,29 +944,103 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     {
                         IApplication applicationLocal = PosApplication.Instance as IApplication;
                         APIAccess.APIParameter.Item foundItem = itemDetails.items.FirstOrDefault(item => item.id == itemSale.ItemId);
-
+                        var orderItem = itemDetails.items.FirstOrDefault(item => item.id == itemSale.ItemId);
 
 
                         priceAfterExponentString = foundItem.price.ToString().Substring(0, foundItem.price.ToString().Length - exponent);
 
                         decimal.TryParse(priceAfterExponentString, out priceAfterExponent);
-                        
+
+
+
+
+
+                        itemSale.CustomerPrice = priceAfterExponent;
+                        itemSale.GrossAmount = priceAfterExponent;
+                        itemSale.OriginalPrice = priceAfterExponent;
+                        itemSale.Price = priceAfterExponent;
+                        //salesLine.TradeAgreementPriceGroup = result[1];
+                        itemSale.TradeAgreementPrice = priceAfterExponent;
+
+                        LSRetailPosis.Transaction.Line.Discount.CustomerDiscountItem custDiscountManual = new LSRetailPosis.Transaction.Line.Discount.CustomerDiscountItem();
+
+                        custDiscountManual.Amount = orderItem.discAmt;
+                        //custDiscountManual.Percentage = Convert.ToDecimal(resultDisc[2]);
+                        applicationLoc.Services.Discount.AddDiscountLine(itemSale, custDiscountManual);
+
+                        applicationLoc.Services.Tax.CalculateTax(itemSale, grabPosTransaction);
+                       
+                       
 
                          
                         //saleLineItem = RetailTransaction.PriceOverride(itemSale, foundItem.price);//transaction.SaleItems.Last.Value, priceToOverride);
-                        saleLineItem = RetailTransaction.PriceOverride(itemSale, priceAfterExponent);//transaction.SaleItems.Last.Value, priceToOverride);
-                        applicationLocal.BusinessLogic.ItemSystem.CalculatePriceTaxDiscount(posTransaction);
-                        grabPosTransaction.CalcTotals();
+                        //saleLineItem = RetailTransaction.PriceOverride(itemSale, priceAfterExponent);//transaction.SaleItems.Last.Value, priceToOverride);
+
+
+
+
+
+
+
+                        //decimal priceToOverride = priceAfterExponent;
+                        //saleLineItem = RetailTransaction.SetCostPrice(itemSale, priceToOverride);
+                        //saleLineItem.PriceOverridden = false;
+                        //applicationLoc.BusinessLogic.ItemSystem.CalculatePriceTaxDiscount(posTransaction);
+                        //grabPosTransaction.CalcTotals();
+
+                        ////applicationLoc.RunOperation(PosisOperations.BlankOperation, "95", grabPosTransaction);
+
                         
+
+                        //applicationLoc.BusinessLogic.ItemSystem.CalculatePriceTaxDiscount(grabPosTransaction);
+
+
                         
-                        string str = ((IServicesV1)PosApplication.Instance.Services).Rounding.Round(((BaseSaleItem)saleLineItem).OriginalPrice, true);
-                        POSFormsManager.ShowPOSStatusPanelText(ApplicationLocalizer.Language.Translate(3352, new object[3]
-                                {
-                                    (object) ((LineItem) saleLineItem).Description,
-                                    (object) ((BaseSaleItem) saleLineItem).BarcodeId,
-                                    (object) str
-                                }));
+
+                        //string str = ((IServicesV1)PosApplication.Instance.Services).Rounding.Round(((BaseSaleItem)saleLineItem).OriginalPrice, true);
+                        //POSFormsManager.ShowPOSStatusPanelText(ApplicationLocalizer.Language.Translate(3352, new object[3]
+                        //        {
+                        //            (object) ((LineItem) saleLineItem).Description,
+                        //            (object) ((BaseSaleItem) saleLineItem).BarcodeId,
+                        //            (object) str
+                        //        }));
                     }
+                    grabPosTransaction.CalcTotals();
+                    grabPosTransaction.Save();
+                    //applicationLoc.BusinessLogic.ItemSystem.CalculatePriceTaxDiscount(grabPosTransaction);
+                    //grabPosTransaction.CalcTotals();
+                    //grabPosTransaction.Save();
+
+//                    foreach (var itemSale in grabPosTransaction.SaleItems)
+//                    {
+//                        //#GRABDISCOUNT 
+//                        var orderItem = itemDetails.items.FirstOrDefault(item => item.id == itemSale.ItemId);
+                        
+
+
+//                        //LSRetailPosis.Transaction.Line.Discount.LineDiscountItem lineDisc = new LSRetailPosis.Transaction.Line.Discount.LineDiscountItem();
+//                        DiscountItem lineDisc = new LineDiscountItem();
+//                        lineDisc.Amount = orderItem.discAmt;// *itemSale.qu
+//;
+//                        //applicationLoc.Services.Discount.AddLineDiscountAmount(grabPosTransaction.CurrentSaleLineItem, lineDisc);
+
+
+//                        LineDiscountItem itemDisc = lineDisc as LineDiscountItem;
+//                        itemDisc.Amount = lineDisc.Amount;
+//                        itemDisc.LineDiscountType = LineDiscountItem.DiscountTypes.Manual;
+
+
+//                        itemSale.DiscountLines.AddFirst(itemDisc);
+
+//                        //END
+//                    }
+//                    grabPosTransaction.CalcTotals();
+//                    grabPosTransaction.Save();
+
+                    BlankOperations.grabPosTransactionDisc = grabPosTransaction;
+                    //applicationLoc.BusinessLogic.ItemSystem.CalculatePriceTaxDiscount(grabPosTransaction);
+                    //grabPosTransaction.CalcTotals();
+
 
                     //foreach (var orderItem in itemDetails.items)
                     //{
@@ -986,6 +1072,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 
                     RetailTransaction transaction = posTransaction as RetailTransaction;
                     var application = PosApplication.Instance as IApplication;
+
                     /*
             
                     PayCustomerAccountConfirmation paycust = new PayCustomerAccountConfirmation();
@@ -1040,9 +1127,26 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     }
                     this.Close();
 
+
+                    //RetailTransaction grabPosTransactionLocal = BlankOperations.grabPosTransaction as RetailTransaction;
+                     
+
                     APIAccess.APIAccessClass.grabOrderState = driverState;
                     APIAccess.APIAccessClass.grabOrderIdLong = orderIdLong;
-                    application.RunOperation(PosisOperations.PayCustomerAccount, gmTID, grabPosTransaction); //tenderId - is ID payment method, transaction - your transaction object
+                    //applicationLoc.RunOperation(PosisOperations.BlankOperation, "102", BlankOperations.grabPosTransactionDisc);
+                    transaction = grabPosTransaction; // (RetailTransaction)BlankOperations.grabPosTransactionDisc; 
+                    transaction.CalcTotals();
+                    transaction.Save();
+                    //BlankOperations.grabPosTransaction = grabPosTransaction;
+                    //applicationLoc.RunOperation(PosisOperations.BlankOperation, "95", grabPosTransaction);
+                    //applicationLoc.RunOperation(PosisOperations.BlankOperation, "102", grabPosTransaction);
+                    //grabPosTransaction.CalcTotals();
+                    //grabPosTransaction.Save();
+                    //BlankOperations.grabPosTransaction = grabPosTransaction;
+                    //application.RunOperation(PosisOperations.PayCustomerAccount, gmTID, BlankOperations.grabPosTransaction);
+
+
+                    application.RunOperation(PosisOperations.PayCustomerAccount, gmTID, transaction); //tenderId - is ID payment method, transaction - your transaction object
                     //application.RunOperation(PosisOperations.PayCashQuick, gmTID, transaction); 
                     /*PayCash pay = new PayCash(false, gmTID);  // 1 is the number of Payement method
 
@@ -1052,6 +1156,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     pay.Amount = transaction.NetAmountWithTax;
             
                     pay.RunOperation();*/
+
+                    
                     this.Close();
                 }
                 else //if (driverState == "")
@@ -1072,7 +1178,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                 //}
                
             }
-            else if (findFalse == 1)
+            else if (findFalse == 1) 
             {
                 using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Salah satu stock item tidak cukup.\nTidak bisa melanjutkan order", MessageBoxButtons.OK, MessageBoxIcon.Stop))
                 {

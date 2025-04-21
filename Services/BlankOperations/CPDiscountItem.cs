@@ -896,7 +896,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                                     POSFormsManager.ShowPOSStatusPanelText("Added item discount " + dataGridResult.Rows[e.RowIndex].Cells["Promo Name"].Value.ToString());
                                     closeBtn.PerformClick();
 
-                                    application.RunOperation(PosisOperations.DisplayTotal, "");
+                                    //application.RunOperation(PosisOperations.DisplayTotal, "");
                                 }
                                 else
                                 {

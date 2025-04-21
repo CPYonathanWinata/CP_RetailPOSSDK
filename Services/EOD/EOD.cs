@@ -189,6 +189,8 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification="Grandfathered")]
         public void CloseShift(IPosTransaction transaction)
         {
+            //add by Yonathan CP_MDFCLOSESHIFT 04032025
+            string storedByValue = "";
             if (transaction == null)
             {
                 NetTracer.Warning("transaction parameter is null");
@@ -198,7 +200,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
 
             
             Batch batch = null;
-
+             
             // Are you sure you want to close the shift ?
             if (this.Application.Services.Dialog.ShowMessage(51302, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
@@ -210,6 +212,19 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
                     batch = null;
                 }
             }
+
+            //add a new form to choose closed by and stored by when closing shift
+            if (batch != null)
+            {
+                //add by Yonathan CP_MDFCLOSESHIFT 04032025
+                CPCloseShiftUser closeShift = new CPCloseShiftUser();
+                if (closeShift.ShowDialog() == DialogResult.OK)  
+                {
+                    storedByValue = closeShift.StoredBy;
+                    //MessageBox.Show("Stored By: " + storedByValue);  // Example usage
+                }
+            }
+
 
             // Calculate and verify amounts.
             if (batch != null)
@@ -300,7 +315,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
                 transaction.Shift.Status = PosBatchStatus.Closed;
 
                 //close shift
-                updateCustomBatchTable(batch);
+                updateCustomBatchTable(batch, storedByValue);
                 //
 
                 ShiftUsersCache.Remove(transaction.Shift);
@@ -337,7 +352,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             }
         }
 
-        private void updateCustomBatchTable(Batch _batch)
+        private void updateCustomBatchTable(Batch _batch  , string _setorBy)
         {
              // Establish the database connection
             SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
@@ -347,15 +362,16 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
                 // Define the SQL UPDATE query
                 string queryString = @"
                     UPDATE [ax].[CPRETAILPOSBATCHTABLEEXTEND]
-                    SET [CLOSEBY] = @CloseBy
+                    SET [CLOSEBY] = @CloseBy,
+                        [SETORBY] = @SetorBy
                     WHERE [BATCHID] = @BatchId";
-
+                //
                 using (SqlCommand command = new SqlCommand(queryString, connection))
                 {
                     // Set parameter values for the UPDATE statement
                     command.Parameters.AddWithValue("@BatchId", _batch.BatchId);
                     command.Parameters.AddWithValue("@CloseBy", ApplicationSettings.Terminal.TerminalOperator.OperatorId);
-
+                    command.Parameters.AddWithValue("@SetorBy", _setorBy);
                     // Open the connection if it’s not already open
                     if (connection.State != ConnectionState.Open)
                     {
