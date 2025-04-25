@@ -69,7 +69,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 		private string approvalCode;
 		#endregion
 
-		#region Form Components
+		#region Form Components 
 
 		private Tender tenderInfo;
 		private PanelControl panelControl1;

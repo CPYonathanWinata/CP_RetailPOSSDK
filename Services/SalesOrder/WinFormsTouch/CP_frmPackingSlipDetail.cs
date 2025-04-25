@@ -449,11 +449,12 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                                 }
                                 else
                                 {
-                                    SalesOrder.InternalApplication.Services.Dialog.ShowMessage("Posting berhasil.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    
                                     
                                     //don't print packing slip and invoice if cancel SO
                                     if (cancelSO == false)
                                     {
+                                        SalesOrder.InternalApplication.Services.Dialog.ShowMessage("Posting berhasil.", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                         SalesOrderActions.TryPrintPackSlip(LSRetailPosis.Transaction.SalesStatus.Delivered, salesID, "1");
 
                                         string invoiceAx = "";
@@ -467,6 +468,10 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                                             }
                                         }
 
+                                    }
+                                    else
+                                    {
+                                        SalesOrder.InternalApplication.Services.Dialog.ShowMessage("Sales order berhasil dibatalkan.", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                     }
                                     
                                     

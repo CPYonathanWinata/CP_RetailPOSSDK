@@ -652,7 +652,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 
             //}
 
-           
+           //Discount for grab 21042025 - Yonathan
             foreach (var campaign in item.campaigns)
             {
                
