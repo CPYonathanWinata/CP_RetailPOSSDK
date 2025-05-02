@@ -731,9 +731,10 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                         if (posTransaction.ToString() == "LSRetailPosis.Transaction.RetailTransaction")
 						{
 							DE customer = ((RetailTransaction)posTransaction).Customer;
-                            
 
-                            if ((customer.CustomerId != null || customer.CustomerId == "") && transaction.SaleItems.Count != 0)
+                            if (!string.IsNullOrEmpty(customer.CustomerId) && transaction.SaleItems.Count != 0)
+
+                            //if ((customer.CustomerId != null || customer.CustomerId == "") && transaction.SaleItems.Count != 0)
                             {
                                 if (customer.CustomerId != "")
                                 {
@@ -814,9 +815,10 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                         {
                             DE customer = ((RetailTransaction)posTransaction).Customer;
 
-                           
 
-                            if ((customer.CustomerId != null || customer.CustomerId == "") )//&& transaction.SaleItems.Count != 0)                             
+                            if (!string.IsNullOrEmpty(customer.CustomerId))
+
+                            //if ((customer.CustomerId != null || customer.CustomerId != "") )//&& transaction.SaleItems.Count != 0)                             
                             //if ( transaction.SaleItems.Count != 0)
                             {
                                  //check 
@@ -881,6 +883,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                         }
                         else
                         {
+                            using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Please Choose Customer", MessageBoxButtons.OK, MessageBoxIcon.Stop))
+                            {
+                                LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                                return;
+                            }
                             //using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Please add item first", MessageBoxButtons.OK, MessageBoxIcon.Stop))
                             //{
                             //    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
@@ -923,8 +930,9 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                             DE customer = ((RetailTransaction)posTransaction).Customer;
 
 
+                            if (!string.IsNullOrEmpty(customer.CustomerId))
 
-                            if ((customer.CustomerId != null || customer.CustomerId == "") )//&& transaction.SaleItems.Count != 0)
+                            //if ((customer.CustomerId != null || customer.CustomerId == "") )//&& transaction.SaleItems.Count != 0)
                             //if ( transaction.SaleItems.Count != 0)
                             {
                                 //check 
@@ -1005,6 +1013,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                         }
                         else
                         {
+                            using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Please Choose Customer", MessageBoxButtons.OK, MessageBoxIcon.Stop))
+                            {
+                                LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                                return;
+                            }
                             //using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Please add item first", MessageBoxButtons.OK, MessageBoxIcon.Stop))
                             //{
                             //    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
