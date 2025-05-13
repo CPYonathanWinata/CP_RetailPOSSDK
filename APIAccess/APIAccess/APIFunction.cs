@@ -958,7 +958,7 @@ namespace APIAccess
             {
                 _connectionString = connectionString;
             }
-
+            // Method to check if a table exists
             public bool CheckExistTable(string tableName)
             {
                 using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -974,9 +974,9 @@ namespace APIAccess
 
                         // Query to check if the table exists
                         string checkTableQuery = @"
-                            SELECT COUNT(1) 
-                            FROM INFORMATION_SCHEMA.TABLES 
-                            WHERE TABLE_SCHEMA = @Schema AND TABLE_NAME = @TableName";
+                        SELECT COUNT(1) 
+                        FROM INFORMATION_SCHEMA.TABLES 
+                        WHERE TABLE_SCHEMA = @Schema AND TABLE_NAME = @TableName";
 
                         using (SqlCommand command = new SqlCommand(checkTableQuery, connection))
                         {
@@ -987,10 +987,9 @@ namespace APIAccess
                             return result > 0;
                         }
                     }
-                    catch (Exception ex)
+                    catch
                     {
-                        //Console.WriteLine($"Error checking table existence: {ex.Message}");
-                        return false; // You might handle this differently based on requirements
+                        return false; // Return false in case of error
                     }
                     finally
                     {
@@ -1001,6 +1000,93 @@ namespace APIAccess
                     }
                 }
             }
+
+            // Method to check if a field exists in a table
+            public bool CheckExistField(string tableName, string fieldName)
+            {
+                using (SqlConnection connection = new SqlConnection(_connectionString))
+                {
+                    try
+                    {
+                        connection.Open();
+
+                        // Split schema and table name if needed
+                        string[] tableParts = tableName.Split('.');
+                        string schema = tableParts.Length > 1 ? tableParts[0] : "dbo"; // Default to "dbo" if no schema provided
+                        string table = tableParts.Length > 1 ? tableParts[1] : tableParts[0];
+
+                        // Query to check if the field exists
+                        string checkFieldQuery = @"
+                        SELECT COUNT(1)
+                        FROM INFORMATION_SCHEMA.COLUMNS
+                        WHERE TABLE_SCHEMA = @Schema AND TABLE_NAME = @TableName AND COLUMN_NAME = @ColumnName";
+
+                        using (SqlCommand command = new SqlCommand(checkFieldQuery, connection))
+                        {
+                            command.Parameters.AddWithValue("@Schema", schema);
+                            command.Parameters.AddWithValue("@TableName", table);
+                            command.Parameters.AddWithValue("@ColumnName", fieldName);
+
+                            int result = (int)command.ExecuteScalar();
+                            return result > 0; // Returns true if the field exists
+                        }
+                    }
+                    catch
+                    {
+                        return false; // Return false in case of error
+                    }
+                    finally
+                    {
+                        if (connection.State != ConnectionState.Closed)
+                        {
+                            connection.Close();
+                        }
+                    }
+                }
+            }
+//            public bool CheckExistTable(string tableName)
+//            {
+//                using (SqlConnection connection = new SqlConnection(_connectionString))
+//                {
+//                    try
+//                    {
+//                        connection.Open();
+
+//                        // Split schema and table name if needed
+//                        string[] tableParts = tableName.Split('.');
+//                        string schema = tableParts.Length > 1 ? tableParts[0] : "dbo"; // Default to "dbo" if no schema provided
+//                        string table = tableParts.Length > 1 ? tableParts[1] : tableParts[0];
+
+//                        // Query to check if the table exists
+//                        string checkTableQuery = @"
+//                            SELECT COUNT(1) 
+//                            FROM INFORMATION_SCHEMA.TABLES 
+//                            WHERE TABLE_SCHEMA = @Schema AND TABLE_NAME = @TableName";
+
+//                        using (SqlCommand command = new SqlCommand(checkTableQuery, connection))
+//                        {
+//                            command.Parameters.AddWithValue("@Schema", schema);
+//                            command.Parameters.AddWithValue("@TableName", table);
+
+//                            int result = (int)command.ExecuteScalar();
+//                            return result > 0;
+//                        }
+//                    }
+//                    catch (Exception ex)
+//                    {
+//                        //Console.WriteLine($"Error checking table existence: {ex.Message}");
+//                        return false; // You might handle this differently based on requirements
+//                    }
+//                    finally
+//                    {
+//                        if (connection.State != ConnectionState.Closed)
+//                        {
+//                            connection.Close();
+//                        }
+//                    }
+//                }
+//            }
+
         }
 
       

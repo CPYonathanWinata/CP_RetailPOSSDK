@@ -647,20 +647,22 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 
             //}
 
-           
-            foreach (var campaign in item.campaigns)
+            if (item.campaigns != null)
             {
-               
-                var applicableItems = item.items.Where(i => campaign.appliedItemIDs.Contains(i.id)).ToList();
-
-                int totalQty = applicableItems.Sum(i => i.quantity);
-
-                if (totalQty > 0) 
+                foreach (var campaign in item.campaigns)
                 {
-                    foreach (var orderItem in applicableItems)
-                    {                       
-                        decimal itemDiscount = (orderItem.quantity / (decimal)totalQty) * campaign.deductedAmount;
-                        orderItem.discAmt += itemDiscount/orderItem.quantity;
+
+                    var applicableItems = item.items.Where(i => campaign.appliedItemIDs.Contains(i.id)).ToList();
+
+                    int totalQty = applicableItems.Sum(i => i.quantity);
+
+                    if (totalQty > 0)
+                    {
+                        foreach (var orderItem in applicableItems)
+                        {
+                            decimal itemDiscount = (orderItem.quantity / (decimal)totalQty) * campaign.deductedAmount;
+                            orderItem.discAmt += itemDiscount / orderItem.quantity;
+                        }
                     }
                 }
             }
