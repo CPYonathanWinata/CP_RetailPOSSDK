@@ -921,6 +921,7 @@ namespace APIAccess
             APIAccess.APIAccessClass.ageText = 0;
             APIAccess.APIAccessClass.nationality = "";
             APIAccess.APIAccessClass.nationalityIndex = -1;
+            APIAccess.APIAccessClass.isB2b = "";
         }
         public void LogErrorToEventViewer(string errorDetails)
         {

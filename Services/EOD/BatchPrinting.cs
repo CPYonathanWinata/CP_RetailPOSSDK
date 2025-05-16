@@ -1047,8 +1047,15 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             reportLayout.AppendReportHeaderLine(7005, ApplicationLocalizer.Language.Translate(206, batch.TerminalId, batch.BatchId), true);
             reportLayout.AppendLine();
             //custom by Yonathan 31102024
+            if (reportType == ReportType.XReport)
+            {
+                openBy = batch.StaffId;
+            }
+            else
+            {
+                getOpenCloseBy(batch, out openBy, out closeBy, out setorBy);
+            }
             
-            getOpenCloseBy(batch, out openBy, out closeBy, out setorBy);
             getCashiersOnDuty(batch, reportType, out cashierOnDutyList);
            
             reportLayout.AppendLine("Printed By    : " + operatorName(ApplicationSettings.Terminal.TerminalOperator.OperatorId));

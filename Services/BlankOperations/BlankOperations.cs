@@ -849,7 +849,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                                         {
                                             //promoID = periodDiscItem.OfferId;
                                         }
-                                        else
+                                        else if (periodDiscItem.OfferId.StartsWith("QS"))
                                         {
                                             using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Tidak bisa akses ke menu ini karena sudah mendapat diskon", MessageBoxButtons.OK, MessageBoxIcon.Stop))
                                             {
@@ -974,7 +974,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                                         {
                                             //promoID = periodDiscItem.OfferId;
                                         }
-                                        else
+                                        else if (periodDiscItem.OfferId.StartsWith("ED"))
                                         {
                                             using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Tidak bisa akses ke menu ini karena sudah mendapat diskon", MessageBoxButtons.OK, MessageBoxIcon.Stop))
                                             {

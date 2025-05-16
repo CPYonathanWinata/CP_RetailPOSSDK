@@ -385,7 +385,7 @@ namespace Microsoft.Dynamics.Retail.Pos.ApplicationTriggers
 
             // Get the XML result from getListTablePOS
             ReadOnlyCollection<object> containerArray = Application.TransactionServices.InvokeExtension("getListTablePOS");
-            string xmlContent = containerArray[3].ToString(); // index 2 holds the XML
+            string xmlContent = containerArray[3].ToString(); // index 2 holds the XML 
 
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(xmlContent);

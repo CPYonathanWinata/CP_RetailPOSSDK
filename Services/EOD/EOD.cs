@@ -354,48 +354,92 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
 
         private void updateCustomBatchTable(Batch _batch  , string _setorBy)
         {
-             // Establish the database connection
+
+            //ADD BY ERWIN
             SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+            var tenderID = new List<string>();
+
 
             try
             {
-                // Define the SQL UPDATE query
+                //to do change to RETAILTRANSACTIONPAYMENTTRANS FOR TENDERID DISTINCT YONATHAN
                 string queryString = @"
-                    UPDATE [ax].[CPRETAILPOSBATCHTABLEEXTEND]
-                    SET [CLOSEBY] = @CloseBy,
-                        [SETORBY] = @SetorBy
-                    WHERE [BATCHID] = @BatchId";
-                //
+                INSERT INTO [ax].[CPRETAILPOSBATCHTABLEEXTEND]
+                    ([BATCHID], [CLOSEBY], [SETORBY], [OPENBY], [STOREID], [TERMINALID], [DATAAREAID],[PARTITION])
+                VALUES
+                    (@BatchId, @CloseBy, @SetorBy, @OpenBy, @StoreId, @TerminalId, @DataAreaId, @PARTITION)";
+
                 using (SqlCommand command = new SqlCommand(queryString, connection))
                 {
-                    // Set parameter values for the UPDATE statement
                     command.Parameters.AddWithValue("@BatchId", _batch.BatchId);
                     command.Parameters.AddWithValue("@CloseBy", ApplicationSettings.Terminal.TerminalOperator.OperatorId);
                     command.Parameters.AddWithValue("@SetorBy", _setorBy);
-                    // Open the connection if it’s not already open
+                    command.Parameters.AddWithValue("@OpenBy", _batch.StaffId);
+                    command.Parameters.AddWithValue("@StoreId", _batch.StoreId);
+                    command.Parameters.AddWithValue("@TerminalId", _batch.TerminalId);
+                    command.Parameters.AddWithValue("@DataAreaId", Application.Settings.Database.DataAreaID);
+                    command.Parameters.AddWithValue("@PARTITION", 1);
                     if (connection.State != ConnectionState.Open)
                     {
                         connection.Open();
                     }
-
-                    // Execute the UPDATE command
                     int rowsAffected = command.ExecuteNonQuery();
-                     
                 }
             }
             catch (Exception ex)
             {
-                // Handle exceptions if necessary
+                //LSRetailPosis.ApplicationExceptionHandler.HandleException();
                 throw;
             }
             finally
             {
-                // Ensure the connection is closed
                 if (connection.State != ConnectionState.Closed)
                 {
                     connection.Close();
                 }
             }
+//             // Establish the database connection
+//            SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+
+//            try
+//            {
+//                // Define the SQL UPDATE query
+//                string queryString = @"
+//                    UPDATE [ax].[CPRETAILPOSBATCHTABLEEXTEND]
+//                    SET [CLOSEBY] = @CloseBy,
+//                        [SETORBY] = @SetorBy
+//                    WHERE [BATCHID] = @BatchId";
+//                //
+//                using (SqlCommand command = new SqlCommand(queryString, connection))
+//                {
+//                    // Set parameter values for the UPDATE statement
+//                    command.Parameters.AddWithValue("@BatchId", _batch.BatchId);
+//                    command.Parameters.AddWithValue("@CloseBy", ApplicationSettings.Terminal.TerminalOperator.OperatorId);
+//                    command.Parameters.AddWithValue("@SetorBy", _setorBy);
+//                    // Open the connection if it’s not already open
+//                    if (connection.State != ConnectionState.Open)
+//                    {
+//                        connection.Open();
+//                    }
+
+//                    // Execute the UPDATE command
+//                    int rowsAffected = command.ExecuteNonQuery();
+                     
+//                }
+//            }
+//            catch (Exception ex)
+//            {
+//                // Handle exceptions if necessary
+//                throw;
+//            }
+//            finally
+//            {
+//                // Ensure the connection is closed
+//                if (connection.State != ConnectionState.Closed)
+//                {
+//                    connection.Close();
+//                }
+//            }
         }
 
         /// <summary>
@@ -767,8 +811,8 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
                             batchData.CreateBatch(newPosBatch);
                         }
                         shift = newPosBatch;
-                        //ADD SHIFT OPEN
-                        writeBatchTableExt(newPosBatch);
+                        //ADD SHIFT OPEN //disable and move to insert when close shift
+                        //writeBatchTableExt(newPosBatch);
                         //
                         result = true;
                     }
