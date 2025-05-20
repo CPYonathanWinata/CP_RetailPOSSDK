@@ -369,14 +369,74 @@ namespace Microsoft.Dynamics.Retail.Pos.ApplicationTriggers
 			connectToDB(storeId, dataAreaId);
 
 			result = checkTaxTable(storeId, dataAreaId);
-			
 
-            result = checkCustomTables(storeId, dataAreaId);
+
+            result = checkCustomTablesAndFields(storeId, dataAreaId); //checkCustomTables(storeId, dataAreaId);
             if (result == false)
             {
                 application.RunOperation(PosisOperations.ApplicationExit, "Close");
             }
 		}
+
+
+        private bool checkCustomTablesAndFields(string storeId, string dataAreaId)
+        {
+            bool allValid = true;
+
+            // Get the XML result from getListTablePOS
+            ReadOnlyCollection<object> containerArray = Application.TransactionServices.InvokeExtension("getListTablePOS");
+            string xmlContent = containerArray[3].ToString(); // index 2 holds the XML 
+
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(xmlContent);
+
+            APIAccess.APIFunction.DatabaseHelper dbHelper = new APIAccess.APIFunction.DatabaseHelper(ApplicationSettings.Database.LocalConnectionString);
+
+            List<string> missingInfo = new List<string>();
+
+            XmlNodeList tableNodes = xmlDoc.SelectNodes("/database/table");
+            foreach (XmlNode tableNode in tableNodes)
+            {
+                string tableName = tableNode.Attributes["name"].Value;
+                string fullTableName = "ax." + tableName;
+
+                bool tableExists = dbHelper.CheckExistTable(fullTableName);
+                if (!tableExists)
+                {
+                    missingInfo.Add(string.Format("Table missing: {0}",tableName));
+                    allValid = false;
+                    continue; // Skip checking fields if table doesn't exist
+                }
+
+                foreach (XmlNode fieldNode in tableNode.SelectNodes("field"))
+                {
+                    string fieldName = fieldNode.InnerText;
+                    bool fieldExists = dbHelper.CheckExistField(fullTableName, fieldName);
+                    if (!fieldExists)
+                    {
+                        missingInfo.Add(string.Format("Missing field in {0}: {1}",tableName,fieldName));
+                        allValid = false;
+                    }
+                }
+            }
+
+            if (missingInfo.Count > 0)
+            {
+                string message = "Tidak bisa masuk aplikasi POS. Berikut adalah table/field yang tidak ditemukan:\n";
+                for (int i = 0; i < missingInfo.Count; i++)
+                {
+                    message += string.Format("{0}. {1}\n", i + 1, missingInfo[i]);
+                } 
+                MessageBox.Show(message);
+                //using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage(message, MessageBoxButtons.OK, MessageBoxIcon.Error))
+                //{
+                //    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                //}
+            }
+
+            return allValid;
+        }
+
 
         private bool checkCustomTables(string storeId, string dataAreaId)
         {

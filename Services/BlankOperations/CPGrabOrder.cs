@@ -47,8 +47,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
         string merchantId = "";
         string nameCust, phoneCust = "";
         int exponent = 0;
-        //string gmTID = "19"; //DEV
-        string gmTID = "16"; //Prod
+        string gmTID = "19"; //DEV
+        //string gmTID = "16"; //Prod
         public CPGrabOrder(IPosTransaction _posTransaction, IApplication _application)
         {
             InitializeComponent(); 
@@ -628,12 +628,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                 }
             }
 
-            var result = apiFunction.checkStockOnHandMultiNew(application, urlRTS, application.Settings.Database.DataAreaID, siteId, ApplicationSettings.Terminal.InventLocationId, itemIdMulti, "", "", "", qtyMulti, posTransaction.StoreId + "-" + _orderId.ToString()); // mod by Yonathan to add 2 parameters qty and trans id 11092024
-
-            //testing for 1 store only, nanti dibalikin ke yang baru (yang atas)
-            //var result = apiFunction.checkStockOnHandMulti(application, urlRTS, application.Settings.Database.DataAreaID, siteId, ApplicationSettings.Terminal.InventLocationId, itemIdMulti, "", "", "");//, qtyMulti, posTransaction.StoreId+"-"+ _orderId.ToString())//, _qtyMulti, posTransaction.StoreId + "-FORMCHECKSTOCK"); 
-            //end
-
+            var result = apiFunction.checkStockOnHandMultiNew(application, urlRTS, application.Settings.Database.DataAreaID, siteId, ApplicationSettings.Terminal.InventLocationId, itemIdMulti, "", "", "", qtyMulti, posTransaction.StoreId+"-"+ _orderId.ToString()); // mod by Yonathan to add 2 parameters qty and trans id 11092024
             xmlResponse = result[3].ToString();
 
             XmlDocument xmlDoc = new XmlDocument();
@@ -652,9 +647,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 
             //}
 
-           //Discount for grab 21042025 - Yonathan
             if (item.campaigns != null)
-
             {
                 foreach (var campaign in item.campaigns)
                 {
@@ -673,7 +666,6 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     }
                 }
             }
-            
 
 
 
