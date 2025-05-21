@@ -52,3 +52,4 @@ C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Triggers\Pa
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.pdb
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.CP_CustomerDetail.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Triggers\PaymentTriggers\obj\Debug\PaymentTriggers.csprojResolveAssemblyReference.cache

@@ -338,7 +338,7 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 
 				//added customization by yonathan 08/09/2022
 				//loop through all of the item transaction
-				AddItemTransaction(posTransaction); //temporarily disable for testing because not implemented yet.
+				AddItemTransaction(posTransaction); //disable this for PRJ
 				//end added
 
                 //add by yonathan to update receiptid on giftcard 10092024

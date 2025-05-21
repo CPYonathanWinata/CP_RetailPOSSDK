@@ -355,7 +355,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
         private void updateCustomBatchTable(Batch _batch  , string _setorBy)
         {
 
-            //ADD BY ERWIN
+            // Insert open by and close by and setor by 16052025 - Yonathan
             SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
             var tenderID = new List<string>();
 

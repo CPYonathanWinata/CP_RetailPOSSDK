@@ -174,7 +174,14 @@ namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
                 return;
             }
             //add if to check whether the stock is enough by yonathan 02/01/2023
-            if (checkStock(posTransaction, out messageBoxString) == true)
+
+            //start to disable checkstock for PRJ
+            bool enableCheckStock = false; 
+           
+            if (checkStock(posTransaction, out messageBoxString) == true)  //original 
+               
+            //if (enableCheckStock == true) //for PRJ
+            //end
             {
                
                 preTriggerResult.ContinueOperation = false;

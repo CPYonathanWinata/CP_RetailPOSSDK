@@ -384,7 +384,7 @@ namespace Microsoft.Dynamics.Retail.Pos.ApplicationTriggers
             bool allValid = true;
 
             // Get the XML result from getListTablePOS
-            ReadOnlyCollection<object> containerArray = Application.TransactionServices.InvokeExtension("getListTablePOS");
+            ReadOnlyCollection<object> containerArray = Application.TransactionServices.InvokeExtension("getListTableFieldPOS");
             string xmlContent = containerArray[3].ToString(); // index 2 holds the XML 
 
             XmlDocument xmlDoc = new XmlDocument();
@@ -444,7 +444,7 @@ namespace Microsoft.Dynamics.Retail.Pos.ApplicationTriggers
             bool allExist = true;
 
             // List of semicolon-separated table names
-            ReadOnlyCollection<object> containerArray = Application.TransactionServices.InvokeExtension("getListTablePOS");
+            ReadOnlyCollection<object> containerArray = Application.TransactionServices.InvokeExtension("getListTableFieldPOS");
            
             string tableNames = containerArray[3].ToString(); //"ax.CPRETAILPOSBATCHTABLEEXTENDS;ax.CPPROMOCASHBACSK;ax.CPPOSONLINEORDER";
             string[] tables = tableNames.Split(';'); // Split the string into individual table names
