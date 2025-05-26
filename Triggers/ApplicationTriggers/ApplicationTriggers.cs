@@ -384,7 +384,7 @@ namespace Microsoft.Dynamics.Retail.Pos.ApplicationTriggers
             bool allValid = true;
 
             // Get the XML result from getListTablePOS
-            ReadOnlyCollection<object> containerArray = Application.TransactionServices.InvokeExtension("getListTablePOS");
+            ReadOnlyCollection<object> containerArray = Application.TransactionServices.InvokeExtension("getListTableFieldPOS");
             string xmlContent = containerArray[3].ToString(); // index 2 holds the XML 
 
             XmlDocument xmlDoc = new XmlDocument();

@@ -2711,7 +2711,8 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 				}
 				catch (Exception ex)
 				{
-					MessageBox.Show("error open port");
+					MessageBox.Show("Error open port");
+                    //GME_Var.serialBCA.IsOpen = false;
 				}
 
 				if (GME_Var.serialBCA.IsOpen)
@@ -2728,19 +2729,83 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 					 * Means that it will wait for receiveThreadBCA to return value for continue process
 					 */
 
-					try
-					{
-						BCAOnline.sendData(totalAmount.ToString(), transType, Connection.applicationLoc, posTransaction, refNumber);
-						Thread.Sleep(500);
-						lblWaitingRespond.Visible = true;
-						//waitingForm.Show();
-						ThreadPool.QueueUserWorkItem(new WaitCallback(receiveThreadBCA), autoEventBCA);
-						autoEventBCA.WaitOne();
-					}
-					catch (Exception ex)
-					{
-						MessageBox.Show(ex.ToString());
-					}
+                    //try
+                    //{
+                    //    BCAOnline.sendData(totalAmount.ToString(), transType, Connection.applicationLoc, posTransaction, refNumber);
+                    //    Thread.Sleep(500);
+                    //    lblWaitingRespond.Visible = true;
+                    //    //waitingForm.Show();
+                    //    ThreadPool.QueueUserWorkItem(new WaitCallback(receiveThreadBCA), autoEventBCA);
+                    //    //autoEventBCA.WaitOne();
+
+                    //    if (!autoEventBCA.WaitOne(60000)) // wait up to 60 seconds
+                    //    {
+                    //        GME_Var.respCodeBCA = "TO"; // or use your own enum
+                            
+                    //    }
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    MessageBox.Show(ex.ToString());
+                    //}
+
+                    //fix for neverending waiting EDC ECR 22052025
+                    try
+                    {
+                        bool sendSuccess = false;
+                        int retryCount = 0;
+                    RetryEDC:
+                        BCAOnline.sendData(totalAmount.ToString(), transType, Connection.applicationLoc, posTransaction, refNumber);
+                        Thread.Sleep(500);
+                        lblWaitingRespond.Visible = true;
+                        ThreadPool.QueueUserWorkItem(new WaitCallback(receiveThreadBCA), autoEventBCA);
+
+                        if (!autoEventBCA.WaitOne(10000)) // wait up to 60 seconds
+                        {
+                            GME_Var.respCodeBCA = "TO"; // this triggers switch-case elsewhere
+                            DialogResult retry = new DialogResult();
+
+                            if (retryCount <= 2)
+                            {
+                                retry = MessageBox.Show(
+                                "EDC tidak merespon. Ulangi transaksi?",
+                                "EDC Timeout",
+                                MessageBoxButtons.RetryCancel,
+                                MessageBoxIcon.Warning);
+                            }
+                            else
+                            {
+                                retry = MessageBox.Show(
+                                "EDC tidak merespons sama sekali. Silakan cabut kabel, restart EDC kemudian pasang kabel kembali.\nUlangi transaksi?",
+                                "EDC Timeout",
+                                MessageBoxButtons.RetryCancel,
+                                MessageBoxIcon.Warning);
+                            }
+
+                            if (retry == DialogResult.Retry)
+                            {
+                                retryCount++;
+                                goto RetryEDC; // reattempt sendData
+                            }
+                            else
+                            {
+                                btnRequest.Enabled = true;
+                                lblWaitingRespond.Visible = false;
+                                btnCancel.Enabled = true;
+                                return; // cashier chose Cancel
+
+                            }
+
+
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.ToString());
+                    }
+                    //end
+
+
 					/*BCAOnline.sendData(totalAmount.ToString(), transType, Connection.applicationLoc, posTransaction);
 					ThreadPool.QueueUserWorkItem(new WaitCallback(receiveThreadBCA), autoEventBCA);*/
 					
@@ -3611,7 +3676,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 					}
 					catch (Exception ex)
 					{
-						MessageBox.Show("error open port");
+						MessageBox.Show("Error open port");
 					}
 				}
 
@@ -3629,18 +3694,62 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 					 * Means that it will wait for receiveThreadBCA to return value for continue process
 					 */
 						
-					try
-					{ 
-						BCAOnline.sendData(totalAmount.ToString(), transType, Connection.applicationLoc, posTransaction, refNumber);
-						Thread.Sleep(500);
-						lblWaitingRespond.Visible = true;
-						ThreadPool.QueueUserWorkItem(new WaitCallback(receiveThreadBCA), autoEventBCA);
-						autoEventBCA.WaitOne();
-					}
-					catch (Exception ex)
-					{
-						MessageBox.Show(ex.ToString());
-					}
+                    //try
+                    //{ 
+                    //    BCAOnline.sendData(totalAmount.ToString(), transType, Connection.applicationLoc, posTransaction, refNumber);
+                    //    Thread.Sleep(500);
+                    //    lblWaitingRespond.Visible = true;
+                    //    ThreadPool.QueueUserWorkItem(new WaitCallback(receiveThreadBCA), autoEventBCA);
+                    //    autoEventBCA.WaitOne();
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    MessageBox.Show(ex.ToString());
+                    //}
+
+                    //fix for neverending waiting EDC ECR 22052025
+                    try
+                    {
+                        bool sendSuccess = false;
+
+                    RetryEDC:
+                        BCAOnline.sendData(totalAmount.ToString(), transType, Connection.applicationLoc, posTransaction, refNumber);
+                        Thread.Sleep(500);
+                        lblWaitingRespond.Visible = true;
+                        ThreadPool.QueueUserWorkItem(new WaitCallback(receiveThreadBCA), autoEventBCA);
+
+                        if (!autoEventBCA.WaitOne(10000)) // wait up to 60 seconds
+                        {
+                            GME_Var.respCodeBCA = "TO"; // this triggers switch-case elsewhere
+
+                            DialogResult retry = MessageBox.Show(
+                                "EDC tidak merespon. Ulangi transaksi?",
+                                "EDC Timeout",
+                                MessageBoxButtons.RetryCancel,
+                                MessageBoxIcon.Warning);
+
+                            if (retry == DialogResult.Retry)
+                            {
+                                goto RetryEDC; // reattempt sendData
+                            }
+                            else
+                            {
+                                btnRequest.Enabled = true;
+                                lblWaitingRespond.Visible = false;
+                                btnCancel.Enabled = true;
+                                return; // cashier chose Cancel
+
+                            }
+
+
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.ToString());
+                    }
+                    //end
+
 
 					/*if (autoEventBCA.WaitOne(60000) == false)
 						{
