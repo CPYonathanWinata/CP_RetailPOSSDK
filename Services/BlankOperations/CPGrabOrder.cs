@@ -531,31 +531,37 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
             }
             foreach (var orderItem in item.items)
             {
-                    
-                if (isFirstIteration)
-                {
+                //check positive stock first
 
-                    exponent = item.currency.exponent;
-                    BlankOperations.exponent = exponent;
-                    APIAccess.APIAccessClass.merchantId = item.merchantID;
-                    isFirstIteration = false;
+                if (APIAccess.APIFunction.checkPositiveStatus(orderItem.id, LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection) == true)
+                {
+                    if (isFirstIteration)
+                    {
+
+                        exponent = item.currency.exponent;
+                        BlankOperations.exponent = exponent;
+                        APIAccess.APIAccessClass.merchantId = item.merchantID;
+                        isFirstIteration = false;
+                    }
+
+                    //loop through the items in the cart
+                    itemIdMulti += orderItem.id;
+                    qtyMulti += orderItem.quantity; //add Qty by Yonathan 11092024
+                    //barcodeMulti +=
+                    //configIdMulti +=
+                    //qtyMulti +=
+                    // Add the itemid to the result string
+                    //result += itemId.ToString();
+
+                    // Add the separator (;) if it's not the last item
+                    if (orderItem.id != item.items[item.items.Count - 1].id)
+                    {
+                        itemIdMulti += ";";
+                        qtyMulti += ";"; //add Qty by Yonathan 11092024
+                    }
                 }
 
-                //loop through the items in the cart
-                itemIdMulti += orderItem.id;
-                qtyMulti += orderItem.quantity; //add Qty by Yonathan 11092024
-                //barcodeMulti +=
-                //configIdMulti +=
-                //qtyMulti +=
-                // Add the itemid to the result string
-                //result += itemId.ToString();
-
-                // Add the separator (;) if it's not the last item
-                if (orderItem.id != item.items[item.items.Count - 1].id)
-                {
-                    itemIdMulti += ";";
-                    qtyMulti += ";"; //add Qty by Yonathan 11092024
-                }
+                
             }
 
             //get the inventSiteId
@@ -628,13 +634,22 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                 }
             }
 
-            var result = apiFunction.checkStockOnHandMultiNew(application, urlRTS, application.Settings.Database.DataAreaID, siteId, ApplicationSettings.Terminal.InventLocationId, itemIdMulti, "", "", "", qtyMulti, posTransaction.StoreId+"-"+ _orderId.ToString()); // mod by Yonathan to add 2 parameters qty and trans id 11092024
-            xmlResponse = result[3].ToString();
+            //check whether itemIdMulti is empty. if empry, don't check the RTS
+            /*<?xml version="1.0" encoding="utf-8"?><GetStockList><StockListResult ItemId="70000004" Barcode="" QtyAvail="45,000" QtyPhy="45,000" /></GetStockList>*/
+            ReadOnlyCollection<object> result = null;
+            XmlNodeList itemNodes = null ;
+            if (itemIdMulti != "")
+            {
+                 result = apiFunction.checkStockOnHandMultiNew(application, urlRTS, application.Settings.Database.DataAreaID, siteId, ApplicationSettings.Terminal.InventLocationId, itemIdMulti, "", "", "", qtyMulti, posTransaction.StoreId + "-" + _orderId.ToString()); // mod by Yonathan to add 2 parameters qty and trans id 11092024
+                 xmlResponse = result[3].ToString();
 
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(xmlResponse);
+                 XmlDocument xmlDoc = new XmlDocument();
+                 xmlDoc.LoadXml(xmlResponse);
 
-            XmlNodeList itemNodes = xmlDoc.SelectNodes("//StockListResult");
+                 itemNodes = xmlDoc.SelectNodes("//StockListResult");
+            }
+            
+            
             //loop for each node
             //foreach (XmlNode node in itemNodes)
             //{
@@ -669,9 +684,10 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 
 
 
-
+            string itemType = "Stock";
             foreach (var orderItem in item.items)
             {
+                
                 
                 if (isFirstIteration)
                 {
@@ -697,31 +713,61 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                 //decimal availQty = availQtyStock + availQtyStockSO; //
                 //MessageBox.Show(String.Format("Config Id : {0}, ({1} + {2}) = {3}" , configId.ToString(), availQtyStock, availQtyStockSO, availQty));
                 decimal remainQty = 0;//availQty;// -(orderItem.quantity);// + qtyBeforeAdded);
-
+                string itemId = "";
+                bool found = false;
                 //remainQty = Convert.ToDecimal(itemNodes[indexRow].Attributes["QtyAvail"].Value);
-                remainQty = Convert.ToDecimal(itemNodes[indexRow].Attributes["QtyAvail"].Value.Replace(",", "."), CultureInfo.InvariantCulture);
+                if(itemNodes != null)
+                {
+                    foreach (XmlNode node in itemNodes)
+                    {
+                        if (node.Attributes["ItemId"].Value == orderItem.id)
+                        {
+                            remainQty = decimal.Parse(node.Attributes["QtyAvail"].Value, NumberStyles.Number, CultureInfo.CurrentCulture); //.Replace(",", ".")
+                            itemId = node.Attributes["ItemId"].Value.ToString();
+                            found = true;
+                            break;
+                        }
+                        //else
+                        //{
+                        //    itemType = "Non";
+                        //}
+                    }
+                }
+                
+                
+                //remainQty = itemNodes == null ? 0 : Convert.ToDecimal(itemNodes[indexRow].Attributes["QtyAvail"].Value.Replace(",", "."), CultureInfo.InvariantCulture);
                 priceAfterExponentString = orderItem.price.ToString().Substring(0, orderItem.price.ToString().Length - exponent);
 
                 decimal.TryParse(priceAfterExponentString, out priceAfterExponent);
                 subTotal = (priceAfterExponent * orderItem.quantity);
                 grandTotal += subTotal - (orderItem.discAmt*orderItem.quantity);
 
-                 
+                //if(itemNodes != null)
+                if (found == true) //found in XML
+                {
+                    isAvailable = remainQty - orderItem.quantity < 0 ? "Tidak" : "Ya";
+                    itemType = "Stock";
+                }
+                else //not Found in XML -> Non Stock
+                {
+                    itemType = "Non";
+                    isAvailable = "Ya";
+                }
                 //add to row
                 itemDetailsGrid.Rows.Add(
-                    itemNodes[indexRow].Attributes["ItemId"].Value,
+                    orderItem.id,//itemNodes == null ? orderItem.id : itemId,
                     getItemName(orderItem.id),
                     orderItem.specifications,
                     orderItem.quantity,
                     priceAfterExponent,
                     orderItem.discAmt*orderItem.quantity,
                     subTotal,
-                    remainQty,
-                    isAvailable = remainQty - orderItem.quantity < 0 ? "Tidak" : "Ya"
+                    itemType == "Non" ? "Non Stock" : remainQty.ToString("N2",CultureInfo.CurrentCulture), //remainQty.ToString(CultureInfo.InvariantCulture),
+                    isAvailable// = remainQty - orderItem.quantity < 0 ? "Tidak" : "Ya"
 
                 ); 
 
-                //itemDetailsGrid.Rows.Add(
+                //itemDetailsGrid.Rows.Add(s
                 //    orderItem.id,
                 //    getItemName(orderItem.id),                    
                 //    orderItem.specifications,
@@ -911,7 +957,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     //iSale.OperationInfo = new LSRetailPosis.POSProcesses.OperationInfo();
                     //iSale.Barcode = skuId; disable by Yonathan 21/10/2022
 
-                    
+                    //use blank operation to store the items.
                     foreach (var orderItem in itemDetails.items)
                     {
                         RetailTransaction grabPosTransactionLocal = BlankOperations.grabPosTransaction as RetailTransaction;

@@ -139,48 +139,48 @@ namespace APIAccess
 
         }
 
-            public ReadOnlyCollection<object> checkStockOnHandMulti(IApplication _application, string url, string parmCompanyCode = "", string parmSiteId = "", string parmWareHouse = "", string parmItemId = "", string parmMaxQty = "", string parmBarcodeSetupId = "", string parmConfigId = "")
-            //public ReadOnlyCollection<object> checkStockOnHandMulti(IApplication _application, string url, string parmCompanyCode = "", string parmSiteId = "", string parmWareHouse = "", string parmItemId = "", string parmMaxQty = "", string parmBarcodeSetupId = "", string parmConfigId = "", string parmQtyInput = "", string parmTransId = "")
+        public ReadOnlyCollection<object> checkStockOnHandMulti(IApplication _application, string url, string parmCompanyCode = "", string parmSiteId = "", string parmWareHouse = "", string parmItemId = "", string parmMaxQty = "", string parmBarcodeSetupId = "", string parmConfigId = "")
+        //public ReadOnlyCollection<object> checkStockOnHandMulti(IApplication _application, string url, string parmCompanyCode = "", string parmSiteId = "", string parmWareHouse = "", string parmItemId = "", string parmMaxQty = "", string parmBarcodeSetupId = "", string parmConfigId = "", string parmQtyInput = "", string parmTransId = "")
+        {
+            //System.Diagnostics.Stopwatch timer = new Stopwatch();
+            string itemId, siteId, wareHouse, maxQty, barCode, company = "";
+            bool status = false;
+            string message = "";
+            //object[] array = Array.Empty<object>();
+
+            Application = _application;
+            ReadOnlyCollection<object> containerArray = new ReadOnlyCollection<object>(new object[0]);
+
+            try
             {
-                //System.Diagnostics.Stopwatch timer = new Stopwatch();
-                string itemId, siteId, wareHouse, maxQty, barCode, company = "";
-                bool status = false;
-                string message = "";
-                //object[] array = Array.Empty<object>();
 
-                Application = _application;
-                ReadOnlyCollection<object> containerArray = new ReadOnlyCollection<object>(new object[0]);
-
-                try
-                {
-
-                    object[] parameterList = new object[] 
-							{
-								url,
-                                parmCompanyCode,
-								parmSiteId,
-								parmWareHouse,
-								parmItemId,
-								"",
-								""						
-							};
+                object[] parameterList = new object[] 
+						{
+							url,
+                            parmCompanyCode,
+							parmSiteId,
+							parmWareHouse,
+							parmItemId,
+							"",
+							""						
+						};
 
 
-                    containerArray = Application.TransactionServices.InvokeExtension("getStockOnHandMulti", parameterList);
+                containerArray = Application.TransactionServices.InvokeExtension("getStockOnHandMulti", parameterList);
 
 
 
-                    return containerArray;
+                return containerArray;
 
-
-                }
-                catch (Exception ex)
-                {
-                    return containerArray;
-
-                }
 
             }
+            catch (Exception ex)
+            {
+                return containerArray;
+
+            }
+
+        }
 		//itemid,qty,unitid,dataareaid,warehouse,type,reffnum,retailvarid
 		public string addItemMultiple(string _url, List<APIParameter.parmRequestAddItemMultiple> _listData)
 		{
@@ -848,6 +848,57 @@ namespace APIAccess
 
         }
 
+         
+        public static bool checkPositiveStatus(string _itemId, SqlConnection _connectionString)
+        {
+            //before checking the stock, check first whether this item type is service
+            //string queryString = @" SELECT DISPLAYPRODUCTNUMBER,PRODUCTTYPE  FROM ax.ECORESPRODUCT where DISPLAYPRODUCTNUMBER =@ITEMID";
+            string positiveStatus = "0";
+            SqlConnection connection = _connectionString;
+            string queryString = @"SELECT ITEMID,POSITIVESTATUS,DATAAREAID FROM ax.CPITEMONHANDSTATUS where ITEMID=@ITEMID";
+            try
+            {
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+                    command.Parameters.AddWithValue("@ITEMID", _itemId);
+
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+
+                    }
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            positiveStatus = reader["POSITIVESTATUS"].ToString();
+                            ////for testing purpose
+                            //MessageBox.Show(positiveStatus);
+                            ////
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(typeof(APIFunction).ToString(), ex);
+                throw;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+                }
+            }
+            
+
+            return positiveStatus == "1" ? true : false;
+        }
+        
+            
 
 
         //public async Task<bool> CheckApiAvailability(string url)
