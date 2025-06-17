@@ -476,6 +476,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
             bool isFirstIteration = true;
             decimal priceAfterExponent = 0;
             string priceAfterExponentString = "";
+            string discAfterExponentString = "";
+            decimal discAfterExponent = 0;
             bool isAvail = true;
             string isAvailable = "Ya";
             decimal subTotal = 0;
@@ -677,6 +679,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                         {
                             decimal itemDiscount = (orderItem.quantity / (decimal)totalQty) * campaign.deductedAmount;
                             orderItem.discAmt += itemDiscount / orderItem.quantity;
+
+                            
                         }
                     }
                 }
@@ -716,6 +720,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                 string itemId = "";
                 bool found = false;
                 //remainQty = Convert.ToDecimal(itemNodes[indexRow].Attributes["QtyAvail"].Value);
+                //add for nonstock items 17062025 - Yonathan
                 if(itemNodes != null)
                 {
                     foreach (XmlNode node in itemNodes)
@@ -733,16 +738,20 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                         //}
                     }
                 }
-                
+                //end
                 
                 //remainQty = itemNodes == null ? 0 : Convert.ToDecimal(itemNodes[indexRow].Attributes["QtyAvail"].Value.Replace(",", "."), CultureInfo.InvariantCulture);
                 priceAfterExponentString = orderItem.price.ToString().Substring(0, orderItem.price.ToString().Length - exponent);
-
                 decimal.TryParse(priceAfterExponentString, out priceAfterExponent);
+
+                discAfterExponentString = orderItem.discAmt.ToString().Substring(0, orderItem.discAmt.ToString().Length - exponent);
+                decimal.TryParse(discAfterExponentString, out discAfterExponent);
+
                 subTotal = (priceAfterExponent * orderItem.quantity);
-                grandTotal += subTotal - (orderItem.discAmt*orderItem.quantity);
+                grandTotal += subTotal - (discAfterExponent * orderItem.quantity); //(orderItem.discAmt*orderItem.quantity);
 
                 //if(itemNodes != null)
+                //add for nonstock items 17062025 - Yonathan CP_MDFPOSGRABORDER
                 if (found == true) //found in XML
                 {
                     isAvailable = remainQty - orderItem.quantity < 0 ? "Tidak" : "Ya";
@@ -760,7 +769,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     orderItem.specifications,
                     orderItem.quantity,
                     priceAfterExponent,
-                    orderItem.discAmt*orderItem.quantity,
+                    discAfterExponent * orderItem.quantity,//orderItem.discAmt*orderItem.quantity,
                     subTotal,
                     itemType == "Non" ? "Non Stock" : remainQty.ToString("N2",CultureInfo.CurrentCulture), //remainQty.ToString(CultureInfo.InvariantCulture),
                     isAvailable// = remainQty - orderItem.quantity < 0 ? "Tidak" : "Ya"

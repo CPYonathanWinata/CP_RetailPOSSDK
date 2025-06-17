@@ -848,7 +848,7 @@ namespace APIAccess
 
         }
 
-         
+         //add for check positive status item (stock / non stock) - Yonathan 17062025
         public static bool checkPositiveStatus(string _itemId, SqlConnection _connectionString)
         {
             //before checking the stock, check first whether this item type is service

@@ -367,7 +367,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             "AND LN.TRANSACTIONSTATUS = 0 " +
             "AND L.COUNTER < 2 " +
             "GROUP BY LN.ITEMID,EPT.NAME,LN.PRICE, LN.VARIANTID" + //added , LN.VARIANTID by yonathan
-            "ORDER BY LN.ITEMID ASC"; //added Order by 28052025 - Yonathan
+            "ORDER BY LN.ITEMID ASC"; //added Order by 28052025 - Yonathan 
 
         //walk in cust amount
         private const string sqlAmountWalkIn = "SELECT sum(L.AMOUNTCUR) " +
