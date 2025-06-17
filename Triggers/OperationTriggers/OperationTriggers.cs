@@ -393,9 +393,13 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
 
                                 // joined duplicate item cause of the mixmatch discount end
 
-
+                                
+                                
                                 foreach (var salesLine in transaction.CalculableSalesLines)
                                 {
+                                
+                                    
+                                   
                                     //find the pricegroup that specified for the applied customer first yonathan 12/07/2024
 
                                     List<string> result = findPriceAgreement(posTransaction, transaction.ChannelId, salesLine.ItemId, transaction.Customer.CustomerId, salesLine.BackofficeSalesOrderUnitOfMeasure, salesLine.Quantity);
@@ -597,6 +601,48 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
                             transaction.Save();
                         }
                     }
+
+                    //calc discount rounding
+                    //add this below to recalculate discount for rounding - Yonathan 02062025
+
+                    //RetailTransaction retailTransaction = posTransaction as RetailTransaction;
+                    
+                    //foreach (salelineitem salelineitems in transaction.saleitems)
+                    //{
+                    //    if (salelineitems.discountlines.count != 0)
+                    //    {
+                    //        salelineitems.netamount = 81500.25m;
+                    //        salelineitems.netamountwithallinclusivetax =  81500.25m;
+                    //        //salelineitems.priceoverridden = true;
+                    //        salelineitems.waschanged = true;
+                    //        salelineitems.pricevalid = true;
+                    //        salelineitems.initializerounding(transaction.irounding);
+
+                            
+                            
+                    //        //messagebox.show(discountline.amount.tostring());
+                    //        //salelineitems.discountlines.remove(discountline);
+
+                    //    }
+
+                    //}
+                    //Application.BusinessLogic.ItemSystem.CalculatePriceTaxDiscount(transaction);
+                    //transaction.CalcTotals();
+
+                    //transaction.RoundingDifference = 45;
+                    
+                    //transaction.IRounding.Round(transaction.BalanceNetAmountWithTax);
+                    
+                    //transaction.CalculateAmountDue();
+                    transaction.CalcTotals();
+                    transaction.Save();
+                    //
+                    
+                    //transaction.InitializeRounding(Contracts.Services.ir)
+                    //transaction.Save();
+                    
+                    //end
+
                 }
 
                 ////Application.Services.Discount.CalculateDiscount(transaction);
@@ -637,12 +683,15 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
 
                 }
 
+                
+
             }
             else
             {
                 LSRetailPosis.POSControls.POSFormsManager.ShowPOSStatusPanelText(string.Empty);
             }
             
+
             
             switch (posisOperation)
             {
@@ -900,7 +949,7 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
 // 
 //                                        FROM [ax].PRICEDISCTABLE ta
 //                                        WHERE
-//                                        
+//                                         
 //                                        ta.RELATION IN (5, 6, 7)
 //                                        AND ta.CURRENCY = 'IDR'                                          
 //                                        AND ((ta.FROMDATE <= @ActiveDate OR ta.FROMDATE <= @NoDate)
