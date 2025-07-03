@@ -727,7 +727,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     {
                         if (node.Attributes["ItemId"].Value == orderItem.id)
                         {
-                            remainQty = decimal.Parse(node.Attributes["QtyAvail"].Value, NumberStyles.Number, CultureInfo.CurrentCulture); //.Replace(",", ".")
+                            remainQty = Convert.ToDecimal(node.Attributes["QtyAvail"].Value.Replace(",", "."), CultureInfo.InvariantCulture);
+                            //remainQty = decimal.Parse(node.Attributes["QtyAvail"].Value, NumberStyles.Number, CultureInfo.CurrentCulture); //.Replace(",", ".")
                             itemId = node.Attributes["ItemId"].Value.ToString();
                             found = true;
                             break;
@@ -741,11 +742,17 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                 //end
                 
                 //remainQty = itemNodes == null ? 0 : Convert.ToDecimal(itemNodes[indexRow].Attributes["QtyAvail"].Value.Replace(",", "."), CultureInfo.InvariantCulture);
-                priceAfterExponentString = orderItem.price.ToString().Substring(0, orderItem.price.ToString().Length - exponent);
-                decimal.TryParse(priceAfterExponentString, out priceAfterExponent);
+                //priceAfterExponentString = orderItem.price.ToString().Substring(0, orderItem.price.ToString().Length - exponent);
+                //decimal.TryParse(priceAfterExponentString, out priceAfterExponent);
 
-                discAfterExponentString = orderItem.discAmt.ToString().Substring(0, orderItem.discAmt.ToString().Length - exponent);
-                decimal.TryParse(discAfterExponentString, out discAfterExponent);
+                priceAfterExponent = orderItem.price / (decimal)Math.Pow(10, exponent);
+
+
+                //if (orderItem.discAmt != null && orderItem.discAmt != 0)
+                discAfterExponent = orderItem.discAmt / (decimal)Math.Pow(10, exponent);
+
+                //discAfterExponentString = orderItem.discAmt.ToString().Substring(0, orderItem.discAmt.ToString().Length - exponent);
+                //decimal.TryParse(discAfterExponentString, out discAfterExponent);
 
                 subTotal = (priceAfterExponent * orderItem.quantity);
                 grandTotal += subTotal - (discAfterExponent * orderItem.quantity); //(orderItem.discAmt*orderItem.quantity);
@@ -945,7 +952,9 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
             string result = "";
             SaleLineItem saleLineItem;
             decimal priceAfterExponent = 0;
+            decimal discAfterExponent = 0;
             string priceAfterExponentString = "";
+            string discAfterExponentString = "";
             if (findFalse == 0)
             {
 
@@ -999,11 +1008,15 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                         var orderItem = itemDetails.items.FirstOrDefault(item => item.id == itemSale.ItemId);
 
 
-                        priceAfterExponentString = foundItem.price.ToString().Substring(0, foundItem.price.ToString().Length - exponent);
+                        //priceAfterExponentString = foundItem.price.ToString().Substring(0, foundItem.price.ToString().Length - exponent);
 
-                        decimal.TryParse(priceAfterExponentString, out priceAfterExponent);
+                        //decimal.TryParse(priceAfterExponentString, out priceAfterExponent);
 
+                        //discAfterExponentString = orderItem.discAmt.ToString().Substring(0, orderItem.discAmt.ToString().Length - exponent);
+                        //decimal.TryParse(discAfterExponentString, out discAfterExponent);
 
+                        priceAfterExponent = orderItem.price / (decimal)Math.Pow(10, exponent);
+                        discAfterExponent = orderItem.discAmt / (decimal)Math.Pow(10, exponent);
 
 
 
@@ -1014,10 +1027,14 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                         //salesLine.TradeAgreementPriceGroup = result[1];
                         itemSale.TradeAgreementPrice = priceAfterExponent;
 
+                        itemSale.ClearPeriodicDiscounts();
+                        itemSale.ClearCustomerDiscountLines(true);
+
                         LSRetailPosis.Transaction.Line.Discount.CustomerDiscountItem custDiscountManual = new LSRetailPosis.Transaction.Line.Discount.CustomerDiscountItem();
 
-                        custDiscountManual.Amount = orderItem.discAmt;
+                        custDiscountManual.Amount = discAfterExponent; //orderItem.discAmt;
                         //custDiscountManual.Percentage = Convert.ToDecimal(resultDisc[2]);
+                        
                         applicationLoc.Services.Discount.AddDiscountLine(itemSale, custDiscountManual);
 
                         applicationLoc.Services.Tax.CalculateTax(itemSale, grabPosTransaction);
@@ -1187,6 +1204,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     APIAccess.APIAccessClass.grabOrderIdLong = orderIdLong;
                     //applicationLoc.RunOperation(PosisOperations.BlankOperation, "102", BlankOperations.grabPosTransactionDisc);
                     transaction = grabPosTransaction; // (RetailTransaction)BlankOperations.grabPosTransactionDisc; 
+                    //applicationLoc.BusinessLogic.ItemSystem.CalculatePriceTaxDiscount(transaction);
                     transaction.CalcTotals();
                     transaction.Save();
                     //BlankOperations.grabPosTransaction = grabPosTransaction;

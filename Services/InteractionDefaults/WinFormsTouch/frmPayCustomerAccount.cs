@@ -2760,7 +2760,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
                         lblWaitingRespond.Visible = true;
                         ThreadPool.QueueUserWorkItem(new WaitCallback(receiveThreadBCA), autoEventBCA);
 
-                        if (!autoEventBCA.WaitOne(10000)) // wait up to 60 seconds
+                        if (!autoEventBCA.WaitOne(180000)) // wait up to 180 seconds
                         {
                             GME_Var.respCodeBCA = "TO"; // this triggers switch-case elsewhere
                             DialogResult retry = new DialogResult();

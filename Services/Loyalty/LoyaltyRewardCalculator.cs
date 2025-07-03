@@ -18,6 +18,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Loyalty
     using LSRetailPosis.Settings;
     using LSRetailPosis.Transaction;
     using LSRetailPosis.Transaction.Line.SaleItem;
+    using System.Windows.Forms;
 
     internal class LoyaltyRewardCalculator
     {
@@ -82,7 +83,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Loyalty
                     decimal transactionLevelTotalCharges = (from cl in retailTransaction.MiscellaneousCharges select cl.Amount).Sum();
                     payablePerSalesLine.Add(NoneSalesLineSalesId, transactionLevelTotalCharges);
                 }
-
+                string activePts = "";
                 foreach (RewardPoint activePoint in rewardPoints)
                 {
                     IEnumerable<RedeemSchemeLine> redeemLines = LoyaltyHelper.Instance.LoyaltyData.GetRedeemSchemeLines(cardInfo.CardNumber, activePoint.RewardPointId)
@@ -91,6 +92,8 @@ namespace Microsoft.Dynamics.Retail.Pos.Loyalty
                                        && rsl.ToRewardAmountQuantity > decimal.Zero);
 
                     decimal activePoints = activePoint.Active;
+                    //activePts += activePoint.ToString() + ";";
+                    //MessageBox.Show(activePts);
                     RedeemSchemeLine firstBestRedeemLine = null;
 
                     // Use the reward points to pay towards the transaction, product by product (because points may have restrictions on products)

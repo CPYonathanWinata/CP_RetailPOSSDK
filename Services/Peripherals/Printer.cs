@@ -1,4 +1,4 @@
-/*
+﻿/*
 SAMPLE CODE NOTICE
 
 THIS SAMPLE CODE IS MADE AVAILABLE AS IS.  MICROSOFT MAKES NO WARRANTIES, WHETHER EXPRESS OR IMPLIED, 
@@ -324,17 +324,31 @@ namespace Microsoft.Dynamics.Retail.Pos.Services
                     printTextLine = 0;
                     // Begin add NEC
                     int printLength = printText.Length;
+                    /*
                     PaperSize psize = new PaperSize("Custom", 100, ((printLength * 10) + 236));
                     pd.Document = printDoc;
                     pd.Document.DefaultPageSettings.PaperSize = psize;
                     printDoc.DefaultPageSettings.PaperSize.Width = 400;
+                    */
                     //change the margin for thermal- yonathan 11102024 - development only #THERMAL
                     if (printerName == "EPSON LX-310 ESC/P")
                     {
+                        //set to this for printing receipt
+                        // Set custom long-form paper (just for this print job)
+                        PaperSize longForm = new PaperSize("LongForm", 850, 3200); // 8.5" x ~37"
+                        printDoc.DefaultPageSettings.PaperSize = longForm;
+                        //printDoc.DefaultPageSettings.Margins = new Margins(0, 0, 0, 0);
+
+                        // Optional: for ultra control
+                        printDoc.PrinterSettings.DefaultPageSettings.PaperSize = longForm;
                         //printDoc.DefaultPageSettings.Margins = new Margins(100, 100, 100, 100);  // Left, Right, Top, Bottom margins in 100ths of an inch
                     }
                     else
                     {
+                        //PaperSize psize = new PaperSize("Custom", 100, ((printLength * 10) + 236));
+                        //pd.Document = printDoc;
+                        //pd.Document.DefaultPageSettings.PaperSize = psize;
+                        //printDoc.DefaultPageSettings.PaperSize.Width = 400;
                         printDoc.DefaultPageSettings.Margins = new Margins(0, 0, 0, 0);  // Left, Right, Top, Bottom margins in 100ths of an inch
                     }
                     //end 
@@ -860,12 +874,23 @@ namespace Microsoft.Dynamics.Retail.Pos.Services
                     float dpiYRatio = e.Graphics.DpiY / 96f; // 96dpi = 100%
                     float contentWidth = printText.Max(str => str.Replace(NORMAL_TEXT_MARKER, string.Empty).Replace(BOLD_TEXT_MARKER, string.Empty).Replace(DOUBLESIZE_TEXT_MARKER, string.Empty).Replace(DOUBLESIZE_BOLD_TEXT_MARKER, string.Empty).Length) * dpiXRatio; // Line with max length = content width
 
+                    bool reportDetected = printText.Any(line =>
+                    line.IndexOf("X-Report", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    line.IndexOf("Z-Report", StringComparison.OrdinalIgnoreCase) >= 0);
+
+                    
+
                     while (this.printTextLine < printText.Length)
                     {
                         string printingLine;
                         var heightStep = IsStringContainAnyOfMarkers(printText[this.printTextLine], DOUBLESIZE_TEXT_MARKER, DOUBLESIZE_BOLD_TEXT_MARKER) ? 2 * defaultLineHeight : defaultLineHeight;
                         // Begin modify line NEC
-                        if (yCaretPos + heightStep >= 1100)
+                        //Changed by Yonathan - 24062025 to change the height limit if it's not X|Z Report
+                        if (yCaretPos + heightStep >= 1040)
+                        
+                        //Changed by Yonathan - 24062025 to skipped the height limit if it's not X|Z Report
+                        //if (!reportDetected && (yCaretPos + heightStep >= 1100))
+
                         {   // No more room - advance to next page
                             e.HasMorePages = true;
                             return;
@@ -938,8 +963,10 @@ namespace Microsoft.Dynamics.Retail.Pos.Services
                                     if (barcodeImage != null)
                                     {
                                         float barcodeHeight = (barcodeImage.Height / dpiYRatio);
+                                        
 
                                         if (yCaretPos + barcodeHeight >= e.MarginBounds.Height)
+                                        //if (!reportDetected && (yCaretPos + barcodeHeight >= e.MarginBounds.Height))
                                         {   // No more room - advance to next page
                                             e.HasMorePages = true;
                                             return;
