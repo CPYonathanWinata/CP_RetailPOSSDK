@@ -280,7 +280,8 @@ namespace Microsoft.Dynamics.Retail.Pos.DiscountService
                 //    }
                 //}
                 
-
+                //disable temp 2025
+                /* 
                 if (isEmptyCustomer == false)
                 {
 
@@ -312,7 +313,7 @@ namespace Microsoft.Dynamics.Retail.Pos.DiscountService
                         }//end custom
                 }
                 
-                 
+                 */
                 retailTransaction.IsDiscountFullyCalculated = true;
 #if DEBUG
                 newTimeElapsed = DateTime.Now.Subtract(startNewTime);

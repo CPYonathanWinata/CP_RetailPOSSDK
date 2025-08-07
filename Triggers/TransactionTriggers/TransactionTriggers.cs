@@ -358,14 +358,82 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
                 }
                 
                 //end
-                
 
+                updateDiscountRounding();
 			}
             //clear the value - 16012025
             APIFunction.clearRetailTransExtended();
             
 		 
 		}
+
+        private void updateDiscountRounding()
+        {
+            SqlConnection connString = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+            decimal totalRounding = 0;
+            string transId = "";
+            try
+            {
+                if (connString.State != ConnectionState.Open)
+                {
+                    connString.Open();
+                }
+
+                foreach (var data in APIAccess.APIParameter.RoundingDataStore.Items)
+                {
+                    string queryString = @"
+                                UPDATE AX.RETAILTRANSACTIONSALESTRANS
+                                SET TOTALROUNDEDAMOUNT = @Rounding 
+                                WHERE TRANSACTIONID = @TransId AND LINENUM = @LineNum AND ITEMID = @ItemId";
+                    
+
+                    using (SqlCommand cmd = new SqlCommand(queryString, connString))
+                    {
+                        cmd.Parameters.AddWithValue("@Rounding", data.Rounding);
+                        cmd.Parameters.AddWithValue("@TransId", data.TransId);
+                        cmd.Parameters.AddWithValue("@LineNum", data.LineNum);
+                        cmd.Parameters.AddWithValue("@ItemId", data.ItemId);
+
+                        cmd.ExecuteNonQuery();
+                    }
+                    totalRounding += data.Rounding;
+                    transId = data.TransId;
+
+                   
+                }
+
+                string queryString2 = @"
+                                UPDATE AX.RETAILTRANSACTIONTABLE
+                                SET 
+                                    SALESPAYMENTDIFFERENCE = @Rounding,
+                                    ROUNDEDAMOUNT = @Rounding
+
+                                WHERE 
+                                    TRANSACTIONID = @TransId";
+
+                using (SqlCommand cmd2 = new SqlCommand(queryString2, connString))
+                {
+                    cmd2.Parameters.AddWithValue("@Rounding", totalRounding);
+                    cmd2.Parameters.AddWithValue("@TransId", transId);
+                    cmd2.ExecuteNonQuery();
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Database update failed", ex);
+            }
+            finally
+            {
+                connString.Close();
+                APIAccess.APIParameter.RoundingDataStore.Items.Clear();
+            }
+
+
+           
+            
+
+        }
+
 
         private void UpdateGiftCardReceiptId(IPosTransaction posTransaction)
         {

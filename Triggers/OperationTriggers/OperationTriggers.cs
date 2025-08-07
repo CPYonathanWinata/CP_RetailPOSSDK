@@ -27,6 +27,7 @@ using LSRetailPosis.Settings;
 using System.Collections.ObjectModel;
 using LSRetailPosis.Transaction.Line.Discount;
 using LSRetailPosis.Transaction.Line.SaleItem;
+using Microsoft.Dynamics.Retail.Pos.RoundingService;
 
 
 namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
@@ -47,6 +48,8 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
 
 		#endregion
         bool foundOperationCancelled = false;
+        
+
 		#region IOperationTriggersV1 Members
 
 		/// <summary>
@@ -279,7 +282,10 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
             string taxGroup1="";
             string taxGroup2 ="";
             bool foundDifferentTaxGroup = false;
+            int lastTwoDigits = 0;
+            decimal deltaRounding = 0;
             foundOperationCancelled = false;
+            
 
             //string[] listItemToRemove;
             List<string> listItemToRemove = new List<string>();
@@ -603,39 +609,203 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
                     }
 
                     //calc discount rounding
-                    //add this below to recalculate discount for rounding - Yonathan 02062025
+                    //add this below to recalculate discount for rounding - Yonathan 02062025 #CPPOSDISCOUNTROUNDING
 
-                    //RetailTransaction retailTransaction = posTransaction as RetailTransaction;
-                    
-                    //foreach (salelineitem salelineitems in transaction.saleitems)
+                    //if (posisOperation == PosisOperations.ProcessInput || posisOperation == PosisOperations.VoidItem || posisOperation == PosisOperations.SetQty || posisOperation == PosisOperations.BlankOperation)
                     //{
-                    //    if (salelineitems.discountlines.count != 0)
-                    //    {
-                    //        salelineitems.netamount = 81500.25m;
-                    //        salelineitems.netamountwithallinclusivetax =  81500.25m;
-                    //        //salelineitems.priceoverridden = true;
-                    //        salelineitems.waschanged = true;
-                    //        salelineitems.pricevalid = true;
-                    //        salelineitems.initializerounding(transaction.irounding);
+                    RetailTransaction retailTransaction = posTransaction as RetailTransaction;
 
-                            
-                            
-                    //        //messagebox.show(discountline.amount.tostring());
-                    //        //salelineitems.discountlines.remove(discountline);
+                    //prevent customer b2b/canvas/grab entering this rounding method
 
-                    //    }
+                    if (Rounding.CheckTableRounding(LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection) == true)
+                    {
 
-                    //}
-                    //Application.BusinessLogic.ItemSystem.CalculatePriceTaxDiscount(transaction);
-                    //transaction.CalcTotals();
 
-                    //transaction.RoundingDifference = 45;
-                    
-                    //transaction.IRounding.Round(transaction.BalanceNetAmountWithTax);
-                    
-                    //transaction.CalculateAmountDue();
-                    transaction.CalcTotals();
-                    transaction.Save();
+                        if (!string.IsNullOrEmpty(isB2bCust) && isB2bCust != "1" && isB2bCust != "2"
+                        && (retailTransaction.Customer == null
+                            || string.IsNullOrEmpty(retailTransaction.Customer.Name)
+                            || retailTransaction.Customer.Name.IndexOf("grab", StringComparison.OrdinalIgnoreCase) < 0))
+                        {
+
+
+
+                            foreach (SaleLineItem salelineitems in transaction.SaleItems)
+                            {
+                                if (salelineitems.DiscountLines.Count != 0)
+                                {
+                                    foreach (var discountLine in salelineitems.DiscountLines)
+                                    {
+                                        //APIAccess.APIParameter.RoundingRule roundingRules =  
+                                        if (discountLine.Amount != 0) //this is discount amount
+                                        {
+                                            decimal roundedAmount = Rounding.GetRoundedAmount((discountLine.EffectiveAmount), out lastTwoDigits, LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection);
+
+                                            //decimal roundedAmount = Rounding.GetRoundedAmount(discountLine.Amount, out lastTwoDigits, LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection);
+                                            //decimal roundedAmount = APIAccess.APIFunction.GetRoundedAmount(discountLine.Amount, out lastTwoDigits, LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection);
+                                            //deltaRounding = discountLine.Amount - roundedAmount;
+                                            deltaRounding = roundedAmount - discountLine.EffectiveAmount; //* salelineitems.Quantity;
+                                            //discountLine.Amount = Math.Round(roundedAmount / salelineitems.Quantity, 2);
+                                            //discountLine.EffectiveAmount = roundedAmount;// *salelineitems.Quantity;
+
+                                            var existingItem = APIAccess.APIParameter.RoundingDataStore.Items
+                                                                 .FirstOrDefault(r =>
+                                                                     r.ItemId == salelineitems.ItemId &&
+                                                                     r.LineNum == salelineitems.LineId);
+
+                                            if (deltaRounding != 0)
+                                            {
+                                                if (existingItem == null)
+                                                {
+                                                    APIAccess.APIParameter.RoundingDataStore.Items.Add(new APIAccess.APIParameter.RoundingData
+                                                    {
+                                                        TransId = transaction.TransactionId,
+                                                        LineNum = salelineitems.LineId,
+                                                        ItemId = salelineitems.ItemId,
+                                                        Rounding = deltaRounding
+                                                    });
+                                                }
+                                                else
+                                                {
+
+                                                    existingItem.Rounding = deltaRounding;
+
+
+                                                }
+                                            }
+
+
+                                            //listRounding.Add(new APIAccess.APIParameter.RoundingData { TransId = transaction.TransactionId, LineNum = salelineitems.LineId, ItemId = salelineitems.ItemId, Rounding = deltaRounding });
+
+                                        }
+                                        else
+                                        {
+
+                                            //decimal roundedAmount = Rounding.GetRoundedAmount((discountLine.EffectiveAmount/salelineitems.Quantity), out lastTwoDigits, LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection);
+                                            ////discountLine.Amount = 0;
+                                            //deltaRounding = discountLine.EffectiveAmount - (roundedAmount * salelineitems.Quantity);
+                                            //discountLine.Amount = roundedAmount;
+                                            //discountLine.EffectiveAmount = (roundedAmount * salelineitems.Quantity);
+                                            //discountLine.Percentage = 0;
+
+                                            decimal roundedAmount = Rounding.GetRoundedAmount((discountLine.EffectiveAmount), out lastTwoDigits, LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection);
+
+                                            //decimal roundedAmount = Rounding.GetRoundedAmount(discountLine.Amount, out lastTwoDigits, LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection);
+                                            //decimal roundedAmount = APIAccess.APIFunction.GetRoundedAmount(discountLine.Amount, out lastTwoDigits, LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection);
+                                            //deltaRounding = discountLine.Amount - roundedAmount;
+                                            deltaRounding = roundedAmount - discountLine.EffectiveAmount;  //discountLine.EffectiveAmount - roundedAmount; //* salelineitems.Quantity;
+
+
+                                            //discountLine.Amount = Math.Round(roundedAmount / salelineitems.Quantity, 2);
+                                            //discountLine.EffectiveAmount = roundedAmount; //* salelineitems.Quantity;
+                                            //discountLine.Percentage = 0;
+
+                                            var existingItem = APIAccess.APIParameter.RoundingDataStore.Items
+                                                                 .FirstOrDefault(r =>
+                                                                     r.ItemId == salelineitems.ItemId &&
+                                                                     r.LineNum == salelineitems.LineId);
+                                            if (deltaRounding != 0)
+                                            {
+                                                if (existingItem == null)
+                                                {
+                                                    APIAccess.APIParameter.RoundingDataStore.Items.Add(new APIAccess.APIParameter.RoundingData
+                                                    {
+                                                        TransId = transaction.TransactionId,
+                                                        LineNum = salelineitems.LineId,
+                                                        ItemId = salelineitems.ItemId,
+                                                        Rounding = deltaRounding
+                                                    });
+                                                }
+                                                else
+                                                {
+
+                                                    existingItem.Rounding = deltaRounding;
+
+                                                }
+                                            }
+
+                                            //salelineitems.NetAmount = 16900;
+                                            //salelineitems.NetAmountPerUnit = 16900;
+                                            //salelineitems.NetAmountWithAllInclusiveTax = 16900;
+                                            //salelineitems.PeriodicDiscount = 3000;
+
+
+                                            //salelineitems.NetAmountWithTax = 16900;
+
+                                        }
+
+                                        //salelineitems.NetAmountWithNoTax = 16900;
+                                        //salelineitems.NetAmountWithAllInclusiveTaxPerUnit = 16900;
+                                        //salelineitems.NetAmountWithTax = 16900;
+
+
+                                    }
+                                }
+
+
+                                //Application.RunOperation(PosisOperations.CalculateFullDiscounts,this);
+
+                            }
+
+                            //}
+
+
+                            //Application.BusinessLogic.ItemSystem.CalculatePriceTaxDiscount(transaction);
+                            //transaction.CalcTotals();
+
+                            //transaction.RoundingDifference = 45;
+
+                            //transaction.IRounding.Round(transaction.BalanceNetAmountWithTax);
+                            //transaction.IRounding.RoundAmount(transaction.AmountDue, "JDELIMA");
+                            //transaction.RoundingDifference =
+
+                            //transaction.CalculateAmountDue();
+                            //transaction.NetAmountWithNoTax = 16900;
+                            //transaction.NetAmountWithTax = 16900;
+                            //transaction.PeriodicDiscountAmount = 3000;
+                            ////--------------------------------
+                            transaction.RoundingDifference = -(APIAccess.APIParameter.RoundingDataStore.Items.Sum(r => Math.Round(r.Rounding, 2)));
+
+                            transaction.CalcTotals();
+
+
+                            //Ganti
+                            //transaction.TransSalePmtDiff = 12; //transaction.NetAmountWithTax + Math.Abs(transaction.RoundingDifference);
+
+                            if (posisOperation != PosisOperations.PayCash && posisOperation != PosisOperations.PayCard && posisOperation != PosisOperations.PayCashQuick && posisOperation != PosisOperations.PayCheque && posisOperation != PosisOperations.PayCheque && posisOperation != PosisOperations.PayCreditMemo && posisOperation != PosisOperations.PayCurrency
+                                && posisOperation != PosisOperations.PayCustomerAccount && posisOperation != PosisOperations.PayGiftCertificate && posisOperation != PosisOperations.PayLoyalty)
+                            {
+                                typeof(RetailTransaction)
+                                .GetProperty("TransSalePmtDiff")
+                                .SetValue(transaction, transaction.NetAmountWithTax - (APIAccess.APIParameter.RoundingDataStore.Items.Sum(r => Math.Round(r.Rounding, 2))));
+
+                            }
+                            else
+                            {
+                                if (((IPosTransactionV1)posTransaction).LastRunOperationIsValidPayment == false)
+                                {
+                                    typeof(RetailTransaction)
+                                   .GetProperty("TransSalePmtDiff")
+                                   .SetValue(transaction, transaction.NetAmountWithTax - (APIAccess.APIParameter.RoundingDataStore.Items.Sum(r => Math.Round(r.Rounding, 2))));
+                                }
+                                else
+                                {
+                                    if (transaction.NetAmountWithTax + transaction.RoundingDifference == transaction.TenderLines.Sum(p => p.Amount))
+                                    {
+                                        typeof(RetailTransaction)
+                                        .GetProperty("TransSalePmtDiff")
+                                        .SetValue(transaction, 0M);
+                                    }
+                                    transaction.RoundingDifference = 0;
+                                }
+
+                            }
+
+
+
+                            transaction.Save();
+
+                        }
+                    }
                     //
                     
                     //transaction.InitializeRounding(Contracts.Services.ir)
@@ -704,7 +874,7 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
                         APIAccess.APIAccessClass.lineDiscGroup = null;
                         APIAccess.APIAccessClass.ppnValidation = null;
                         APIAccess.APIAccessClass.custId = null;
-
+                        APIAccess.APIParameter.RoundingDataStore.Items.Clear(); // #CPPOSDISCOUNTROUNDING -  Yonathan 15072025
                         break;
                     }
             }

@@ -371,7 +371,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                         case "TOTAL":
                             // Begin add line NEC
                             {
-                            totalCustom = theTransaction.NetAmountWithNoTax;
+                            totalCustom = theTransaction.NetAmountWithNoTax; 
                             return Printing.InternalApplication.Services.Rounding.Round(theTransaction.NetAmountWithNoTax, theTransaction.StoreCurrencyCode, true);
                             }
                         case "TAXTOTAL":
@@ -908,7 +908,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
 
                                         if (matchingNode != null)
                                         {
-                                            // Split the ItemLines attribute by semicolons
+                                            // Split the ItemLines attribute by semicolons"
                                             string[] itemDetails = matchingNode.Attribute("ItemLines").Value.Split(';');
 
                                             lineAmountIncTax = itemDetails[3];

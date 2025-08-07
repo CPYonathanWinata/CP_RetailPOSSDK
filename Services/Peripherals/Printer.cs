@@ -331,12 +331,25 @@ namespace Microsoft.Dynamics.Retail.Pos.Services
                     //change the margin for thermal- yonathan 11102024 - development only #THERMAL
                     if (printerName == "EPSON LX-310 ESC/P")
                     {
+                        //set to this for printing receipt
+                        // Set custom long-form paper (just for this print job)
+                        PaperSize longForm = new PaperSize("LongForm", 850, 3200); // 8.5" x ~37"
+                        printDoc.DefaultPageSettings.PaperSize = longForm;
+                        //printDoc.DefaultPageSettings.Margins = new Margins(0, 0, 0, 0);
+
+                        // Optional: for ultra control
+                        printDoc.PrinterSettings.DefaultPageSettings.PaperSize = longForm;
                         //printDoc.DefaultPageSettings.Margins = new Margins(100, 100, 100, 100);  // Left, Right, Top, Bottom margins in 100ths of an inch
                     }
                     else
                     {
+                        //PaperSize psize = new PaperSize("Custom", 100, ((printLength * 10) + 236));
+                        //pd.Document = printDoc;
+                        //pd.Document.DefaultPageSettings.PaperSize = psize;
+                        //printDoc.DefaultPageSettings.PaperSize.Width = 400;
                         printDoc.DefaultPageSettings.Margins = new Margins(0, 0, 0, 0);  // Left, Right, Top, Bottom margins in 100ths of an inch
                     }
+
                     //end 
                     //End add NEC
                     if (SupportedCountryRegion.BR == Functions.CountryRegion)
@@ -865,7 +878,8 @@ namespace Microsoft.Dynamics.Retail.Pos.Services
                         string printingLine;
                         var heightStep = IsStringContainAnyOfMarkers(printText[this.printTextLine], DOUBLESIZE_TEXT_MARKER, DOUBLESIZE_BOLD_TEXT_MARKER) ? 2 * defaultLineHeight : defaultLineHeight;
                         // Begin modify line NEC
-                        if (yCaretPos + heightStep >= 1100)
+                        //if (yCaretPos + heightStep >= 1100)
+                        if (yCaretPos + heightStep >= 1040)
                         {   // No more room - advance to next page
                             e.HasMorePages = true;
                             return;

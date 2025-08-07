@@ -1001,6 +1001,86 @@ namespace APIAccess
             }
         }
 
+        public static decimal GetRoundedAmount(decimal originalAmount, out int lastTwoDigits, SqlConnection _connectionString)
+        {
+            lastTwoDigits = 0;
+            var rules = new List<APIAccess.APIParameter.RoundingRule>();
+            SqlConnection connection = _connectionString;
+            string queryString = @"SELECT FROMAMOUNT, TOAMOUNT, ROUNDING
+                                                    FROM [ax].[CPROUNDINGRULESTABLE]
+                                                    WHERE STATUS = 1
+                                                    ORDER BY FROMAMOUNT";
+            try
+            {
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+                    
+
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+
+                    }
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            rules.Add(new APIAccess.APIParameter.RoundingRule
+                            {
+                                FromAmount = Convert.ToInt32(reader["FROMAMOUNT"]),
+                                ToAmount = Convert.ToInt32(reader["TOAMOUNT"]),
+                                Rounding = Convert.ToInt32(reader["ROUNDING"])
+                            });
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(typeof(APIFunction).ToString(), ex);
+                throw;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+                }
+            }
+
+
+             
+            lastTwoDigits = (int)(originalAmount % 100);
+
+            foreach (var rule in rules)
+            {
+                if (lastTwoDigits >= rule.FromAmount && lastTwoDigits <= rule.ToAmount)
+                {
+                    if (rule.Rounding == 0)
+                    {
+                        return originalAmount - lastTwoDigits; // trim last 2 digits
+                    }
+                    else
+                    {
+                        int mod = lastTwoDigits % rule.Rounding;
+                        return originalAmount - mod;
+                    }
+                }
+            }
+
+            return originalAmount; // no rule matched
+        }
+
+
+        //public List<APIAccess.APIParameter.RoundingRule> GetRoundingRules(SqlConnection _connectionString)
+        //{
+            
+             
+
+        //    return rules;
+        //}
 
         public class DatabaseHelper
         {

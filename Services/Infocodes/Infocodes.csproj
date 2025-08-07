@@ -55,12 +55,18 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="WinFormsTouch\frmInfocodeSubCodeBase.cs" />
+    <Compile Include="WinFormsTouch\frmInfocodeSubCodeBase.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="WinFormsTouch\frmInfocodeSubCodeBase.designer.cs">
       <DependentUpon>frmInfocodeSubCodeBase.cs</DependentUpon>
     </Compile>
-    <Compile Include="WinFormsTouch\frmInfocodeSubCodeList.cs" />
-    <Compile Include="WinFormsTouch\frmInfoSubCode.cs" />
+    <Compile Include="WinFormsTouch\frmInfocodeSubCodeList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinFormsTouch\frmInfoSubCode.cs">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Dynamics.Retail.Notification.Contracts">

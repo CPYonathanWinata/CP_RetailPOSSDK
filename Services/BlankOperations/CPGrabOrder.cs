@@ -476,6 +476,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
             bool isFirstIteration = true;
             decimal priceAfterExponent = 0;
             string priceAfterExponentString = "";
+            decimal discAfterExponent = 0;
+            string discAfterExponentString = "";
             bool isAvail = true;
             string isAvailable = "Ya";
             decimal subTotal = 0;
@@ -666,7 +668,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
             {
                 foreach (var campaign in item.campaigns)
                 {
-
+                                                                                                       
                     var applicableItems = item.items.Where(i => campaign.appliedItemIDs.Contains(i.id)).ToList();
 
                     int totalQty = applicableItems.Sum(i => i.quantity);
@@ -722,7 +724,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     {
                         if (node.Attributes["ItemId"].Value == orderItem.id)
                         {
-                            remainQty = decimal.Parse(node.Attributes["QtyAvail"].Value, NumberStyles.Number, CultureInfo.CurrentCulture); //.Replace(",", ".")
+                            remainQty = Convert.ToDecimal(node.Attributes["QtyAvail"].Value.Replace(",", "."), CultureInfo.InvariantCulture);
+                            //remainQty = decimal.Parse(node.Attributes["QtyAvail"].Value, NumberStyles.Number, CultureInfo.CurrentCulture); //.Replace(",", ".")
                             itemId = node.Attributes["ItemId"].Value.ToString();
                             found = true;
                             break;
@@ -733,14 +736,24 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                         //}
                     }
                 }
-                
-                
-                //remainQty = itemNodes == null ? 0 : Convert.ToDecimal(itemNodes[indexRow].Attributes["QtyAvail"].Value.Replace(",", "."), CultureInfo.InvariantCulture);
-                priceAfterExponentString = orderItem.price.ToString().Substring(0, orderItem.price.ToString().Length - exponent);
 
-                decimal.TryParse(priceAfterExponentString, out priceAfterExponent);
+
+                //remainQty = itemNodes == null ? 0 : Convert.ToDecimal(itemNodes[indexRow].Attributes["QtyAvail"].Value.Replace(",", "."), CultureInfo.InvariantCulture);
+                //priceAfterExponentString = orderItem.price.ToString().Substring(0, orderItem.price.ToString().Length - exponent);
+                //decimal.TryParse(priceAfterExponentString, out priceAfterExponent);
+
+                priceAfterExponent = orderItem.price / (decimal)Math.Pow(10, exponent);
+
+
+                //if (orderItem.discAmt != null && orderItem.discAmt != 0)
+                discAfterExponent = orderItem.discAmt / (decimal)Math.Pow(10, exponent);
+
+                //discAfterExponentString = orderItem.discAmt.ToString().Substring(0, orderItem.discAmt.ToString().Length - exponent);
+                //decimal.TryParse(discAfterExponentString, out discAfterExponent);
+
                 subTotal = (priceAfterExponent * orderItem.quantity);
-                grandTotal += subTotal - (orderItem.discAmt*orderItem.quantity);
+                grandTotal += subTotal - (discAfterExponent * orderItem.quantity); //(orderItem.discAmt*orderItem.quantity);
+
 
                 //if(itemNodes != null)
                 if (found == true) //found in XML
@@ -936,7 +949,10 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
             string result = "";
             SaleLineItem saleLineItem;
             decimal priceAfterExponent = 0;
+            decimal discAfterExponent = 0;
             string priceAfterExponentString = "";
+            string discAfterExponentString = "";
+
             if (findFalse == 0)
             {
 
@@ -981,8 +997,42 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     //}
                     //BlankOperations.globalposTransaction
                     //Microsoft.Dynamics.Retail.Pos.BlankOperations.BlankOperations.globalposTransaction
+
+
+                  
+
                     RetailTransaction grabPosTransaction = BlankOperations.grabPosTransaction as RetailTransaction;
 
+
+                    //Disable Cust Disc 06082025 - Yonathan
+
+                    int indexLines = 0;
+
+                    string isB2bCust = APIAccess.APIAccessClass.isB2b;
+                    string priceGroup = APIAccess.APIAccessClass.priceGroup;//.ToString();
+                    string lineDiscGroup = APIAccess.APIAccessClass.lineDiscGroup;//.ToString();
+                    if (isB2bCust == "0")
+                    {
+                        foreach (var salesLine in grabPosTransaction.CalculableSalesLines)
+                        {
+
+                            foreach (var lineDiscount in salesLine.DiscountLines.ToList())
+                            {
+
+                                if (lineDiscount.ToString() == "LSRetailPosis.Transaction.Line.Discount.CustomerDiscountItem")
+                                {
+
+                                    salesLine.DiscountLines.Remove(lineDiscount);
+
+
+                                }
+                                indexLines++;
+                            }
+
+                        }
+                    }
+                    //end
+                    //add a grab discount
                     foreach (var itemSale in grabPosTransaction.SaleItems)
                     {
                         IApplication applicationLocal = PosApplication.Instance as IApplication;
@@ -990,9 +1040,16 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                         var orderItem = itemDetails.items.FirstOrDefault(item => item.id == itemSale.ItemId);
 
 
-                        priceAfterExponentString = foundItem.price.ToString().Substring(0, foundItem.price.ToString().Length - exponent);
+                        //priceAfterExponentString = foundItem.price.ToString().Substring(0, foundItem.price.ToString().Length - exponent);
 
-                        decimal.TryParse(priceAfterExponentString, out priceAfterExponent);
+                        //decimal.TryParse(priceAfterExponentString, out priceAfterExponent);
+
+                        //discAfterExponentString = orderItem.discAmt.ToString().Substring(0, orderItem.discAmt.ToString().Length - exponent);
+                        //decimal.TryParse(discAfterExponentString, out discAfterExponent);
+
+                        priceAfterExponent = orderItem.price / (decimal)Math.Pow(10, exponent);
+                        discAfterExponent = orderItem.discAmt / (decimal)Math.Pow(10, exponent);
+
 
 
 
@@ -1005,13 +1062,18 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                         //salesLine.TradeAgreementPriceGroup = result[1];
                         itemSale.TradeAgreementPrice = priceAfterExponent;
 
+                        itemSale.ClearPeriodicDiscounts();
+                        itemSale.ClearCustomerDiscountLines(true);
+
                         LSRetailPosis.Transaction.Line.Discount.CustomerDiscountItem custDiscountManual = new LSRetailPosis.Transaction.Line.Discount.CustomerDiscountItem();
 
-                        custDiscountManual.Amount = orderItem.discAmt;
+                        custDiscountManual.Amount = discAfterExponent; //orderItem.discAmt;
                         //custDiscountManual.Percentage = Convert.ToDecimal(resultDisc[2]);
+
                         applicationLoc.Services.Discount.AddDiscountLine(itemSale, custDiscountManual);
 
                         applicationLoc.Services.Tax.CalculateTax(itemSale, grabPosTransaction);
+
                        
                        
 
@@ -1178,8 +1240,10 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     APIAccess.APIAccessClass.grabOrderIdLong = orderIdLong;
                     //applicationLoc.RunOperation(PosisOperations.BlankOperation, "102", BlankOperations.grabPosTransactionDisc);
                     transaction = grabPosTransaction; // (RetailTransaction)BlankOperations.grabPosTransactionDisc; 
+                    //applicationLoc.BusinessLogic.ItemSystem.CalculatePriceTaxDiscount(transaction);
                     transaction.CalcTotals();
                     transaction.Save();
+                    //BlankOperations.grabPosTransaction = grabPosTransaction;
                     //BlankOperations.grabPosTransaction = grabPosTransaction;
                     //applicationLoc.RunOperation(PosisOperations.BlankOperation, "95", grabPosTransaction);
                     //applicationLoc.RunOperation(PosisOperations.BlankOperation, "102", grabPosTransaction);

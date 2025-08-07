@@ -279,9 +279,34 @@ namespace APIAccess
 
         }
 
-        
 
+        //for rounding
+        public class RoundingRule
+        {
+            public int FromAmount { get; set; }
+            public int ToAmount { get; set; }
+            public int Rounding { get; set; }
+        }
         //
+
+        public static class RoundingDataStore
+        {
+            private static readonly List<RoundingData> _items = new List<RoundingData>();
+
+            public static List<RoundingData> Items
+            {
+                get { return _items; }
+            }
+        }
+
+        public class RoundingData
+        {
+            public string TransId { get; set; }
+            public int LineNum { get; set; }
+            public string ItemId { get; set; }
+            public decimal Rounding { get; set; }
+        }
+
         public static MySql.Data.MySqlClient.MySqlConnection mySqlConnString;
     }
 }

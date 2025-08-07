@@ -352,6 +352,11 @@ namespace Microsoft.Dynamics.Retail.Pos.ItemTriggers
 
             var retailTransaction = posTransaction as RetailTransaction;
             //add a code to delete the ppn if the itemline is zero - yonathan 16/07/2024
+
+            //remove the line rounding  #CPPOSDISCOUNTROUNDING - Yonathan 15072025
+            APIAccess.APIParameter.RoundingDataStore.Items.RemoveAll(r => r.LineNum == lineId);
+
+            
             if (retailTransaction.SaleItems.Count == 0)
             {
                 taxGroupId = "";
