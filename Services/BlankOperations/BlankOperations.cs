@@ -612,8 +612,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                             RetailTransaction transaction = posTransaction as RetailTransaction;
 
                              
-                            //string tenderId = "19"; //for DEV 
-                            string tenderId = "16"; //for PROD
+                            string tenderId = "19"; //for DEV 
+                            //string tenderId = "16"; //for PROD
                             if (!validateCustomer(posTransaction, tenderId))
                             {
                                 using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Please Choose Correct Customer", MessageBoxButtons.OK, MessageBoxIcon.Stop))
@@ -731,10 +731,9 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                         if (posTransaction.ToString() == "LSRetailPosis.Transaction.RetailTransaction")
 						{
 							DE customer = ((RetailTransaction)posTransaction).Customer;
+                            
 
-                            if (!string.IsNullOrEmpty(customer.CustomerId) && transaction.SaleItems.Count != 0)
-
-                            //if ((customer.CustomerId != null || customer.CustomerId == "") && transaction.SaleItems.Count != 0)
+                            if ((customer.CustomerId != null || customer.CustomerId == "") && transaction.SaleItems.Count != 0)
                             {
                                 if (customer.CustomerId != "")
                                 {
@@ -760,7 +759,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                                     foreach (var discountLines in lineItem.PeriodicDiscountLines)
                                     {
                                         PeriodicDiscountItem periodDiscItem = discountLines as PeriodicDiscountItem;
-                                        if (periodDiscItem.OfferId.StartsWith("PDI") || periodDiscItem.OfferId.StartsWith("PDIS"))  //if (periodDiscItem.OfferId.StartsWith("ED") || periodDiscItem.OfferId.StartsWith("QS")) //
+                                        if (periodDiscItem.OfferId.StartsWith("ED") || periodDiscItem.OfferId.StartsWith("QS")) //if (periodDiscItem.OfferId.StartsWith("PDI") || periodDiscItem.OfferId.StartsWith("PDIS"))  //
                                         {
                                             using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Tidak bisa akses ke menu ini karena sudah mendapat diskon", MessageBoxButtons.OK, MessageBoxIcon.Stop))
                                             {
@@ -784,7 +783,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                             }
                             else
                             {
-                                using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Please add item first or choose customer", MessageBoxButtons.OK, MessageBoxIcon.Stop))
+                                using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Please choose customer", MessageBoxButtons.OK, MessageBoxIcon.Stop))
                                 {
                                     LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
                                     return;
@@ -793,7 +792,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                         }
                         else
                         {
-                            using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Please Choose Customer", MessageBoxButtons.OK, MessageBoxIcon.Stop))
+                            using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Please add item first or choose customer", MessageBoxButtons.OK, MessageBoxIcon.Stop))
                             {
                                 LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
                                 return;
@@ -815,10 +814,9 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                         {
                             DE customer = ((RetailTransaction)posTransaction).Customer;
 
+                           
 
-                            if (!string.IsNullOrEmpty(customer.CustomerId))
-
-                            //if ((customer.CustomerId != null || customer.CustomerId != "") )//&& transaction.SaleItems.Count != 0)                             
+                            if ((customer.CustomerId != null || customer.CustomerId == "") )//&& transaction.SaleItems.Count != 0)                             
                             //if ( transaction.SaleItems.Count != 0)
                             {
                                  //check 
@@ -847,11 +845,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                                     {
                                         PeriodicDiscountItem periodDiscItem = discountLines as PeriodicDiscountItem;
                                         //this to exclude the other discount ID
-                                        if (periodDiscItem.OfferId.StartsWith("PDI")) //if (periodDiscItem.OfferId.StartsWith("ED")) //
+                                        if (periodDiscItem.OfferId.StartsWith("ED")) //if (periodDiscItem.OfferId.StartsWith("PDI")) //
                                         {
                                             //promoID = periodDiscItem.OfferId;
                                         }
-                                        else if (periodDiscItem.OfferId.StartsWith("PDIS"))
+                                        else if (periodDiscItem.OfferId.StartsWith("QS"))
                                         {
                                             using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Tidak bisa akses ke menu ini karena sudah mendapat diskon", MessageBoxButtons.OK, MessageBoxIcon.Stop))
                                             {
@@ -883,16 +881,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                         }
                         else
                         {
-                            using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Please Choose Customer", MessageBoxButtons.OK, MessageBoxIcon.Stop))
+                            using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Please add item first or choose customer", MessageBoxButtons.OK, MessageBoxIcon.Stop))
                             {
                                 LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
                                 return;
                             }
-                            //using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Please add item first", MessageBoxButtons.OK, MessageBoxIcon.Stop))
-                            //{
-                            //    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
-                            //    return;
-                            //}
                         }
                         
                         Application.RunOperation(PosisOperations.DisplayTotal, "");
@@ -930,9 +923,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                             DE customer = ((RetailTransaction)posTransaction).Customer;
 
 
-                            if (!string.IsNullOrEmpty(customer.CustomerId))
 
-                            //if ((customer.CustomerId != null || customer.CustomerId == "") )//&& transaction.SaleItems.Count != 0)
+                            if ((customer.CustomerId != null || customer.CustomerId == "") )//&& transaction.SaleItems.Count != 0)
                             //if ( transaction.SaleItems.Count != 0)
                             {
                                 //check 
@@ -978,12 +970,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 
 
                                         //this to exclude the other discount ID
-                                        //if (periodDiscItem.OfferId.StartsWith("QS")) 
-                                        if (periodDiscItem.OfferId.StartsWith("PDIS")) //
+                                        if (periodDiscItem.OfferId.StartsWith("QS")) //if (periodDiscItem.OfferId.StartsWith("PDIS")) //
                                         {
                                             //promoID = periodDiscItem.OfferId;
                                         }
-                                        else if (periodDiscItem.OfferId.StartsWith("PDI"))
+                                        else if (periodDiscItem.OfferId.StartsWith("ED"))
                                         {
                                             using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Tidak bisa akses ke menu ini karena sudah mendapat diskon", MessageBoxButtons.OK, MessageBoxIcon.Stop))
                                             {
@@ -1013,16 +1004,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                         }
                         else
                         {
-                            using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Please Choose Customer", MessageBoxButtons.OK, MessageBoxIcon.Stop))
+                            using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Please add item first or choose customer", MessageBoxButtons.OK, MessageBoxIcon.Stop))
                             {
                                 LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
                                 return;
                             }
-                            //using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Please add item first", MessageBoxButtons.OK, MessageBoxIcon.Stop))
-                            //{
-                            //    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
-                            //    return;
-                            //}
                         }
 
                         Application.RunOperation(PosisOperations.DisplayTotal, "");
@@ -1204,6 +1190,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                         
 
                         Application.RunOperation(PosisOperations.DisplayTotal, "");
+
+                        //Application.RunOperation(PosisOperations.LineDiscountAmount);
                          
                     }
                     break;
@@ -1278,7 +1266,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                         SaleLineItem saleLineItem;
                         RetailTransaction transaction = posTransaction as RetailTransaction;
 
-                        decimal priceToOverride = 21300;
+                        decimal priceToOverride = 12378.97m;
 
 
                         for (int i = 0; i < ((RetailTransaction)posTransaction).SaleItems.Count; i++)
@@ -1526,17 +1514,40 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                             salesLine.TradeAgreementPrice = amountTA;
 
                             LSRetailPosis.Transaction.Line.Discount.CustomerDiscountItem custDiscountManual = new LSRetailPosis.Transaction.Line.Discount.CustomerDiscountItem();
-
+                            
                             custDiscountManual.Amount = amountDisc;
                             //custDiscountManual.Percentage = Convert.ToDecimal(resultDisc[2]);
-                            Application.Services.Discount.AddDiscountLine(salesLine, custDiscountManual);
-                                        
+                            
+                            Application.Services.Discount.AddDiscountLine(salesLine, custDiscountManual);                                
                             Application.Services.Tax.CalculateTax(salesLine, transaction);
+                            salesLine.CalculateLine();
+                            
+                            salesLine.CalculateLinePercentDiscount();
                         }
+
+                        //transaction.
+                        //Application.Services.Discount.CalculateDiscount(transaction);
                         transaction.CalcTotals();
                         transaction.Save();
                         //end
                     }
+                    break;
+                case "104":
+
+                    {
+                        RetailTransaction transaction = posTransaction as RetailTransaction;
+                        PosApplication.Instance.Services.Rounding.Round(transaction.TaxAmount, false);
+
+                    }
+                    
+                    break;
+                case "105":
+                    {
+                        RetailTransaction transaction = posTransaction as RetailTransaction;
+                        PosApplication.Instance.Services.Rounding.Round(transaction.TaxAmount, false);
+
+                    }
+
                     break;
                 //Application.RunOperation(PosisOperations.PayCard, string.Empty, posTransaction);
                 //CP_SalesOrderDetail cpSalesDetail = new CP_SalesOrderDetail(Application);

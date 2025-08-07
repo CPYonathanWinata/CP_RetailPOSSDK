@@ -263,6 +263,11 @@ namespace Microsoft.Dynamics.Retail.Pos.RoundingService
             return RoundToUnit(value, roundingValue, (TenderRoundMethod)roundingMethod);
         }
 
+        public string RoundAmount(decimal value, string storeId, string tenderTypeId, string currencyCode, bool useCurrencySymbol)
+        {
+            return value.ToString(NumberFormat(value)); 
+        }
+
         /// <summary>
         /// Standard round to minimal coin/amount in defined currency
         /// </summary>
@@ -907,5 +912,131 @@ namespace Microsoft.Dynamics.Retail.Pos.RoundingService
         }
 
         #endregion
+
+
+        //custom by Yonathan for rounding 07082025
+        #region Custom 
+
+        public static bool CheckTableRounding(SqlConnection _connectionString)
+        {
+            string tableName = "CPROUNDINGRULESTABLE";
+            SqlConnection connection = _connectionString;
+            string query = @"
+                SELECT COUNT(*) 
+                FROM INFORMATION_SCHEMA.TABLES 
+                WHERE TABLE_NAME = @TableName";
+
+            try
+            {
+                using (SqlCommand command = new SqlCommand(query, connection))
+                { 
+                    command.Parameters.AddWithValue("@TableName", tableName);
+
+                    connection.Open();
+                    int count = (int)command.ExecuteScalar();
+                    return count > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                //LSRetailPosis.ApplicationExceptionHandler.HandleException(typeof(APIFunction).ToString(), ex);
+                throw;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+                }
+            }
+        }
+
+        public static decimal GetRoundedAmount(decimal originalAmount, out int lastTwoDigits, SqlConnection _connectionString)
+        {
+            lastTwoDigits = 0;
+            decimal roundAmount = 0;
+            //var rules = new List<APIAccess.APIParameter.RoundingRule>();
+
+            decimal baseAmount = originalAmount - (originalAmount % 100);
+            //int lastTwoDigits = originalAmount % 100;
+            lastTwoDigits = (int)(originalAmount % 100);
+            SqlConnection connection = _connectionString;
+            string queryString = @"SELECT TOP 1 ROUNDING
+                                    FROM [ax].[CPROUNDINGRULESTABLE]
+                                    WHERE STATUS = 1 AND
+                                    @LastTwoDigits BETWEEN FROMAMOUNT AND TOAMOUNT
+                                    ORDER BY FROMAMOUNT";
+            try
+            {
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+                    command.Parameters.Add("@LastTwoDigits", lastTwoDigits);
+
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+
+                    }
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+
+                            //rules.Add(new APIAccess.APIParameter.RoundingRule
+                            //{
+                            //    FromAmount = Convert.ToInt32(reader["FROMAMOUNT"]),
+                            //    ToAmount = Convert.ToInt32(reader["TOAMOUNT"]),
+                            roundAmount = Convert.ToInt32(reader["ROUNDING"]);
+                            //});
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                //LSRetailPosis.ApplicationExceptionHandler.HandleException(typeof(APIFunction).ToString(), ex);
+                throw;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+                }
+            }
+
+
+
+
+            if (roundAmount == 0)
+            {
+                return baseAmount;
+            }
+            else
+            {
+                return baseAmount + roundAmount;
+            }
+            //else if (roundAmount == 50)
+            //{
+            //    // Round down to nearest multiple of 50
+            //    decimal
+            // rounded = baseAmount + (lastTwoDigits / 50) * 50;
+            //    return rounded;
+            //}
+            //else if (roundAmount == 100)
+            //{
+            //    // Always round up to next hundred if not already on it
+            //    return (originalAmount % 100 == 0) ? originalAmount : baseAmount + 100;
+            //}
+
+            //// fallback: return original
+            return originalAmount;
+        }
+
+        #endregion  
+
     }
 }
