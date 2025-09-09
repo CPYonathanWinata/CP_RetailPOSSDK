@@ -87,7 +87,7 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
 
 
 
-                if (transaction.Comment == "PAYMENTDISCOUNT" || transaction.Comment == "PROMOED" || transaction.Comment == "PROMORCPT") //if (transaction.Comment == "PAYMENTDISCOUNT"  || transaction.Comment == "PROMOPDI" || transaction.Comment == "PROMOPDIS")                                  
+                if (transaction.Comment == "PAYMENTDISCOUNT" || transaction.Comment == "PROMOPDI" || transaction.Comment == "PROMOPDIS") //if (transaction.Comment == "PAYMENTDISCOUNT" || transaction.Comment == "PROMOED" || transaction.Comment == "PROMORCPT") //
                 {
 
                     /*
@@ -733,7 +733,7 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
 
                                         }
 
-                                        //salelineitems.NetAmountWithNoTax = 16900;
+                                        //salelineitems.NetAmountWithNoTax = 16900; 
                                         //salelineitems.NetAmountWithAllInclusiveTaxPerUnit = 16900;
                                         //salelineitems.NetAmountWithTax = 16900;
 
@@ -776,7 +776,7 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
                             {
                                 typeof(RetailTransaction)
                                 .GetProperty("TransSalePmtDiff")
-                                .SetValue(transaction, transaction.NetAmountWithTax - (APIAccess.APIParameter.RoundingDataStore.Items.Sum(r => Math.Round(r.Rounding, 2))));
+                                .SetValue(transaction, transaction.NetAmountWithTax - transaction.Payment - (APIAccess.APIParameter.RoundingDataStore.Items.Sum(r => Math.Round(r.Rounding, 2))));
 
                             }
                             else
@@ -785,7 +785,7 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
                                 {
                                     typeof(RetailTransaction)
                                    .GetProperty("TransSalePmtDiff")
-                                   .SetValue(transaction, transaction.NetAmountWithTax - (APIAccess.APIParameter.RoundingDataStore.Items.Sum(r => Math.Round(r.Rounding, 2))));
+                                   .SetValue(transaction, transaction.NetAmountWithTax - transaction.Payment - (APIAccess.APIParameter.RoundingDataStore.Items.Sum(r => Math.Round(r.Rounding, 2))));
                                 }
                                 else
                                 {

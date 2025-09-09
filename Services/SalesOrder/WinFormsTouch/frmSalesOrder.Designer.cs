@@ -299,7 +299,6 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             this.lblOrder.Size = new System.Drawing.Size(94, 25);
             this.lblOrder.TabIndex = 4;
             this.lblOrder.Text = "Order type:";
-            this.lblOrder.Visible = true;
             // 
             // orderBox
             // 
@@ -309,11 +308,10 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             this.orderBox.Items.AddRange(new object[] {
             "POS Order",
             "Online Order"});
-            this.orderBox.Location = new System.Drawing.Point(33, 461);
+            this.orderBox.Location = new System.Drawing.Point(33, 492);
             this.orderBox.Name = "orderBox";
             this.orderBox.Size = new System.Drawing.Size(271, 33);
             this.orderBox.TabIndex = 6;
-            this.orderBox.Visible = true;
             // 
             // btnCustomerSearch
             // 

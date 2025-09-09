@@ -145,7 +145,7 @@ namespace Microsoft.Dynamics.Retail.Pos.LogOn
         {
             bool result = true;
             IUserAccessSystem userAccess = Application.BusinessLogic.UserAccessSystem;
-
+            //MessageBox.Show(string.Format("{0}-{1}", operatorID, operation));
             if (!userAccess.UserHasAccess(operatorID, operation))
             {
                 ManagerAccessConfirmation managerAccessInteraction = new ManagerAccessConfirmation() { Operation = (int)operation };

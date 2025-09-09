@@ -359,7 +359,7 @@ namespace Microsoft.Dynamics.Retail.Pos.ItemTriggers
             
             if (retailTransaction.SaleItems.Count == 0)
             {
-                taxGroupId = "";
+                taxGroupId = ""; 
             }
             //
 

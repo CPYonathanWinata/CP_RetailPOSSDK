@@ -925,16 +925,29 @@ namespace Microsoft.Dynamics.Retail.Pos.RoundingService
                 SELECT COUNT(*) 
                 FROM INFORMATION_SCHEMA.TABLES 
                 WHERE TABLE_NAME = @TableName";
-
+            
             try
             {
+                //check table exist
                 using (SqlCommand command = new SqlCommand(query, connection))
-                { 
+                {
                     command.Parameters.AddWithValue("@TableName", tableName);
 
                     connection.Open();
                     int count = (int)command.ExecuteScalar();
-                    return count > 0;
+                    if (count == 0)
+                    {
+                        // Tabel tidak ada
+                        return false;
+                    } //return count > 0;
+                }
+
+                //check record exist
+                string queryCheckRec = "SELECT COUNT(*) FROM [ax].[" + tableName + "]";
+                using (SqlCommand cmdCheckRecord = new SqlCommand(queryCheckRec, connection))
+                {
+                    int recordCount = (int)cmdCheckRecord.ExecuteScalar();
+                    return recordCount > 0;
                 }
             }
             catch (Exception ex)
@@ -951,6 +964,54 @@ namespace Microsoft.Dynamics.Retail.Pos.RoundingService
                 }
             }
         }
+
+        public static bool CheckTableRounding2(SqlConnection connection)
+        {
+            string tableName = "CPROUNDINGRULESTABLE";
+
+
+            try
+            {
+                connection.Open();
+
+                //check table exist
+                using (SqlCommand cmdCheckTable = new SqlCommand(
+                    "SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = @TableName",
+                    connection))
+                {
+                    cmdCheckTable.Parameters.AddWithValue("@TableName", tableName);
+
+                    int tableExists = (int)cmdCheckTable.ExecuteScalar();
+                    if (tableExists == 0)
+                    {
+                        // Tabel tidak ada
+                        return false;
+                    }
+                }
+
+                //check record exist
+                using (SqlCommand cmdCheckRecord = new SqlCommand(
+                    "SELECT COUNT(*) FROM " + tableName,
+                    connection))
+                {
+                    int recordCount = (int)cmdCheckRecord.ExecuteScalar();
+                    return recordCount > 0;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+                }
+            }
+        }
+
+
 
         public static decimal GetRoundedAmount(decimal originalAmount, out int lastTwoDigits, SqlConnection _connectionString)
         {

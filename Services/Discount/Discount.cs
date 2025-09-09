@@ -275,7 +275,7 @@ namespace Microsoft.Dynamics.Retail.Pos.DiscountService
                 //        //LSRetailPosis.POSControls.POSFormsManager.ShowPOSStatusPanelText(string.Format("{0} {1}. Changed quantity", currentLine.Description, currentLine.ItemId));
                 //    }
                 //    catch (Exception ex)
-                //    {
+                //    { 
                 //        LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
                 //    }
                 //}

@@ -238,7 +238,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 					{
 						selectCustomerEzeelink(posTransaction);
 						break;
-					}
+					} 
 
 				case "6":
 					{
@@ -611,9 +611,9 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 							DE customer = ((RetailTransaction)posTransaction).Customer;
                             RetailTransaction transaction = posTransaction as RetailTransaction;
 
-                             
-                            string tenderId = "19"; //for DEV 
-                            //string tenderId = "16"; //for PROD
+                             //GMT TenderID
+                            //string tenderId = "19"; //for DEV 
+                            string tenderId = "16"; //for PROD
                             if (!validateCustomer(posTransaction, tenderId))
                             {
                                 using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Please Choose Correct Customer", MessageBoxButtons.OK, MessageBoxIcon.Stop))
@@ -759,7 +759,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                                     foreach (var discountLines in lineItem.PeriodicDiscountLines)
                                     {
                                         PeriodicDiscountItem periodDiscItem = discountLines as PeriodicDiscountItem;
-                                        if (periodDiscItem.OfferId.StartsWith("ED") || periodDiscItem.OfferId.StartsWith("QS")) //if (periodDiscItem.OfferId.StartsWith("PDI") || periodDiscItem.OfferId.StartsWith("PDIS"))  //
+                                        if (periodDiscItem.OfferId.StartsWith("PDI") || periodDiscItem.OfferId.StartsWith("PDIS")) //if (periodDiscItem.OfferId.StartsWith("ED") || periodDiscItem.OfferId.StartsWith("QS")) //  //
                                         {
                                             using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Tidak bisa akses ke menu ini karena sudah mendapat diskon", MessageBoxButtons.OK, MessageBoxIcon.Stop))
                                             {
@@ -845,11 +845,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                                     {
                                         PeriodicDiscountItem periodDiscItem = discountLines as PeriodicDiscountItem;
                                         //this to exclude the other discount ID
-                                        if (periodDiscItem.OfferId.StartsWith("ED")) //if (periodDiscItem.OfferId.StartsWith("PDI")) //
+                                        if (periodDiscItem.OfferId.StartsWith("PDI")) //if (periodDiscItem.OfferId.StartsWith("ED")) //if (periodDiscItem.OfferId.StartsWith("PDI")) //
                                         {
                                             //promoID = periodDiscItem.OfferId;
                                         }
-                                        else if (periodDiscItem.OfferId.StartsWith("QS"))
+                                        else if (periodDiscItem.OfferId.StartsWith("PDIS")) //if (periodDiscItem.OfferId.StartsWith("QS"))
                                         {
                                             using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Tidak bisa akses ke menu ini karena sudah mendapat diskon", MessageBoxButtons.OK, MessageBoxIcon.Stop))
                                             {
@@ -970,11 +970,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 
 
                                         //this to exclude the other discount ID
-                                        if (periodDiscItem.OfferId.StartsWith("QS")) //if (periodDiscItem.OfferId.StartsWith("PDIS")) //
+                                        if (periodDiscItem.OfferId.StartsWith("PDIS"))//if (periodDiscItem.OfferId.StartsWith("QS")) //if (periodDiscItem.OfferId.StartsWith("PDIS")) //
                                         {
                                             //promoID = periodDiscItem.OfferId;
                                         }
-                                        else if (periodDiscItem.OfferId.StartsWith("ED"))
+                                        else if (periodDiscItem.OfferId.StartsWith("PDI"))
                                         {
                                             using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Tidak bisa akses ke menu ini karena sudah mendapat diskon", MessageBoxButtons.OK, MessageBoxIcon.Stop))
                                             {

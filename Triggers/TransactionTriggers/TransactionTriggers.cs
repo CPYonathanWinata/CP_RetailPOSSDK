@@ -363,7 +363,7 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 			}
             //clear the value - 16012025
             APIFunction.clearRetailTransExtended();
-            
+             
 		 
 		}
 

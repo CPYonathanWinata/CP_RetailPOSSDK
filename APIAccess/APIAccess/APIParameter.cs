@@ -281,7 +281,7 @@ namespace APIAccess
 
 
         //for rounding
-        public class RoundingRule
+        public class RoundingRule 
         {
             public int FromAmount { get; set; }
             public int ToAmount { get; set; }
