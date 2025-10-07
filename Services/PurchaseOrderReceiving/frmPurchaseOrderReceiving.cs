@@ -44,6 +44,7 @@ using System.ComponentModel.Composition;
 using Microsoft.Dynamics.Retail.Pos.Contracts;
 using System.Printing;
 using System.Management;
+using APIAccess;
 
 namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
 {
@@ -62,7 +63,8 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
         private PRCountingType prType;
         private bool isMixedDeliveryMode = false;
         decimal quantityTotal;
-
+        public APIAccess.APIParameter.parmResponsePOStatus responseAPI;
+        public int printStat = 2; //2 means not from PDT
         string errorPrinter = "Tidak bisa melakukan print !!!\nSebelum hubungi Tim IT, pastikan :\n- Printer sudah on/menyala\n- Default Printer \"EPSON LX 310 ESC/P\"\n- Posisi kertas struk terpasang dengan benar\n- Semua kabel USB tidak kendor\n\nKemudian coba print ulang ";//dengan tekan tombol \"Reprint\"";
         //Begin add line NEC
         int Offset = 0;
@@ -121,6 +123,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
 
         protected override void OnLoad(EventArgs e)
         {
+            
             if (!this.DesignMode)
             {
                 receiptData = new PurchaseOrderReceiptData(
@@ -146,6 +149,12 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             TranslateLabels();
             base.OnLoad(e);
             //<CP_POTOCancel>
+            //check PO from API
+            string url = "";
+            APIAccess.APIAccessClass APIClass = new APIAccess.APIAccessClass();
+            url = APIClass.getURLAPIByFuncName("GetStatusPOTO");
+            responseAPI = APIFunction.getPOAPI(url, ApplicationSettings.Database.DATAAREAID, txtPoNumber.Text.ToString()); 
+
             if (!string.IsNullOrEmpty(this.cpGetDataDocumentBuffer()))
             {
                 btnCommit.Visible = false;
@@ -156,10 +165,50 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                 //additional by Yonathan to enable the reprint button 23072024
                 btnReprint.Visible = true;
                 //end
+                if (responseAPI.response_data != "") //If found, then it's received via PDT
+                {
+                    APIAccess.APIParameter.responsePOData responsePOData = APIFunction.MyJsonConverter.Deserialize<APIParameter.responsePOData>(responseAPI.response_data);
+                    printStat = responsePOData.STAT_PRINT;
+                }
             }
             else
             {
-                btnReprint.Visible = false;
+                //check API to make sure it receive from PDT
+                //string url="";
+                //APIAccess.APIAccessClass APIClass = new APIAccess.APIAccessClass();
+                //url = APIClass.getURLAPIByFuncName("GetStatusPOTO");
+                //responseAPI = APIFunction.getPOAPI(url, ApplicationSettings.Database.DATAAREAID, txtPoNumber.Text.ToString()); 
+                //APIAccess.APIParameter.parmResponsePOStatus responsePOStatus = APIFunction.MyJsonConverter.Deserialize<APIParameter.parmResponsePOStatus>(responseAPI);
+                //APIAccess.APIParameter.Data[] order = APIAccess.APIFunction.MyJsonConverter.Deserialize<APIAccess.APIParameter.Data[]>(responseAPI.data);
+                if (responseAPI.response_data != "") //If found, then it's received via PDT
+                {
+                    APIAccess.APIParameter.responsePOData responsePOData = APIFunction.MyJsonConverter.Deserialize<APIParameter.responsePOData>(responseAPI.response_data);
+
+                    printStat = responsePOData.STAT_PRINT;
+
+                    btnCommit.Visible = false;
+                    numPad1.Visible = false;
+                    txtDelivery.Visible = false; //temp disable 22072024
+                    txtDriver.Visible = false;
+
+                    //additional by Yonathan to enable the reprint button 23072024
+                    btnReprint.Visible = true;
+                    //end
+                }
+                else
+                {
+                    btnReprint.Visible = false;
+                }
+                //btnReprint.Visible = false;
+            }
+
+             if (printStat == 1 || printStat == 2)
+            {
+                btnReprint.Text = "Reprint";
+            }
+            else if (printStat == 0)
+            {
+                btnReprint.Text = "Print";
             }
 
             btnSave.Visible = false;
@@ -858,114 +907,285 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             }
         }
 
+        //for reprint either from PDT or POS 10092025 - Yonathan
         private void btnReprint_Click(object sender, EventArgs s)
         {
             string tempDriverDetails;
+            string printDocName = "REPRINT";
+            string url = "";
             LoadReceiptLinesFromDB();
             Offset = 0;
-            
+
             try
             {
                 LoadReceiptLinesFromDB();
-                //Begin add NEC hmz to manipulate PO Id with driver Details
-                if (this.prType == PRCountingType.PurchaseOrder)// || this.prType == PRCountingType.TransferIn)
+                if (this.prType == PRCountingType.PurchaseOrder)
                     tempDriverDetails = this.PONumber + "-" + txtDelivery.Text;
                 else
                     tempDriverDetails = this.PONumber;
-                //End add NEC hmz
-
-                // Commit receipt to AX via webservice
-                // Begin modify line NEC - to pass tempDriverDetails
-                //IPRDocument prDoc = PurchaseOrderReceiving.InternalApplication.Services.StoreInventoryServices.CommitOrderReceipt(tempDriverDetails, this.ReceiptNumber, this.prType);
 
                 tempDriverDetails = this.PONumber;
-                // Remove rows that are successfully submitted
-                List<DataRow> removeRows = new List<DataRow>();
 
-                //string sHeader =   "     -------------- " + Environment.NewLine +
-                //                   "         REPRINT " + Environment.NewLine +
-                //                   "     --------------" + Environment.NewLine;
-
-                string sHeader="";
-                string printerName = "";
-                string sPrint = "";
-            
-                printerName = LSRetailPosis.Settings.HardwareProfiles.Printer.DeviceName;
-                if (printerName == "EPSON LX-310 ESC/P")
+               
+                if (printStat == 1 || printStat == 2)
                 {
-                    sHeader = "\t** REPRINT ** \r\n";
-                    sPrint = this.ReceiveDocumentFormat("REPRINT");
+                    PrintReceipt("REPRINT");
                 }
-                else
+                else if (printStat == 0)
                 {
-                    sHeader = "   ** REPRINT ** \r\n";
-                    sPrint = this.ReceiveDocumentFormatThermal("REPRINT"); 
+                    PrintReceipt("ORIGINAL");
+                    PrintReceipt("COPY");
                 }
-                PrintDocument p = new PrintDocument();
-                PrintDialog pd = new PrintDialog();
-                PaperSize psize = new PaperSize("Custom", 100, Offset + 236);
-                Margins margins = new Margins(0, 0, 0, 0);
-                int normal = 7;
-                int bigger = 12;
-                Font normalFont = new Font("Lucida Console", normal);
-                Font biggerFont = new Font("Lucida Console", bigger);
-
-                pd.Document = p;
-                pd.Document.DefaultPageSettings.PaperSize = psize;
-                pd.Document.DefaultPageSettings.Margins = margins;
-                p.DefaultPageSettings.PaperSize.Width = 600;
-
-                bool isPrinterOffline = checkPrinterStatus(p);                
-
-                
-
-                if (isPrinterOffline == false)
-                {
-                    p.PrintPage += delegate(object sender1, PrintPageEventArgs e1)
-                    {
-                        SolidBrush brush = new SolidBrush(Color.Black);
-                        float leftMargin = p.DefaultPageSettings.PrintableArea.Left;
-                        float yPos = 0;
-
-                        string[] headerLines = sHeader.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
-                        foreach (string line in headerLines)
-                        {
-                            e1.Graphics.DrawString(line, biggerFont, brush, leftMargin, yPos);
-                            yPos += normalFont.GetHeight(e1.Graphics);
-                        }
-
-                        string[] printLines = sPrint.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
-                        foreach (string line in printLines)
-                        {
-                            e1.Graphics.DrawString(line, normalFont, brush, leftMargin, yPos);
-                            yPos += normalFont.GetHeight(e1.Graphics);
-                        }
-                    };
-
-                    try
-                    {
-                        p.Print();
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception("Exception Occurred While Printing", ex);
-                    }
-                }
-                else
-                {
-                    using (frmMessage frm = new frmMessage(errorPrinter, MessageBoxButtons.OK, MessageBoxIcon.Error))
-                    {
-                        POSFormsManager.ShowPOSForm(frm);
-                    }
-                }
-                
-
             }
             finally
             {
+
+                if (printStat == 0)
+                {
+                    int maxRetries = 3;   // how many times you want to retry
+                    int delayMs = 4000;   // wait between retries (in milliseconds)
+                    int attempt = 0;
+                    bool success = false;
+
+                    while (attempt < maxRetries && !success)
+                    {
+                        attempt++;
+                        try
+                        {
+                            APIAccess.APIAccessClass APIClass = new APIAccess.APIAccessClass();
+                            url = APIClass.getURLAPIByFuncName("UpdateStatusPOTO");
+
+                            responseAPI = APIFunction.getPOAPI(
+                                url,
+                                ApplicationSettings.Database.DATAAREAID,
+                                txtPoNumber.Text
+                            );
+
+                            if (responseAPI.error == false)
+                            {
+                                success = true; // exit loop
+                            }
+                            else
+                            {
+                                // log or show error
+                                Console.WriteLine("Attempt " + attempt + " failed: " + responseAPI.message_description);
+                                System.Threading.Thread.Sleep(delayMs);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("Attempt " + attempt + " exception: " + ex.Message);
+                            System.Threading.Thread.Sleep(delayMs);
+                        }
+                    }
+
+                    if (!success)
+                    {
+                        MessageBox.Show("Failed to update PO/TO status after multiple attempts.",
+                                        "API Error",
+                                        MessageBoxButtons.OK,
+                                        MessageBoxIcon.Error);
+                    }
+                }
                 Cursor.Current = Cursors.Default;
+                Close();
             }
         }
+
+      
+        private void PrintReceipt(string printDocName)
+        {
+            string sHeader = "";
+            string printerName = LSRetailPosis.Settings.HardwareProfiles.Printer.DeviceName;
+
+            string sPrint = "";
+
+            if (printerName == "EPSON LX-310 ESC/P")
+            {
+                sHeader = "\t** " + printDocName + " ** \r\n";
+                sPrint = this.ReceiveDocumentFormat(printDocName);
+            }
+            else
+            {
+                sHeader = "   ** " + printDocName + " ** \r\n";
+                sPrint = this.ReceiveDocumentFormatThermal(printDocName);
+            }
+
+            PrintDocument p = new PrintDocument();
+            PrintDialog pd = new PrintDialog();
+            PaperSize psize = new PaperSize("Custom", 100, Offset + 236);
+            Margins margins = new Margins(0, 0, 0, 0);
+            int normal = 7;
+            int bigger = 12;
+            Font normalFont = new Font("Lucida Console", normal);
+            Font biggerFont = new Font("Lucida Console", bigger);
+
+            pd.Document = p;
+            pd.Document.DefaultPageSettings.PaperSize = psize;
+            pd.Document.DefaultPageSettings.Margins = margins;
+            p.DefaultPageSettings.PaperSize.Width = 600;
+
+            bool isPrinterOffline = checkPrinterStatus(p);
+
+            if (!isPrinterOffline)
+            {
+                p.PrintPage += delegate(object sender1, PrintPageEventArgs e1)
+                {
+                    SolidBrush brush = new SolidBrush(Color.Black);
+                    float leftMargin = p.DefaultPageSettings.PrintableArea.Left;
+                    float yPos = 0;
+
+                    string[] headerLines = sHeader.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+                    foreach (string line in headerLines)
+                    {
+                        e1.Graphics.DrawString(line, biggerFont, brush, leftMargin, yPos);
+                        yPos += normalFont.GetHeight(e1.Graphics);
+                    }
+
+                    string[] printLines = sPrint.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+                    foreach (string line in printLines)
+                    {
+                        e1.Graphics.DrawString(line, normalFont, brush, leftMargin, yPos);
+                        yPos += normalFont.GetHeight(e1.Graphics);
+                    }
+                };
+
+                try
+                {
+                    p.Print();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Exception Occurred While Printing", ex);
+                }
+            }
+            else
+            {
+                using (frmMessage frm = new frmMessage(errorPrinter, MessageBoxButtons.OK, MessageBoxIcon.Error))
+                {
+                    POSFormsManager.ShowPOSForm(frm);
+                }
+            }
+        }
+
+
+        //OLD REPRINT LOGIC
+        //private void btnReprint_Click(object sender, EventArgs s)
+        //{
+        //    string tempDriverDetails;
+        //    string printDocName = "REPRINT";
+
+        //    LoadReceiptLinesFromDB();
+        //    Offset = 0;
+            
+        //    //Add by Yonathan 11092025 to check if this is the first time print for PO receive via PDT
+        //    //printStat = 1;
+            
+        //    try
+        //    {
+        //        LoadReceiptLinesFromDB();
+        //        //Begin add NEC hmz to manipulate PO Id with driver Details
+        //        if (this.prType == PRCountingType.PurchaseOrder)// || this.prType == PRCountingType.TransferIn)
+        //            tempDriverDetails = this.PONumber + "-" + txtDelivery.Text;
+        //        else
+        //            tempDriverDetails = this.PONumber;
+        //        //End add NEC hmz
+
+        //        // Commit receipt to AX via webservice
+        //        // Begin modify line NEC - to pass tempDriverDetails
+        //        //IPRDocument prDoc = PurchaseOrderReceiving.InternalApplication.Services.StoreInventoryServices.CommitOrderReceipt(tempDriverDetails, this.ReceiptNumber, this.prType);
+
+        //        tempDriverDetails = this.PONumber;
+        //        // Remove rows that are successfully submitted
+        //        List<DataRow> removeRows = new List<DataRow>();
+
+        //        //string sHeader =   "     -------------- " + Environment.NewLine +
+        //        //                   "         REPRINT " + Environment.NewLine +
+        //        //                   "     --------------" + Environment.NewLine;
+
+        //        string sHeader="";
+        //        string printerName = "";
+        //        string sPrint = "";
+            
+        //        printerName = LSRetailPosis.Settings.HardwareProfiles.Printer.DeviceName;
+        //        if (printerName == "EPSON LX-310 ESC/P")
+        //        {
+        //            sHeader = "\t** " + printDocName + " ** \r\n";
+        //            //add here for reprint/print oricopy PDT
+        //            if(printStat == 1)
+        //                sPrint = this.ReceiveDocumentFormat(printDocName);
+                   
+        //        }
+        //        else
+        //        {
+        //            sHeader = "   ** " + printDocName + " ** \r\n";
+        //            sPrint = this.ReceiveDocumentFormatThermal(printDocName); 
+        //        }
+        //        PrintDocument p = new PrintDocument();
+        //        PrintDialog pd = new PrintDialog();
+        //        PaperSize psize = new PaperSize("Custom", 100, Offset + 236);
+        //        Margins margins = new Margins(0, 0, 0, 0);
+        //        int normal = 7;
+        //        int bigger = 12;
+        //        Font normalFont = new Font("Lucida Console", normal);
+        //        Font biggerFont = new Font("Lucida Console", bigger);
+
+        //        pd.Document = p;
+        //        pd.Document.DefaultPageSettings.PaperSize = psize;
+        //        pd.Document.DefaultPageSettings.Margins = margins;
+        //        p.DefaultPageSettings.PaperSize.Width = 600;
+
+        //        bool isPrinterOffline = checkPrinterStatus(p);                
+
+                
+
+        //        if (isPrinterOffline == false)
+        //        {
+        //            p.PrintPage += delegate(object sender1, PrintPageEventArgs e1)
+        //            {
+        //                SolidBrush brush = new SolidBrush(Color.Black);
+        //                float leftMargin = p.DefaultPageSettings.PrintableArea.Left;
+        //                float yPos = 0;
+
+        //                string[] headerLines = sHeader.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+        //                foreach (string line in headerLines)
+        //                {
+        //                    e1.Graphics.DrawString(line, biggerFont, brush, leftMargin, yPos);
+        //                    yPos += normalFont.GetHeight(e1.Graphics);
+        //                }
+
+        //                string[] printLines = sPrint.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+        //                foreach (string line in printLines)
+        //                {
+        //                    e1.Graphics.DrawString(line, normalFont, brush, leftMargin, yPos);
+        //                    yPos += normalFont.GetHeight(e1.Graphics);
+        //                }
+        //            };
+
+        //            try
+        //            {
+        //                p.Print();
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                throw new Exception("Exception Occurred While Printing", ex);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            using (frmMessage frm = new frmMessage(errorPrinter, MessageBoxButtons.OK, MessageBoxIcon.Error))
+        //            {
+        //                POSFormsManager.ShowPOSForm(frm);
+        //            }
+        //        }
+                
+
+        //    }
+        //    finally
+        //    {
+        //        Cursor.Current = Cursors.Default;
+        //    }
+        //}
 
         private bool checkPrinterStatus(PrintDocument p)
         {
@@ -1760,7 +1980,7 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
                         itemName = reader["ItemName"].ToString();
                         itemNumber = reader["ItemNumber"].ToString();
                         unit = reader["Unit"].ToString();
-                        if (statusReceipt == "REPRINT")
+                        if (statusReceipt == "REPRINT" || statusReceipt == "ORIGINAL" || statusReceipt == "COPY")
                         {
                             qty = (Math.Truncate(Convert.ToDecimal(reader["QuantityReceived"]) * 1000m) / 1000m);
                         }

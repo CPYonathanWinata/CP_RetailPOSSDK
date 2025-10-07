@@ -489,7 +489,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             this.textBoxSearch.Enter += new System.EventHandler(this.textBoxSearch_Enter);
             this.textBoxSearch.Leave += new System.EventHandler(this.textBoxSearch_Leave);
             // 
-            // btnCreatePickList
+            // btnCreatePickList change to print checker Yonathan 24092025 CPPOSSALESCHECKER
             // 
             this.btnCreatePickList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCreatePickList.Appearance.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
@@ -502,7 +502,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             this.btnCreatePickList.Size = new System.Drawing.Size(130, 57);
             this.btnCreatePickList.TabIndex = 6;
             this.btnCreatePickList.Tag = "BtnNormal";
-            this.btnCreatePickList.Text = "Create picking list";
+            this.btnCreatePickList.Text = "Print Checker"; //"Create picking list"
             this.btnCreatePickList.Click += new System.EventHandler(this.btnCreatePickList_Click);
             this.btnCreatePickList.Visible = true; //hide yonathan 09092024
             // 

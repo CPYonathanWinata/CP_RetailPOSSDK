@@ -1073,14 +1073,76 @@ namespace APIAccess
             return originalAmount; // no rule matched
         }
 
+        public static APIParameter.parmResponsePOStatus getPOAPI(string _url, string _dataAreaId, string _docNumber)
+        {
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |
+                                           SecurityProtocolType.Tls11 |
+                                           SecurityProtocolType.Tls12;
 
-        //public List<APIAccess.APIParameter.RoundingRule> GetRoundingRules(SqlConnection _connectionString)
-        //{
-            
-             
+            System.Net.ServicePointManager.ServerCertificateValidationCallback = (senderX, certificate, chain, sslPolicyErrors) => { return true; };
 
-        //    return rules;
-        //}
+            var httpRequest = (HttpWebRequest)WebRequest.Create(_url);
+            string result = "";
+            httpRequest.Method = "POST";
+            httpRequest.ContentType = "application/json";
+            httpRequest.Headers.Add("Authorization", "PFM");
+
+            APIAccess.APIParameter.parmResponsePOStatus responseData;
+
+            var pack = new APIParameter.parmRequestPOStatus()
+            {
+                DATAAREAID = _dataAreaId,
+                DOCUMENT_NUMBER = _docNumber
+            };
+
+
+            //var data = MyJsonConverter.Serialize(pack);
+            //using (var streamWriter = new StreamWriter(httpRequest.GetRequestStream()))
+            //{
+            //    streamWriter.Write(data);
+            //}
+
+            //try
+            //{
+            //    var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
+            //    using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            //    {
+            //        result = streamReader.ReadToEnd();
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    //LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+            //    throw;
+            //}
+
+            try
+            {
+                var data = APIAccess.APIFunction.MyJsonConverter.Serialize(pack);
+                using (var streamWriter = new StreamWriter(httpRequest.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                }
+
+                var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    result = streamReader.ReadToEnd();
+                    responseData = APIAccess.APIFunction.MyJsonConverter.Deserialize<APIAccess.APIParameter.parmResponsePOStatus>(result); //
+
+                }
+            }
+            catch (Exception ex)
+            {
+                //LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                //return "0";
+                throw;
+
+            }
+
+            return responseData; 
+        }
 
         public class DatabaseHelper
         {
@@ -1221,7 +1283,96 @@ namespace APIAccess
 
         }
 
-      
+
+        public class APIService
+        {
+
+
+            public static void GetApiConfig(string _apiUrl, string _storeId, string _dataAreaId)
+            {
+                ServicePointManager.Expect100Continue = true;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |
+                                               SecurityProtocolType.Tls11 |
+                                               SecurityProtocolType.Tls12;
+
+                System.Net.ServicePointManager.ServerCertificateValidationCallback = (senderX, certificate, chain, sslPolicyErrors) => { return true; };
+
+                var httpRequest = (HttpWebRequest)WebRequest.Create(_apiUrl);
+                string result = "";
+                httpRequest.Method = "POST";
+                httpRequest.ContentType = "application/json";
+                httpRequest.Headers.Add("Authorization", "PFM");
+
+                APIAccess.APIParameter.parmResponseAPIConfig apiResponse;
+
+                var pack = new APIParameter.parmRequestAPIConfig()
+                {
+                    DATAAREAID = _dataAreaId,
+                    STOREID = _storeId
+                };
+
+                try
+                {
+                    var data = APIAccess.APIFunction.MyJsonConverter.Serialize(pack);
+                    using (var streamWriter = new StreamWriter(httpRequest.GetRequestStream()))
+                    {
+                        streamWriter.Write(data);
+                    }
+
+                    var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
+                    using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                    {
+                        result = streamReader.ReadToEnd();
+                        apiResponse = APIAccess.APIFunction.MyJsonConverter.Deserialize<APIAccess.APIParameter.parmResponseAPIConfig>(result); //
+
+                    }
+
+                    if (apiResponse != null &&
+                        apiResponse.response_data != null &&
+                        apiResponse.response_data.CPURLCONFIG != null &&
+                        apiResponse.response_data.CPURLCONFIG.Count > 0)
+                    {
+                        foreach (var item in apiResponse.response_data.CPURLCONFIG)
+                        {
+                            API resultData = new API
+                            {
+                                URL = item.URL,
+                                FuncName = item.FUNCNAME
+                            };
+
+                            APIAccessClass.result.Add(resultData);
+                            APIAccessClass.resultURL.Add(item.URL);
+                            APIAccessClass.resultFuncName.Add(item.FUNCNAME);
+                            APIAccessClass.resultIsSvcRef.Add(item.ISUSINGSERVICEREFERENCE.ToString());
+                            APIAccessClass.resultSvcRefName.Add(item.SERVICEREFERENCENAME);
+                        }
+                    }
+                    else
+                    {
+                        // mimic your old error handling
+                        Console.WriteLine(
+                            string.Format("Tidak ada data toko {0} pada konfigurasi API Table.\nHubungi Tim IT untuk lebih lanjut", _storeId)
+                        );
+                    }
+
+                    // ========== Handle CPAPIURLQRIS ==========
+                    if (apiResponse != null &&
+                        apiResponse.response_data != null &&
+                        apiResponse.response_data.CPAPIURLQRIS != null &&
+                        apiResponse.response_data.CPAPIURLQRIS.Count > 0)
+                    {
+                        foreach (var qris in apiResponse.response_data.CPAPIURLQRIS)
+                        {                         
+                            APIAccessClass.QrisUrlConfig[qris.PAYMENTMETHODNAME] = qris;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error calling API: " + ex.Message);
+                }
+            }
+        }
 
 
         public class GrabMartAPI

@@ -173,6 +173,7 @@ namespace Microsoft.Dynamics.Retail.Pos.ItemTriggers
 
         public void PreSale(IPreTriggerResult preTriggerResult, ISaleLineItem saleLineItem, IPosTransaction posTransaction)
         {
+            List<string> groupId;
             bool existTaxTable = true;
             LSRetailPosis.ApplicationLog.Log("IItemTriggersV1.PreSale", "Prior to the sale of an item...", LSRetailPosis.LogTraceLevel.Trace);
 
@@ -187,10 +188,21 @@ namespace Microsoft.Dynamics.Retail.Pos.ItemTriggers
                 return;
             }
             //last before adding the item.
+            RetailTransaction retailTransaction = (RetailTransaction)posTransaction;
+            //check UOM and pricing
+            groupId = GetChannelGroupIds(retailTransaction.ChannelId);
 
-            
 
-             
+            if (findPriceAgreement(retailTransaction.ChannelId, saleLineItem.ItemId, groupId, saleLineItem.SalesOrderUnitOfMeasure).Count == 0)
+            {
+                using (frmMessage dialog = new frmMessage(string.Format("Item '{0}' tidak memiliki harga dengan unit ID {1}.\nSilakan cek Unit Id di InventItemBarcode table", saleLineItem.ItemId, saleLineItem.SalesOrderUnitOfMeasure), MessageBoxButtons.OK, MessageBoxIcon.Error))
+                {
+                    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                    posTransaction.OperationCancelled = true;
+                    preTriggerResult.ContinueOperation = false;
+                    return;
+                }
+            }
             /*string customer = ((RetailTransaction)posTransaction).Customer.CustomerId;
 
             if (customer.ToString() == "C000004125")
@@ -1460,6 +1472,117 @@ namespace Microsoft.Dynamics.Retail.Pos.ItemTriggers
                 }
             }
         }
+        public List<string> GetChannelGroupIds(long channelId)
+        {
+            List<string> groupIds = new List<string>();
+            SqlConnection connectionStore = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+
+            try
+            {
+                string queryString = @"
+                                        SELECT PDG.GROUPID
+                                        FROM RETAILCHANNELPRICEGROUP RCP
+                                        INNER JOIN RETAILCHANNELTABLE RCT ON RCP.RETAILCHANNEL = RCT.RECID
+                                        INNER JOIN PRICEDISCGROUP PDG ON RCP.PRICEGROUP = PDG.RECID
+                                        WHERE RCT.RECID = @ChannelId";
+
+                using (SqlCommand command = new SqlCommand(queryString, connectionStore))
+                {
+                    command.Parameters.AddWithValue("@ChannelId", channelId);
+
+                    if (connectionStore.State != ConnectionState.Open)
+                        connectionStore.Open();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            groupIds.Add(reader["GROUPID"].ToString());
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                if (connectionStore.State != ConnectionState.Closed)
+                    connectionStore.Close();
+            }
+
+            return groupIds;
+        }
+
+        public List<string> findPriceAgreement(long _channelId, string _itemRelation, List<string> _groupIds, string _unitId, decimal _qty = 0)
+        {
+            List<string> stringList = new List<string>();
+            SqlConnection connectionStore = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+
+            try
+            {
+                // Build dynamic IN clause for GROUPIDs
+                string inClause = string.Join(",", _groupIds.Select((g, i) => "@GroupId" + i));
+
+                string queryString = @"
+                    SELECT TOP 1 ITEMRELATION, ACCOUNTRELATION, AMOUNT, QUANTITYAMOUNTFROM, QUANTITYAMOUNTTO, FROMDATE, TODATE 
+                    FROM PRICEDISCTABLE TA
+                    INNER JOIN [ax].RETAILCHANNELTABLE AS c
+                        ON c.INVENTLOCATIONDATAAREAID = ta.DATAAREAID 
+                        AND c.RECID = @CHANNELID
+                    LEFT JOIN [ax].INVENTDIM invdim 
+                        ON ta.INVENTDIMID = invdim.INVENTDIMID 
+                        AND ta.DATAAREAID = c.INVENTLOCATIONDATAAREAID
+                    WHERE ITEMRELATION = @ItemRelation
+                        AND TA.ACCOUNTRELATION IN (" + inClause + ") " +
+                        @"AND TA.RELATION = 4
+                        AND TA.UNITID = @UnitId
+                        AND (
+                            (@Quantity BETWEEN QUANTITYAMOUNTFROM AND QUANTITYAMOUNTTO) 
+                            OR (QUANTITYAMOUNTFROM = 0 AND QUANTITYAMOUNTTO = 0)
+                        )
+                        AND (@ActiveDate BETWEEN TA.FROMDATE AND TA.TODATE)
+                    ORDER BY QUANTITYAMOUNTFROM DESC";
+
+                using (SqlCommand command = new SqlCommand(queryString, connectionStore))
+                {
+                    command.Parameters.AddWithValue("@CHANNELID", _channelId);
+                    command.Parameters.AddWithValue("@Quantity", _qty);
+                    command.Parameters.AddWithValue("@ItemRelation", _itemRelation);
+                    command.Parameters.AddWithValue("@UnitId", _unitId);
+                    command.Parameters.AddWithValue("@ActiveDate", DateTime.Now);
+
+                    // Add GroupId parameters dynamically
+                    for (int i = 0; i < _groupIds.Count; i++)
+                    {
+                        command.Parameters.AddWithValue("@GroupId" + i, _groupIds[i]);
+                    }
+
+                    if (connectionStore.State != ConnectionState.Open)
+                        connectionStore.Open();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            stringList.Add(reader["AMOUNT"].ToString());
+                            stringList.Add(reader["ACCOUNTRELATION"].ToString());
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+            finally
+            {
+                if (connectionStore.State != ConnectionState.Closed)
+                    connectionStore.Close();
+            }
+
+            return stringList;
+        }
+
+
         private void selectPromoItemReceipt(string itemId, string promoId, out decimal pctDisc, out decimal amtDisc, out DateTime fromDate, out DateTime toDate, out string promoName)
         {
             amtDisc = 0;

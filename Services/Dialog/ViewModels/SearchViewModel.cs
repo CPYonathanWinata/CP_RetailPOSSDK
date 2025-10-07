@@ -528,7 +528,9 @@ namespace Microsoft.Dynamics.Retail.Pos.Dialog.ViewModels
                     //List<APIParameter.SaleLineItemData> itemData =  new List<APIParameter.SaleLineItemData>();
                     // Convert List<ISaleLineItem> to List<SaleLineItemData>
 
-                    if (isB2b != "0" || isB2b !="")
+                    //if (isB2b != "0" || isB2b !="")
+                    if (!string.IsNullOrEmpty(isB2b) && isB2b != "0")
+
                     {
                         List<APIParameter.SaleLineItemData> itemData = items
                                                .Select(item => new APIParameter.SaleLineItemData

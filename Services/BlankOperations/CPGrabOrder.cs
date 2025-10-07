@@ -773,7 +773,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     orderItem.specifications,
                     orderItem.quantity,
                     priceAfterExponent,
-                    orderItem.discAmt*orderItem.quantity,
+                    discAfterExponent * orderItem.quantity,// change to discAfterExponent 07102025
                     subTotal,
                     itemType == "Non" ? "Non Stock" : remainQty.ToString("N2",CultureInfo.CurrentCulture), //remainQty.ToString(CultureInfo.InvariantCulture),
                     isAvailable// = remainQty - orderItem.quantity < 0 ? "Tidak" : "Ya"

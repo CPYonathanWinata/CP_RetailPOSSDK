@@ -207,7 +207,43 @@ namespace Microsoft.Dynamics.Retail.Pos.ApplicationTriggers
 			}
 		}
 		#endregion
-		public void connectToDB(string _storeId, string _dataAreaId)
+
+        public void connectToDB(string _storeId, string _dataAreaId)
+        {
+            //var pack = new APIParameter.parmRequestAPIConfig()
+            //{
+            //    STOREID = _storeId,
+            //    DATAAREAID = _dataAreaId
+            //};
+
+
+            try
+            {
+                APIFunction.APIService.GetApiConfig("https://apiqrisdev.cp.co.id/api/pos/config/getConfig", _storeId, _dataAreaId);
+
+            }
+            catch (Exception ex)
+			{
+				LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+
+
+                using (frmMessage dialogError = new frmMessage(string.Format("{0}", ex.Message), MessageBoxButtons.OK, MessageBoxIcon.Error))
+					{
+						LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialogError);
+						 
+								
+
+					}
+				throw;
+			}
+			finally
+			{
+				 
+			}
+        }
+
+
+		public void connectToDBOld(string _storeId, string _dataAreaId)
 		{
 			//string result = "";
 			string PathDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Extensions\\", "APIConfig.xml");
@@ -320,8 +356,9 @@ namespace Microsoft.Dynamics.Retail.Pos.ApplicationTriggers
 			}
 			//APIAccessClass.resultData
 			//return result;
-
+             
 		}
+
 		public string getFolderPath(string ProcessingDirectory, string typeFolder)
 		{
 			string Folder = "";

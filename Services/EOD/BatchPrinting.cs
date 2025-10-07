@@ -1,4 +1,4 @@
-/*
+﻿/*
 SAMPLE CODE NOTICE
 
 THIS SAMPLE CODE IS MADE AVAILABLE AS IS.  MICROSOFT MAKES NO WARRANTIES, WHETHER EXPRESS OR IMPLIED, 
@@ -627,78 +627,148 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             }
             //section for online order - Yonathan 19112024
             salesOrderParam = getOnlineOrderTransaction(fromDateUtc, toDateUtc);
-            containerArray = EOD.InternalApplication.TransactionServices.InvokeExtension("getInvoiceSalesOrder", salesOrderParam);
+            //old
+            //containerArray = EOD.InternalApplication.TransactionServices.InvokeExtension("getInvoiceSalesOrder", salesOrderParam);
+            //new -- Yonathan 10092025 to include only online order printxz checked
+            containerArray = EOD.InternalApplication.TransactionServices.InvokeExtension("getInvoiceOnlineSalesOrder", salesOrderParam);
             returnString = containerArray[3].ToString();
             returnValue = containerArray[1].ToString();
 
 
             totalAmount = 0;
             totalSales = 0;
+            //if (containerArray[1].ToString() != "False")
+            //{
+            //    reportLayout.AppendLine("");
+            //    reportLayout.AppendLine("-------------------------------------------------------");
+            //    reportLayout.AppendLine("Online Order Summary");
+            //    reportLayout.AppendLine("-------------------------------------------------------");
+            //    returnString = containerArray[3].ToString();
+            //    // Load XML into XDocument
+            //    XDocument xdoc = XDocument.Parse(returnString);
+            //    var cultureInfo = new CultureInfo("id-ID");
+            //    // Parse the XML and group by ItemId and ItemName
+            //    var groupedData = xdoc.Descendants("CustInvoiceTrans")
+            //        .Where(e => e.Attribute("ItemLines") != null)
+            //        .Select(e => e.Attribute("ItemLines").Value.Split(';'))
+            //        .GroupBy(
+            //            fields => new { ItemId = fields[0], ItemName = fields[1] }, // Group by ItemId and ItemName
+            //            fields => new
+            //            {
+            //                Quantity = decimal.Parse(fields[2], NumberStyles.Number, cultureInfo),
+            //                LineAmount = decimal.Parse(fields[3], NumberStyles.Number, cultureInfo),
+            //                SalesId = fields[4]
+            //            }
+            //        )
+            //        .Select(group => new
+            //        {
+            //            group.Key.ItemId,
+            //            group.Key.ItemName,
+            //            TotalQty = group.Sum(x => x.Quantity),
+            //            TotalLineAmount = group.Sum(x => x.LineAmount),
+            //            //SalesIdCount = group.Select(x => x.SalesId).Distinct().Count()
+            //        });
+
+            //    // Output the results
+            //    foreach (var data in groupedData)
+            //    {
+            //        reportLayout.AppendLine(string.Format("{0}        {1} - {2}", data.ItemId.ToString(), data.TotalQty, RoundDecimal(Convert.ToDecimal(data.TotalLineAmount))));
+
+            //        reportLayout.AppendLine(string.Format("{0}", data.ItemName.ToString()));
+            //        /*reportLayout.AppendLine(string.Format("{0} - {1}", data.ItemId.ToString(), data.ItemName.ToString()));
+
+            //        reportLayout.AppendLine(string.Format("{0} - {1}", data.TotalQty, RoundDecimal(Convert.ToDecimal(data.TotalLineAmount))));*/
+            //        /*reportLayout.AppendLine(string.Format("{0} - {1}", data.ItemId.ToString(), data.ItemName.ToString()));
+
+            //        reportLayout.AppendLine(string.Format("{0} - {1}", data.TotalQty, RoundDecimal(Convert.ToDecimal(data.TotalLineAmount))));*/
+            //        totalAmount += data.TotalLineAmount;
+            //        //totalSales = data.SalesIdCount;
+            //    }
+            //    XmlDocument xmlDoc = new XmlDocument();
+              
+            //    var distinctSalesIds = xdoc.Descendants("CustInvoiceTrans")
+            //        .Where(e => e.Attribute("ItemLines") != null)
+            //        .Select(e => e.Attribute("ItemLines").Value.Split(';').Last()) // Extract the last part (SalesId)
+            //        .Distinct() // Get distinct SalesId values
+            //        .Count(); // Count the number of distinct SalesId values
+
+            //    reportLayout.AppendLine("-------------------------------------------------------");
+             
+            //    reportLayout.AppendLine(string.Format("Total Amount Sales Order : {0}", RoundDecimal(Convert.ToDecimal(totalAmount))));
+              
+            //    reportLayout.AppendLine(string.Format("Total Sales Order : {0}", RoundDecimal(distinctSalesIds)));
+                 
+            //}
+
+
             if (containerArray[1].ToString() != "False")
             {
                 reportLayout.AppendLine("");
                 reportLayout.AppendLine("-------------------------------------------------------");
-                reportLayout.AppendLine("Online Order Summary");
+                reportLayout.AppendLine("             Online Order");
                 reportLayout.AppendLine("-------------------------------------------------------");
+
                 returnString = containerArray[3].ToString();
-                // Load XML into XDocument
                 XDocument xdoc = XDocument.Parse(returnString);
                 var cultureInfo = new CultureInfo("id-ID");
-                // Parse the XML and group by ItemId and ItemName
+
                 var groupedData = xdoc.Descendants("CustInvoiceTrans")
-                    .Where(e => e.Attribute("ItemLines") != null)
-                    .Select(e => e.Attribute("ItemLines").Value.Split(';'))
-                    .GroupBy(
-                        fields => new { ItemId = fields[0], ItemName = fields[1] }, // Group by ItemId and ItemName
-                        fields => new
-                        {
-                            Quantity = decimal.Parse(fields[2], NumberStyles.Number, cultureInfo),
-                            LineAmount = decimal.Parse(fields[3], NumberStyles.Number, cultureInfo),
-                            SalesId = fields[4]
-                        }
-                    )
-                    .Select(group => new
-                    {
-                        group.Key.ItemId,
-                        group.Key.ItemName,
-                        TotalQty = group.Sum(x => x.Quantity),
-                        TotalLineAmount = group.Sum(x => x.LineAmount),
-                        //SalesIdCount = group.Select(x => x.SalesId).Distinct().Count()
-                    });
+                     .Where(e => e.Attribute("ItemLines") != null)
+                     .Select(e =>
+                     {
+                         var fields = e.Attribute("ItemLines").Value.Split(';');
+                         return new
+                         {
+                             ItemId = fields[0],
+                             ItemName = fields[1],
+                             Quantity = decimal.Parse(fields[2], NumberStyles.Number, cultureInfo),
+                             LineAmount = decimal.Parse(fields[3], NumberStyles.Number, cultureInfo),
+                             CustAccount = fields.Last().Trim().Equals("Primafreshmart", StringComparison.OrdinalIgnoreCase)
+                                           ? "Primafreshmart"
+                                           : "Other"
+                         };
+                     })
+                     .GroupBy(x => x.CustAccount)
+                     .OrderByDescending(g => g.Key == "Primafreshmart") 
+                     .Select(group => new
+                     {
+                         CustAccount = group.Key,
+                         Items = group
+                             .GroupBy(g => new { g.ItemId, g.ItemName })
+                             .Select(itemGroup => new
+                             {
+                                 itemGroup.Key.ItemId,
+                                 itemGroup.Key.ItemName,
+                                 TotalQty = itemGroup.Sum(x => x.Quantity),
+                                 TotalLineAmount = itemGroup.Sum(x => x.LineAmount)
+                             })
+                             .ToList()
+                     });
 
-                // Output the results
-                foreach (var data in groupedData)
+
+                foreach (var custGroup in groupedData)
                 {
-                    reportLayout.AppendLine(string.Format("{0}        {1} - {2}", data.ItemId.ToString(), data.TotalQty, RoundDecimal(Convert.ToDecimal(data.TotalLineAmount))));
+                    reportLayout.AppendLine("-------------------------------------------------------");
+                    reportLayout.AppendLine(string.Format("{0}", custGroup.CustAccount));
+                    reportLayout.AppendLine("-------------------------------------------------------");
 
-                    reportLayout.AppendLine(string.Format("{0}", data.ItemName.ToString()));
-                    /*reportLayout.AppendLine(string.Format("{0} - {1}", data.ItemId.ToString(), data.ItemName.ToString()));
+                    foreach (var item in custGroup.Items)
+                    {
+                        reportLayout.AppendLine(string.Format("{0}        {1} - {2}",
+                            item.ItemId,
+                            item.TotalQty,
+                            RoundDecimal(Convert.ToDecimal(item.TotalLineAmount))));
+                        reportLayout.AppendLine(item.ItemName);
 
-                    reportLayout.AppendLine(string.Format("{0} - {1}", data.TotalQty, RoundDecimal(Convert.ToDecimal(data.TotalLineAmount))));*/
-                    /*reportLayout.AppendLine(string.Format("{0} - {1}", data.ItemId.ToString(), data.ItemName.ToString()));
-
-                    reportLayout.AppendLine(string.Format("{0} - {1}", data.TotalQty, RoundDecimal(Convert.ToDecimal(data.TotalLineAmount))));*/
-                    totalAmount += data.TotalLineAmount;
-                    //totalSales = data.SalesIdCount;
+                        totalAmount += item.TotalLineAmount;
+                    }
+                    reportLayout.AppendLine("-------------------------------------------------------");
+                    reportLayout.AppendLine(string.Format("Total Amount : {0}", RoundDecimal(Convert.ToDecimal(totalAmount))));
                 }
-                XmlDocument xmlDoc = new XmlDocument();
-              
-                var distinctSalesIds = xdoc.Descendants("CustInvoiceTrans")
-                    .Where(e => e.Attribute("ItemLines") != null)
-                    .Select(e => e.Attribute("ItemLines").Value.Split(';').Last()) // Extract the last part (SalesId)
-                    .Distinct() // Get distinct SalesId values
-                    .Count(); // Count the number of distinct SalesId values
 
-                reportLayout.AppendLine("-------------------------------------------------------");
-             
-                reportLayout.AppendLine(string.Format("Total Amount Sales Order : {0}", RoundDecimal(Convert.ToDecimal(totalAmount))));
-              
-                reportLayout.AppendLine(string.Format("Total Sales Order : {0}", RoundDecimal(distinctSalesIds)));
-                 
+                
             }
-            
 
-            
 
             //end
 
@@ -853,60 +923,135 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             //throw new NotImplementedException();
         }
 
+//        private static string getOnlineOrderTransaction(string fromDate, string toDate)
+//        {
+//            SqlConnection localConnection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+//            string salesIdMulti = "";
+//            string salesIds = "";
+//            string custIds = "";
+//            string custAccMulti = "";
+//            decimal totalTunai = 0;
+//            try
+//            {
+//                string queryData = @"SELECT RETAILSTOREID,
+//                                            SALESID,
+//                                            STAFFID,
+//                                            TRANSDATETIME,
+//                                            CUSTACCOUNT,
+//                                            DATAAREAID FROM ax.CPPOSONLINEORDER WHERE 
+//		                            SALESID !='' 
+//		                            AND TRANSDATETIME BETWEEN  '" + fromDate + "'  AND '" + toDate + "' ORDER BY SALESID DESC";
+//                //DATEADD(HOUR, -(DATEPART(TZOFFSET, SYSDATETIMEOFFSET()) / 60), SYSDATETIME()) 
+//                //C.BANK != 'QRISBCA'
+//                using (SqlCommand cmd = new SqlCommand(queryData, localConnection))
+//                {
+
+
+//                    if (localConnection.State != ConnectionState.Open)
+//                    {
+//                        localConnection.Open();
+//                    }
+
+//                    //int flagFirstItem = 0;
+
+//                    using (SqlDataReader reader = cmd.ExecuteReader())
+//                    {
+//                        StringBuilder salesIdBuilder = new StringBuilder();
+//                        StringBuilder custAccBuilder = new StringBuilder();
+//                        while (reader.Read())
+//                        {
+//                            // Retrieve SALESORDERID from the reader
+//                            salesIdMulti = reader["SALESID"].ToString();
+
+//                            custAccMulti = reader["CUSTACCOUNT"].ToString();
+//                            // Append salesOrderId followed by a semicolon
+//                            if (salesIdBuilder.Length > 0)
+//                            {
+//                                salesIdBuilder.Append(";");
+//                            }
+//                            salesIdBuilder.Append(salesIdMulti);
+
+//                            //if (custAccBuilder.Length > 0)
+//                            //{
+//                            //    custAccBuilder.Append(";");
+//                            //}
+//                            //custAccBuilder.Append(custAccMulti);
+//                        }
+
+//                        // Convert the StringBuilder to a string
+//                        salesIds = salesIdBuilder.ToString();
+//                        //custIds = custAccBuilder.ToString();
+//                    }
+//                }
+//            }
+//            catch (Exception ex)
+//            {
+//                //LSRetailPosis.ApplicationExceptionHandler.HandleException();
+//                throw;
+//            }
+//            finally
+//            {
+//                if (localConnection.State != ConnectionState.Closed)
+//                {
+//                    localConnection.Close();
+//                }
+//            }
+
+//            return salesIds;
+//            //throw new NotImplementedException();
+//        }
+
         private static string getOnlineOrderTransaction(string fromDate, string toDate)
         {
             SqlConnection localConnection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
-            string salesIdMulti = "";
-            string salesIds = "";
-            
-            decimal totalTunai = 0;
+            string result = "";
             try
             {
                 string queryData = @"SELECT RETAILSTOREID,
-                                            SALESID,
-                                            STAFFID,
-                                            TRANSDATETIME,
-                                            DATAAREAID FROM ax.CPPOSONLINEORDER WHERE 
-		                            SALESID !='' 
-		                            AND TRANSDATETIME BETWEEN  '" + fromDate + "'  AND '" + toDate + "' ORDER BY SALESID DESC";
-                //DATEADD(HOUR, -(DATEPART(TZOFFSET, SYSDATETIMEOFFSET()) / 60), SYSDATETIME()) 
-                //C.BANK != 'QRISBCA'
+                                    SALESID,
+                                    STAFFID,
+                                    TRANSDATETIME,
+                                    CUSTACCOUNT,
+                                    DATAAREAID 
+                             FROM ax.CPPOSONLINEORDER 
+                             WHERE SALESID !='' 
+                               AND TRANSDATETIME BETWEEN @fromDate AND @toDate
+                             ORDER BY SALESID DESC";
+
                 using (SqlCommand cmd = new SqlCommand(queryData, localConnection))
                 {
-
+                    
+                    cmd.Parameters.AddWithValue("@fromDate", fromDate);
+                    cmd.Parameters.AddWithValue("@toDate", toDate);
 
                     if (localConnection.State != ConnectionState.Open)
                     {
                         localConnection.Open();
                     }
 
-                    //int flagFirstItem = 0;
-
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        StringBuilder salesIdBuilder = new StringBuilder();
+                        StringBuilder sb = new StringBuilder();
 
                         while (reader.Read())
                         {
-                            // Retrieve SALESORDERID from the reader
-                            salesIdMulti = reader["SALESID"].ToString();
+                            string salesId = reader["SALESID"].ToString();
+                            string custAcc = reader["CUSTACCOUNT"].ToString();
 
-                            // Append salesOrderId followed by a semicolon
-                            if (salesIdBuilder.Length > 0)
+                            if (sb.Length > 0)
                             {
-                                salesIdBuilder.Append(";");
+                                sb.Append(";");
                             }
-                            salesIdBuilder.Append(salesIdMulti);
+
+                            sb.Append(salesId).Append("-").Append(custAcc);
                         }
 
-                        // Convert the StringBuilder to a string
-                        salesIds = salesIdBuilder.ToString();
+                        result = sb.ToString();
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                //LSRetailPosis.ApplicationExceptionHandler.HandleException();
                 throw;
             }
             finally
@@ -917,9 +1062,9 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
                 }
             }
 
-            return salesIds;
-            //throw new NotImplementedException();
+            return result;
         }
+
 
         //private string getSalesOrderSummary()
         //{

@@ -1255,6 +1255,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder
                             else
                             {
                                 containerArray = Application.TransactionServices.Invoke("createCustomerOrder", xmlString);
+                                //ShowXmlDialog(xmlString); //debug purpose
                             }
                             break;
                         default:
@@ -1294,6 +1295,29 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder
                 }
             }
         }
+
+        //fordebugOnly
+        public static void ShowXmlDialog(string xmlString)
+        {
+            Form form = new Form();
+            form.Text = "XML Viewer";
+            form.Width = 800;
+            form.Height = 600;
+
+            TextBox textBox = new TextBox();
+            textBox.Multiline = true;
+            textBox.Dock = DockStyle.Fill;
+            textBox.ScrollBars = ScrollBars.Both;
+            textBox.WordWrap = false;
+            //textBox.Font = new Font("Consolas", 10);
+            textBox.Text = xmlString;
+            textBox.ReadOnly = true; // prevents editing, still selectable
+
+            form.Controls.Add(textBox);
+
+            form.ShowDialog();
+        }
+
 
         /// <summary>
         /// Update a customer order
@@ -1787,6 +1811,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder
                
             }
             salesOrders.Columns.Add("DISABLEINVOICE", typeof(string));
+            salesOrders.Columns.Add("CUSTCONFIRMID", typeof(string)); //add cust confirm id - Yonathan 24092025
             for (int i = 3; i < containerArray.Count; i++)
             {
                 IList salesRecord = (IList)containerArray[i];
@@ -1884,6 +1909,13 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder
                 {
                     row["DISABLEINVOICE"] = SerializationHelper.ConvertToStringAtIndex(salesRecord, 30);
                 }
+
+                //add to get the value of custconfirmId - Yonathan 24092025
+                if (salesRecord.Count > 31)
+                {
+                    row["CUSTCONFIRMID"] = SerializationHelper.ConvertToStringAtIndex(salesRecord, 31);
+                }
+
                 //add by Yonathan to prevent other store's sales order to appear in form 19/01/2023
                 string inventLocationId = "WH_"+ApplicationSettings.Database.StoreID;
                 //end
