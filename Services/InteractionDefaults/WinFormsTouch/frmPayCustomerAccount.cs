@@ -44,7 +44,7 @@ using System.Timers;
 using System.Text.RegularExpressions;
 using QRCoder;
 using System.Windows.Shapes;
-using MySql.Data.MySqlClient;
+//using MySql.Data.MySqlClient;
 using System.Net;
 using System.IO;
 using System.Drawing.Printing;
@@ -3994,6 +3994,8 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
                 
      
         }
+
+        /*
 		private void getURLAPIOld()
 		{
 
@@ -4061,7 +4063,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 
 				}
 			}
-		}
+		}*/
 
 
 

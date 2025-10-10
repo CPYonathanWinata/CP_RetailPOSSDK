@@ -31,7 +31,7 @@ using System.Security.Cryptography;
 using System.Collections.Generic;
 
 using APIAccess;
-using MySql.Data.MySqlClient;
+//using MySql.Data.MySqlClient;
 using System.ServiceProcess;
 using System.Threading;
 using System.Collections.ObjectModel;
@@ -242,7 +242,7 @@ namespace Microsoft.Dynamics.Retail.Pos.ApplicationTriggers
 			}
         }
 
-
+        /*
 		public void connectToDBOld(string _storeId, string _dataAreaId)
 		{
 			//string result = "";
@@ -358,7 +358,7 @@ namespace Microsoft.Dynamics.Retail.Pos.ApplicationTriggers
 			//return result;
              
 		}
-
+        */
 		public string getFolderPath(string ProcessingDirectory, string typeFolder)
 		{
 			string Folder = "";
@@ -609,7 +609,7 @@ namespace Microsoft.Dynamics.Retail.Pos.ApplicationTriggers
 			//add by Yonathan for connecting to SQL
 			getDataSql();
 			//end add
-			APIFunction.getMysqlConn(application);//add by Yonathan to lookup for API URL 08/08/2023
+			//APIFunction.getMysqlConn(application);//add by Yonathan to lookup for API URL 08/08/2023
 
 
 			//getAPIURL();

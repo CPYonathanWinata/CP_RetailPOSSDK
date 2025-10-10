@@ -334,7 +334,7 @@ namespace APIAccess
         }
         //end
 
-        public static MySql.Data.MySqlClient.MySqlConnection mySqlConnString;
+        //public static MySql.Data.MySqlClient.MySqlConnection mySqlConnString;
 
         //add mysql subtitue for getting URL API - Yonathan 18092025
         public class parmRequestAPIConfig

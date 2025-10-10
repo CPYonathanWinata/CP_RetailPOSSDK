@@ -581,7 +581,7 @@ namespace APIAccess
             }
             return Folder.Substring(1);
         }
-
+        /*
         public static void getMysqlConn(IApplication _application) 
         {
             //string result = "";
@@ -618,7 +618,7 @@ namespace APIAccess
             //connection = new MySql.Data.MySqlClient.MySqlConnection(connectionString);
             APIAccess.APIParameter.mySqlConnString = new MySql.Data.MySqlClient.MySqlConnection(connectionString); ;
         }
-
+        */
         //find price for customer order 
         public  List<APIAccess.APIParameter.SaleLineItemData> findPriceAgreementCustom(
         IApplication _application,

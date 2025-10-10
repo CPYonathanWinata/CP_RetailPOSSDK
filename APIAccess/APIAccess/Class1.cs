@@ -1,5 +1,5 @@
 ﻿
-using MySql.Data.MySqlClient;
+//using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -225,7 +225,7 @@ namespace APIAccess
         }
 
 
-
+        /*
         public void connectToDB(string _storeId, string _dataAreaId)
         {
             //string result = "";
@@ -308,7 +308,7 @@ namespace APIAccess
             //APIAccessClass.resultData
             //return result;
             
-        }
+        }*/
 
         #region custom class for en/decrypt pass
         public class TripleDes
