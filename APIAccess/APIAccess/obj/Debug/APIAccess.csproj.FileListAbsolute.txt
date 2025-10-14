@@ -547,3 +547,13 @@ C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\A
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\obj\Debug\APIAccess.csprojResolveAssemblyReference.cache
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\obj\Debug\APIAccess.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\obj\Debug\APIAccess.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\POSControls.DLL
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\POSProcesses.DLL
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\SystemFramework.dll
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\Microsoft.Dynamics.Retail.PaymentSDK.dll
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\Microsoft.Dynamics.Retail.Pos.SystemCore.dll
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\Microsoft.Dynamics.Retail.EventTraceProvider.dll
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\BusinessLogic.dll
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\Microsoft.Dynamics.Retail.TransactionServices.ClientProxy.dll
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\Microsoft.Dynamics.Retail.Diagnostics.Sinks.dll
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\POSProcesses.pdb
