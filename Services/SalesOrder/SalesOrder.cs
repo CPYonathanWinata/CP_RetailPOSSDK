@@ -165,7 +165,17 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder
                     {
                         //SalesOrder.InternalApplication.RunOperation(PosisOperations.VoidTransaction, false);
                         //SalesOrder.InternalApplication.RunOperation(PosisOperations.VoidTransaction, false);
+
+                        //posTransaction = null;
+                        //retailTransaction = null;
+                        //priceOverride.OperationInfo = opInfo;
+                        //priceOverride.OperationID = PosisOperations.PriceOverride;
+                        //priceOverride.POSTransaction = transaction;
+                        //priceOverride.LineId = transaction.SaleItems.Last.Value.LineId;
+                        //priceOverride.RunOperation();
+                        
                         return posTransaction;
+
                     }
                     else
                     {

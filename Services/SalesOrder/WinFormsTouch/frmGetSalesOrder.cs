@@ -40,6 +40,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
     using LSRetailPosis.DataAccess;
     using APIAccess;
     using System.Xml.Linq;
+    using Microsoft.Dynamics.Retail.Pos.Contracts;
    
 
     public partial class frmGetSalesOrder : LSRetailPosis.POSProcesses.frmTouchBase
@@ -87,6 +88,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
         //add by Yonathan order type - 04102024
         int orderTypeSO = 0; //0 POS - 1 Online
         int Offset = 0;
+        public IApplication Application { get; set; }
         /// <summary>
         /// Returns selected sales order id as string.
         /// </summary>
@@ -144,6 +146,11 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
         {
             RefreshGrid();
             base.OnShown(e);
+        }
+
+        private void frmGetSalesOrder_FormClosing(object sender, System.Windows.Forms.FormClosingEventArgs e)
+        {
+            //Application.RunOperation(PosisOperations.VoidTransaction, "");
         }
 
         // See PS#3312 - Appears this should be invoked but is not.
