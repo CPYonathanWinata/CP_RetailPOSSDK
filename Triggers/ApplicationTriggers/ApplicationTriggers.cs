@@ -215,31 +215,35 @@ namespace Microsoft.Dynamics.Retail.Pos.ApplicationTriggers
             //    STOREID = _storeId,
             //    DATAAREAID = _dataAreaId
             //};
-
-
+            string urlAPI = "";
+            string PathDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Extensions\\", "APIConfig.xml");
             try
             {
-                APIFunction.APIService.GetApiConfig("https://apiqrisdev.cp.co.id/api/pos/config/getConfig", _storeId, _dataAreaId);
+
+                urlAPI = getFolderPathConfig(PathDirectory, "urlAPI");
+                APIFunction.APIService.GetApiConfig(urlAPI, _storeId, _dataAreaId, application);
+
+                //APIFunction.APIService.GetApiConfig("https://apiqrisdev.cp.co.id/api/pos/config/getConfig", _storeId, _dataAreaId);
+                //http://10.1.4.74
 
             }
             catch (Exception ex)
-			{
-				LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
 
 
                 using (frmMessage dialogError = new frmMessage(string.Format("{0}", ex.Message), MessageBoxButtons.OK, MessageBoxIcon.Error))
-					{
-						LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialogError);
-						 
-								
+                {
+                    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialogError);
+ 
 
-					}
-				throw;
-			}
-			finally
-			{
-				 
-			}
+                }
+                throw;
+            }
+            finally
+            {
+
+            }
         }
 
         /*

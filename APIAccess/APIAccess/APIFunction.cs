@@ -18,6 +18,8 @@ using System.Data;
 using Microsoft.Dynamics.Retail.Pos.Contracts.DataEntity;
  
 using System.Diagnostics;
+using LSRetailPosis.POSControls.Touch;
+using System.Windows.Forms;
 namespace APIAccess
 {
 	public  class APIFunction
@@ -1288,7 +1290,7 @@ namespace APIAccess
         {
 
 
-            public static void GetApiConfig(string _apiUrl, string _storeId, string _dataAreaId)
+            public static void GetApiConfig(string _apiUrl, string _storeId, string _dataAreaId, IApplication _application )
             {
                 ServicePointManager.Expect100Continue = true;
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |
@@ -1369,7 +1371,8 @@ namespace APIAccess
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Error calling API: " + ex.Message);
+                    throw new ApplicationException("API call failed:\n" + ex.Message +"\nSilakan cek APIConfig.xml atau\nHubungi IT Support", ex);
+                    //Console.WriteLine("Error calling API: " + ex.Message);
                 }
             }
         }
