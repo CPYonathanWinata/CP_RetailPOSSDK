@@ -490,6 +490,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
             string configIdMulti= "";
             string qtyMulti = ""; //add Qty by Yonathan 11092024
             string xmlResponse;
+            string itemName = "";
+            bool noNameDetected = false;
             // Set the font size for the headers
             //this.itemDetailsGrid.ColumnHeadersDefaultCellStyle.Font = new Font("Tahoma", 14, FontStyle.Bold);
 
@@ -767,18 +769,24 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     isAvailable = "Ya";
                 }
                 //add to row
+                itemName = getItemName(orderItem.id);
                 itemDetailsGrid.Rows.Add(
                     orderItem.id,//itemNodes == null ? orderItem.id : itemId,
-                    getItemName(orderItem.id),
+                    itemName,
                     orderItem.specifications,
                     orderItem.quantity,
                     priceAfterExponent,
-                    orderItem.discAmt*orderItem.quantity,
+                    discAfterExponent * orderItem.quantity,// change to discAfterExponent 07102025
                     subTotal,
                     itemType == "Non" ? "Non Stock" : remainQty.ToString("N2",CultureInfo.CurrentCulture), //remainQty.ToString(CultureInfo.InvariantCulture),
                     isAvailable// = remainQty - orderItem.quantity < 0 ? "Tidak" : "Ya"
 
-                ); 
+                );
+
+                if (itemName == "")
+                {
+                    findFalse = 2;
+                }
 
                 //itemDetailsGrid.Rows.Add(s
                 //    orderItem.id,
@@ -805,7 +813,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     availableCell.Style.ForeColor = Color.Red; 
                     //this.Stock.DefaultCellStyle.ForeColor = Color.Red;
                     this.Stock.DefaultCellStyle.Font = new Font(itemDetailsGrid.Font, FontStyle.Bold);
-                    
+                         
                     
                      
 
@@ -1288,6 +1296,14 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
             else if (findFalse == 1) 
             {
                 using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Salah satu stock item tidak cukup.\nTidak bisa melanjutkan order", MessageBoxButtons.OK, MessageBoxIcon.Stop))
+                {
+                    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                    return;
+                }
+            }
+            else if (findFalse == 2)
+            {
+                using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Salah satu item tidak ada di assortment.\nTidak bisa melanjutkan order", MessageBoxButtons.OK, MessageBoxIcon.Stop))
                 {
                     LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
                     return;

@@ -30,6 +30,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 		public IApplication application;
 		public IPosTransaction posTransaction;
 		string salesID;
+        string custAcc;
 		CustomerOrderTransaction transaction;
 
 		private List<LineItemViewModel> viewModels;
@@ -55,7 +56,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 			}
 		}
 		 
-		public CP_frmPackingSlipDetail(IApplication _application, string _salesId, int _orderType = 0, string _disableInvoice = "false") 
+		public CP_frmPackingSlipDetail(IApplication _application, string _salesId, string _custAcc, int _orderType = 0, string _disableInvoice = "false") 
 		{
 			InitializeComponent();
 			txtSalesOrder.Text = _salesId;
@@ -63,6 +64,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 			application = _application;
             orderType = _orderType;
             disableInvoice = _disableInvoice;
+            custAcc = _custAcc;
 			//posTransaction = _posTransaction;
 			transaction = SalesOrderActions.GetCustomerOrder(salesID, LSRetailPosis.Transaction.CustomerOrderType.SalesOrder, LSRetailPosis.Transaction.CustomerOrderMode.Edit);
 			ItemDetailsViewModel(transaction);
@@ -619,6 +621,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
         //update invoice id yonathan 06092024
         private void updateInvoiceId(string _invoiceAx, string _salesId)
         {
+            //var custAcc = //gridView1.GetRowCellValue(gridView1.GetFocusedDataSourceRowIndex(), "CUSTOMERACCOUNT");
             string storeId = "";
             bool update = false;
 
@@ -670,9 +673,9 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 try
                 {
                     string queryString = @" INSERT INTO  AX.CPPOSONLINEORDER
-                                        (RETAILSTOREID,SALESID,STAFFID,TRANSDATETIME,DATAAREAID,PARTITION)
+                                        (RETAILSTOREID,SALESID,STAFFID,TRANSDATETIME,DATAAREAID,CUSTACCOUNT,PARTITION)
                                         VALUES
-                                        (@STOREID,@SALESID,@STAFFID,DATEADD(HOUR, -(DATEPART(TZOFFSET, SYSDATETIMEOFFSET()) / 60), SYSDATETIME()),@DATAAREAID,@PARTITION)"
+                                        (@STOREID,@SALESID,@STAFFID,DATEADD(HOUR, -(DATEPART(TZOFFSET, SYSDATETIMEOFFSET()) / 60), SYSDATETIME()),@DATAAREAID,@CUSTACC,@PARTITION)"
                                         ;
 
                     using (SqlCommand command = new SqlCommand(queryString, connection))
@@ -681,6 +684,8 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                         command.Parameters.AddWithValue("@SALESID", _salesId);
                         command.Parameters.AddWithValue("@STAFFID", ApplicationSettings.Terminal.TerminalOperator.OperatorId);
                         command.Parameters.AddWithValue("@DATAAREAID", SalesOrder.InternalApplication.Settings.Database.DataAreaID);
+
+                        command.Parameters.AddWithValue("@CUSTACC", custAcc.ToString());
                         command.Parameters.AddWithValue("@PARTITION", 1);
                         if (connection.State != ConnectionState.Open)
                         {

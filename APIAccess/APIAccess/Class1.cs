@@ -1,5 +1,5 @@
 ﻿
-using MySql.Data.MySqlClient;
+//using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,6 +22,10 @@ namespace APIAccess
         public static List<string> resultFuncName = new List<string>();
         public static List<string> resultIsSvcRef = new List<string>();
         public static List<string> resultSvcRefName = new List<string>();
+
+        public static Dictionary<string, APIAccess.APIParameter.CpApiUrlQris> QrisUrlConfig
+        = new Dictionary<string, APIAccess.APIParameter.CpApiUrlQris>();
+
         public static bool grabMartStatus = false;
 
         public static string custId { get; set; }
@@ -89,7 +93,7 @@ namespace APIAccess
                 
                 //if (String.Equals(row, _funcName, StringComparison.OrdinalIgnoreCase))
                 {
-                    if (APIAccess.APIAccessClass.resultIsSvcRef[i].ToString() == "True")
+                    if (APIAccess.APIAccessClass.resultIsSvcRef[i].ToString() == "1")
                     {
                         URL = APIAccess.APIAccessClass.resultSvcRefName[i].ToString();
                     }
@@ -139,7 +143,7 @@ namespace APIAccess
 
                 //if (String.Equals(row, _funcName, StringComparison.OrdinalIgnoreCase))
                 {
-                    if (APIAccess.APIAccessClass.resultIsSvcRef[i].ToString() == "False")
+                    if (APIAccess.APIAccessClass.resultIsSvcRef[i].ToString() == "0")
                     {
                         URL = APIAccess.APIAccessClass.resultURL[i].ToString();
                     }
@@ -221,7 +225,7 @@ namespace APIAccess
         }
 
 
-
+        /*
         public void connectToDB(string _storeId, string _dataAreaId)
         {
             //string result = "";
@@ -304,7 +308,7 @@ namespace APIAccess
             //APIAccessClass.resultData
             //return result;
             
-        }
+        }*/
 
         #region custom class for en/decrypt pass
         public class TripleDes

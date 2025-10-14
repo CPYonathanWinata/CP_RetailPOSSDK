@@ -963,6 +963,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder
                 case DocumentStatus.Canceled:       return SalesStatus.Canceled;
                 case DocumentStatus.Lost:           return SalesStatus.Lost;
                 case DocumentStatus.Facture:        return SalesStatus.Invoiced;
+                case DocumentStatus.Confirmation:    return SalesStatus.Confirmed; //add confirmed status yonathan 24092025
                 default: return SalesStatus.Unknown;
             }
         }

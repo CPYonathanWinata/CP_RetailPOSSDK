@@ -307,6 +307,74 @@ namespace APIAccess
             public decimal Rounding { get; set; }
         }
 
-        public static MySql.Data.MySqlClient.MySqlConnection mySqlConnString;
+        //for calling PO receive via PDT 11092025 Yonathan
+        public class parmRequestPOStatus
+        {
+            public string DATAAREAID { get; set; }
+            public string DOCUMENT_NUMBER { get; set; }
+        }
+
+        public class parmResponsePOStatus
+        {
+            public bool error { get; set; }
+            public int message_code { get; set; }
+            public string message_description { get; set; }
+            public string response_data { get; set; }
+        }
+
+        public class responsePOData
+        {
+            public string DATAAREAID { get; set; }
+            public string DOCUMENT_NUMBER { get; set; }
+            public string WAREHOUSE_FROM { get; set; }
+            public string WAREHOUSE_TO { get; set; }
+            public int STAT_PRINT { get; set; }
+            public string RECEIVED_USER { get; set; }
+            public string RECEIVED_AT { get; set; }
+        }
+        //end
+
+        //public static MySql.Data.MySqlClient.MySqlConnection mySqlConnString;
+
+        //add mysql subtitue for getting URL API - Yonathan 18092025
+        public class parmRequestAPIConfig
+        {
+            public string DATAAREAID { get; set; }
+            public string STOREID { get; set; }
+
+        }
+        public class parmResponseAPIConfig
+        {
+            public bool error { get; set; }
+            public int message_code { get; set; }
+            public string message_description { get; set; }
+            public ResponseData response_data { get; set; }
+        }
+
+      
+        public class ResponseData
+        {
+            public List<CpApiUrlQris> CPAPIURLQRIS { get; set; }
+            public List<CpUrlConfig> CPURLCONFIG { get; set; }
+        }
+
+        public class CpApiUrlQris
+        {
+            public int PAYMENTMETHOD { get; set; }
+            public string PAYMENTMETHODNAME { get; set; }
+            public string URLCREATE { get; set; }
+            public string URLINVALIDATE { get; set; }
+            public string URLNOTIFY { get; set; }
+        }
+
+        public class CpUrlConfig
+        {
+            public string FUNCNAME { get; set; }
+            public string URL { get; set; }
+            public int ISUSINGSERVICEREFERENCE { get; set; }
+            public string SERVICEREFERENCENAME { get; set; }
+        }
+
+        //
     }
 }

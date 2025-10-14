@@ -33,6 +33,14 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
     using Microsoft.Dynamics.Retail.Pos.SalesOrder.CustomerOrderParameters;
     using Microsoft.Dynamics.Retail.Pos.Contracts.BusinessLogic;
     using System.Diagnostics;
+    using LSRetailPosis.POSControls;
+    using LSRetailPosis.POSControls.Touch;
+    using System.Drawing.Printing;
+    using System.Management;
+    using LSRetailPosis.DataAccess;
+    using APIAccess;
+    using System.Xml.Linq;
+    using Microsoft.Dynamics.Retail.Pos.Contracts;
    
 
     public partial class frmGetSalesOrder : LSRetailPosis.POSProcesses.frmTouchBase
@@ -53,6 +61,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 
         //additional field by Yonathan 03022025 CP_CUSTORDERB2BSETUP
         private const string DisableInvoice = "DISABLEINVOICE";
+        private const string CustConfirmId = "CUSTCONFIRMID"; //ADD FOR CUSTCONFIRM ID - YONATHAN 24092025 - CPPOSSALESCHECKER
         //private const string TotalAmountDecimal = "TOTALAMOUNT";
         //end
         private const string FilterFormat =
@@ -69,10 +78,17 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
         private string invoiceId;
         private string isOpen;
         private string disableInvoice;
+        private string custConfirmId;
+        private List<LineItemViewModel> viewModels;
+        private ReadOnlyCollection<LineItemViewModel> lineItems;
+        CustomerOrderTransaction transaction;
+        string errorPrinter = "Tidak bisa melakukan print !!!\nSebelum hubungi Tim IT, pastikan :\n- Printer sudah on/menyala\n- Default Printer \"EPSON LX 310 ESC/P\"\n- Posisi kertas struk terpasang dengan benar\n- Semua kabel USB tidak kendor\n\nKemudian coba print ulang ";//dengan tekan tombol \"Reprint\"";
         //add by yonathan 21/06/2024
         string isB2bCust = "0";
         //add by Yonathan order type - 04102024
         int orderTypeSO = 0; //0 POS - 1 Online
+        int Offset = 0;
+        public IApplication Application { get; set; }
         /// <summary>
         /// Returns selected sales order id as string.
         /// </summary>
@@ -132,6 +148,11 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             base.OnShown(e);
         }
 
+        private void frmGetSalesOrder_FormClosing(object sender, System.Windows.Forms.FormClosingEventArgs e)
+        {
+            //Application.RunOperation(PosisOperations.VoidTransaction, "");
+        }
+
         // See PS#3312 - Appears this should be invoked but is not.
         private void TranslateLabels()
         {
@@ -146,9 +167,9 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             // Translate everything
             btnCreatePackSlip.Text = ApplicationLocalizer.Language.Translate(56218);   //Create packing slip
             btnPrintPackSlip.Text = ApplicationLocalizer.Language.Translate(56219);   //Print packing slip
-            btnCreatePickList.Text = ApplicationLocalizer.Language.Translate(56104);   //Create picking list
+            btnCreatePickList.Text = "Print Checker"; //ApplicationLocalizer.Language.Translate(56104);   //Create picking list //Cancel order -> change to Print Checker before Packing Slip Yonathan 24092025 
             btnReturn.Text = "Payment Invoice"; //ApplicationLocalizer.Language.Translate(56398);   //Return Order changed by Yonathan 26/06/2023
-            btnCancelOrder.Text = ApplicationLocalizer.Language.Translate(56215);   //Cancel order
+            btnCancelOrder.Text = "Cancel order"; //ApplicationLocalizer.Language.Translate(56215);   CPPOSSALESCHECKER
             btnEdit.Text = ApplicationLocalizer.Language.Translate(56212);   //View details
             btnPickUp.Text = "Print Invoice"; //ApplicationLocalizer.Language.Translate(56213);   //Pickup order changed by Yonathan 09092024
             btnClose.Text = ApplicationLocalizer.Language.Translate(56205);   //Close
@@ -398,6 +419,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 //ReadOnlyCollection<object> containerArrayInvoice = SalesOrder.InternalApplication.TransactionServices.Invoke("getSalesInvoice", invoiceId);
                 isOpen = row.Field<string>(IsOpenString);
                 disableInvoice = row.Field<string>(DisableInvoice);
+                custConfirmId = row.Field<string>(CustConfirmId);
                 //end
             }else
             {
@@ -455,7 +477,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             //this.btnPickUp.Enabled = false;
             this.btnReturn.Enabled = false;
             this.btnCancelOrder.Enabled = false;
-            this.btnCreatePickList.Enabled = false;
+            this.btnCreatePickList.Enabled = false; // Changed to Print Checker Yonathan 24092025 CPPOSSALESCHECKER
             this.btnCreatePackSlip.Enabled = false;
             this.btnPrintPackSlip.Enabled = false;
         }
@@ -513,8 +535,26 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 enablePickup = false;
                 enableReturn = false;
                 enableCancel = false;
-                enablePickList = false;
-                enablePackSlip = true;
+                
+                //adding the code for enabling disabling button for print checker
+                if (this.orderTypeSO == 1)
+                {
+                    //if no record exist/confirmid changed, then checker must be printed first
+                    if (!checkPrintChecker(this.SelectedSalesOrderId, custConfirmId))// this.SelectedCustConfirmId))
+                    {
+                        enablePickList = true; // Changed to Print Checker Yonathan 24092025 CPPOSSALESCHECKER
+                        enablePackSlip = false;
+                    }
+                    else //can packing slip directly
+                    {
+                        enablePickList = false; enablePackSlip = true;
+                    }
+                }
+                else
+                {
+                    enablePickList = false; enablePackSlip = true;
+                }
+                
                 enableInvoice = false;
             }
             else if (this.selectedOrderDocumentStatus == SalesStatus.Delivered) //selectedOrderDocumentStatus //-CHange to Check selectedOrderSalesStatus
@@ -582,12 +622,59 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             this.btnPickUp.Enabled = enablePickup; //enablePickup; //disable by Yonathan as not useed 15/08/2023 
             this.btnReturn.Enabled = enableReturn;
             this.btnCancelOrder.Enabled = enableCancel;
-            this.btnCreatePickList.Enabled = false; //enablePickList; //disable by Yonathan as not useed 15/08/2023 
+            this.btnCreatePickList.Enabled = enablePickList; //enablePickList; //disable by Yonathan as not useed 15/08/2023 -- // Changed to Print Checker Yonathan 24092025 CPPOSSALESCHECKER
             this.btnCreatePackSlip.Enabled = enablePackSlip;
             this.btnPrintPackSlip.Enabled = enablePrintPackSlip;
             this.btnCreateInvoice.Enabled = enableInvoice; //add by  Yonathan 13/01/2023
 
         }
+
+        private bool checkPrintChecker(string _salesId, string _custConfirmId)
+        {
+            SqlConnection connection = ApplicationSettings.Database.LocalConnection;
+            bool exists = false;
+
+            try
+            {
+                string queryString = @"SELECT TOP 1 CUSTCONFIRMID
+                                        FROM AX.CPONLINECHECKERTABLE
+                                        WHERE SALESID = @SALESID";
+
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+                    command.Parameters.AddWithValue("@SALESID", _salesId);
+
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+                    }
+
+                    object result = command.ExecuteScalar();
+
+                    if (result != null && result != DBNull.Value)
+                    {
+                        string dbCustConfirmId = result.ToString();
+                        exists = string.Equals(dbCustConfirmId, _custConfirmId, StringComparison.OrdinalIgnoreCase);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+                }
+            }
+
+            return exists;
+        }
+
+
 
         private void SetSelectedOrderAndClose(CustomerOrderTransaction transaction)
         {
@@ -848,10 +935,318 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             }
         }
 
+
+        //this function change to print checker - Yonathan 24092025
         private void btnCreatePickList_Click(object sender, EventArgs e)
         {
-            SalesOrderActions.TryCreatePickListForOrder(this.selectedOrderSalesStatus, this.SelectedSalesOrderId);
-            RefreshGrid();
+            //original disable
+            //SalesOrderActions.TryCreatePickListForOrder(this.selectedOrderSalesStatus, this.SelectedSalesOrderId);
+            //RefreshGrid();
+            //original
+
+            //custom
+            PrintChecker();
+            //end
+        }
+        protected void SetTransaction(CustomerOrderTransaction custTransaction)
+		{
+			this.transaction = custTransaction;
+		}
+		public CustomerOrderTransaction Transaction
+		{
+			get { return this.transaction; }
+			set
+			{
+				if (this.transaction != value)
+				{
+					SetTransaction(value);
+					//OnPropertyChanged("Transaction");
+				}
+			}
+		}
+        public void ItemDetailsViewModel(CustomerOrderTransaction customerOrderTransaction)
+        {
+
+            this.SetTransaction(customerOrderTransaction);
+            // Create a collection of LineItemViewModels from each SaleLineItem
+            viewModels = (from lineItem in this.Transaction.SaleItems.Where(i => !i.Voided)
+                          select new LineItemViewModel(lineItem)).ToList<LineItemViewModel>();
+
+            this.lineItems = new ReadOnlyCollection<LineItemViewModel>(viewModels);
+        }
+
+        private void PrintChecker()
+        {
+            //MessageBox.Show("Print Checker");
+
+            string tempDriverDetails;
+            int spaceHeader = 6;
+            int spaceLine = 8;
+            string sHeader = "";
+            string printerName = "";
+            string CPBuyerName = "";
+            string CPPhoneNumber = "";
+            string CustomDeliveryAdd = "";
+            string SplittedDeliveryAdd = "";
+            decimal totalQty = 0;
+            printerName = LSRetailPosis.Settings.HardwareProfiles.Printer.DeviceName;
+            transaction = SalesOrderActions.GetCustomerOrder(this.SelectedSalesOrderId, LSRetailPosis.Transaction.CustomerOrderType.SalesOrder, LSRetailPosis.Transaction.CustomerOrderMode.Edit);
+            ItemDetailsViewModel(transaction);
+            //loadTableData();
+            //APIAccessClass.xmlString1 = "";
+
+
+            if (printerName == "EPSON LX-310 ESC/P")//"Microsoft XPS Document Writer")
+            {
+                spaceHeader = 6;
+                spaceLine = 8;
+            }
+            else //for thermal printer
+            {
+                spaceHeader = 0;
+                spaceLine = 0;
+            }
+  
+                Offset = 0;
+                string itemName = "";
+                try
+                {
+                    if (APIAccessClass.xmlString1.ToString() != "")
+                    {
+                        XDocument doc = XDocument.Parse(APIAccessClass.xmlString1);
+                        // Get the value of <CPOrderNumber>
+                        CPBuyerName = doc.Root.Element("CPBuyerName") != null ? doc.Root.Element("CPBuyerName").Value : "";
+                        CPPhoneNumber = doc.Root.Element("CPPhone") != null ? doc.Root.Element("CPPhone").Value : "";
+                        CustomDeliveryAdd = doc.Root.Element("CustomerDeliveryAddress") != null ? doc.Root.Element("CustomerDeliveryAddress").Value : "";
+
+                    }
+                    
+                     
+                    // Remove rows that are successfully submitted
+                    List<DataRow> removeRows = new List<DataRow>();
+
+                    sHeader = "".PadLeft(spaceHeader) + "---------------------------" + Environment.NewLine +
+                              "".PadLeft(spaceHeader) + "         CHECKER        " + Environment.NewLine +
+                              "".PadLeft(spaceHeader) + "---------------------------" + Environment.NewLine;
+                    int a = 34;
+                    int b = 1;
+                    string sPrint = "";
+                    sPrint += "".PadLeft(spaceLine) + "Sales ID : " + this.SelectedSalesOrderId.ToString() + Environment.NewLine;
+                    sPrint += "".PadLeft(spaceLine) + "Ship  To : " + CPBuyerName + Environment.NewLine;
+                    sPrint += "".PadLeft(spaceLine) + "           " + CPPhoneNumber + Environment.NewLine;
+
+                    
+                    if (CustomDeliveryAdd.Length > 22)
+                    {
+                        SplittedDeliveryAdd = CustomDeliveryAdd.Substring(0, 22).PadRight(24);
+                    }
+                    else
+                    {
+                        SplittedDeliveryAdd = CustomDeliveryAdd.PadRight(24);
+                    }
+                    sPrint += "".PadLeft(spaceLine)+ "Alamat   : " + SplittedDeliveryAdd + Environment.NewLine; 
+                    
+                    // +CustomDeliveryAdd + Environment.NewLine;
+                    sPrint += "".PadLeft(spaceLine) + "---------------------------------------" + Environment.NewLine;
+                    sPrint += "".PadLeft(spaceLine) + "SKU      Nama Item".PadRight(a) + "Qty".PadLeft(b) + Environment.NewLine;
+                    sPrint += "".PadLeft(spaceLine) + "---------------------------------------" + Environment.NewLine;
+                    //loop each itemName
+                    foreach (var salesLine in this.lineItems)
+                    {
+                        //int unitDecimals = unitOfMeasureData.GetUnitDecimals(line.PurchUnit);
+                        if (salesLine.Description.Length > 22)
+                        {
+                            itemName = salesLine.Description.Substring(0, 22).PadRight(24);
+                        }
+                        else
+                        {
+                            itemName = salesLine.Description.PadRight(24);
+                        }
+
+
+                        sPrint += "".PadLeft(spaceLine) + salesLine.ItemId + "-" + itemName + SalesOrder.InternalApplication.Services.Rounding.Round(salesLine.QuantityOrdered, 0) + Environment.NewLine;
+                        totalQty += salesLine.QuantityOrdered;
+                    }
+
+                    //
+
+                    sPrint += "".PadLeft(spaceLine) + "---------------------------------------" + Environment.NewLine;
+                    sPrint += "".PadLeft(spaceLine) + "                  TOTAL QTY      " + "" + SalesOrder.InternalApplication.Services.Rounding.Round(totalQty, 0) + Environment.NewLine;
+                    sPrint += "".PadLeft(spaceLine) + "---------------------------------------" + Environment.NewLine;
+                    sPrint += "".PadLeft(spaceLine) + "PROSES DAN PRINT DO JIKA QTY SIAP KIRIM" + Environment.NewLine; 
+                    Offset += 136;
+
+                    //this.ReceiveDocumentFormat("PREVIEW");
+
+                    PrintDocument p = new PrintDocument();
+                    PrintDialog pd = new PrintDialog();
+                    PaperSize psize = new PaperSize("Custom", 100, Offset + 236);
+                    Margins margins = new Margins(0, 0, 0, 0);
+
+                    int normal = 7;
+                    int bigger = 10;
+                    Font normalFont = new Font("Courier New", normal);
+                    Font biggerFont = new Font("Courier New", bigger);
+
+                    pd.Document = p;
+                    pd.Document.DefaultPageSettings.PaperSize = psize;
+                    pd.Document.DefaultPageSettings.Margins = margins;
+                    p.DefaultPageSettings.PaperSize.Width = 600;
+
+                    bool isPrinterOffline = checkPrinterStatus(p);
+
+
+
+                    if (isPrinterOffline == false)
+                    {
+                        p.PrintPage += delegate(object sender1, PrintPageEventArgs e1)
+                        {
+                            SolidBrush brush = new SolidBrush(Color.Black);
+                            float leftMargin = p.DefaultPageSettings.PrintableArea.Left;
+                            float yPos = 0;
+
+                            string[] headerLines = sHeader.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+                            foreach (string line in headerLines)
+                            {
+                                e1.Graphics.DrawString(line, biggerFont, brush, leftMargin, yPos);
+                                yPos += normalFont.GetHeight(e1.Graphics);
+                            }
+
+                            string[] printLines = sPrint.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+                            foreach (string line in printLines)
+                            {
+                                e1.Graphics.DrawString(line, normalFont, brush, leftMargin, yPos);
+                                yPos += normalFont.GetHeight(e1.Graphics);
+                            }
+                        };
+
+                        try
+                        {
+                            p.Print();
+                            updateChecker();
+                            RefreshGrid();
+                              // to reload "selectedOrderStatus" object.
+                            this.EnableButtons();
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new Exception("Exception Occurred While Printing", ex);
+                        }
+                    }
+                    else
+                    {
+                        using (frmMessage frm = new frmMessage(errorPrinter, MessageBoxButtons.OK, MessageBoxIcon.Error))
+                        {
+                            POSFormsManager.ShowPOSForm(frm);
+                        }
+                    }
+
+
+                }
+                finally
+                {
+                    Cursor.Current = Cursors.Default;
+                }
+            //}
+            //else
+            //{
+            //    //checkReceiveThermal();
+            //}
+
+            //throw new NotImplementedException();
+        }
+
+        //To update the table for successfully print checker
+        private void updateChecker()
+        {
+            SqlConnection connection = ApplicationSettings.Database.LocalConnection;
+            string salesId = this.SelectedSalesOrderId;
+              // make sure this variable is passed correctly
+
+            try
+            {
+                string queryString = @"IF EXISTS (SELECT 1 FROM AX.CPONLINECHECKERTABLE WHERE SALESID = @SALESID)
+                                        BEGIN
+                                            UPDATE AX.CPONLINECHECKERTABLE
+                                            SET CUSTCONFIRMID = @CUSTCONFIRMID,
+                                                TRANSDATETIME = @TRANSDATETIME
+                                            WHERE SALESID = @SALESID
+                                        END
+                                        ELSE
+                                        BEGIN
+                                            INSERT INTO AX.CPONLINECHECKERTABLE
+                                                (RETAILSTOREID,SALESID, STAFFID, CUSTCONFIRMID, TRANSDATETIME, DATAAREAID, PARTITION)
+                                            VALUES
+                                                (@RETAILSTOREID,@SALESID, @STAFFID, @CUSTCONFIRMID, @TRANSDATETIME, @DATAAREAID, @PARTITION)
+                                        END
+                                        ";
+
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+
+                    command.Parameters.AddWithValue("@RETAILSTOREID", ApplicationSettings.Database.StoreID.ToString());
+                    command.Parameters.AddWithValue("@SALESID", salesId);
+                    command.Parameters.AddWithValue("@CUSTCONFIRMID", custConfirmId);
+                    command.Parameters.AddWithValue("@TRANSDATETIME", DateTime.Now);
+                    command.Parameters.AddWithValue("@STAFFID", ApplicationSettings.Terminal.TerminalOperator.OperatorId);
+                    command.Parameters.AddWithValue("@DATAAREAID", SalesOrder.InternalApplication.Settings.Database.DataAreaID);
+                    command.Parameters.AddWithValue("@PARTITION", 1);
+                   
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+                    }
+
+                    command.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+                }
+            }
+        }
+
+        private bool checkPrinterStatus(PrintDocument p)
+        {
+         
+            string printerName = p.PrinterSettings.PrinterName;
+            bool isPrinterOffline = false;
+            ManagementObjectSearcher searcher = new
+            ManagementObjectSearcher(string.Format("SELECT * FROM Win32_Printer WHERE Name LIKE '%{0}'", printerName));
+
+            foreach (ManagementObject printer in searcher.Get())
+            {
+                printerName = p.PrinterSettings.PrinterName;
+                if (printerName.Equals(printerName))
+                {
+                    Console.WriteLine("Printer = " + printer["Name"]);
+                    if (printer["WorkOffline"].ToString().ToLower().Equals("true"))
+                    {
+                        // printer is offline by user
+                        //MessageBox.Show("Printer is offline or not available.");
+                        isPrinterOffline = true;
+
+                    }
+                    else
+                    {
+                        // printer is not offline
+                        //MessageBox.Show("Printer is is connected.");
+                        isPrinterOffline = false;
+
+                    }
+                }
+            }
+
+            return isPrinterOffline;
+        
         }
 
         //private void btnCreatePackSlip_Click(object sender, EventArgs e)
@@ -871,8 +1266,8 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
         private void btnCreatePackSlip_Click(object sender, EventArgs e)
         {
             GetSelectedRow();
-
-            CP_frmPackingSlipDetail packingSlipDetails = new CP_frmPackingSlipDetail(SalesOrder.InternalApplication, this.SelectedSalesOrderId.ToString(), orderTypeSO, disableInvoice);
+            string custId = gridView1.GetRowCellValue(gridView1.GetFocusedDataSourceRowIndex(), "CUSTOMERACCOUNT").ToString();
+            CP_frmPackingSlipDetail packingSlipDetails = new CP_frmPackingSlipDetail(SalesOrder.InternalApplication, this.SelectedSalesOrderId.ToString(), custId, orderTypeSO, disableInvoice);
             packingSlipDetails.ShowDialog();
             RefreshGrid();
             GetSelectedRow();  // to reload "selectedOrderStatus" object.
@@ -1088,6 +1483,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
         {
             _invoiceAx = "";
             string statusInvoice;
+            
             try
             {
                 object[] parameterList = new object[] 
@@ -1153,6 +1549,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
         //update invoice id yonathan 06092024
         private void updateInvoiceId(string _invoiceAx, string _salesId)
         {
+            var custAcc = gridView1.GetRowCellValue(gridView1.GetFocusedDataSourceRowIndex(), "CUSTOMERACCOUNT");
             string storeId = "";
             bool update = false;
             SqlConnection connection = ApplicationSettings.Database.LocalConnection;
@@ -1203,9 +1600,9 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                 try
                 {
                     string queryString = @" INSERT INTO  AX.CPPOSONLINEORDER
-                                        (RETAILSTOREID,SALESID,STAFFID,TRANSDATETIME,DATAAREAID,PARTITION)
+                                        (RETAILSTOREID,SALESID,STAFFID,TRANSDATETIME,DATAAREAID,CUSTACCOUNT,PARTITION)
                                         VALUES
-                                        (@STOREID,@SALESID,@STAFFID,DATEADD(HOUR, -(DATEPART(TZOFFSET, SYSDATETIMEOFFSET()) / 60), SYSDATETIME()),@DATAAREAID,@PARTITION)"
+                                        (@STOREID,@SALESID,@STAFFID,DATEADD(HOUR, -(DATEPART(TZOFFSET, SYSDATETIMEOFFSET()) / 60), SYSDATETIME()),@DATAAREAID,@CUSTACC,@PARTITION)"
                                         ;
 
                     using (SqlCommand command = new SqlCommand(queryString, connection))
@@ -1214,7 +1611,10 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
                         command.Parameters.AddWithValue("@SALESID", _salesId);
                         command.Parameters.AddWithValue("@STAFFID", ApplicationSettings.Terminal.TerminalOperator.OperatorId);
                         command.Parameters.AddWithValue("@DATAAREAID", SalesOrder.InternalApplication.Settings.Database.DataAreaID);
+                        command.Parameters.AddWithValue("@CUSTACC", custAcc.ToString()); //add CUSTACCOUNT 17092025 - YOnathan
                         command.Parameters.AddWithValue("@PARTITION", 1);
+                        
+                        
                         if (connection.State != ConnectionState.Open)
                         {
                             connection.Open();

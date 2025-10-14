@@ -71,6 +71,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="WinFormsTouch\frmGetSalesInvoice.resx">
       <DependentUpon>frmGetSalesInvoice.cs</DependentUpon>
       <SubType>Designer</SubType>

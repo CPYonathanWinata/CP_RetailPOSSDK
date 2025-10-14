@@ -61,6 +61,9 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
 		public void PreProcessOperation(IPreTriggerResult preTriggerResult, IPosTransaction posTransaction, PosisOperations posisOperation)
 		{
 
+            //check UOM and price of the item
+
+
             //if (posisOperation == PosisOperations.RecallUnconcludedTransaction)
             //{
             //    posTransaction.OperationCancelled = true;

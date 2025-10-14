@@ -44,10 +44,11 @@ using System.Timers;
 using System.Text.RegularExpressions;
 using QRCoder;
 using System.Windows.Shapes;
-using MySql.Data.MySqlClient;
+//using MySql.Data.MySqlClient;
 using System.Net;
 using System.IO;
 using System.Drawing.Printing;
+using APIAccess;
 
 namespace Microsoft.Dynamics.Retail.Pos.Interaction
 {
@@ -3968,7 +3969,34 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 
 
 		#region QRIS custom Code
-		private void getURLAPI()
+        private void getURLAPI()
+        {
+
+            if (APIAccessClass.QrisUrlConfig.ContainsKey("SHOPEEPAY"))
+            {
+                var shopee = APIAccessClass.QrisUrlConfig["SHOPEEPAY"];
+                if (shopee != null) // extra safety
+                {
+                    urlCreate = shopee.URLCREATE;
+                    urlInvalidate = shopee.URLINVALIDATE;
+                    urlNotify = shopee.URLNOTIFY;
+                }
+            }            
+            else
+            {
+                using (frmMessage dialog = new frmMessage("Please check internet connection or \nAPI table CPAPIURLQRIS config!!!", MessageBoxButtons.OK, MessageBoxIcon.Error))
+                {
+                    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+
+
+                }
+            }
+                
+     
+        }
+
+        /*
+		private void getURLAPIOld()
 		{
 
 			//APIAccess.APIParameter.mySqlConnString;
@@ -4036,7 +4064,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 
 				}
 			}
-		}
+		}*/
 
 
 

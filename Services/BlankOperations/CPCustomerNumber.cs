@@ -29,31 +29,31 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 
         public void LoadLayout(string layoutId)
         {
-            //throw new NotImplementedException();
-            SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+            ////throw new NotImplementedException();
+            //SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
 
-            try
-            {
-                string queryString = "DELETE FROM CPEZSELECTEDCUSTOMER";
+            //try
+            //{
+            //    string queryString = "DELETE FROM CPEZSELECTEDCUSTOMER";
 
-                using (SqlCommand cmd = new SqlCommand(queryString, connection))
-                {
-                    if (connection.State != ConnectionState.Open)
-                    {
-                        connection.Open();
-                    }
+            //    using (SqlCommand cmd = new SqlCommand(queryString, connection))
+            //    {
+            //        if (connection.State != ConnectionState.Open)
+            //        {
+            //            connection.Open();
+            //        }
 
-                    cmd.ExecuteNonQuery();
-                }
-            }
-            catch (SqlException ex)
-            {
-                throw new Exception("Format Error", ex);
-            }
-            finally
-            {
-                connection.Close();
-            }
+            //        cmd.ExecuteNonQuery();
+            //    }
+            //}
+            //catch (SqlException ex)
+            //{
+            //    throw new Exception("Format Error", ex);
+            //}
+            //finally
+            //{
+            //    connection.Close();
+            //}
 
             lblCustomerNo.Text = "";
         }
