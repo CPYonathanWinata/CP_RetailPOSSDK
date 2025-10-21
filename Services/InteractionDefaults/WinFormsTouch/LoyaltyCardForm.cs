@@ -289,39 +289,45 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
                 )
             {
 
-                this.DialogResult = DialogResult.OK;
-               
+                
+                
                 // print here
                 string s = this.cpPrintReceipt();
-                
-                PrintDocument p = new PrintDocument();
-                PrintDialog pd = new PrintDialog();
-                PaperSize psize = new PaperSize("Custom", 100, Offset + 236);                 
-                Margins margins = new Margins(0, 0, 0, 0); 
 
-                pd.Document = p;
-                pd.Document.DefaultPageSettings.PaperSize = psize;
-                pd.Document.DefaultPageSettings.Margins = margins;
-                p.DefaultPageSettings.PaperSize.Width = 400;
-                p.PrintPage += delegate(object sender1, PrintPageEventArgs e1)
+                //add validation when the card is not exist
+                if(s != "INVALID")
                 {
-                    e1.Graphics.DrawString(s, new Font("Calibri", 8, FontStyle.Bold), new SolidBrush(Color.Black), new RectangleF(p.DefaultPageSettings.PrintableArea.Left, 0, p.DefaultPageSettings.PrintableArea.Width, p.DefaultPageSettings.PrintableArea.Height));
+                    this.DialogResult = DialogResult.OK;
+                    PrintDocument p = new PrintDocument();
+                    PrintDialog pd = new PrintDialog();
+                    PaperSize psize = new PaperSize("Custom", 100, Offset + 236);                 
+                    Margins margins = new Margins(0, 0, 0, 0); 
 
-                };
-                try
-                {
-                    //for (int i = 1; i <= 2; i++)
-                    //{
-                        p.Print();
-                   // }
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("Exception Occured While Printing", ex);
-                }
-                // End add NEC Hmz
+                    pd.Document = p;
+                    pd.Document.DefaultPageSettings.PaperSize = psize;
+                    pd.Document.DefaultPageSettings.Margins = margins;
+                    p.DefaultPageSettings.PaperSize.Width = 400;
+                    p.PrintPage += delegate(object sender1, PrintPageEventArgs e1)
+                    {
+                        e1.Graphics.DrawString(s, new Font("Calibri", 8, FontStyle.Bold), new SolidBrush(Color.Black), new RectangleF(p.DefaultPageSettings.PrintableArea.Left, 0, p.DefaultPageSettings.PrintableArea.Width, p.DefaultPageSettings.PrintableArea.Height));
+
+                    };
+                    try
+                    {
+                        //for (int i = 1; i <= 2; i++)
+                        //{
+                            p.Print();
+                       // }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Exception Occured While Printing", ex);
+                    }
+                    // End add NEC Hmz
                 
-                this.Close();
+                    this.Close();
+                }
+                
             }
              
         }
@@ -356,29 +362,88 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
         {
             ILoyaltyCardData cd;
             string comment = "";
-
+            string printerName = LSRetailPosis.Settings.HardwareProfiles.Printer.DeviceName;
             cd = PosApplication.Instance.Services.Loyalty.GetLoyaltyBalanceInfo(padLoyaltyCardNumber.EnteredValue);
-            for (int i = 1; i <= 10; i++)
+
+            if (cd == null)
             {
-                comment += Environment.NewLine;
+                return "INVALID"; //validation when the card is not exist
             }
+            else
+            {
+                for (int i = 1; i <= 10; i++)
+                {
+                    comment += Environment.NewLine;
+                }
 
-            comment += "                                                Loyalty Card" + Environment.NewLine;
-            comment += "                                                    ********************************************************" + Environment.NewLine;
-            comment += "                                                Loyalty Card    :" + "****" + cd.CardNumber.Substring(cd.CardNumber.Length -4,4) + Environment.NewLine;
-            comment += "                                                Customer        :" + cd.CustomerName + Environment.NewLine;
-            comment += "                                                Card Type       :" + cd.CardTypeString + Environment.NewLine;
+                //comment += "                                                Loyalty Card" + Environment.NewLine;
+                //comment += "                                                    ********************************************************" + Environment.NewLine;
+                //comment += "                                                Loyalty Card    :" + "****" + cd.CardNumber.Substring(cd.CardNumber.Length -4,4) + Environment.NewLine;
+                //comment += "                                                Customer        :" + cd.CustomerName + Environment.NewLine;
+                //comment += "                                                Card Type       :" + cd.CardTypeString + Environment.NewLine;
 
-            Offset = Offset + 312;
-            comment += Environment.NewLine + "                                                Issued Points   :" + cd.IssuedPoints.ToString("#,##0.00") + Environment.NewLine;
-            comment += "                                                Used Points     :" + cd.UsedPoints.ToString("#,##0.00") + Environment.NewLine;
-            comment += "                                                Expired Points :" + cd.ExpiredPoints.ToString("#,##0.00") + Environment.NewLine;
-            comment += Environment.NewLine + "                                                Balance Points :" + cd.BalancePoints.ToString("#,##0.00") + Environment.NewLine;
-            comment += "                                                        ********************************************************" + Environment.NewLine;
+                //Offset = Offset + 312;
+                //comment += Environment.NewLine + "                                                Issued Points   :" + cd.IssuedPoints.ToString("#,##0.00") + Environment.NewLine;
+                //comment += "                                                Used Points     :" + cd.UsedPoints.ToString("#,##0.00") + Environment.NewLine;
+                //comment += "                                                Expired Points :" + cd.ExpiredPoints.ToString("#,##0.00") + Environment.NewLine;
+                //comment += Environment.NewLine + "                                                Balance Points :" + cd.BalancePoints.ToString("#,##0.00") + Environment.NewLine;
+                //comment += "                                                        ********************************************************" + Environment.NewLine;
+                //support for thermal and epson 15102025 -  Yonathan
+                if (printerName == "EPSON LX-310 ESC/P")//"Microsoft XPS Document Writer")
+                {
+                    comment += "                                                Loyalty Card Balance" + Environment.NewLine;
+                    comment += "                                                    ********************************************************" + Environment.NewLine;
+                    comment += "                                                Loyalty Card    :" + "****" + cd.CardNumber.Substring(cd.CardNumber.Length - 4, 4) + Environment.NewLine;
+                    comment += "                                                Customer        :" + cd.CustomerName + Environment.NewLine;
+                    comment += "                                                Card Type       :" + cd.CardTypeString + Environment.NewLine;
 
-            return comment;
+                    Offset = Offset + 312;
+                    comment += Environment.NewLine + "                                                Issued Points   :" + cd.IssuedPoints.ToString("#,##0.00") + Environment.NewLine;
+                    comment += "                                                Used Points     :" + cd.UsedPoints.ToString("#,##0.00") + Environment.NewLine;
+                    comment += "                                                Expired Points :" + cd.ExpiredPoints.ToString("#,##0.00") + Environment.NewLine;
+                    comment += Environment.NewLine + "                                                Balance Points :" + cd.BalancePoints.ToString("#,##0.00") + Environment.NewLine;
+                    comment += "                                                        ********************************************************" + Environment.NewLine;
+                }
+                else // assumption for else is thermal printer
+                {
+                    comment += "Loyalty Card Balance" + Environment.NewLine;
+                    comment += "**********************************" + Environment.NewLine;
+                    comment += "Loyalty Card    :" + "****" + cd.CardNumber.Substring(cd.CardNumber.Length - 4, 4) + Environment.NewLine;
+                    comment += "Customer        :" + cd.CustomerName + Environment.NewLine;
+                    comment += "Card Type       :" + cd.CardTypeString + Environment.NewLine;
+
+                    Offset = Offset + 312;
+                    comment += Environment.NewLine + "Issued Points   :" + cd.IssuedPoints.ToString("#,##0.00") + Environment.NewLine;
+                    comment += "Used Points     :" + cd.UsedPoints.ToString("#,##0.00") + Environment.NewLine;
+                    comment += "Expired Points :" + cd.ExpiredPoints.ToString("#,##0.00") + Environment.NewLine;
+                    comment += Environment.NewLine + "Balance Points :" + cd.BalancePoints.ToString("#,##0.00") + Environment.NewLine;
+                    comment += "**********************************" + Environment.NewLine;
+                }
+
+
+                return comment;
+
+            }
+            
         
         }
+       
+        ///// <summary>
+        ///// Clean up any resources being used.
+        ///// </summary>
+        //protected override void Dispose(bool disposing)
+        //{
+        //    if (disposing)
+        //    {
+        //        if (components != null)
+        //        {
+        //            components.Dispose();
+        //        }
+        //    }
+        //    base.Dispose(disposing);
+        //}
+
+
 
     }
 }

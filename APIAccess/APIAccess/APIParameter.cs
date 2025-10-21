@@ -245,7 +245,7 @@ namespace APIAccess
 
         public class DataStatusOrder
         {
-            public string merchantID { get; set; }
+            public string merchantID { get; set; } 
             public string orderID { get; set; }
             public string shortOrderNumber { get; set; }
             public string state { get; set; }

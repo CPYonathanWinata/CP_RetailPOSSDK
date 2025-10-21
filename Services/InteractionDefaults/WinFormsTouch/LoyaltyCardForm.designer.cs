@@ -70,26 +70,26 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
         //}
         private bool isDisposed = false;
 
-        protected override void Dispose(bool disposing)
-        {
-            if (!isDisposed)
-            {
-                if (disposing)
-                {
-                    // Dispose managed resources here
-                    if (this.components != null)
-                    {
-                        this.components.Dispose();
-                        this.components = null;
-                    }
-                }
-                // Dispose unmanaged resources here
+        //protected override void Dispose(bool disposing)
+        //{
+        //    if (!isDisposed)
+        //    {
+        //        if (disposing)
+        //        {
+        //            // Dispose managed resources here
+        //            if (this.components != null)
+        //            {
+        //                this.components.Dispose();
+        //                this.components = null;
+        //            }
+        //        }
+        //        // Dispose unmanaged resources here
 
-                isDisposed = true;
-            }
+        //        isDisposed = true;
+        //    }
 
-            base.Dispose(disposing);
-        }
+        //    base.Dispose(disposing);
+        //}
 
 
         #region Windows Form Designer generated code
@@ -191,7 +191,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
             this.btnCancel.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.btnCancel.Appearance.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnCancel.Appearance.Options.UseFont = true;
-            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            //this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Location = new System.Drawing.Point(486, 4);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(4);
             this.btnCancel.Name = "btnCancel";
@@ -199,6 +199,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
             this.btnCancel.TabIndex = 2;
             this.btnCancel.Tag = "BtnExtraLong";
             this.btnCancel.Text = "Cancel";
+            this.btnCancel.Click+=btnCancel_Click;
             // 
             // btnOk
             // 
@@ -508,6 +509,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
             this.LookAndFeel.SkinName = "Money Twins";
             this.Name = "LoyaltyCardForm";
             this.Text = "LoyaltyCardForm";
+            //this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.LoyaltyCardForm_FormClosing);
             this.Controls.SetChildIndex(this.panelControl1, 0);
             this.Controls.SetChildIndex(this.tableLayoutPanel3, 0);
             ((System.ComponentModel.ISupportInitialize)(this.styleController)).EndInit();
@@ -524,6 +526,14 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
             this.PerformLayout();
 
         }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            Close();
+            this.Close();
+        }
+
+       
 
         #endregion
 

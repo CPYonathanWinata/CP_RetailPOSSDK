@@ -245,7 +245,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
             ShowPopupMessage("ONLINE ORDER NOTIFICATION", string.Format("Ada {0} Pesanan Online untuk toko ini.\nKlik tombol 'BUKA ORDER' untuk memproses Pesanan Online dan pilih Order Type 'Online Order'.", resultData));
         }
 
-        
+         
  
        }
 

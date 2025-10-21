@@ -179,7 +179,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
         /// <param name="context">The value of the parameter to pass to the view's constructor</param>
         /// <param name="showDialog">Show dialog when value true otherwise hide dialog</param>
         /// <returns></returns>
-        private TResults InvokeInteraction<TParam, TResults>(string viewName, TParam context, bool showDialog)
+        /*private TResults InvokeInteraction<TParam, TResults>(string viewName, TParam context, bool showDialog)
             where TParam : Microsoft.Practices.Prism.Interactivity.InteractionRequest.Notification
             where TResults : class, new()
         {
@@ -206,7 +206,36 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
                 // Get results
                 return view.GetResults<TResults>();
             }
+        }*/
+        //fixed 15102025 (not using 'using' because it will be disposed autmatically after close the form, so can't get the return value because already disposed (yonathan)
+        private TResults InvokeInteraction<TParam, TResults>(string viewName, TParam context, bool showDialog)
+            where TParam : Microsoft.Practices.Prism.Interactivity.InteractionRequest.Notification
+            where TResults : class, new()
+        {
+            IInteractionView view = null;
+
+            
+            CompositionContainer container = new CompositionContainer(catalog);
+ 
+            container.ComposeExportedValue<TParam>(context);
+
+           
+            view = container.GetExportedValues<IInteractionView>(viewName).First();
+
+           
+            System.Windows.Forms.Form form = (System.Windows.Forms.Form)view;
+            if (showDialog)
+            {
+                this.Application.ApplicationFramework.POSShowForm(form);
+            }
+
+
+            var result = view.GetResults<TResults>();
+            //container.Dispose(); //dispose manually
+            return result;
+            //return view.GetResults<TResults>();
         }
+
 
         /// <summary>
         /// Adds a directory as a catalog if it exists.

@@ -554,7 +554,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
             this.btnClose.TabIndex = 9;
             this.btnClose.Tag = "BtnNormal";
             this.btnClose.Text = "Close";
-            this.FormClosing +=frmGetSalesOrder_FormClosing;
+            //this.FormClosing +=frmGetSalesOrder_FormClosing;
             // 
             // lblHeading
             // 

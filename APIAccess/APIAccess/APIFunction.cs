@@ -1371,7 +1371,7 @@ namespace APIAccess
                 }
                 catch (Exception ex)
                 {
-                    throw new ApplicationException("API call failed:\n" + ex.Message +"\nSilakan cek APIConfig.xml atau\nHubungi IT Support", ex);
+                    throw new ApplicationException("API call failed:\n" + ex.Message +"\nSilakan cek APIConfig.xml atau\nHubungi IT Support", ex); 
                     //Console.WriteLine("Error calling API: " + ex.Message);
                 }
             }

@@ -189,7 +189,7 @@ namespace Microsoft.Dynamics.Retail.Pos.ItemTriggers
             }
             //last before adding the item.
             RetailTransaction retailTransaction = (RetailTransaction)posTransaction;
-            //check UOM and pricing
+            //check UOM and pricing - 26092025
             groupId = GetChannelGroupIds(retailTransaction.ChannelId);
 
 

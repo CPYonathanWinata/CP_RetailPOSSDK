@@ -1543,8 +1543,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     break;
                 case "105":
                     {
-                        RetailTransaction transaction = posTransaction as RetailTransaction;
-                        PosApplication.Instance.Services.Rounding.Round(transaction.TaxAmount, false);
+                        
+                        Application.RunOperation(PosisOperations.LoyaltyCardBalance, "");
 
                     }
 
