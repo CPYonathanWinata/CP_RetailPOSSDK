@@ -141,6 +141,19 @@ namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
         {
             string messageBoxString = "";
 
+            //validate to compare date of input and date of payment to prevent different date
+            RetailTransaction retailTransaction = posTransaction as RetailTransaction;
+            if (retailTransaction.BeginDateTime.Date != DateTime.Now.Date)
+            {
+                using (frmMessage dialog = new frmMessage(string.Format("Tanggal input berbeda dengan tanggal pembayaran.\nSilakan void transaksi terlebih dahulu, lalu input lagi"), MessageBoxButtons.OK, MessageBoxIcon.Stop))
+                {
+                    POSFormsManager.ShowPOSForm(dialog);
+                }
+
+                preTriggerResult.ContinueOperation = false;
+
+                return;
+            }
             ////add grab discount 24032025 - Yonathan
             //RetailTransaction transaction = posTransaction as RetailTransaction;
             //foreach(var itemLines in transaction.CalculableSalesLines)

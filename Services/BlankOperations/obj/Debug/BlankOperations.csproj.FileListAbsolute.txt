@@ -301,3 +301,6 @@ C:\Users\yonathan.winata\Documents\GitHub\AX\Retail POS\Extensions\BlankOperatio
 C:\Users\yonathan.winata\Documents\GitHub\AX\Retail POS\Extensions\aa\BlankOperations.resources.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\aa\BlankOperations.resources.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\BlankOperations.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel.Infolog.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel.ItemSearch.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel.MainFormPrintLabel.resources

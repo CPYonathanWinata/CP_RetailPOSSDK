@@ -1938,9 +1938,9 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
                     //"=========================="
                     if (statusReceipt != "REPRINT") //additional code for reprint by Yonathan 16/07/2024
                     {
-                        s += "----------------------------------" + Environment.NewLine;
+                        s += "------------------------------" + Environment.NewLine;
                         s += "             " + statusReceipt + Environment.NewLine;
-                        s += "----------------------------------" + Environment.NewLine;
+                        s += "------------------------------" + Environment.NewLine;
                     }
                     //s += "             -----------------------------------" + Environment.NewLine;
                     //s += "                          " + statusReceipt + Environment.NewLine;
@@ -1964,14 +1964,14 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
                          "-------------------------------------------------------" + Environment.NewLine;*/
 
                     //       s += "------------------------------------------------" + Environment.NewLine;
-                    s += "----------------------------------" + Environment.NewLine; // modif by Julius 14 07 2017
+                    s += "------------------------------" + Environment.NewLine; // modif by Julius 14 07 2017
                     //s += "Kode Barang".PadRight(25) + "Unit".PadRight(5) + "Qty".PadLeft(4);
                     //s += "             Kode Barang".PadRight(32) + "Qty".PadLeft(10); //+ "Unit".PadLeft(5); modif by Yonathan 11/10/2022 disable Unit column
                     //s += "Kode Barang".PadRight(a) + "Qty".PadLeft(b,' ') + "Unit".PadLeft(7); //modif by Yonathan 11/10/2022 disable Unit column
                     s += "Kode Barang".PadRight(a) + "Qty".PadLeft(b, ' ') + "Unit".PadLeft(c);
                     //"Kode Barang                       Unit              Qty " 
                     s += Environment.NewLine;
-                    s += "----------------------------------" + Environment.NewLine; 
+                    s += "------------------------------" + Environment.NewLine; 
                     reader = command.ExecuteReader();
                     //Offset = Offset + 160;
                     while (reader.Read())
@@ -1980,7 +1980,7 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
                         itemName = reader["ItemName"].ToString();
                         itemNumber = reader["ItemNumber"].ToString();
                         unit = reader["Unit"].ToString();
-                        if (statusReceipt == "REPRINT" || statusReceipt == "ORIGINAL" || statusReceipt == "COPY")
+                        if (statusReceipt == "REPRINT" )//|| statusReceipt == "ORIGINAL" || statusReceipt == "COPY") //FIXED 27102025 
                         {
                             qty = (Math.Truncate(Convert.ToDecimal(reader["QuantityReceived"]) * 1000m) / 1000m);
                         }
@@ -2044,18 +2044,18 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
                     }
 
                     //     s += "------------------------------------------------" + Environment.NewLine;
-                    s += "----------------------------------" + Environment.NewLine; // modif by Julius 14 07 2017
+                    s += "------------------------------" + Environment.NewLine; // modif by Julius 14 07 2017
                     //s += "Total Qty    :".PadRight(27) + totalQty.ToString().PadLeft(7) + Environment.NewLine;
                     //s += "             Total Qty    :".PadRight(22) + totalQty.ToString().PadLeft(7) + Environment.NewLine; //disable by Yonathan to add support for decimal
                     s += "Total Qty    :".PadRight(10) + totalQtyDec.ToString().PadLeft(11) + Environment.NewLine; //newly modified by yonathan 10/10/2022
                     //     s += "------------------------------------------------" + Environment.NewLine;
-                    s += "----------------------------------" + Environment.NewLine; // modif by Julius 14 07 2017
+                    s += "------------------------------" + Environment.NewLine; // modif by Julius 14 07 2017
                     s += Environment.NewLine + Environment.NewLine + Environment.NewLine;
 
-                    s += "Diterima Oleh     Diserahkan Oleh";
+                    s += "Diterima Oleh  Diserahkan Oleh";
                     s += Environment.NewLine + Environment.NewLine + Environment.NewLine + Environment.NewLine;
 
-                    s += "(_____________)   (_____________)";
+                    s += "(__________)   (___________)";
                     //s += Environment.NewLine + Environment.NewLine + Environment.NewLine + Environment.NewLine +
                     //     Environment.NewLine + Environment.NewLine + Environment.NewLine + Environment.NewLine +
                     //     Environment.NewLine + Environment.NewLine + Environment.NewLine + Environment.NewLine;
