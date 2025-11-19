@@ -32,6 +32,7 @@ using System;
 using System.Net;
 using System.Configuration;
 using System.Linq;
+using System.Xml.Linq;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using CRTDM = Microsoft.Dynamics.Commerce.Runtime.DataModel;
@@ -55,6 +56,9 @@ using LSRetailPosis.Transaction.Line.SaleItem;
 using Microsoft.Dynamics.Retail.Pos.Contracts.BusinessLogic;
 using LSRetailPosis.Transaction.Line;
 using LSRetailPosis.Transaction.Line.Discount;
+using System.Text.RegularExpressions;
+using System.Drawing.Printing;
+using System.Drawing;
 
 
 
@@ -1019,6 +1023,16 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 
                         break;
                     }
+                case "26":
+                    {
+
+                        CP_PrintLabel.MainFormPrintLabel printLabel = new CP_PrintLabel.MainFormPrintLabel(posTransaction, Application);
+
+
+                        printLabel.ShowDialog();
+                        
+                        break;
+                    }
                 case "88":
                     {
                         break;
@@ -1028,16 +1042,16 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                         Application.RunOperation(PosisOperations.LoyaltyCardBalance,"", posTransaction);
                         break;
                     }
-				case "90":
-					{
+                case "90":
+                    {
                         //for testing purpose
 
-						//addNodeTcpBinding();
-						//addEndPointBinding();
-						CPStressTest cpTest = new CPStressTest(Application);
-						cpTest.ShowDialog();
-						break;
-					}
+                        //addNodeTcpBinding();
+                        //addEndPointBinding();
+                        CPStressTest cpTest = new CPStressTest(Application);
+                        cpTest.ShowDialog();
+                        break;
+                    }
                 
                 case "91":
                     {
@@ -1142,31 +1156,31 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     break;
                 case "94":
                     {
-                        //int exponent = 0;
-                        //decimal priceAfterExponent = 0;
-                        //string priceAfterExponentString = "";
+                            //int exponent = 0;
+                            //decimal priceAfterExponent = 0;
+                            //string priceAfterExponentString = "";
 
 
-                        /*
-                         priceAfterExponentString = orderItem.price.ToString().Substring(0, orderItem.price.ToString().Length - exponent);
+                            /*
+                                priceAfterExponentString = orderItem.price.ToString().Substring(0, orderItem.price.ToString().Length - exponent);
 
-                        decimal.TryParse(priceAfterExponentString, out priceAfterExponent);
-                         */
-                        LSRetailPosis.POSProcesses.ItemSale iSale = new LSRetailPosis.POSProcesses.ItemSale();
+                                decimal.TryParse(priceAfterExponentString, out priceAfterExponent);
+                                    */
+                    LSRetailPosis.POSProcesses.ItemSale iSale = new LSRetailPosis.POSProcesses.ItemSale();
 
-                        iSale = new LSRetailPosis.POSProcesses.ItemSale();
-                        iSale.OperationID = PosisOperations.ItemSale;
-                        iSale.OperationInfo = new LSRetailPosis.POSProcesses.OperationInfo();
-                        iSale.Barcode = itemIdToAdd;  // change to this by yonathan 21/10/2022
-                        //iSale.BarcodeInfo.ItemId = txtSKU.Text;
-                        iSale.OperationInfo.NumpadQuantity = quantityToAdd;//orderItem.id
-                        iSale.POSTransaction = (LSRetailPosis.Transaction.PosTransaction)posTransaction;
-                        iSale.RunOperation();
-                        grabPosTransaction = iSale.POSTransaction;
+                    iSale = new LSRetailPosis.POSProcesses.ItemSale();
+                    iSale.OperationID = PosisOperations.ItemSale;
+                    iSale.OperationInfo = new LSRetailPosis.POSProcesses.OperationInfo();
+                    iSale.Barcode = itemIdToAdd;  // change to this by yonathan 21/10/2022
+                    //iSale.BarcodeInfo.ItemId = txtSKU.Text;
+                    iSale.OperationInfo.NumpadQuantity = quantityToAdd;//orderItem.id
+                    iSale.POSTransaction = (LSRetailPosis.Transaction.PosTransaction)posTransaction;
+                    iSale.RunOperation();
+                    grabPosTransaction = iSale.POSTransaction;
 
 
-                    }
-                    break;
+                }
+                break;
                 case "95":
                     {
                         RetailTransaction transaction;

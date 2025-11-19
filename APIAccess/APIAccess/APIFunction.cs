@@ -850,7 +850,7 @@ namespace APIAccess
 
         }
 
-         //add for check positive status item (stock / non stock) - Yonathan 17062025
+         
         public static bool checkPositiveStatus(string _itemId, SqlConnection _connectionString)
         {
             //before checking the stock, check first whether this item type is service
@@ -1371,7 +1371,7 @@ namespace APIAccess
                 }
                 catch (Exception ex)
                 {
-                    throw new ApplicationException("API call failed:\n" + ex.Message +"\nSilakan cek APIConfig.xml atau\nHubungi IT Support", ex); 
+                    throw new ApplicationException("API call failed:\n" + ex.Message +"\n- Silakan restart modem & router\n- Tutup aplikasi POS AX\n- Buka ulang POS AX jika jaringan sudah terkoneksi, lalu hubungi IT Support untuk tindakan lanjut.", ex);
                     //Console.WriteLine("Error calling API: " + ex.Message);
                 }
             }

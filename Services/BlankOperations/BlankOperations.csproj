@@ -151,10 +151,20 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.RegularExpressions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="Transaction">
       <HintPath>..\..\..\..\..\Users\it.application\Desktop\Retail POS\Transaction.DLL</HintPath>
+    </Reference>
+    <Reference Include="zxing, Version=0.16.11.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZXing.Net.0.16.11\lib\net48\zxing.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="zxing.presentation, Version=0.16.11.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZXing.Net.0.16.11\lib\net48\zxing.presentation.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -308,6 +318,24 @@
     </Compile>
     <Compile Include="CP_IZone\PLN\CPPLNPascabayar.Designer.cs">
       <DependentUpon>CPPLNPascabayar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CP_PrintLabel\PrintLabelInfolog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CP_PrintLabel\PrintLabelInfolog.Designer.cs">
+      <DependentUpon>PrintLabelInfolog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CP_PrintLabel\PrintLabelItemSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CP_PrintLabel\PrintLabelItemSearch.Designer.cs">
+      <DependentUpon>PrintLabelItemSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CP_PrintLabel\PrintLabel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CP_PrintLabel\PrintLabel.Designer.cs">
+      <DependentUpon>PrintLabel.cs</DependentUpon>
     </Compile>
     <Compile Include="CP_SalesOrderDetail.cs">
       <SubType>Form</SubType>
@@ -471,6 +499,15 @@
     <EmbeddedResource Include="CP_IZone\PLN\CPPLNPascabayar.resx">
       <DependentUpon>CPPLNPascabayar.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="CP_PrintLabel\PrintLabelInfolog.resx">
+      <DependentUpon>PrintLabelInfolog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CP_PrintLabel\PrintLabelItemSearch.resx">
+      <DependentUpon>PrintLabelItemSearch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CP_PrintLabel\PrintLabel.resx">
+      <DependentUpon>PrintLabel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CP_SalesOrderDetail.resx">
       <DependentUpon>CP_SalesOrderDetail.cs</DependentUpon>
     </EmbeddedResource>
@@ -505,6 +542,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagram3.cd" />
     <None Include="JBENHL1StoresDataSet.xsc">
       <DependentUpon>JBENHL1StoresDataSet.xsd</DependentUpon>
     </None>
@@ -516,6 +554,7 @@
     <None Include="JBENHL1StoresDataSet.xss">
       <DependentUpon>JBENHL1StoresDataSet.xsd</DependentUpon>
     </None>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

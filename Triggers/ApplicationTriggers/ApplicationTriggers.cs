@@ -641,8 +641,67 @@ namespace Microsoft.Dynamics.Retail.Pos.ApplicationTriggers
 			string value = loginSuccessful ? "User has successfully logged in. OperatorID: " + operatorId : "Failed user login attempt. OperatorID: " + operatorId;
 			LSRetailPosis.ApplicationLog.Log(source, value, LSRetailPosis.LogTraceLevel.Debug);
 			LSRetailPosis.ApplicationLog.WriteAuditEntry(source, value);
+
+            //MessageBox.Show("JANGAN LUPA PRINT LABEL ");
+            //LSRetailPosis.POSProcesses.BlankOperationInfo operationInfo = new LSRetailPosis.POSProcesses.BlankOperationInfo(); 
+            //operationInfo.OperationId = "21";
+            //operationInfo.Parameter = "TEST";
+            LSRetailPosis.Transaction.RetailTransaction retailTransaction = new LSRetailPosis.Transaction.RetailTransaction(ApplicationSettings.Terminal.StoreId, "IDR", ApplicationSettings.Terminal.TaxIncludedInPrice, this.Application.Services.Rounding);
+            //Application.Services.BlankOperations.BlankOperation((Microsoft.Dynamics.Retail.Pos.Contracts.BusinessObjects.IBlankOperationInfo)operationInfo, (Microsoft.Dynamics.Retail.Pos.Contracts.DataEntity.IPosTransaction)retailTransaction);
+            bool adaHargaBaru = HasNewPriceToday(LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection.ConnectionString, ApplicationSettings.Terminal.StoreId);
+
+            if (adaHargaBaru)
+            {
+                // ada harga baru dari PRICEDISCTABLE untuk hari ini
+                BlankOperations.CP_PrintLabel.MainFormPrintLabel printLabel = new BlankOperations.CP_PrintLabel.MainFormPrintLabel(null, Application);
+
+
+                printLabel.ShowDialog();
+            }
+            else
+            {
+                // tidak ada
+            }
+
+            
+                        
 		}
 
+        public bool HasNewPriceToday(string connectionString, string storeNumber)
+        {
+            var today = DateTime.Today;
+
+            var query = @"
+                        SELECT TOP 1
+                            PDG.GROUPID,
+                            PDT.ITEMRELATION,
+                            PDT.UNITID,
+                            IIB.ITEMBARCODE,
+                            PDT.FROMDATE,
+                            PDT.AMOUNT,
+                            ERP.SEARCHNAME
+                        FROM PRICEDISCTABLE PDT
+                        INNER JOIN PRICEDISCGROUP PDG ON PDT.ACCOUNTRELATION = PDG.GROUPID
+                        INNER JOIN RETAILCHANNELPRICEGROUP RCP ON PDG.RECID = RCP.PRICEGROUP
+                        INNER JOIN RETAILSTORETABLE RST ON RCP.RETAILCHANNEL = RST.RECID
+                        LEFT JOIN INVENTITEMBARCODE IIB ON IIB.ITEMID = PDT.ITEMRELATION
+                        LEFT JOIN ECORESPRODUCT ERP ON ERP.DISPLAYPRODUCTNUMBER = PDT.ITEMRELATION
+                        WHERE RST.STORENUMBER = @STORENUMBER
+                        AND CAST(PDT.FROMDATE AS DATE) = @TODAY  
+                        ORDER BY PDT.ITEMRELATION, PDT.FROMDATE DESC";
+
+            using (var conn = new SqlConnection(connectionString))
+            using (var cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.Add("@STORENUMBER", SqlDbType.VarChar, 50).Value = storeNumber;
+                cmd.Parameters.Add("@TODAY", SqlDbType.Date).Value = today;
+
+                conn.Open();
+
+                var result = cmd.ExecuteScalar();
+                return result != null;
+            }
+        }
 
 		public void PreLogon(IPreTriggerResult preTriggerResult, string operatorId, string name)
 		{

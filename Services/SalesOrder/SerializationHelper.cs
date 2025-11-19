@@ -586,7 +586,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder
 
             
              //online number - yonathan 05112024
-            transaction.ChannelReferenceId = orderInfo.CPOrderNumber != ""? orderInfo.CPOrderNumber : orderInfo.ChannelReferenceId;
+            //transaction.ChannelReferenceId = orderInfo.CPOrderNumber != ""? orderInfo.CPOrderNumber : orderInfo.ChannelReferenceId;
 
 
             if (transaction.LoyaltyItem != null && !string.IsNullOrEmpty(orderInfo.LoyaltyCardId))

@@ -1255,7 +1255,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder
                     switch (customerOrder.OrderType)
                     {
                         case CustomerOrderType.Quote:
-                            containerArray = Application.TransactionServices.Invoke("createCustomerQuote", xmlString);
+                            containerArray = Application.TransactionServices.Invoke("createCustomerQuote", xmlString); 
                             break;
                         case CustomerOrderType.SalesOrder:
                             if (customerOrder.Mode == CustomerOrderMode.Return)
