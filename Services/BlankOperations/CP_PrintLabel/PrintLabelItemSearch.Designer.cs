@@ -44,7 +44,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
             // 
             this.searchBox.Location = new System.Drawing.Point(10, 27);
             this.searchBox.Name = "searchBox";
-            this.searchBox.Size = new System.Drawing.Size(587, 20);
+            this.searchBox.Size = new System.Drawing.Size(729, 20);
             this.searchBox.TabIndex = 0;
             this.searchBox.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
@@ -60,7 +60,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
             this.itemGrid.ReadOnly = true;
             this.itemGrid.RowTemplate.Height = 25;
             this.itemGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.itemGrid.Size = new System.Drawing.Size(587, 239);
+            this.itemGrid.Size = new System.Drawing.Size(729, 239);
             this.itemGrid.TabIndex = 1;
             // 
             // submitBtn
@@ -103,7 +103,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
             this.closeBtn.FlatAppearance.BorderSize = 0;
             this.closeBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.closeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.closeBtn.Location = new System.Drawing.Point(480, 299);
+            this.closeBtn.Location = new System.Drawing.Point(622, 298);
             this.closeBtn.Name = "closeBtn";
             this.closeBtn.Size = new System.Drawing.Size(117, 35);
             this.closeBtn.TabIndex = 5;
@@ -116,7 +116,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(213)))), ((int)(((byte)(222)))), ((int)(((byte)(229)))));
-            this.ClientSize = new System.Drawing.Size(609, 339);
+            this.ClientSize = new System.Drawing.Size(751, 339);
             this.Controls.Add(this.closeBtn);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);

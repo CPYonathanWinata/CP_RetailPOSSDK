@@ -1583,7 +1583,7 @@ namespace Microsoft.Dynamics.Retail.Pos.ItemTriggers
                                             OR (TA.QUANTITYAMOUNTFROM = 0 AND TA.QUANTITYAMOUNTTO = 0)
                                         )
                                         AND (@ActiveDate BETWEEN TA.FROMDATE AND TA.TODATE)
-                                    ORDER BY TA.QUANTITYAMOUNTFROM DESC;
+                                     ORDER BY FROMDATE DESC;
                                     ";  
                 using (SqlCommand command = new SqlCommand(queryString, connectionStore))
                 {
