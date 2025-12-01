@@ -125,25 +125,25 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
                                     ORDER BY FROMDATE DESC;
                                     ";
 
-                System.Diagnostics.Debug.WriteLine("=== DEBUG INFO ===");
-                System.Diagnostics.Debug.WriteLine(string.Format("@INVENTLOCATION = '{0}'",
-                    ApplicationSettings.Terminal.InventLocationId));
-                System.Diagnostics.Debug.WriteLine(string.Format("dateString (string) = '{0}' (type: {1})",
-                    dateString, dateString.GetType().Name));
-                System.Diagnostics.Debug.WriteLine(string.Format("dateParam (parsed) = '{0}' (type: {1})",
-                    dateParam, dateParam.GetType().Name));
-                System.Diagnostics.Debug.WriteLine(string.Format("DateTime.Today = '{0}' (type: {1})",
-                    DateTime.Today, DateTime.Today.GetType().Name));
-                System.Diagnostics.Debug.WriteLine("===================");
-                // Build a testable SQL string with ACTUAL values (for SSMS)
-                string testQuery = queryString
-                    .Replace("@INVENTLOCATION", "'" + ApplicationSettings.Terminal.InventLocationId.Replace("'", "''") + "'")
-                    .Replace("@DATE", "'" + DateTime.Today.ToString("yyyy-MM-dd") + "'");
+                //System.Diagnostics.Debug.WriteLine("=== DEBUG INFO ===");
+                //System.Diagnostics.Debug.WriteLine(string.Format("@INVENTLOCATION = '{0}'",
+                //    ApplicationSettings.Terminal.InventLocationId));
+                //System.Diagnostics.Debug.WriteLine(string.Format("dateString (string) = '{0}' (type: {1})",
+                //    dateString, dateString.GetType().Name));
+                //System.Diagnostics.Debug.WriteLine(string.Format("dateParam (parsed) = '{0}' (type: {1})",
+                //    dateParam, dateParam.GetType().Name));
+                //System.Diagnostics.Debug.WriteLine(string.Format("DateTime.Today = '{0}' (type: {1})",
+                //    DateTime.Today, DateTime.Today.GetType().Name));
+                //System.Diagnostics.Debug.WriteLine("===================");
+                //// Build a testable SQL string with ACTUAL values (for SSMS)
+                //string testQuery = queryString
+                //    .Replace("@INVENTLOCATION", "'" + ApplicationSettings.Terminal.InventLocationId.Replace("'", "''") + "'")
+                //    .Replace("@DATE", "'" + DateTime.Today.ToString("yyyy-MM-dd") + "'");
 
-                // Output it for debugging
-                System.Diagnostics.Debug.WriteLine("=== TESTABLE QUERY (paste into SSMS) ===");
-                System.Diagnostics.Debug.WriteLine(testQuery);
-                System.Diagnostics.Debug.WriteLine("=========================================");
+                //// Output it for debugging
+                //System.Diagnostics.Debug.WriteLine("=== TESTABLE QUERY (paste into SSMS) ===");
+                //System.Diagnostics.Debug.WriteLine(testQuery);
+                //System.Diagnostics.Debug.WriteLine("=========================================");
                 using (SqlCommand command = new SqlCommand(queryString, connection))
                 {
                     //command.Parameters.AddWithValue("@DATE", dateString);
@@ -568,7 +568,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
                                 try
                                 {
 
-                                    using (Bitmap barcodeBmp = GenerateGS1_128(barCode, width: 200, height: 20))
+                                    using (Bitmap barcodeBmp = GenerateAnyBarcode(barCode, width: 200, height: 20)) // GenerateAnyBarcode
                                     {
 
                                         float barcodeX = leftMargin;// +(280 - barcodeBmp.Width) / 2;
@@ -978,6 +978,41 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
                 return true;
             }
         }
+
+        public static Bitmap GenerateAnyBarcode(string digits, int width = 250, int height = 120)
+        {
+            var options = new EncodingOptions
+            {
+                Height = height,
+                Width = width,
+                Margin = 10,
+                PureBarcode = true
+            };
+
+            var writer = new BarcodeWriterPixelData
+            {
+                Format = BarcodeFormat.CODE_128, // <-- bukan GS1
+                Options = options
+            };
+
+            var pixelData = writer.Write(digits);
+
+            Bitmap bitmap = new Bitmap(pixelData.Width, pixelData.Height, PixelFormat.Format32bppRgb);
+            var bmpData = bitmap.LockBits(new Rectangle(0, 0, pixelData.Width, pixelData.Height),
+                                          ImageLockMode.WriteOnly, PixelFormat.Format32bppRgb);
+
+            try
+            {
+                System.Runtime.InteropServices.Marshal.Copy(pixelData.Pixels, 0, bmpData.Scan0, pixelData.Pixels.Length);
+            }
+            finally
+            {
+                bitmap.UnlockBits(bmpData);
+            }
+
+            return bitmap;
+        }
+
 
         public static Bitmap GenerateGS1_128(string barcodeDigits, int width = 250, int height = 120)
         {

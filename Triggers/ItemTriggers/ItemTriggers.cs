@@ -1577,7 +1577,7 @@ namespace Microsoft.Dynamics.Retail.Pos.ItemTriggers
                                         AND TA.ACCOUNTRELATION = PDG.GROUPID
                                     WHERE TA.ITEMRELATION =  @ItemRelation
                                         AND TA.RELATION = 4
-                                        --AND TA.UNITID =  @UnitId
+                                        AND TA.UNITID =  @UnitId
                                         AND (
                                             (1 BETWEEN TA.QUANTITYAMOUNTFROM AND TA.QUANTITYAMOUNTTO)
                                             OR (TA.QUANTITYAMOUNTFROM = 0 AND TA.QUANTITYAMOUNTTO = 0)

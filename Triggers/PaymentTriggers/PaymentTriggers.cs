@@ -141,7 +141,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
         {
             string messageBoxString = "";
 
-            //validate to compare date of input and date of payment to prevent different date
+            //validate to compare date of input and date of payment to prevent different date 27102025
             RetailTransaction retailTransaction = posTransaction as RetailTransaction;
             if (retailTransaction.BeginDateTime.Date != DateTime.Now.Date)
             {

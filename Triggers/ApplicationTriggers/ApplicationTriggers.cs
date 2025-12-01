@@ -646,6 +646,8 @@ namespace Microsoft.Dynamics.Retail.Pos.ApplicationTriggers
             //LSRetailPosis.POSProcesses.BlankOperationInfo operationInfo = new LSRetailPosis.POSProcesses.BlankOperationInfo(); 
             //operationInfo.OperationId = "21";
             //operationInfo.Parameter = "TEST";
+
+            //Print Label Reminder new Price 19112025
             LSRetailPosis.Transaction.RetailTransaction retailTransaction = new LSRetailPosis.Transaction.RetailTransaction(ApplicationSettings.Terminal.StoreId, "IDR", ApplicationSettings.Terminal.TaxIncludedInPrice, this.Application.Services.Rounding);
             //Application.Services.BlankOperations.BlankOperation((Microsoft.Dynamics.Retail.Pos.Contracts.BusinessObjects.IBlankOperationInfo)operationInfo, (Microsoft.Dynamics.Retail.Pos.Contracts.DataEntity.IPosTransaction)retailTransaction);
             bool adaHargaBaru = HasNewPriceToday(LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection.ConnectionString, ApplicationSettings.Terminal.StoreId);

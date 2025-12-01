@@ -114,12 +114,12 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
                                         FROM [ax].[ECORESPRODUCT] ERP
                                         INNER JOIN [AX].[ECORESPRODUCTTRANSLATION] EPT 
                                             ON ERP.RECID = EPT.PRODUCT
-                                        LEFT JOIN [AX].[INVENTTABLEMODULE] ITM 
+                                        INNER JOIN [AX].[INVENTTABLEMODULE] ITM 
                                             ON ITM.ITEMID = ERP.[DISPLAYPRODUCTNUMBER]
                                             AND ITM.MODULETYPE = 2
-                                        LEFT JOIN [AX].[INVENTITEMBARCODE] IIB
+                                        INNER JOIN [AX].[INVENTITEMBARCODE] IIB
 	                                        ON IIB.ITEMID = ERP.[DISPLAYPRODUCTNUMBER]
-                                        WHERE (ERP.[DISPLAYPRODUCTNUMBER] LIKE @ProductNumber OR [SEARCHNAME] LIKE @SearchName)
+                                        WHERE (ERP.[DISPLAYPRODUCTNUMBER] LIKE @ProductNumber OR [NAME] LIKE @SearchName)
                                           AND EPT.LANGUAGEID = 'en-us'
                                         ORDER BY SKU ASC;";
 
