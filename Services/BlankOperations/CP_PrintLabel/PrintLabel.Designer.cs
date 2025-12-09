@@ -40,6 +40,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
             this.ITEMPRICE = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ITEMDISC = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.deleteBtn = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.VALIDFROM = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.VALIDTO =  new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.checkBtn = new System.Windows.Forms.Button();
             this.clearBtn = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -87,6 +89,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
             this.ITEMBARCODE,
             this.ITEMPRICE,
             this.ITEMDISC,
+            this.VALIDFROM,
+            this.VALIDTO,
             this.deleteBtn});
             this.dataGridView1.EnableHeadersVisualStyles = false;
             this.dataGridView1.GridColor = System.Drawing.Color.White;
@@ -109,7 +113,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
             this.ITEMNAME.HeaderText = "Nama Barang";
             this.ITEMNAME.Name = "ITEMNAME";
             this.ITEMNAME.ReadOnly = true;
-            this.ITEMNAME.Width = 370;
+            this.ITEMNAME.Width = 190;
             // 
             // UOM
             // 
@@ -136,6 +140,17 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
             this.ITEMDISC.HeaderText = "Harga Diskon";
             this.ITEMDISC.Name = "ITEMDISC";
             this.ITEMDISC.ReadOnly = true;
+
+
+            this.VALIDFROM.HeaderText = "Diskon Dari";
+            this.VALIDFROM.Name = "VALIDFROM";
+            this.VALIDFROM.ReadOnly = true;
+            this.VALIDFROM.Width = 90;
+
+            this.VALIDTO.HeaderText = "Diskon Sampai";
+            this.VALIDTO.Name = "VALIDTO";
+            this.VALIDTO.ReadOnly = true;
+            this.VALIDTO.Width = 90;
             // 
             // deleteBtn
             // 
@@ -237,6 +252,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
         private DataGridViewTextBoxColumn ITEMBARCODE;
         private DataGridViewTextBoxColumn ITEMPRICE;
         private DataGridViewTextBoxColumn ITEMDISC;
+        private DataGridViewTextBoxColumn VALIDFROM;
+        private DataGridViewTextBoxColumn VALIDTO;
         private DataGridViewButtonColumn deleteBtn;
         private Label label1;
         private Button btnClose;

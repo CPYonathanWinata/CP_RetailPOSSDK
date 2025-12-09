@@ -27,6 +27,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
 
             printWindow.Properties.ReadOnly = true;
             printWindow.BackColor           = Color.White;
+            printWindow.Enabled = false;
         }
 
         /// <summary>

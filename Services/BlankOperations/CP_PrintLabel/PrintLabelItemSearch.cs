@@ -28,8 +28,10 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
             public decimal SelectedPrice { get; set; }
             public string SelectedUnitId { get; set; }
             public decimal SelectedDisc { get; set; }
+            public string SelectedDiscFrom { get; set; }
+            public string SelectedDiscTo { get; set; }
             
-            public ItemSelectedEventArgs(string selectedSKU, string selectedBarang, string selectedBarcode, string selectedUnitId, decimal selectedPrice, decimal selectedDisc)
+            public ItemSelectedEventArgs(string selectedSKU, string selectedBarang, string selectedBarcode, string selectedUnitId, decimal selectedPrice, decimal selectedDisc, string selectedDiscFrom, string selectedDiscTo)
             {
                 SelectedSKU = selectedSKU;
                 SelectedBarang = selectedBarang;
@@ -37,6 +39,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
                 SelectedUnitId = selectedUnitId;
                 SelectedPrice = selectedPrice;
                 SelectedDisc = selectedDisc;
+                SelectedDiscFrom = selectedDiscFrom;
+                SelectedDiscTo = selectedDiscTo;
 
             }
         }
@@ -181,15 +185,16 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
             // Get the selected SKU from the selected row
             if (itemGrid.SelectedRows.Count > 0)
             {
+                string selectedDiscFrom, selectedDiscTo;
                 string selectedSKU = itemGrid.SelectedRows[0].Cells["SKU"].Value.ToString();
                 string selectedBarang = itemGrid.SelectedRows[0].Cells["Nama Barang"].Value.ToString();
                 string selectedBarcode = itemGrid.SelectedRows[0].Cells["Barcode"].Value.ToString();
                 string selectedUnitId = itemGrid.SelectedRows[0].Cells["Unit Id"].Value.ToString();
                 decimal selectedPrice = Application.Services.Price.GetItemPrice(selectedSKU, selectedUnitId);
-                decimal selectedDisc = getDiscount(selectedSKU, selectedPrice);
+                decimal selectedDisc = getDiscount(selectedSKU, selectedPrice, out selectedDiscFrom, out selectedDiscTo);
                 if (ItemSelected != null)
                 {
-                    ItemSelected(this, new ItemSelectedEventArgs(selectedSKU, selectedBarang, selectedBarcode, selectedUnitId, selectedPrice, selectedDisc));
+                    ItemSelected(this, new ItemSelectedEventArgs(selectedSKU, selectedBarang, selectedBarcode, selectedUnitId, selectedPrice, selectedDisc, selectedDiscFrom, selectedDiscTo));
                 }
                 
             }
@@ -198,11 +203,13 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
            // this.Close();
         }
 
-        public decimal getDiscount(string selectedSKU, decimal selectedPrice)
+        public decimal getDiscount(string selectedSKU, decimal selectedPrice, out string validFrom, out string validTo)
         {
 
             decimal pctDisc = 0;
             decimal amtDisc = 0;
+            validFrom = "";
+            validTo = "";
             bool foundData = false;
             SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
             try
@@ -253,7 +260,10 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
                         {
                             pctDisc = reader["DISCPCT"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["DISCPCT"]);
                             amtDisc = reader["DISCAMOUNT"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["DISCAMOUNT"]);
-
+                            DateTime validFromDate = Convert.ToDateTime(reader["VALIDFROM"]);
+                            DateTime validToDate = Convert.ToDateTime(reader["VALIDTO"]);
+                            validFrom = validFromDate.ToString("dd/MM/yyyy");
+                            validTo = validToDate.ToString("dd/MM/yyyy");
                             foundData = true;
                         }
                     }
