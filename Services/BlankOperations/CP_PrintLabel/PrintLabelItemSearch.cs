@@ -203,6 +203,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
 
             decimal pctDisc = 0;
             decimal amtDisc = 0;
+            decimal offerPriceIncTax = 0;
+            decimal offerPrice = 0;
             bool foundData = false;
             SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
             try
@@ -217,6 +219,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
                                     RDLO.DISCPCT,
                                     RDLO.DISCAMOUNT,
                                     RDLO.OFFERPRICE,
+                                    RDLO.OFFERPRICEINCLTAX,
                                     RP.VALIDFROM,
                                     RP.VALIDTO
                                 FROM RETAILPERIODICDISCOUNT RP
@@ -253,6 +256,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
                         {
                             pctDisc = reader["DISCPCT"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["DISCPCT"]);
                             amtDisc = reader["DISCAMOUNT"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["DISCAMOUNT"]);
+                            offerPrice = reader["OFFERPRICE"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["OFFERPRICE"]);
+                            offerPriceIncTax = reader["OFFERPRICEINCLTAX"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["OFFERPRICEINCLTAX"]);
 
                             foundData = true;
                         }
@@ -276,7 +281,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
 
             if (foundData == true)
             {
-                return CalculateDiscountedPrice(selectedPrice, pctDisc, amtDisc);
+                return CalculateDiscountedPrice(selectedPrice, pctDisc, amtDisc, offerPriceIncTax, offerPrice);
 
             }
             else
@@ -285,20 +290,42 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
             }
         }
 
-        decimal CalculateDiscountedPrice(decimal price, decimal pctDisc, decimal amtDisc)
+        decimal CalculateDiscountedPrice(decimal price, decimal pctDisc, decimal amtDisc, decimal offerPriceIncTax, decimal offerPrice)
         {
             decimal totalDisc = 0m;
 
             if (pctDisc > 0)
+            {
                 totalDisc += price * (pctDisc / 100);
+                return price - totalDisc;
+            }
 
-            if (amtDisc > 0)
+            else if (amtDisc > 0)
+            { 
                 totalDisc += amtDisc;
+                return price - totalDisc;
 
-            if (totalDisc > price)
-                totalDisc = price;
+            }
 
-            return price - totalDisc;
+            else if (offerPriceIncTax > 0)
+            {
+                return offerPriceIncTax;
+            }
+            else if (offerPrice > 0)
+            {
+                return offerPrice;
+            }
+            else
+            {
+                return 0;
+            }
+            //if(totalDisc > 0)
+            //    totalDisc += offerPrice;
+
+            //if (totalDisc > price)
+            //    totalDisc = price;
+
+            //return price - totalDisc;
         }
 
         private void closeBtn_Click(object sender, EventArgs e)
@@ -308,3 +335,4 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
     
     }
 }
+    
