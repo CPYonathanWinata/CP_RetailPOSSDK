@@ -233,7 +233,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
                                     ON RDLO.RECID = RPL.RECID
                                 WHERE RP.STATUS = 1
                                   AND RP.ISDISCOUNTCODEREQUIRED = 0
-                                  AND GETDATE() BETWEEN RP.VALIDFROM AND RP.VALIDTO
+                                  --AND GETDATE() BETWEEN RP.VALIDFROM AND RP.VALIDTO
+                                  AND CAST (GETDATE() AS DATE)BETWEEN RP.VALIDFROM AND RP.VALIDTO
                                   AND ERP.DISPLAYPRODUCTNUMBER = @ItemId
                                 ORDER BY RP.VALIDFROM DESC;
 
