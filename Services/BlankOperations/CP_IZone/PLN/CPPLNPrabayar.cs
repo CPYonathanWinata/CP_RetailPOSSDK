@@ -26,6 +26,7 @@ using LSRetailPosis.POSControls;
 using LSRetailPosis;
 using LSRetailPosis.Transaction.Line;
 using System.Collections.ObjectModel;
+using System.Globalization;
 
 namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.IZone.PLN
 {
@@ -68,9 +69,26 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.IZone.PLN
                 {
                     case 0:
                         LoadTabOneData();
+                        errLbl.Visible = false;
+                        txtIDMeter.Enabled = false;
                         break;
                     case 1:
                         LoadTabTwoData();
+                        break;
+                    case 2:
+                        if(txtIDMeter.Text.Length == 12)
+                            txtIdPelanggan.Text = txtIDMeter.Text;
+
+                        if (txtIDMeter.Text.Length == 11)
+                            txtNoMeter.Text = txtIDMeter.Text;
+
+                        //do some API Call here//
+                        callInquiry();
+
+                        //"N0"
+                        //txtStroom.Text = application.Services.Price.GetItemPrice(selectedItemId, "PC").ToString();
+                        //txtAdminAmt.Text = "2000";
+                        //txtTotalAmt.Text = (Convert.ToDecimal(txtStroom.Text) + Convert.ToDecimal(txtAdminAmt.Text)).ToString();
                         break;
                     // Add more cases for additional tabs
                     default:
@@ -79,14 +97,80 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.IZone.PLN
             }
         }
 
+        private void callInquiry()
+        {
+            string prodCode = "DEV1"; //dev
+            //string prodCode = "APPLN"; //prod
+            string result = "";
+            decimal amount = 0;
+            string storeId = ApplicationSettings.Terminal.InventLocationId.ToString();//ApplicationSettings.Terminal.StoreId.ToString();
+           
+            var url = "";// "https://devpfm.cp.co.id/api/grab/updateStatusReceipt";
+            string functionName = "InquiryTransaction";
+            APIAccess.APIAccessClass APIClass = new APIAccess.APIAccessClass();
+            url = APIClass.getURLAPIByFuncName(functionName);
+            amount = application.Services.Price.GetItemPrice(selectedItemId,"PC");
+            APIAccess.APIParameter.APIResponseInquiryTransactionIzone responseAPI = APIAccess.APIFunction.IzoneAPI.inquiryTranasction(LSRetailPosis.Settings.ApplicationSettings.Database.DATAAREAID, LSRetailPosis.Settings.ApplicationSettings.Database.StoreID, ApplicationSettings.Terminal.TerminalId, "DEV1", amount,txtNoMeter.Text, "", url);
+
+            var responseData = APIAccess.APIFunction.MyJsonConverter.Deserialize<APIAccess.APIParameter.InquiryTransactionDataIzone>(responseAPI.data);
+            
+            var parsed = responseData.GetParsedResponseData();
+
+            //responseData.
+
+            //foreach (var kv in parsed)
+            //{
+                
+            //}
+            if (parsed.ContainsKey("NAMA"))
+                txtNamaPelanggan.Text = parsed["NAMA"].ToString();
+
+            if (parsed.ContainsKey("TARIF/DAYA"))
+                txtTarifDaya.Text = parsed["TARIF/DAYA"].ToString();
+            
+            
+            txtStroom.Text = thousandSeparator(responseData.Amount); // responseData.Amount.ToString("N0");  //application.Services.Price.GetItemPrice(selectedItemId, "PC").ToString();
+            txtAdminAmt.Text = responseData.Admin.ToString("N2");
+            txtTotalAmt.Text = thousandSeparator( (Convert.ToDecimal(txtStroom.Text) + Convert.ToDecimal(txtAdminAmt.Text)).ToString());
+        }
+
         private void LoadData()
         {
-            btnBack.Enabled = false;
-            btnBack.BackColor = Color.DarkGray;
-            btnFinish.Enabled = false;
-            btnFinish.BackColor = Color.DarkGray;
-            //i want this on main and production too
-            //i want this on main and production too ver 2
+            //btnBack.Enabled = false;
+            //btnBack.BackColor = Color.DarkGray;
+            //btnFinish.Enabled = false;
+            //btnFinish.BackColor = Color.DarkGray;
+
+            disableButton(btnBack);
+            disableButton(btnFinish);
+            disableButton(btnNext);
+         
+        }
+
+
+        public string thousandSeparator(string _amount)
+        {
+            string formatted = "";
+            decimal amountDecimal;
+            if (decimal.TryParse(_amount, out amountDecimal))
+            {
+              formatted   = amountDecimal.ToString("N2"); // misal "500,000.00"
+            }
+            return formatted;
+
+        }
+
+        private void disableButton(Button  _button)
+        {
+            _button.Enabled = false;
+            _button.BackColor = Color.DarkGray;
+        }
+
+
+        private void enableButton(Button _button)
+        {
+            _button.Enabled = true;
+            _button.BackColor = Color.FromArgb(171, 194, 215);
         }
 
         private void LoadTabOneData()
@@ -175,6 +259,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.IZone.PLN
                         btnNext.Enabled = false;
                         btnNext.BackColor = Color.DarkGray;
 
+
                         btnFinish.Enabled = true;
                         btnFinish.BackColor = Color.FromArgb(171, 194, 215);
                     }
@@ -184,6 +269,10 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.IZone.PLN
             {
                 if (reasonMessage.Length > 0)
                     MessageBox.Show(reasonMessage, "Error", MessageBoxButtons.OK);
+            }
+            if (currentPanelIndex == 2)
+            {
+                
             }
         }
 
@@ -255,6 +344,78 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.IZone.PLN
         {
 
         }
+
+        private void inputBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (inputBox.SelectedIndex == 0)
+            {
+                lblIDMeter.Text = "ID Pelanggan :";
+                txtIDMeter.Enabled = true;
+                errLbl.Text = "Silakan 12 digit (Id pelanggan)";
+                txtIDMeter.MaxLength = 12;
+
+            }
+            else if (inputBox.SelectedIndex == 1)
+            {
+                lblIDMeter.Text = "No. Meter    :";
+                txtIDMeter.Enabled = true;
+                errLbl.Text = "Silakan input 11 (No Meter)";
+                txtIDMeter.MaxLength = 11;
+            }
+        }
+
+        private void txtIDMeter_TextChanged(object sender, EventArgs e)
+        {
+           
+            if (currentPanelIndex == 0)  
+            {
+                string input = txtIDMeter.Text.Trim();
+
+                // validasi maks 12 digit angka
+                bool isValid = false;//= input.Length >= 11 && input.Length <= 12; //&& input.All(char.IsDigit);
+
+                if (inputBox.SelectedIndex == 0 && input.Length == 12)
+                {
+                    isValid = true;
+
+                }
+                else if (inputBox.SelectedIndex == 1 && input.Length == 11)
+                {
+                    isValid = true;
+                }
+
+                if(isValid == true)
+                {
+                    errLbl.Visible = false;
+                    enableButton(btnNext);
+                }
+                else
+                {
+                    errLbl.Visible = true;
+                    //errLbl.Text = "Silakan input 11 (No Meter) atau 12 digit (Id pelanggan)";
+                    disableButton(btnNext);
+                }
+                 
+            }
+            //else if (currentPanelIndex == 1)
+            //{ 
+            //}
+            //else
+        }
+
+        private void txtIDMeter_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
+        {
+            if (char.IsControl(e.KeyChar))
+                return;
+
+            // Blok selain angka
+            if (!char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+
     }
 
     public class ComboBoxItem

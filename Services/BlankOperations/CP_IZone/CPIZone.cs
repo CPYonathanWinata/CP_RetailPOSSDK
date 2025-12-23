@@ -46,9 +46,26 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 
         private void btnPLNPra_Click(object sender, EventArgs e)
         {
-            CPPLNPrabayar plnPrabayar = new CPPLNPrabayar(operationInfo, posTransaction, application);
-            plnPrabayar.Owner = this;
-            plnPrabayar.Show();
+             //Indosmart 
+            APIAccess.APIParameter.ApiResponseCheckBalanceIzone responseAPI = APIAccess.APIFunction.IzoneAPI.checkBalanceAccount(LSRetailPosis.Settings.ApplicationSettings.Database.DATAAREAID, LSRetailPosis.Settings.ApplicationSettings.Database.StoreID, "JDELIMA-R1", "https://apiqrisdev.cp.co.id/api/izone/checkBalance");
+
+            var balanceData = APIAccess.APIFunction.MyJsonConverter.Deserialize<APIAccess.APIParameter.CheckBalanceData>(responseAPI.data);
+            //check balance before proceeding to prabayar form
+            if (balanceData.TerminalBalance == "0")
+            {
+                using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Saldo deposit kurang, silakan hubungi HO", MessageBoxButtons.OK, MessageBoxIcon.Error))
+                {
+                    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                }
+            }
+            else
+            {
+                CPPLNPrabayar plnPrabayar = new CPPLNPrabayar(operationInfo, posTransaction, application);
+                plnPrabayar.Owner = this;
+                plnPrabayar.Show();
+            }
+
+          
             //this.Hide();
  
             //plnPrabayar.ShowDialog();

@@ -1377,6 +1377,132 @@ namespace APIAccess
             }
         }
 
+        //call API
+        public static TResponse CallApi<TRequest, TResponse>(
+        string url,
+        TRequest requestObject,
+        string authorization = "PFM",
+        string httpMethod = "POST")
+        where TResponse : class
+        {
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol =
+                SecurityProtocolType.Tls |
+                SecurityProtocolType.Tls11 |
+                SecurityProtocolType.Tls12;
+
+            ServicePointManager.ServerCertificateValidationCallback =
+                (sender, cert, chain, ssl) => true;
+
+            var httpRequest = (HttpWebRequest)WebRequest.Create(url);
+            httpRequest.Method = httpMethod;
+            httpRequest.ContentType = "application/json";
+
+            if (!string.IsNullOrEmpty(authorization))
+                httpRequest.Headers.Add("Authorization", authorization);
+
+            try
+            {
+                var json = MyJsonConverter.Serialize(requestObject);
+                using (var sw = new StreamWriter(httpRequest.GetRequestStream()))
+                {
+                    sw.Write(json);
+                }
+
+                using (var response = (HttpWebResponse)httpRequest.GetResponse())
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    var result = sr.ReadToEnd();
+                    return MyJsonConverter.Deserialize<TResponse>(result);
+                }
+            }
+            catch
+            {
+                return null; // atau return error object (recommended)
+            }
+        }
+
+
+        public class IzoneAPI
+        {
+            public static APIAccess.APIParameter.ApiResponseCheckBalanceIzone checkBalanceAccount(string _dataAreaId, string _storeId, string _terminal, string _url)
+            {
+                var request = new APIAccess.APIParameter.ApiRequestCheckBalanceIzone
+                {
+                    legal = _dataAreaId,
+                    storeId = _storeId,
+                    terminalId = _terminal
+                };
+
+                return CallApi<APIAccess.APIParameter.ApiRequestCheckBalanceIzone, APIAccess.APIParameter.ApiResponseCheckBalanceIzone>(_url, request);
+
+            }
+
+            public static APIAccess.APIParameter.APIResponseInquiryTransactionIzone inquiryTranasction(string _dataAreaId, string _storeId, string _terminal, string _productCode, decimal _amount, string _customerId, string _meterNumber, string _url)
+            {
+                var myRequestData = new APIAccess.APIParameter.requestDataIzone
+                {
+                    productCode = _productCode, //prepaid -> token
+                    amount = _amount,
+                    customerId =  _customerId,
+                    meterNumber = _meterNumber
+                };
+ 
+
+                var request = new APIAccess.APIParameter.APIRequestInquiryTransactionIzone
+                {
+                    legal = _dataAreaId,
+                    storeId = _storeId,
+                    terminalId = _terminal,
+                    requestData = myRequestData
+                };
+
+                return CallApi<APIAccess.APIParameter.APIRequestInquiryTransactionIzone, APIAccess.APIParameter.APIResponseInquiryTransactionIzone>(_url, request);
+
+            }
+
+             public static APIAccess.APIParameter.ApiResponsePaymentIzone paymentTransaction(string _dataAreaId, string _storeId, string _terminal, string _traceNumber, string _url)
+            {
+                var request = new APIAccess.APIParameter.ApiRequestPaymentIzone
+                {
+                    legal = _dataAreaId,
+                    storeId = _storeId,
+                    terminalId = _terminal,
+                    traceNumber = _traceNumber
+                };
+
+                return CallApi<APIAccess.APIParameter.ApiRequestPaymentIzone, APIAccess.APIParameter.ApiResponsePaymentIzone>(_url, request);
+
+            }
+
+             public static APIAccess.APIParameter.ApiResponseCheckTransIzone checkStatusTransaction(string _dataAreaId, string _storeId, string _terminal, string _traceNumber, string _url)
+            {
+                var request = new APIAccess.APIParameter.ApiRequestCheckTransIzone
+                {
+                    legal = _dataAreaId,
+                    storeId = _storeId,
+                    terminalId = _terminal,
+                    traceNumber = _traceNumber
+                };
+
+                return CallApi<APIAccess.APIParameter.ApiRequestCheckTransIzone, APIAccess.APIParameter.ApiResponseCheckTransIzone>(_url, request);
+
+            }
+
+             public static APIAccess.APIParameter.ApiResponseCheckTransAltIzone checkStatusTransactionAlt(string _dataAreaId, string _storeId, string _terminal, string _traceNumber, string _url)
+            {
+                var request = new APIAccess.APIParameter.ApiRequestCheckTransAltIzone
+                {
+                    legal = _dataAreaId,
+                    storeId = _storeId,
+                    terminalId = _terminal,
+                    traceNumber = _traceNumber
+                };
+
+                return CallApi<APIAccess.APIParameter.ApiRequestCheckTransAltIzone, APIAccess.APIParameter.ApiResponseCheckTransAltIzone>(_url, request);
+
+            }
+        }
 
         public class GrabMartAPI
         {

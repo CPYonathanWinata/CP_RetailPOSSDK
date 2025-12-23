@@ -120,16 +120,16 @@
             // txtInputBy
             // 
             this.txtInputBy.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.txtInputBy.Location = new System.Drawing.Point(218, 139);
+            this.txtInputBy.Location = new System.Drawing.Point(162, 245);
             this.txtInputBy.Name = "txtInputBy";
             this.txtInputBy.Size = new System.Drawing.Size(499, 30);
             this.txtInputBy.TabIndex = 3;
             // 
             // lblIDMeter
-            //  
+            // 
             this.lblIDMeter.AutoSize = true;
             this.lblIDMeter.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.lblIDMeter.Location = new System.Drawing.Point(214, 113);
+            this.lblIDMeter.Location = new System.Drawing.Point(158, 219);
             this.lblIDMeter.Name = "lblIDMeter";
             this.lblIDMeter.Size = new System.Drawing.Size(137, 23);
             this.lblIDMeter.TabIndex = 1;
@@ -141,7 +141,7 @@
             this.tabpage2.Controls.Add(this.tableLayoutPanel1);
             this.tabpage2.Controls.Add(this.lblHeader3);
             this.tabpage2.Location = new System.Drawing.Point(4, 22);
-            this.tabpage2.Name = "tabPage2";
+            this.tabpage2.Name = "tabpage2";
             this.tabpage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabpage2.Size = new System.Drawing.Size(840, 491);
             this.tabpage2.TabIndex = 1;
@@ -152,7 +152,7 @@
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 86.89957F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 13.10044F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 236F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 238F));
             this.tableLayoutPanel1.Controls.Add(this.textBox7, 2, 6);
             this.tableLayoutPanel1.Controls.Add(this.textBox6, 2, 5);
             this.tableLayoutPanel1.Controls.Add(this.textBox5, 2, 4);
@@ -183,7 +183,7 @@
             // textBox7
             // 
             this.textBox7.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.textBox7.Location = new System.Drawing.Point(220, 231);
+            this.textBox7.Location = new System.Drawing.Point(218, 231);
             this.textBox7.Name = "textBox7";
             this.textBox7.Size = new System.Drawing.Size(227, 30);
             this.textBox7.TabIndex = 14;
@@ -191,7 +191,7 @@
             // textBox6
             // 
             this.textBox6.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.textBox6.Location = new System.Drawing.Point(220, 193);
+            this.textBox6.Location = new System.Drawing.Point(218, 193);
             this.textBox6.Name = "textBox6";
             this.textBox6.Size = new System.Drawing.Size(227, 30);
             this.textBox6.TabIndex = 14;
@@ -199,7 +199,7 @@
             // textBox5
             // 
             this.textBox5.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.textBox5.Location = new System.Drawing.Point(220, 155);
+            this.textBox5.Location = new System.Drawing.Point(218, 155);
             this.textBox5.Name = "textBox5";
             this.textBox5.Size = new System.Drawing.Size(227, 30);
             this.textBox5.TabIndex = 14;
@@ -207,7 +207,7 @@
             // textBox4
             // 
             this.textBox4.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.textBox4.Location = new System.Drawing.Point(220, 117);
+            this.textBox4.Location = new System.Drawing.Point(218, 117);
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(227, 30);
             this.textBox4.TabIndex = 14;
@@ -215,7 +215,7 @@
             // textBox3
             // 
             this.textBox3.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.textBox3.Location = new System.Drawing.Point(220, 79);
+            this.textBox3.Location = new System.Drawing.Point(218, 79);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(227, 30);
             this.textBox3.TabIndex = 14;
@@ -223,7 +223,7 @@
             // textBox2
             // 
             this.textBox2.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.textBox2.Location = new System.Drawing.Point(220, 41);
+            this.textBox2.Location = new System.Drawing.Point(218, 41);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(227, 30);
             this.textBox2.TabIndex = 22;
@@ -231,7 +231,7 @@
             // textBox1
             // 
             this.textBox1.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.textBox1.Location = new System.Drawing.Point(220, 3);
+            this.textBox1.Location = new System.Drawing.Point(218, 3);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(227, 30);
             this.textBox1.TabIndex = 13;
@@ -410,7 +410,7 @@
 
         #endregion
 
-        private DevExpress.XtraEditors.StyleController styleController;
+        //private DevExpress.XtraEditors.StyleController styleController;
         private System.Windows.Forms.Label header;
         private System.Windows.Forms.Panel parentPanel;
         private System.Windows.Forms.TabControl tabControl;
@@ -439,5 +439,6 @@
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnNext;
         private System.Windows.Forms.Button btnBack;
+        private DevExpress.XtraEditors.StyleController styleController;
     }
 }

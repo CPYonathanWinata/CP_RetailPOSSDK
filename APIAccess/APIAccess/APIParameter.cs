@@ -376,5 +376,213 @@ namespace APIAccess
         }
 
         //
+
+        //for izone PLN API
+        public class ApiRequestCheckBalanceIzone
+        {
+            public string legal { get; set; }
+            public string storeId { get; set; }
+            public string terminalId { get; set; }
+        }
+
+        public class ApiResponseCheckBalanceIzone
+        {
+            public int status { get; set; }
+            public bool error { get; set; }
+            public string message { get; set; }
+            public string data { get; set; }
+        }
+
+        public class CheckBalanceData
+        {
+            public string ResponseCode { get; set; }
+            public string GroupBalance { get; set; }
+            public string Message { get; set; }
+            public string TerminalBalance { get; set; }
+            public string TerminalID { get; set; }
+        }
+
+
+        public class APIRequestInquiryTransactionIzone
+        {
+            
+            public string legal { get; set; }
+            public string storeId { get; set; }
+            public string terminalId { get; set; }
+            public requestDataIzone requestData { get; set; }
+        }
+
+        public class requestDataIzone
+        {
+            public string productCode { get; set; }  //prepaid -> token
+            public decimal amount { get; set; }
+            public string customerId { get; set; }
+            public string meterNumber { get; set; }
+        }
+
+
+        public class APIResponseInquiryTransactionIzone
+        {
+            public int status { get; set; }
+            public bool error { get; set; }
+            public string message { get; set; }           
+            public string data { get; set; }
+        }
+
+
+        public class InquiryTransactionDataIzone
+        {
+            public string AdditionalData { get; set; }
+            public string ResponseCode { get; set; }
+            public string ProductCode { get; set; }
+            public string ResponseData { get; set; }
+            public string Amount { get; set; }
+            public string TransactionDateTime { get; set; }
+            public string CustomerID { get; set; }
+            public int Admin { get; set; }
+            public string ProcessingCode { get; set; }
+            public string TransactionID { get; set; }
+            public string TerminalID { get; set; }
+            public string ReferenceNo { get; set; }
+            public string TraceNo { get; set; }
+
+
+            public Dictionary<string, string> GetParsedResponseData()
+            {
+                var result = new Dictionary<string, string>();
+                if (string.IsNullOrEmpty(ResponseData))
+                    return result;
+
+                // Split by pipe
+                string[] parts = ResponseData.Split('|');
+                foreach (var part in parts)
+                {
+                    // Split key-value by colon
+                    int colonIndex = part.IndexOf(':');
+                    if (colonIndex > 0)
+                    {
+                        string key = part.Substring(0, colonIndex).Trim();
+                        string value = part.Substring(colonIndex + 1).Trim();
+                        result[key] = value;
+                    }
+                    else
+                    {
+                        // Optional: store items without colon as "Info" or ignore
+                        string info = part.Trim();
+                        if (!string.IsNullOrEmpty(info))
+                            result["Info_" + result.Count] = info;
+                    }
+                }
+
+                return result;
+            }
+
+        }
+
+
+        public class ApiRequestPaymentIzone
+        {
+            public string legal { get; set; }
+            public string storeId { get; set; }
+            public string terminalId { get; set; }
+            public string traceNumber { get; set; }
+        }
+
+        public class ApiResponsePaymentIzone
+        {
+            public int status { get; set; }
+            public bool error { get; set; }
+            public string message { get; set; }
+            public string data { get; set; }
+        }
+
+        public class PaymentResponseDataIzone
+        {
+            public string AdditionalData { get; set; }
+            public string BillAmount { get; set; }
+            public string SerialNo { get; set; }
+            public string ResponseCode { get; set; }
+            public string Message { get; set; }
+            public string TerminalBalance { get; set; }
+            public string ProductCode { get; set; }
+            public string Amount { get; set; }
+            public string TransactionDateTime { get; set; }
+            public string CustomerID { get; set; }
+            public string Admin { get; set; }
+            public string ProcessingCode { get; set; }
+            public string TerminalID { get; set; }
+            public string ReferenceNo { get; set; }
+            public string TraceNo { get; set; }
+        }
+
+        public class ApiRequestCheckTransIzone
+        {
+            public string legal { get; set; }
+            public string storeId { get; set; }
+            public string terminalId { get; set; }
+            public string traceNumber { get; set; }
+        }
+
+
+        public class ApiResponseCheckTransIzone
+        {
+            public int status { get; set; }
+            public bool error { get; set; }
+            public string message { get; set; }
+            public string data { get; set; }
+        }
+
+        public class CheckTransIzoneResponseData
+        {
+            public string AdditionalData { get; set; }
+            public string BillAmount { get; set; }
+            public string SerialNo { get; set; }
+            public string ResponseCode { get; set; }
+            public string ProductCode { get; set; }
+            public string Amount { get; set; }
+            public string TransactionDateTime { get; set; }
+            public string CustomerID { get; set; }
+            public string ProcessingCode { get; set; }
+            public int Collection { get; set; }
+            public string TerminalID { get; set; }
+            public string ReferenceNo { get; set; }
+            public string TraceNo { get; set; }
+            public string Receipt { get; set; }
+        }
+
+        public class ApiRequestCheckTransAltIzone
+        {
+            public string legal { get; set; }
+            public string storeId { get; set; }
+            public string terminalId { get; set; }
+            public string traceNumber { get; set; }
+        }
+
+        public class ApiResponseCheckTransAltIzone
+        {
+            public int status { get; set; }
+            public bool error { get; set; }
+            public string message { get; set; }
+            public string data { get; set; }
+        }
+
+        public class CheckTransAltIzoneData
+        {
+            public string SerialNo { get; set; }
+            public string ReqTime { get; set; }
+            public string Receipt { get; set; }
+            public string ProductCode { get; set; }
+            public string Amount { get; set; }
+            public string TrxDate { get; set; }
+            public string RespTime { get; set; }
+            public string TerminalID { get; set; }
+            public string CustomerID { get; set; }
+            public string BillingAmount { get; set; }
+            public string ReferenceNo { get; set; }
+            public string TransactionID { get; set; }
+        }
+
+
+        //end
     }
 }

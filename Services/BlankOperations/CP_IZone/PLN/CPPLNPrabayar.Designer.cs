@@ -37,22 +37,23 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.IZone.PLN
             this.parentPanel = new System.Windows.Forms.Panel();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.label2 = new System.Windows.Forms.Label();
+            this.errLbl = new System.Windows.Forms.Label();
+            this.inputBox = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.txtIDMeter = new System.Windows.Forms.TextBox();
             this.lblIDMeter = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.nominalBox = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.lblNominal = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.textBox7 = new System.Windows.Forms.TextBox();
-            this.textBox6 = new System.Windows.Forms.TextBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtTotalAmt = new System.Windows.Forms.TextBox();
+            this.txtAdminAmt = new System.Windows.Forms.TextBox();
+            this.txtStroom = new System.Windows.Forms.TextBox();
+            this.txtTarifDaya = new System.Windows.Forms.TextBox();
+            this.txtNamaPelanggan = new System.Windows.Forms.TextBox();
+            this.txtIdPelanggan = new System.Windows.Forms.TextBox();
+            this.txtNoMeter = new System.Windows.Forms.TextBox();
             this.lblNoMeter = new System.Windows.Forms.Label();
             this.lblTarif = new System.Windows.Forms.Label();
             this.lblTotal = new System.Windows.Forms.Label();
@@ -124,48 +125,76 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.IZone.PLN
             this.tabControl.Controls.Add(this.tabPage1);
             this.tabControl.Controls.Add(this.tabPage2);
             this.tabControl.Controls.Add(this.tabPage3);
-            this.tabControl.Location = new System.Drawing.Point(55, 5);
+            this.tabControl.Location = new System.Drawing.Point(0, 5);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(848, 517);
+            this.tabControl.Size = new System.Drawing.Size(959, 517);
             this.tabControl.TabIndex = 21;
             // 
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.Color.White;
-            this.tabPage1.Controls.Add(this.label2);
+            this.tabPage1.Controls.Add(this.errLbl);
+            this.tabPage1.Controls.Add(this.inputBox);
+            this.tabPage1.Controls.Add(this.label3);
             this.tabPage1.Controls.Add(this.txtIDMeter);
             this.tabPage1.Controls.Add(this.lblIDMeter);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(840, 491);
+            this.tabPage1.Size = new System.Drawing.Size(951, 491);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             // 
-            // label2
+            // errLbl
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.label2.Location = new System.Drawing.Point(343, 31);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(277, 23);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "PEMBELIAN LISTRIK PRABAYAR";
+            this.errLbl.AutoSize = true;
+            this.errLbl.ForeColor = System.Drawing.Color.Red;
+            this.errLbl.Location = new System.Drawing.Point(299, 259);
+            this.errLbl.Name = "errLbl";
+            this.errLbl.Size = new System.Drawing.Size(139, 13);
+            this.errLbl.TabIndex = 26;
+            this.errLbl.Text = "Input dengan format angka";
+            this.errLbl.Visible = false;
+            // 
+            // inputBox
+            // 
+            this.inputBox.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.inputBox.FormattingEnabled = true;
+            this.inputBox.Items.AddRange(new object[] {
+            "ID Pelanggan",
+            "No. Meter"});
+            this.inputBox.Location = new System.Drawing.Point(159, 192);
+            this.inputBox.Name = "inputBox";
+            this.inputBox.Size = new System.Drawing.Size(121, 27);
+            this.inputBox.TabIndex = 25;
+            this.inputBox.SelectedIndexChanged += new System.EventHandler(this.inputBox_SelectedIndexChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Tahoma", 14F);
+            this.label3.Location = new System.Drawing.Point(155, 151);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(95, 23);
+            this.label3.TabIndex = 24;
+            this.label3.Text = "Input by :";
             // 
             // txtIDMeter
             // 
             this.txtIDMeter.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.txtIDMeter.Location = new System.Drawing.Point(218, 206);
+            this.txtIDMeter.Location = new System.Drawing.Point(159, 276);
+            this.txtIDMeter.MaxLength = 12;
             this.txtIDMeter.Name = "txtIDMeter";
             this.txtIDMeter.Size = new System.Drawing.Size(499, 30);
             this.txtIDMeter.TabIndex = 2;
+            this.txtIDMeter.TextChanged += new System.EventHandler(this.txtIDMeter_TextChanged);
             // 
             // lblIDMeter
             // 
             this.lblIDMeter.AutoSize = true;
             this.lblIDMeter.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.lblIDMeter.Location = new System.Drawing.Point(214, 180);
+            this.lblIDMeter.Location = new System.Drawing.Point(155, 250);
             this.lblIDMeter.Name = "lblIDMeter";
             this.lblIDMeter.Size = new System.Drawing.Size(137, 23);
             this.lblIDMeter.TabIndex = 1;
@@ -175,12 +204,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.IZone.PLN
             // 
             this.tabPage2.BackColor = System.Drawing.Color.White;
             this.tabPage2.Controls.Add(this.nominalBox);
-            this.tabPage2.Controls.Add(this.label1);
             this.tabPage2.Controls.Add(this.lblNominal);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(840, 491);
+            this.tabPage2.Size = new System.Drawing.Size(951, 491);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             // 
@@ -195,16 +223,6 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.IZone.PLN
             this.nominalBox.Name = "nominalBox";
             this.nominalBox.Size = new System.Drawing.Size(499, 32);
             this.nominalBox.TabIndex = 6;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.label1.Location = new System.Drawing.Point(343, 31);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(277, 23);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "PEMBELIAN LISTRIK PRABAYAR";
             // 
             // lblNominal
             // 
@@ -224,7 +242,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.IZone.PLN
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(840, 491);
+            this.tabPage3.Size = new System.Drawing.Size(951, 491);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "tabPage3";
             // 
@@ -233,14 +251,14 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.IZone.PLN
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 86.89957F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 13.10044F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 238F));
-            this.tableLayoutPanel1.Controls.Add(this.textBox7, 2, 6);
-            this.tableLayoutPanel1.Controls.Add(this.textBox6, 2, 5);
-            this.tableLayoutPanel1.Controls.Add(this.textBox5, 2, 4);
-            this.tableLayoutPanel1.Controls.Add(this.textBox4, 2, 3);
-            this.tableLayoutPanel1.Controls.Add(this.textBox3, 2, 2);
-            this.tableLayoutPanel1.Controls.Add(this.textBox2, 2, 1);
-            this.tableLayoutPanel1.Controls.Add(this.textBox1, 2, 0);
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 243F));
+            this.tableLayoutPanel1.Controls.Add(this.txtTotalAmt, 2, 6);
+            this.tableLayoutPanel1.Controls.Add(this.txtAdminAmt, 2, 5);
+            this.tableLayoutPanel1.Controls.Add(this.txtStroom, 2, 4);
+            this.tableLayoutPanel1.Controls.Add(this.txtTarifDaya, 2, 3);
+            this.tableLayoutPanel1.Controls.Add(this.txtNamaPelanggan, 2, 2);
+            this.tableLayoutPanel1.Controls.Add(this.txtIdPelanggan, 2, 1);
+            this.tableLayoutPanel1.Controls.Add(this.txtNoMeter, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.lblNoMeter, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.lblTarif, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.lblTotal, 0, 6);
@@ -261,61 +279,68 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.IZone.PLN
             this.tableLayoutPanel1.Size = new System.Drawing.Size(454, 268);
             this.tableLayoutPanel1.TabIndex = 12;
             // 
-            // textBox7
+            // txtTotalAmt
             // 
-            this.textBox7.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.textBox7.Location = new System.Drawing.Point(218, 231);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(227, 30);
-            this.textBox7.TabIndex = 14;
+            this.txtTotalAmt.Enabled = false;
+            this.txtTotalAmt.Font = new System.Drawing.Font("Tahoma", 14F);
+            this.txtTotalAmt.Location = new System.Drawing.Point(213, 231);
+            this.txtTotalAmt.Name = "txtTotalAmt";
+            this.txtTotalAmt.Size = new System.Drawing.Size(227, 30);
+            this.txtTotalAmt.TabIndex = 14;
             // 
-            // textBox6
+            // txtAdminAmt
             // 
-            this.textBox6.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.textBox6.Location = new System.Drawing.Point(218, 193);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(227, 30);
-            this.textBox6.TabIndex = 14;
+            this.txtAdminAmt.Enabled = false;
+            this.txtAdminAmt.Font = new System.Drawing.Font("Tahoma", 14F);
+            this.txtAdminAmt.Location = new System.Drawing.Point(213, 193);
+            this.txtAdminAmt.Name = "txtAdminAmt";
+            this.txtAdminAmt.Size = new System.Drawing.Size(227, 30);
+            this.txtAdminAmt.TabIndex = 14;
             // 
-            // textBox5
+            // txtStroom
             // 
-            this.textBox5.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.textBox5.Location = new System.Drawing.Point(218, 155);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(227, 30);
-            this.textBox5.TabIndex = 14;
+            this.txtStroom.Enabled = false;
+            this.txtStroom.Font = new System.Drawing.Font("Tahoma", 14F);
+            this.txtStroom.Location = new System.Drawing.Point(213, 155);
+            this.txtStroom.Name = "txtStroom";
+            this.txtStroom.Size = new System.Drawing.Size(227, 30);
+            this.txtStroom.TabIndex = 14;
             // 
-            // textBox4
+            // txtTarifDaya
             // 
-            this.textBox4.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.textBox4.Location = new System.Drawing.Point(218, 117);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(227, 30);
-            this.textBox4.TabIndex = 14;
+            this.txtTarifDaya.Enabled = false;
+            this.txtTarifDaya.Font = new System.Drawing.Font("Tahoma", 14F);
+            this.txtTarifDaya.Location = new System.Drawing.Point(213, 117);
+            this.txtTarifDaya.Name = "txtTarifDaya";
+            this.txtTarifDaya.Size = new System.Drawing.Size(227, 30);
+            this.txtTarifDaya.TabIndex = 14;
             // 
-            // textBox3
+            // txtNamaPelanggan
             // 
-            this.textBox3.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.textBox3.Location = new System.Drawing.Point(218, 79);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(227, 30);
-            this.textBox3.TabIndex = 14;
+            this.txtNamaPelanggan.Enabled = false;
+            this.txtNamaPelanggan.Font = new System.Drawing.Font("Tahoma", 14F);
+            this.txtNamaPelanggan.Location = new System.Drawing.Point(213, 79);
+            this.txtNamaPelanggan.Name = "txtNamaPelanggan";
+            this.txtNamaPelanggan.Size = new System.Drawing.Size(227, 30);
+            this.txtNamaPelanggan.TabIndex = 14;
             // 
-            // textBox2
+            // txtIdPelanggan
             // 
-            this.textBox2.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.textBox2.Location = new System.Drawing.Point(218, 41);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(227, 30);
-            this.textBox2.TabIndex = 22;
+            this.txtIdPelanggan.Enabled = false;
+            this.txtIdPelanggan.Font = new System.Drawing.Font("Tahoma", 14F);
+            this.txtIdPelanggan.Location = new System.Drawing.Point(213, 41);
+            this.txtIdPelanggan.Name = "txtIdPelanggan";
+            this.txtIdPelanggan.Size = new System.Drawing.Size(227, 30);
+            this.txtIdPelanggan.TabIndex = 22;
             // 
-            // textBox1
+            // txtNoMeter
             // 
-            this.textBox1.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.textBox1.Location = new System.Drawing.Point(218, 3);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(227, 30);
-            this.textBox1.TabIndex = 13;
+            this.txtNoMeter.Enabled = false;
+            this.txtNoMeter.Font = new System.Drawing.Font("Tahoma", 14F);
+            this.txtNoMeter.Location = new System.Drawing.Point(213, 3);
+            this.txtNoMeter.Name = "txtNoMeter";
+            this.txtNoMeter.Size = new System.Drawing.Size(227, 30);
+            this.txtNoMeter.TabIndex = 13;
             // 
             // lblNoMeter
             // 
@@ -363,7 +388,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.IZone.PLN
             this.lblStroom.Font = new System.Drawing.Font("Tahoma", 14F);
             this.lblStroom.Location = new System.Drawing.Point(3, 152);
             this.lblStroom.Name = "lblStroom";
-            this.lblStroom.Size = new System.Drawing.Size(179, 23);
+            this.lblStroom.Size = new System.Drawing.Size(151, 38);
             this.lblStroom.TabIndex = 11;
             this.lblStroom.Text = "RP STROOM/TOKEN";
             // 
@@ -391,7 +416,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.IZone.PLN
             // 
             this.lblHeader3.AutoSize = true;
             this.lblHeader3.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.lblHeader3.Location = new System.Drawing.Point(343, 31);
+            this.lblHeader3.Location = new System.Drawing.Point(326, 42);
             this.lblHeader3.Name = "lblHeader3";
             this.lblHeader3.Size = new System.Drawing.Size(277, 23);
             this.lblHeader3.TabIndex = 4;
@@ -470,12 +495,13 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.IZone.PLN
 
         }
 
+      
         
       
 
         #endregion
 
-        private DevExpress.XtraEditors.StyleController styleController;
+        //private DevExpress.XtraEditors.StyleController styleController;
         private System.Windows.Forms.Label header;
         private System.Windows.Forms.Button btnBack;
         private System.Windows.Forms.Button btnNext;
@@ -498,16 +524,18 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.IZone.PLN
         private System.Windows.Forms.Label lblNoMeter;
         private System.Windows.Forms.Label lblIdPelanggan;
         private System.Windows.Forms.Label lblNama;
-        private System.Windows.Forms.TextBox textBox7;
-        private System.Windows.Forms.TextBox textBox6;
-        private System.Windows.Forms.TextBox textBox5;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox txtTotalAmt;
+        private System.Windows.Forms.TextBox txtAdminAmt;
+        private System.Windows.Forms.TextBox txtStroom;
+        private System.Windows.Forms.TextBox txtTarifDaya;
+        private System.Windows.Forms.TextBox txtNamaPelanggan;
+        private System.Windows.Forms.TextBox txtIdPelanggan;
+        private System.Windows.Forms.TextBox txtNoMeter;
         private DevExpress.XtraEditors.DropDownButton dropDownButton1;
         private System.Windows.Forms.ComboBox nominalBox;
+        private System.Windows.Forms.ComboBox inputBox;
+        private System.Windows.Forms.Label label3;
+        private DevExpress.XtraEditors.StyleController styleController;
+        private System.Windows.Forms.Label errLbl;
     }
 }

@@ -419,9 +419,6 @@ C:\Users\yonathan.winata\Documents\GitHub\CP_RetailPOSSDK\APIAccess\APIAccess\ob
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\APIAccess.dll.config
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\APIAccess.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\APIAccess.pdb
-C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\obj\Debug\APIAccess.dll
-C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\obj\Debug\APIAccess.pdb
-C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\obj\Debug\APIAccess.csprojResolveAssemblyReference.cache
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\POSControls.DLL
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\POSProcesses.DLL
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\DataAccess.dll
@@ -557,3 +554,6 @@ C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\A
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\es\DevExpress.Office.v14.2.Core.resources.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\ja\DevExpress.Office.v14.2.Core.resources.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\bin\Debug\ru\DevExpress.Office.v14.2.Core.resources.dll
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\obj\Debug\APIAccess.dll
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\obj\Debug\APIAccess.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\APIAccess\APIAccess\obj\Debug\APIAccess.csprojResolveAssemblyReference.cache

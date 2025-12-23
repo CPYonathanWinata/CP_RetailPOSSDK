@@ -1119,16 +1119,37 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     }
                 case "92":
                     {
-                        //Indosmart 
-                        CPIZone cpIzone = new CPIZone(operationInfo, posTransaction, Application);
-                        cpIzone.ShowDialog();
+                        ////Indosmart 
+                        //APIAccess.APIParameter.ApiResponseCheckBalanceIzone responseAPI = APIAccess.APIFunction.IzoneAPI.checkBalanceAccount(LSRetailPosis.Settings.ApplicationSettings.Database.DATAAREAID, LSRetailPosis.Settings.ApplicationSettings.Database.StoreID, "JDELIMA-R1", "https://apiqrisdev.cp.co.id/api/izone/checkBalance");
 
-                        RetailTransaction transaction = globalposTransaction as RetailTransaction;
-                        //transaction.CalcTotals();
+                        //var balanceData = APIAccess.APIFunction.MyJsonConverter.Deserialize<APIAccess.APIParameter.CheckBalanceData>(responseAPI.data);
 
-                        //to refresh the not updated price in the main display POS
-                        //Application.BusinessLogic.TransactionSystem.LoadTransactionStatus(transaction);
-                        Application.RunOperation(PosisOperations.DisplayTotal, "");
+                        //if (balanceData.TerminalBalance == "0")
+                        //{
+                        //    using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Saldo deposit kurang, silakan hubungi HO", MessageBoxButtons.OK, MessageBoxIcon.Error))
+                        //    {
+                        //        LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                        //    }
+                        //}
+                        //else
+                        //{
+                            //using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Saldo cukup ", MessageBoxButtons.OK, MessageBoxIcon.Error))
+                            //{
+                            //    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                            //}
+
+                            CPIZone cpIzone = new CPIZone(operationInfo, posTransaction, Application);
+                            cpIzone.ShowDialog();
+
+                            RetailTransaction transaction = globalposTransaction as RetailTransaction;
+                            //transaction.CalcTotals();
+
+                            //to refresh the not updated price in the main display POS
+                            //Application.BusinessLogic.TransactionSystem.LoadTransactionStatus(transaction);
+                            Application.RunOperation(PosisOperations.DisplayTotal, "");
+                        //}
+
+                       
                         //Application.RunOperation(PosisOperations.NoOperation, "");
                         //posTransaction.CalcTotals();
                         //transaction.

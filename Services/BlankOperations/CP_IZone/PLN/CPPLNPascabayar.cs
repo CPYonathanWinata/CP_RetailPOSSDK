@@ -113,6 +113,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_IZone.PLN
                     MessageBox.Show(reasonMessage, "Error", MessageBoxButtons.OK);
             }
         }
+
         private void btnBack_Click(object sender, EventArgs e)
         {
             if (BackButtonClicked())
