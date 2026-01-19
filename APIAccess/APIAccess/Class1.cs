@@ -35,6 +35,11 @@ namespace APIAccess
         public static string ppnValidation { get; set; }
         public static string custBlocked { get; set; }
 
+        //izone
+        public static bool isPlnTrans { get; set; }
+        public static string izoneTraceNumber { get; set; }
+        public static string receiptIzone { get; set; } 
+
         public static List<string> itemToRemove { get; set; }
         public static List<string> itemToRemoveList = new List<string>();
 
@@ -57,6 +62,9 @@ namespace APIAccess
         public static int nationalityIndex { get; set; }
         public static string nationality { get; set; }
 
+        public static APIParameter.CheckBalanceData balanceData { get; set; }
+ 
+
         //grabmart
         public static string merchantId { get; set; }
 
@@ -65,6 +73,7 @@ namespace APIAccess
             return "^" + Regex.Escape(value).Replace("_", ".").Replace("%", ".*") + "$";
         }*/
 
+        public static List<string> itemListPLN = new List<string>(); 
         
 
         public string getURLAPIByFuncName(string _funcName)

@@ -13,7 +13,41 @@ NO TECHNICAL SUPPORT IS PROVIDED.  YOU MAY NOT DISTRIBUTE THIS CODE UNLESS YOU H
 using System.ComponentModel.Composition;
 using Microsoft.Dynamics.Retail.Pos.Contracts.DataEntity;
 using Microsoft.Dynamics.Retail.Pos.Contracts.Triggers;
+using System.Windows.Forms;
 
+using System.Data;
+using System.Data.SqlClient;
+ 
+
+using System;
+using System.Net;
+
+using LSRetailPosis;
+using LSRetailPosis.POSProcesses;
+using LSRetailPosis.Transaction;
+using LSRetailPosis.Settings.FunctionalityProfiles;
+
+using System.IO;
+ 
+using System.Text;
+using Microsoft.Dynamics.Retail.Pos.Contracts;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Xml;
+
+
+
+using System.ComponentModel;
+
+
+using System.Diagnostics;
+using System.Drawing;
+using System.Linq;
+
+using System.Threading.Tasks;
+using System.Collections.ObjectModel;
+using LSRetailPosis.Transaction.Line.InfocodeItem;
+using LSRetailPosis.Transaction.Line.Discount;
 namespace Microsoft.Dynamics.Retail.Pos.SuspendTriggers
 {
     [Export(typeof(ISuspendTrigger))]
@@ -21,7 +55,8 @@ namespace Microsoft.Dynamics.Retail.Pos.SuspendTriggers
     {
 
         #region Constructor - Destructor
-
+        [Import]
+        public IApplication Application { get; set; }
         public SuspendTriggers()
         {
             
@@ -50,7 +85,19 @@ namespace Microsoft.Dynamics.Retail.Pos.SuspendTriggers
 
         public void PreSuspendTransaction(IPreTriggerResult preTriggerResult, IPosTransaction posTransaction)
         {
-            LSRetailPosis.ApplicationLog.Log("SuspendTriggers.PreSuspendTransaction", "Prior to the suspension of a transaction...", LSRetailPosis.LogTraceLevel.Trace);
+
+            //LSRetailPosis.ApplicationLog.Log("SuspendTriggers.PreSuspendTransaction", "Prior to the suspension of a transaction...", LSRetailPosis.LogTraceLevel.Trace);
+
+
+            using (frmMessage dialog = new frmMessage("Tidak boleh menggunakan suspend feature", MessageBoxButtons.OK, MessageBoxIcon.Error))
+            {
+                LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                posTransaction.OperationCancelled = true;
+                return;
+                //Application.RunOperation(PosisOperations.SetQty, itemIdRemove);
+                //Application.RunOperation(PosisOperations.SetQty,itemIdRemove, posTransaction);
+
+            }
         }
 
         public void PostSuspendTransaction(IPosTransaction posTransaction)

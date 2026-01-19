@@ -502,7 +502,7 @@ namespace APIAccess
             public string BillAmount { get; set; }
             public string SerialNo { get; set; }
             public string ResponseCode { get; set; }
-            public string Message { get; set; }
+            public string Receipt { get; set; }
             public string TerminalBalance { get; set; }
             public string ProductCode { get; set; }
             public string Amount { get; set; }

@@ -39,6 +39,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.IZone.PLN
         private Dictionary<string, string> itemDictionary = new Dictionary<string, string>();
         string selectedName;
         string selectedItemId  ;
+        string traceNum = "";
         private void SetCurrentTab(int currentIndex)
         {
             if (currentPanelIndex > -1) //remove all old controls back to tabcontrol
@@ -127,8 +128,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.IZone.PLN
 
             if (parsed.ContainsKey("TARIF/DAYA"))
                 txtTarifDaya.Text = parsed["TARIF/DAYA"].ToString();
-            
-            
+
+            traceNum = responseData.TraceNo;
             txtStroom.Text = thousandSeparator(responseData.Amount); // responseData.Amount.ToString("N0");  //application.Services.Price.GetItemPrice(selectedItemId, "PC").ToString();
             txtAdminAmt.Text = responseData.Admin.ToString("N2");
             txtTotalAmt.Text = thousandSeparator( (Convert.ToDecimal(txtStroom.Text) + Convert.ToDecimal(txtAdminAmt.Text)).ToString());
@@ -182,6 +183,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.IZone.PLN
         private void LoadTabTwoData()
         {
             nominalBox.Items.Clear();
+            APIAccess.APIAccessClass.itemListPLN.Clear();
             ReadOnlyCollection<object> containerArray = application.TransactionServices.InvokeExtension("getItemList", "APPLN");
             string xmlString = containerArray[3].ToString();
 
@@ -197,6 +199,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.IZone.PLN
             {
                 string itemId = node.Attributes["ItemId"].Value;
                 string name = node.Attributes["Name"].Value;
+
+                APIAccess.APIAccessClass.itemListPLN.Add(itemId);
 
                 // Add a new ComboBoxItem to the ComboBox
                 nominalBox.Items.Add(new ComboBoxItem(name, itemId));
@@ -322,16 +326,31 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.IZone.PLN
         {
             SaleLineItem saleLineItem;
 
-            decimal priceToOverride = 213000;
+            //decimal priceToOverride = 213000;
             string itemID = selectedItemId;
-
-            if (itemID != "")
+            if (Convert.ToDecimal(APIAccess.APIAccessClass.balanceData.TerminalBalance) - Convert.ToDecimal(txtStroom.Text) <= 0)
             {
-                application.RunOperation(PosisOperations.ItemSale, itemID);
+                using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Saldo deposit kurang, silakan hubungi HO.", MessageBoxButtons.OK, MessageBoxIcon.Error))
+                {
+                    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                }
+            }
+            else
+            {
+                if (itemID != "")
+                {
+                    application.RunOperation(PosisOperations.ItemSale, itemID);
+                }
+
+                RetailTransaction transaction = BlankOperations.globalposTransaction as RetailTransaction;
+                //CPIZONEPRABAYAR - 05012026 - Yonathan
+                APIAccess.APIAccessClass.isPlnTrans = true;
+                APIAccess.APIAccessClass.izoneTraceNumber = traceNum;
+                this.Close();
             }
 
-            RetailTransaction transaction = BlankOperations.globalposTransaction as RetailTransaction;
-            this.Close();
+           
+
         }
 
         private void CPPLNPrabayar_FormClosed(object sender, System.Windows.Forms.FormClosedEventArgs e)

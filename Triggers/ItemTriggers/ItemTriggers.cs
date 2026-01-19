@@ -173,6 +173,8 @@ namespace Microsoft.Dynamics.Retail.Pos.ItemTriggers
 
         public void PreSale(IPreTriggerResult preTriggerResult, ISaleLineItem saleLineItem, IPosTransaction posTransaction)
         {
+          
+
             List<string> groupId;
             bool existTaxTable = true;
             LSRetailPosis.ApplicationLog.Log("IItemTriggersV1.PreSale", "Prior to the sale of an item...", LSRetailPosis.LogTraceLevel.Trace);
@@ -224,6 +226,22 @@ namespace Microsoft.Dynamics.Retail.Pos.ItemTriggers
                     preTriggerResult.ContinueOperation = false;
                 }
             }*/
+            //CPIZONEPRABAYAR - 05012026 - Yonathan
+            if (APIAccess.APIAccessClass.isPlnTrans == true)
+            {
+                using (frmMessage dialog = new frmMessage(
+                       string.Format("Untuk transaksi token atau pembayaran tagihan PLN\ntidak bisa digabung dengan barang lain.\nSilakan selesaikan transaksi terlebih dahulu."),
+                            
+                       MessageBoxButtons.OK,
+                       MessageBoxIcon.Error))
+                {
+                    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                    posTransaction.OperationCancelled = true;
+                    preTriggerResult.ContinueOperation = false;
+                    return;
+                }
+            }
+             
         }
 
         public void PostSale(IPosTransaction posTransaction)
@@ -443,7 +461,22 @@ namespace Microsoft.Dynamics.Retail.Pos.ItemTriggers
                 preTriggerResult.ContinueOperation = false;
                 return;
             }
-            
+
+            //CPIZONEPRABAYAR - 05012026 - Yonathan
+            if (APIAccess.APIAccessClass.isPlnTrans == true)
+            {
+                using (frmMessage dialog = new frmMessage(
+                     string.Format("Tidak bisa add barang lain/edit quantity untuk transaksi PLN.\nSilakan selesaikan transaksi terlebih dahulu."),
+
+                     MessageBoxButtons.OK,
+                     MessageBoxIcon.Error))
+                {
+                    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                    posTransaction.OperationCancelled = true;
+                    preTriggerResult.ContinueOperation = false;
+                    return;
+                }
+            }
 
         }
 

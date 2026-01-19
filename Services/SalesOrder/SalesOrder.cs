@@ -1298,7 +1298,6 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder
                         else
                         {
                             throw;
-
                         }
                     }
 

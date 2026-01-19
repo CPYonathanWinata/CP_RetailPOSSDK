@@ -975,6 +975,10 @@ namespace APIAccess
             APIAccess.APIAccessClass.nationality = "";
             APIAccess.APIAccessClass.nationalityIndex = -1;
             APIAccess.APIAccessClass.isB2b = "";
+            //CPIZONEPRABAYAR - 05012026 - Yonathan
+            APIAccess.APIAccessClass.isPlnTrans = false;
+            APIAccess.APIAccessClass.izoneTraceNumber = "";
+            APIAccess.APIAccessClass.receiptIzone = "";
         }
         public void LogErrorToEventViewer(string errorDetails)
         {

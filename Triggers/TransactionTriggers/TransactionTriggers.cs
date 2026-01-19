@@ -43,6 +43,8 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using LSRetailPosis.Transaction.Line.SaleItem;
 using LSRetailPosis.Settings;
+using System.Drawing.Printing;
+using System.Drawing;
 
 namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 {
@@ -60,6 +62,7 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 		int countRetry = 0;
 		Dictionary<string, string> dict = new Dictionary<string, string>();
 		string topupName = "";
+        private string receiptContent;
 
 		// CPAPIEZEELINK CUSTOMIZATION
 
@@ -358,14 +361,205 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
                 }
                 
                 //end
-
+                
                 updateDiscountRounding();
 			}
+
+            //pay the CPIZONEPRABAYAR TOKEN - 06012026 - Yonathan
+            if (APIAccess.APIAccessClass.isPlnTrans == true)
+            {
+                topupPayment(posTransaction);
+            }
             //clear the value - 16012025
             APIFunction.clearRetailTransExtended();
              
 		 
 		}
+
+        private void topupPayment(IPosTransaction posTransaction)
+        {
+            int retryCount = 0;
+            int maxRetry = 3;
+            bool retry = true;
+            string functionName = "CheckTrans";
+            string url = "";
+            string message = "fail";
+            APIAccess.APIAccessClass APIClass = new APIAccess.APIAccessClass();
+            url = APIClass.getURLAPIByFuncName(functionName);
+
+            //check status first
+            APIAccess.APIParameter.ApiResponseCheckTransIzone responseAPICheckStatus = APIAccess.APIFunction.IzoneAPI.checkStatusTransaction(LSRetailPosis.Settings.ApplicationSettings.Database.DATAAREAID, LSRetailPosis.Settings.ApplicationSettings.Database.StoreID, ApplicationSettings.Terminal.TerminalId, APIAccess.APIAccessClass.izoneTraceNumber, url);
+
+            //if  error, then process to payment
+            if (responseAPICheckStatus.error == true)
+            {
+                functionName = "Payment";
+                url = APIClass.getURLAPIByFuncName(functionName);
+                while (retry && (retryCount < maxRetry))
+                {
+                    retryCount++;
+
+                    try
+                    {
+
+                        APIAccess.APIParameter.ApiResponsePaymentIzone responseAPI = APIAccess.APIFunction.IzoneAPI.paymentTransaction(LSRetailPosis.Settings.ApplicationSettings.Database.DATAAREAID, LSRetailPosis.Settings.ApplicationSettings.Database.StoreID, ApplicationSettings.Terminal.TerminalId, APIAccess.APIAccessClass.izoneTraceNumber, url);
+
+                        if (string.Equals(responseAPI.message, "success", StringComparison.OrdinalIgnoreCase))
+                        {
+
+                            retry = false;
+                            //input to CPIZONEHISTORY
+                            inputToIzoneHistory(posTransaction, 2000);
+
+                            //check status
+                            functionName = "CheckTrans";
+                            url = APIClass.getURLAPIByFuncName(functionName);
+                            responseAPICheckStatus = new APIAccess.APIParameter.ApiResponseCheckTransIzone();
+                            responseAPICheckStatus = APIAccess.APIFunction.IzoneAPI.checkStatusTransaction(LSRetailPosis.Settings.ApplicationSettings.Database.DATAAREAID, LSRetailPosis.Settings.ApplicationSettings.Database.StoreID, ApplicationSettings.Terminal.TerminalId, APIAccess.APIAccessClass.izoneTraceNumber, url);
+
+
+                            APIAccess.APIParameter.CheckTransIzoneResponseData responseData = APIAccess.APIFunction.MyJsonConverter.Deserialize<APIAccess.APIParameter.CheckTransIzoneResponseData>(responseAPICheckStatus.data);
+
+                            APIAccess.APIAccessClass.receiptIzone = responseData.Receipt;
+
+
+                            //responseAPICheckStatus
+
+
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                        if (retryCount >= maxRetry)
+                        {
+
+                            DialogResult dialogResult = Application.Services.Dialog.ShowMessage("Error, retry?", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+
+                            if (dialogResult == DialogResult.Yes)
+                            {
+                                retryCount = 0;
+                            }
+                            else
+                            {
+                                throw;
+
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                APIAccess.APIParameter.CheckTransIzoneResponseData responseData = APIAccess.APIFunction.MyJsonConverter.Deserialize<APIAccess.APIParameter.CheckTransIzoneResponseData>(responseAPICheckStatus.data);
+
+                APIAccess.APIAccessClass.receiptIzone = responseData.Receipt;
+            }
+
+
+            //print
+            if (!string.IsNullOrEmpty(APIAccess.APIAccessClass.receiptIzone))
+            {
+                printReceipt(APIAccess.APIAccessClass.receiptIzone);
+            }
+        }
+
+        private void printReceipt(string _receipt)
+        {
+            receiptContent = _receipt;
+
+            PrintDocument printDoc = new PrintDocument();
+            printDoc.PrintPage += PrintDoc_PrintPage; 
+
+            // kalau mau set printer tertentu:
+            // printDoc.PrinterSettings.PrinterName = "POS-58";
+
+            printDoc.Print();
+        }
+
+        private void PrintDoc_PrintPage(object sender, PrintPageEventArgs e)
+        {
+            Font font = new Font("Courier New", 9);
+            float x = 5;
+            float y = 5;
+
+            e.Graphics.DrawString(
+                receiptContent,
+                font,
+                Brushes.Black,
+                new RectangleF(x, y, e.PageBounds.Width, e.PageBounds.Height)
+            );
+        }
+
+
+
+        private void inputToIzoneHistory(IPosTransaction _posTransaction, decimal _admFee)
+        {
+            SqlConnection conn = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+            RetailTransaction retailTransaction = (RetailTransaction)_posTransaction;
+
+            try
+            {
+                if (conn.State != ConnectionState.Open)
+                {
+                    conn.Open();
+                }
+
+                string query = @"
+                INSERT INTO AX.CPIZONEHISTORY
+                (
+                    PRODUCTCODE,
+                    CUSTOMERID,
+                    RESPONSECODE,
+                    TERMINALID,
+                    TRANSACTIONDATETIME,
+                    AMOUNT,
+                    TRANSACTIONID,
+                    RECEIPTID,
+                    ADMFEE
+                )
+                VALUES
+                (
+                    @ProductCode,
+                    @CustomerId,
+                    @ResponseCode,
+                    @TerminalId,
+                    @TransactionDateTime,
+                    @Amount,
+                    @TransactionId,
+                    @ReceiptId,
+                    @AdmFee
+                )";
+
+                foreach (var data in retailTransaction.SaleItems)
+                {
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@ProductCode", data.ItemId);
+                        cmd.Parameters.AddWithValue("@CustomerId", "C000000001");//((RetailTransaction)_posTransaction).Customer.CustomerId);
+                        cmd.Parameters.AddWithValue("@ResponseCode", "");
+                        cmd.Parameters.AddWithValue("@TerminalId", _posTransaction.TerminalId);
+                        cmd.Parameters.AddWithValue("@TransactionDateTime", DateTime.Now);
+                        cmd.Parameters.AddWithValue("@Amount", data.NetAmount);
+                        cmd.Parameters.AddWithValue("@TransactionId", ((RetailTransaction)_posTransaction).TransactionId);
+                        cmd.Parameters.AddWithValue("@ReceiptId", ((RetailTransaction)_posTransaction).ReceiptId);
+                        cmd.Parameters.AddWithValue("@AdmFee", _admFee);
+
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                //throw new Exception("Insert CPIZONEHISTORY failed", ex);
+            }
+            finally
+            {
+                conn.Close();
+                //APIAccess.APIParameter.IzoneHistoryDataStore.Items.Clear();
+            }
+        }
+
 
         private void updateDiscountRounding()
         {

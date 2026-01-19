@@ -1301,7 +1301,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                         SaleLineItem saleLineItem;
                         RetailTransaction transaction = posTransaction as RetailTransaction;
 
-                        decimal priceToOverride = 12378.97m;
+                        decimal priceToOverride = 2000m;
 
 
                         for (int i = 0; i < ((RetailTransaction)posTransaction).SaleItems.Count; i++)

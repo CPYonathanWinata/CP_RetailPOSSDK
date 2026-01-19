@@ -49,9 +49,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
              //Indosmart 
             APIAccess.APIParameter.ApiResponseCheckBalanceIzone responseAPI = APIAccess.APIFunction.IzoneAPI.checkBalanceAccount(LSRetailPosis.Settings.ApplicationSettings.Database.DATAAREAID, LSRetailPosis.Settings.ApplicationSettings.Database.StoreID, "JDELIMA-R1", "https://apiqrisdev.cp.co.id/api/izone/checkBalance");
 
-            var balanceData = APIAccess.APIFunction.MyJsonConverter.Deserialize<APIAccess.APIParameter.CheckBalanceData>(responseAPI.data);
-            //check balance before proceeding to prabayar form
-            if (balanceData.TerminalBalance == "0")
+            //var balanceData = 
+            APIAccess.APIAccessClass.balanceData = APIAccess.APIFunction.MyJsonConverter.Deserialize<APIAccess.APIParameter.CheckBalanceData>(responseAPI.data); 
+            //check balance before proceeding to prabayar form\
+
+            if (Convert.ToDecimal(APIAccess.APIAccessClass.balanceData.TerminalBalance) <= 0)
             {
                 using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Saldo deposit kurang, silakan hubungi HO", MessageBoxButtons.OK, MessageBoxIcon.Error))
                 {

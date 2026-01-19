@@ -293,93 +293,93 @@ namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
 
                     listItem += ")";
 
-                    if (totalItem != 0)
-                    {
-                        SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
-                        try
-                        {
+//                    if (totalItem != 0)
+//                    {
+//                        SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+//                        try
+//                        {
 
-                            string queryString = @" SELECT MAX(ID1) AS ID1, MAX(ID2) AS ID2, SUM(TOTAL_ITEM1) AS TOTAL_ITEM1, SUM(TOTAL_ITEM2) AS TOTAL_ITEM2, SUM(EDC1) AS EDC1, SUM(EDC2) AS EDC2
-                                        FROM
-                                        (
-	                                        SELECT ITEMID ID1, '' ID2, SUM(1) TOTAL_ITEM1, 0 TOTAL_ITEM2, SUM(EDCTYPE) EDC1, 0 EDC2
-	                                        FROM [AX].[CPITEMTOPUP] WHERE ITEMID IN " + listItem + @"
-	                                        GROUP BY ITEMID
-	
-	                                        UNION
+//                            string queryString = @" SELECT MAX(ID1) AS ID1, MAX(ID2) AS ID2, SUM(TOTAL_ITEM1) AS TOTAL_ITEM1, SUM(TOTAL_ITEM2) AS TOTAL_ITEM2, SUM(EDC1) AS EDC1, SUM(EDC2) AS EDC2
+//                                        FROM
+//                                        (
+//	                                        SELECT ITEMID ID1, '' ID2, SUM(1) TOTAL_ITEM1, 0 TOTAL_ITEM2, SUM(EDCTYPE) EDC1, 0 EDC2
+//	                                        FROM [AX].[CPITEMTOPUP] WHERE ITEMID IN " + listItem + @"
+//	                                        GROUP BY ITEMID
+//	
+//	                                        UNION
+//
+//	                                        SELECT '' ID1, ITEMID ID2, 0 TOTAL_ITEM1, SUM(1) TOTAL_ITEM2, 0 EDC1, SUM(EDCTYPE) EDC2
+//	                                        FROM [AX].[CPITEMTOPUPFEE] WHERE ITEMID IN " + listItem + @"
+//	                                        GROUP BY ITEMID
+//                                        ) AS TOPUP
+//                                        ";
 
-	                                        SELECT '' ID1, ITEMID ID2, 0 TOTAL_ITEM1, SUM(1) TOTAL_ITEM2, 0 EDC1, SUM(EDCTYPE) EDC2
-	                                        FROM [AX].[CPITEMTOPUPFEE] WHERE ITEMID IN " + listItem + @"
-	                                        GROUP BY ITEMID
-                                        ) AS TOPUP
-                                        ";
+//                            using (SqlCommand command = new SqlCommand(queryString, connection))
+//                            {
+//                                if (connection.State != ConnectionState.Open)
+//                                {
+//                                    connection.Open();
+//                                }
+//                                using (SqlDataReader reader = command.ExecuteReader())
+//                                {
+//                                    if (reader.Read())
+//                                    {
+//                                        if (reader[2].ToString() != "" && reader[3].ToString() != "")
+//                                        {
+//                                            if ((PosisOperations)posOperation != PosisOperations.PayCash)
+//                                            {
+//                                                MessageBox.Show("PAYMENT METHOD MUST BE CASH FOR TOP UP");
+//                                                preTriggerResult.ContinueOperation = false;
+//                                            }
+//                                            else if ((int)reader[2] < 1)
+//                                            {
+//                                                MessageBox.Show("Please choose top up item");
+//                                                preTriggerResult.ContinueOperation = false;
+//                                            }
+//                                            else if ((int)reader[2] > 1)
+//                                            {
+//                                                MessageBox.Show("Only 1 top up item allowed");
+//                                                preTriggerResult.ContinueOperation = false;
+//                                            }
+//                                            else if (dict[reader[0].ToString()] > 1)
+//                                            {
+//                                                MessageBox.Show("Qty top up item must not be more than 1");
+//                                                preTriggerResult.ContinueOperation = false;
+//                                            }
+//                                            else if (reader[1].ToString() != "" && dict[reader[1].ToString()] > 1)
+//                                            {
+//                                                MessageBox.Show("Qty top up fee must not be more than 1");
+//                                                preTriggerResult.ContinueOperation = false;
+//                                            }
+//                                            else if ((int)reader[3] != 1)
+//                                            {
+//                                                MessageBox.Show("Please choose top up fee");
+//                                                preTriggerResult.ContinueOperation = false;
+//                                            }
+//                                            else if ((int)reader[4] != (int)reader[5])
+//                                            {
+//                                                MessageBox.Show("Top up item and top up fee does not match");
+//                                                preTriggerResult.ContinueOperation = false;
+//                                            }
+//                                        }
 
-                            using (SqlCommand command = new SqlCommand(queryString, connection))
-                            {
-                                if (connection.State != ConnectionState.Open)
-                                {
-                                    connection.Open();
-                                }
-                                using (SqlDataReader reader = command.ExecuteReader())
-                                {
-                                    if (reader.Read())
-                                    {
-                                        if (reader[2].ToString() != "" && reader[3].ToString() != "")
-                                        {
-                                            if ((PosisOperations)posOperation != PosisOperations.PayCash)
-                                            {
-                                                MessageBox.Show("PAYMENT METHOD MUST BE CASH FOR TOP UP");
-                                                preTriggerResult.ContinueOperation = false;
-                                            }
-                                            else if ((int)reader[2] < 1)
-                                            {
-                                                MessageBox.Show("Please choose top up item");
-                                                preTriggerResult.ContinueOperation = false;
-                                            }
-                                            else if ((int)reader[2] > 1)
-                                            {
-                                                MessageBox.Show("Only 1 top up item allowed");
-                                                preTriggerResult.ContinueOperation = false;
-                                            }
-                                            else if (dict[reader[0].ToString()] > 1)
-                                            {
-                                                MessageBox.Show("Qty top up item must not be more than 1");
-                                                preTriggerResult.ContinueOperation = false;
-                                            }
-                                            else if (reader[1].ToString() != "" && dict[reader[1].ToString()] > 1)
-                                            {
-                                                MessageBox.Show("Qty top up fee must not be more than 1");
-                                                preTriggerResult.ContinueOperation = false;
-                                            }
-                                            else if ((int)reader[3] != 1)
-                                            {
-                                                MessageBox.Show("Please choose top up fee");
-                                                preTriggerResult.ContinueOperation = false;
-                                            }
-                                            else if ((int)reader[4] != (int)reader[5])
-                                            {
-                                                MessageBox.Show("Top up item and top up fee does not match");
-                                                preTriggerResult.ContinueOperation = false;
-                                            }
-                                        }
-
-                                    }
-                                }
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
-                            throw;
-                        }
-                        finally
-                        {
-                            if (connection.State != ConnectionState.Closed)
-                            {
-                                connection.Close();
-                            }
-                        }
-                    }
+//                                    }
+//                                }
+//                            }
+//                        }
+//                        catch (Exception ex)
+//                        {
+//                            LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+//                            throw;
+//                        }
+//                        finally
+//                        {
+//                            if (connection.State != ConnectionState.Closed)
+//                            {
+//                                connection.Close();
+//                            }
+//                        }
+//                    }
             }
             
                 #endregion
