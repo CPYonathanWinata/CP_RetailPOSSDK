@@ -64,7 +64,38 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
 
             if (ApplicationSettings.Terminal.TerminalOperator.UserIsInventoryUser)
             {
-                using (frmPurchaseOrderReceiptSearch dialog = new frmPurchaseOrderReceiptSearch())
+                using (frmPurchaseOrderReceiptSearch dialog = new frmPurchaseOrderReceiptSearch(true))
+                {
+                    dialog.RepeatCalled = this.repeatCall;
+                    this.Application.ApplicationFramework.POSShowForm(dialog);
+                    result = dialog.DialogResult;
+                    selectedReceiptNumber = dialog.SelectedReceiptNumber;
+                    selectedPONumber = dialog.SelectedPONumber;
+                    prType = dialog.SelectedPRType;
+                }
+
+                if (result == DialogResult.OK && !string.IsNullOrEmpty(selectedReceiptNumber) && !string.IsNullOrEmpty(selectedPONumber))
+                {
+                    ReceivePurchaseOrder(selectedPONumber, selectedReceiptNumber, prType);
+                }
+            }
+            else
+            {
+                POSFormsManager.ShowPOSMessageDialog(3540);             // Not allowed.
+            }
+        }
+
+        //custom by Yonathan to list the PO Retur Only - 20011026
+        public void ShowPurchaseOrderReturList()
+        {
+            DialogResult result = DialogResult.Cancel;
+            string selectedReceiptNumber = string.Empty;
+            string selectedPONumber = string.Empty;
+            PRCountingType prType;
+
+            if (ApplicationSettings.Terminal.TerminalOperator.UserIsInventoryUser)
+            {
+                using (frmPurchaseOrderReceiptSearch dialog = new frmPurchaseOrderReceiptSearch(true))
                 {
                     dialog.RepeatCalled = this.repeatCall;
                     this.Application.ApplicationFramework.POSShowForm(dialog);

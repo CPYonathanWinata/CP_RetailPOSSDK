@@ -979,6 +979,7 @@ namespace APIAccess
             APIAccess.APIAccessClass.isPlnTrans = false;
             APIAccess.APIAccessClass.izoneTraceNumber = "";
             APIAccess.APIAccessClass.receiptIzone = "";
+            APIAccess.APIAccessClass.isRetur = false;
         }
         public void LogErrorToEventViewer(string errorDetails)
         {

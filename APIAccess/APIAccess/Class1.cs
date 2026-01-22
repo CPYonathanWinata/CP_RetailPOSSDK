@@ -61,7 +61,7 @@ namespace APIAccess
         public static int ageText { get; set; }
         public static int nationalityIndex { get; set; }
         public static string nationality { get; set; }
-
+        public static bool isRetur { get; set; }
         public static APIParameter.CheckBalanceData balanceData { get; set; }
  
 

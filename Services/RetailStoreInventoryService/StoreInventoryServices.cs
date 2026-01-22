@@ -23,7 +23,7 @@ using LSRetailPosis.DataAccess;
 using LSRetailPosis.Settings;
 using Microsoft.Dynamics.Retail.Pos.Contracts;
 using Microsoft.Dynamics.Retail.Pos.Contracts.Services;
-
+using APIAccess;
 
 namespace Microsoft.Dynamics.Retail.Pos.StoreInventoryServices
 {
@@ -1163,10 +1163,10 @@ namespace Microsoft.Dynamics.Retail.Pos.StoreInventoryServices
         /// </summary>
         /// <returns></returns>
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
-        public IList<IPRDocument> GetOrderReceipts()
+        public IList<IPRDocument> GetOrderReceipts()//bool _isRetur = false)
         {
             string[] docTypes = null;
-
+            bool _isRetur = APIAccessClass.isRetur;
             // Get PR documents.
             // e.g. "R-000006; - PO-000023;PURCHASEUNIT;1;100.00;;No;<status>\n"
             docTypes = new string[] { PrDocListType.PurchaseOrder, PrDocListType.TransferOrder, PrDocListType.PickingList };
@@ -1192,7 +1192,11 @@ namespace Microsoft.Dynamics.Retail.Pos.StoreInventoryServices
                 switch (docType)
                 {
                     case PrDocListType.PurchaseOrder:
-                        this.CallTransactionService(ref succeeded, ref returnMessage, ref retVal, "GetOpenPurchaseOrders", ApplicationSettings.Terminal.InventLocationId);//,"POS");
+                        if (_isRetur == false)
+                            this.CallTransactionService(ref succeeded, ref returnMessage, ref retVal, "GetOpenPurchaseOrders", ApplicationSettings.Terminal.InventLocationId);
+                        else
+                            this.CallTransactionServiceEx(ref succeeded, ref returnMessage, ref retVal, "GetOpenPurchaseOrdersRetur", ApplicationSettings.Terminal.InventLocationId);
+                       
                         break;
                     case PrDocListType.TransferOrder:
                         this.CallTransactionService(ref succeeded, ref returnMessage, ref retVal, "GetOpenTransferOrders", ApplicationSettings.Terminal.InventLocationId);//, "POS");
@@ -1289,6 +1293,281 @@ namespace Microsoft.Dynamics.Retail.Pos.StoreInventoryServices
                         //}
                         // Insert 
                          
+                        // Insert receipt into DB if it is not already existing
+                        int result = prData.InsertReceipt(doc.OrderType, doc.RecId, doc.PurchId, posStatus, doc.DeliveryMethod);
+                    }
+
+                    //Gather receipt documents per each document type
+                    prDocuments.AddRange(prDocs);
+                }
+            }
+
+            //Delete receipts from POS if they can NOT be found in HQ
+            prData.DeleteUnspecifiedReceipts(prDocuments.Select(doc => doc.RecId));
+
+            return prDocuments;
+        }
+
+        [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
+        public IList<IPRDocument> GetOrderReceipts(bool _isRetur = false)
+        {
+            string[] docTypes = null;
+
+            // Get PR documents.
+            // e.g. "R-000006; - PO-000023;PURCHASEUNIT;1;100.00;;No;<status>\n"
+            docTypes = new string[] { PrDocListType.PurchaseOrder, PrDocListType.TransferOrder, PrDocListType.PickingList };
+
+            bool succeeded = false;
+            string retVal = string.Empty;
+            string returnMessage = string.Empty;
+
+            // Process PR documents for all document types.
+            List<IPRDocument> prDocuments = new List<IPRDocument>();
+
+            // Create DAL object
+            PurchaseOrderReceiptData prData = new PurchaseOrderReceiptData(
+                ApplicationSettings.Database.LocalConnection,
+                ApplicationSettings.Database.DATAAREAID,
+                ApplicationSettings.Terminal.StorePrimaryId);
+
+            // Loop through each document type because TransactionService returns PO by the requested PO document type
+            foreach (string docType in docTypes)
+            {
+                IEnumerable<IPRDocument> prDocs = new List<IPRDocument>();
+
+                switch (docType)
+                {
+                    case PrDocListType.PurchaseOrder:
+
+                        this.CallTransactionService(ref succeeded, ref returnMessage, ref retVal, "GetOpenPurchaseOrders", ApplicationSettings.Terminal.InventLocationId);
+                        //,"POS");
+
+                        break;
+                    case PrDocListType.TransferOrder:
+                        this.CallTransactionService(ref succeeded, ref returnMessage, ref retVal, "GetOpenTransferOrders", ApplicationSettings.Terminal.InventLocationId);//, "POS");
+                        break;
+                    case PrDocListType.PickingList:
+                        this.CallTransactionService(ref succeeded, ref returnMessage, ref retVal, "GetPickingLists", ApplicationSettings.Terminal.InventLocationId);
+                        break;
+                }
+
+                if (succeeded)
+                {
+                    // Remove Xml declaration
+                    RemoveXmlDeclaration(ref retVal);
+
+                    if (!string.IsNullOrEmpty(retVal))
+                    {
+                        XDocument doc = XDocument.Parse(retVal);
+                        XElement root = null;
+                        switch (docType)
+                        {
+                            case PrDocListType.PurchaseOrder:
+                                root = doc.Elements("PurchTables").FirstOrDefault();
+                                if (root != null)
+                                {
+                                    prDocs = root.Elements("PurchTable").Select<XElement, IPRDocument>(
+                                        (po) =>
+                                        {
+                                            IPRDocument prDocument = new PRDocument();
+                                            prDocument.Parse(po);
+                                            return prDocument;
+                                        });
+                                }
+                                break;
+                            case PrDocListType.TransferOrder:
+                                root = doc.Elements("InventTransferTables").FirstOrDefault();
+                                if (root != null)
+                                {
+                                    prDocs = root.Elements("InventTransferTable").Select<XElement, IPRDocument>(
+                                        (tr) =>
+                                        {
+                                            IPRDocument trDocument = new TRDocument();
+                                            trDocument.Parse(tr);
+                                            return trDocument;
+                                        });
+                                }
+                                break;
+                            case PrDocListType.PickingList:
+                                root = doc.Elements("WMSPickingRoutes").FirstOrDefault();
+                                if (root != null)
+                                {
+                                    prDocs = root.Elements("WMSPickingRoute").Select<XElement, IPRDocument>(
+                                       (pl) =>
+                                       {
+                                           IPRDocument plDocument = new PickingListDocument();
+                                           plDocument.Parse(pl);
+                                           return plDocument;
+                                       });
+                                }
+                                break;
+                        }
+                    }
+
+                    // Update PO document type with current requested document type
+                    foreach (IPRDocument doc in prDocs)
+                    {
+                        PurchaseOrderReceiptStatus posStatus;
+                        int temp;
+
+                        //change to provide received status by Yonathan 25072024
+
+                        if (doc.RetailStatusType == "Received")
+                        {
+                            posStatus = PurchaseOrderReceiptStatus.InProgress;
+                            if (doc.DeliveryMethod == null)
+                            {
+                                doc.DeliveryMethod = "";
+                            }
+                        }
+                        else
+                        {
+                            posStatus = PurchaseOrderReceiptStatus.Open;
+                        }
+
+
+
+                        // ORIGINAL CODE
+                        // if (int.TryParse(doc.RetailStatusType, out temp))
+                        //{
+                        //    posStatus = MapHHTRetailStatusTypeBaseToPurchaseOrderReceiptStatus((HHTRetailStatusTypeBase)temp);
+                        //}
+                        //else
+                        //{
+                        //    posStatus = PurchaseOrderReceiptStatus.Open;
+                        //}
+                        // Insert 
+
+                        // Insert receipt into DB if it is not already existing
+                        int result = prData.InsertReceipt(doc.OrderType, doc.RecId, doc.PurchId, posStatus, doc.DeliveryMethod);
+                    }
+
+                    //Gather receipt documents per each document type
+                    prDocuments.AddRange(prDocs);
+                }
+            }
+
+            //Delete receipts from POS if they can NOT be found in HQ
+            prData.DeleteUnspecifiedReceipts(prDocuments.Select(doc => doc.RecId));
+
+            return prDocuments;
+        }
+
+        [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
+        public IList<IPRDocument> GetOrderReceiptsRetur()
+        {
+            string[] docTypes = null;
+
+            // Get PR documents.
+            // e.g. "R-000006; - PO-000023;PURCHASEUNIT;1;100.00;;No;<status>\n"
+            docTypes = new string[] { PrDocListType.PurchaseOrder, PrDocListType.TransferOrder, PrDocListType.PickingList };
+
+            bool succeeded = false;
+            string retVal = string.Empty;
+            string returnMessage = string.Empty;
+
+            // Process PR documents for all document types.
+            List<IPRDocument> prDocuments = new List<IPRDocument>();
+
+            // Create DAL object
+            PurchaseOrderReceiptData prData = new PurchaseOrderReceiptData(
+                ApplicationSettings.Database.LocalConnection,
+                ApplicationSettings.Database.DATAAREAID,
+                ApplicationSettings.Terminal.StorePrimaryId);
+
+            // Loop through each document type because TransactionService returns PO by the requested PO document type
+            foreach (string docType in docTypes)
+            {
+                IEnumerable<IPRDocument> prDocs = new List<IPRDocument>();
+
+                switch (docType)
+                {
+                    case PrDocListType.PurchaseOrder:
+
+
+                        this.CallTransactionServiceEx(ref succeeded, ref returnMessage, ref retVal, "GetOpenReturPurchaseOrders", ApplicationSettings.Terminal.InventLocationId);
+                        //,"POS");
+
+                        break;
+                   
+                }
+
+                if (succeeded)
+                {
+                    // Remove Xml declaration
+                    RemoveXmlDeclaration(ref retVal);
+
+                    if (!string.IsNullOrEmpty(retVal))
+                    {
+                        XDocument doc = XDocument.Parse(retVal);
+                        XElement root = null;
+                        switch (docType)
+                        {
+                            case PrDocListType.PurchaseOrder:
+                                root = doc.Elements("PurchTables").FirstOrDefault();
+                                if (root != null)
+                                {
+                                    prDocs = root.Elements("PurchTable").Select<XElement, IPRDocument>(
+                                        (po) =>
+                                        {
+                                            IPRDocument prDocument = new PRDocument();
+                                            prDocument.Parse(po);
+                                            return prDocument;
+                                        });
+                                }
+                                break;
+                            case PrDocListType.TransferOrder:
+                                root = doc.Elements("InventTransferTables").FirstOrDefault();
+                                if (root != null)
+                                {
+                                    prDocs = root.Elements("InventTransferTable").Select<XElement, IPRDocument>(
+                                        (tr) =>
+                                        {
+                                            IPRDocument trDocument = new TRDocument();
+                                            trDocument.Parse(tr);
+                                            return trDocument;
+                                        });
+                                }
+                                break;
+                            case PrDocListType.PickingList:
+                                root = doc.Elements("WMSPickingRoutes").FirstOrDefault();
+                                if (root != null)
+                                {
+                                    prDocs = root.Elements("WMSPickingRoute").Select<XElement, IPRDocument>(
+                                       (pl) =>
+                                       {
+                                           IPRDocument plDocument = new PickingListDocument();
+                                           plDocument.Parse(pl);
+                                           return plDocument;
+                                       });
+                                }
+                                break;
+                        }
+                    }
+
+                    // Update PO document type with current requested document type
+                    foreach (IPRDocument doc in prDocs)
+                    {
+                        PurchaseOrderReceiptStatus posStatus;
+                        int temp;
+
+                        //change to provide received status by Yonathan 25072024
+
+                        if (doc.RetailStatusType == "Received")
+                        {
+                            posStatus = PurchaseOrderReceiptStatus.InProgress;
+                            if (doc.DeliveryMethod == null)
+                            {
+                                doc.DeliveryMethod = "";
+                            }
+                        }
+                        else
+                        {
+                            posStatus = PurchaseOrderReceiptStatus.Open;
+                        }
+
+
+ 
                         // Insert receipt into DB if it is not already existing
                         int result = prData.InsertReceipt(doc.OrderType, doc.RecId, doc.PurchId, posStatus, doc.DeliveryMethod);
                     }
@@ -1406,6 +1685,26 @@ namespace Microsoft.Dynamics.Retail.Pos.StoreInventoryServices
             try
             {
                 ReadOnlyCollection<object> result = this.Application.TransactionServices.Invoke(methodName, parameters);
+
+                if ((result != null) && (result.Count == 4))
+                {
+                    bool.TryParse(result[1].ToString(), out succeeded);
+                    returnMessage = result[2].ToString();
+                    returnResult = result[3].ToString();
+                }
+            }
+            catch (Exception x)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException("StoreTransactionServices.CallTransactionService", x);
+                throw;
+            }
+
+        }
+            private void CallTransactionServiceEx(ref bool succeeded, ref string returnMessage, ref string returnResult, string methodName, params object[] parameters)
+        {
+            try
+            {
+                ReadOnlyCollection<object> result = this.Application.TransactionServices.InvokeExtension(methodName, parameters);
 
                 if ((result != null) && (result.Count == 4))
                 {

@@ -1031,6 +1031,15 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 
                         printLabel.ShowDialog();
                         
+                        break; 
+                    }
+                case "27":
+                    {
+                        Application.Services.PurchaseOrder.ShowPurchaseOrderList();
+                        //PurchaseOrderReceiving.PurchaseOrderReceiving poReceiving = new PurchaseOrderReceiving.PurchaseOrderReceiving();
+                        //poReceiving.Application.
+                        //poReceiving.ShowPurchaseOrderReturList();
+                        //PurchaseOrderReceiving.PurchaseOrderReceiving.ShowPurchaseOrderReturList();
                         break;
                     }
                 case "88":

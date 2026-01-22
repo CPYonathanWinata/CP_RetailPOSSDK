@@ -204,6 +204,11 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch
 		int Offset = 0;
 		private StyleController styleController;
 		private System.ComponentModel.IContainer components;
+        
+        //custom var - Yonathan
+        bool isRetur = false;
+        //end
+
 
 		/// <summary>
 		/// Get/set property for singaling if form is called first time
@@ -228,11 +233,12 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch
 		/// <summary>
 		/// Displays form of purchase order receipts search.
 		/// </summary>
-		public frmPurchaseOrderReceiptSearch()
+		public frmPurchaseOrderReceiptSearch(bool _fromBlankOperation = false)
 		{
 			//
 			// Required for Windows Form Designer support
 			//
+            APIAccess.APIAccessClass.isRetur = _fromBlankOperation;
 			InitializeComponent();
 
 			colStatus.DisplayFormat.Format = new StatusFormatter();
@@ -333,8 +339,16 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch
 				}
 
 				// Download POs from AX and update POs in DB
-				IList<IPRDocument> prDocuments = PurchaseOrderReceiving.InternalApplication.Services.StoreInventoryServices.GetOrderReceipts();
+                IList<IPRDocument> prDocuments;
+                //if (isRetur == true)
+                //{ 
+                    
+                //}
 
+
+                prDocuments = PurchaseOrderReceiving.InternalApplication.Services.StoreInventoryServices.GetOrderReceipts();
+                
+				
 				if (prDocuments != null && prDocuments.Count > 0)
 				{
 					// Load POs from DB and populate to grid control
