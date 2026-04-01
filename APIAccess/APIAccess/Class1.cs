@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.Dynamics.Retail.Pos.Contracts.DataEntity;
 //using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -64,6 +65,15 @@ namespace APIAccess
         public static bool isRetur { get; set; }
         public static APIParameter.CheckBalanceData balanceData { get; set; }
  
+
+        //for blibliorder
+        public static string packageId  { get; set; }
+        public static IPosTransaction posTransaction { get; set; }
+        public static string blibliCustName = "";
+        public static string blibliCustPhone = "";
+        public static string blibliOrderState = "";
+        public static string blibliOrderIdLong = "";
+        //end
 
         //grabmart
         public static string merchantId { get; set; }

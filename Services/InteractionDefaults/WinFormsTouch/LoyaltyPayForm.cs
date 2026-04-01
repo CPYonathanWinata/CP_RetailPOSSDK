@@ -336,6 +336,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
            // FirstInput = new DateTime(1900, 01, 01, 01, 00, 00);
             //MessageBox.Show("KeyDown");
         }
+
         private void btnCheckBalance_Click(object sender, EventArgs e)
         {
             //add by Yonathan 26/01/2024
@@ -370,6 +371,8 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
                 loyaltyFullName = containerArray[4].ToString();
                 labelNameTitle.Text = loyaltyFullName;
                 //GetLoyaltyBalanceInfo
+
+                MessageBox.Show("Available Points "+containerArray[5].ToString() + " - " + "Point will be used "+ loyaltyCardData.BalancePoints);
             }
             
             

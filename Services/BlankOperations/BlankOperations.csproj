@@ -54,7 +54,7 @@
     </Reference>
     <Reference Include="DevExpress.XtraEditors.v16.2, Version=16.2.15.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\DevExpress\Framework\DevExpress.XtraEditors.v16.2.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\DevExpress\Framework\DevExpress.XtraEditors.v16.2.dll</HintPath>
     </Reference>
     <Reference Include="DevExpress.XtraGrid.v16.2, Version=16.2.15.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
     </Reference>
@@ -219,6 +219,18 @@
     </Compile>
     <Compile Include="CPDiscountPayment.Designer.cs">
       <DependentUpon>CPDiscountPayment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CPIBLIBLIORDERS\BlibliOrderList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CPIBLIBLIORDERS\BlibliOrderList.Designer.cs">
+      <DependentUpon>BlibliOrderList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CPIBLIBLIORDERS\OrderDetailForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CPIBLIBLIORDERS\OrderDetailForm.Designer.cs">
+      <DependentUpon>OrderDetailForm.cs</DependentUpon>
     </Compile>
     <Compile Include="CP_IZone\CPIZone.cs">
       <SubType>Form</SubType>
@@ -444,6 +456,12 @@
     <EmbeddedResource Include="CPDiscountPayment.resx">
       <DependentUpon>CPDiscountPayment.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="CPIBLIBLIORDERS\BlibliOrderList.resx">
+      <DependentUpon>BlibliOrderList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CPIBLIBLIORDERS\OrderDetailForm.resx">
+      <DependentUpon>OrderDetailForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CP_IZone\CPIZone.resx">
       <DependentUpon>CPIZone.cs</DependentUpon>
     </EmbeddedResource>
@@ -546,6 +564,7 @@
     </None>
     <None Include="ClassDiagram1.cd" />
     <None Include="ClassDiagram3.cd" />
+    <None Include="ClassDiagram4.cd" />
     <None Include="JBENHL1StoresDataSet.xsc">
       <DependentUpon>JBENHL1StoresDataSet.xsd</DependentUpon>
     </None>

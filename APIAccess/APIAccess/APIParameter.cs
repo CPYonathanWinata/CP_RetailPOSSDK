@@ -584,5 +584,263 @@ namespace APIAccess
 
 
         //end
+
+
+        // blibli otfrt
+        /*{
+    "warehouse": "WH_JDELIMA",
+    "dateFrom": "2026-02-18 00:00:00",
+    "dateTo": "2026-02-18 23:59:59"
+}*/
+        public class ApiRequestBliBliListOrder
+        {
+            public string warehouse { get; set; }
+            public string dateFrom { get; set; }
+            public string dateTo { get; set; }
+        }
+
+        public class ApiResponseBliBliListOrderRaw
+        {
+            public int status { get; set; }
+            public bool error { get; set; }
+            public string message { get; set; }
+            public string data { get; set; } 
+        }
+
+        public class ApiResponseBliBliListOrder
+        {
+            public int status { get; set; }
+            public bool error { get; set; }
+            public string message { get; set; }
+            public List<OrderData> data { get; set; }
+        }
+
+        public class OrderData
+        {
+            public string order_id { get; set; }
+            public string store_code { get; set; }
+            public string pickup_point_code { get; set; }
+            public string pickup_point_name { get; set; }
+            public string status { get; set; }
+            public string reason { get; set; }
+            public string package_id { get; set; }
+            public int status_receipt { get; set; }
+            public string no_receipt_pos { get; set; }
+            public string order_time { get; set; }
+
+            public List<Product> product { get; set; }
+            public List<Amount> amount { get; set; }
+            //public List<object> adjustment { get; set; }
+            //public List<Adjustment> adjustment { get; set; }
+            public List<List<Adjustment>> adjustment { get; set; }
+
+            public Recipient recipient { get; set; }
+            public List<Shipment> shipment { get; set; }
+            public List<Flags> flags { get; set; }
+            public List<OrderItem> order_item { get; set; }
+
+            //public DateTime created_at { get; set; }
+            //public DateTime updated_at { get; set; }
+
+            public string created_at { get; set; }
+            public string updated_at { get; set; }
+        }
+
+        public class Adjustment
+        {
+            public int amount { get; set; }
+            public string code { get; set; }
+            public string description { get; set; }
+            public int merchantMargin { get; set; }
+            public string name { get; set; }
+            public string type { get; set; }
+        }
+
+
+        public class Product
+        {
+            public string blibliSku { get; set; }
+            public string name { get; set; }
+            public string sellerSku { get; set; }
+            public int quantity { get; set; }
+            public int initialQuantity { get; set; }
+            public decimal itemPrice { get; set; }
+            public string type { get; set; }
+            public string notes { get; set; }
+        }
+
+        public class Amount
+        {
+            public decimal itemAmount { get; set; }
+            public decimal itemTotalAmount { get; set; }
+            public decimal sellerAmount { get; set; }
+            public decimal shippingCost { get; set; }
+            public decimal shippingInsuranceCost { get; set; }
+            public decimal paymentFee { get; set; }
+        }
+
+        public class Recipient
+        {
+            public string name { get; set; }
+            public string streetAddress { get; set; }
+            public string country { get; set; }
+            public string state { get; set; }
+            public string city { get; set; }
+            public string district { get; set; }
+            public string subDistrict { get; set; }
+            public string zipCode { get; set; }
+            public double longitude { get; set; }
+            public double latitude { get; set; }
+        }
+
+        public class Shipment
+        {
+            public string logisticProductCode { get; set; }
+            public string logisticProductName { get; set; }
+            public string logisticOptionCode { get; set; }
+            public string logisticOptionName { get; set; }
+            public string notes { get; set; }
+            public long shippingEtdMin { get; set; }
+            public long shippingEtdMax { get; set; }
+            public int totalWeight { get; set; }
+        }
+
+        public class Flags
+        {
+            public bool instantPickup { get; set; }
+            public bool fulfilledByBlibli { get; set; }
+            public bool cashOnDelivery { get; set; }
+            public bool fasOrder { get; set; }
+        }
+
+        public class OrderItem
+        {
+            public string id { get; set; }
+            public string packageId { get; set; }
+            public bool packageCreated { get; set; }
+            public int? itemSellerCount { get; set; }
+        }
+
+
+        //change status to PF
+        public class ApiRequestBlibliCreatePacakge
+        {
+            public string orderId { get; set; }
+            public string orderItemIds { get; set; }
+        }
+
+        public class ApiResponseBlibliCreatePackage
+        {
+            public int status { get; set; }
+            public bool error { get; set; }
+            public string message { get; set; }
+            public DataPackage data { get; set; }
+        }
+
+        public class DataPackage
+        {
+            public string requestId { get; set; }
+            public string errorMessage { get; set; }
+            public string errorCode { get; set; }
+            public bool success { get; set; }
+            public Value value { get; set; }
+        }
+
+        public class Value
+        {
+            public string id { get; set; }
+            public string storeId { get; set; }
+            public string createdDate { get; set; }
+            public string createdBy { get; set; }
+            public string updatedDate { get; set; }
+            public string updatedBy { get; set; }
+            public string version { get; set; }
+            public string packageId { get; set; }
+        }
+        //end
+
+
+        //change status to PU
+        public class ApiRequestBlibliFulfillOrder
+        {
+            public string orderId { get; set; }
+        }
+
+        public class ApiResponseBlibliFulfillOrder
+        {
+            public int status { get; set; }
+            public bool error { get; set; }
+            public string message { get; set; }
+            public string data { get; set; }
+        }
+
+
+        //end
+
+        //get current status
+        public class ApiRequestBlibliGetCurrentStatus
+        {
+            public string id { get; set; }
+        }
+
+        public class ApiResponseBlibliGetCurrentStatus
+        {
+            public int status { get; set; }
+            public bool error { get; set; }
+            public string message { get; set; }
+            public string data { get; set; }
+        }
+
+        public class BlibliCurrentStatusData
+        {
+            public string pickup_point_code { get; set; }
+            public string pickup_point_name { get; set; }
+            public string order_id { get; set; }
+            public string status { get; set; }
+            public string reason { get; set; }
+        }
+        //end
+
+
+        //update transaction after receipt
+        public class ApiRequestBlibliUpdateTransStatus
+        {
+            public string orderId { get; set; }
+            public string receiptID { get; set; }
+            
+        }
+
+        public class ApiResponseBlibliUpdateTransStatus
+        {
+            public int status { get; set; }
+            public bool error { get; set; }
+            public string message { get; set; }
+            public string data { get; set; }
+        }
+        //end
+
+        //cancel order 
+        public class ApiRequestBlibliCancelOrder
+        {
+            public string orderId { get; set; }
+            public string reasonCode { get; set; }
+        }
+
+        public class ApiResponseBlibliCancelOrder
+        {
+            public int status { get; set; }
+            public bool error { get; set; }
+            public string message { get; set; }
+            public List<CancelOrderItem> data { get; set; }
+        }
+
+        public class CancelOrderItem
+        {
+            public int status { get; set; }
+            public bool error { get; set; }
+            public string message { get; set; }
+            public object data { get; set; } // karena null, bisa pakai object atau string
+        }
+        //end
     }
 }

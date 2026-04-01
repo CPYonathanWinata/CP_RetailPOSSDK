@@ -35,6 +35,7 @@ using System.Xml;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using APIAccess;
 
 
 
@@ -238,7 +239,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch
 			//
 			// Required for Windows Form Designer support
 			//
-            APIAccess.APIAccessClass.isRetur = _fromBlankOperation;
+           
 			InitializeComponent();
 
 			colStatus.DisplayFormat.Format = new StatusFormatter();
@@ -283,8 +284,20 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch
 			btnClose.Text = ApplicationLocalizer.Language.Translate(103125); //Close
 
 			//Title
-			this.Text = ApplicationLocalizer.Language.Translate(1031202); //Picking/Receiving
-			this.lblHeading.Text = ApplicationLocalizer.Language.Translate(1031202); //Picking/Receiving
+            bool _isRetur = APIAccessClass.isRetur;
+
+            if (_isRetur == true)
+            {
+                this.Text = "Purchase Order Retur";
+                this.lblHeading.Text = "Purchase Order Retur";
+            }
+            else
+            {
+                this.Text = ApplicationLocalizer.Language.Translate(1031202); //Picking/Receiving
+			    this.lblHeading.Text = ApplicationLocalizer.Language.Translate(1031202); //Picking/Receiving
+            }
+            //this.Text = ApplicationLocalizer.Language.Translate(1031202); //Picking/Receiving
+            //this.lblHeading.Text = ApplicationLocalizer.Language.Translate(1031202); //Picking/Receiving
 		}
 
 		/// <summary>
@@ -746,6 +759,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch
 			this.btnClose.TabIndex = 14;
 			this.btnClose.Tag = "";
 			this.btnClose.Text = "Close";
+            this.btnClose.Click +=btnClose_Click;
 			// 
 			// btnRefresh
 			// 
@@ -959,6 +973,12 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch
 			this.ResumeLayout(false);
 
 		}
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            APIAccessClass.isRetur = false;
+            this.Close();
+        }
 		#endregion
 
 		private void btnSearch_Click(object sender, EventArgs e)

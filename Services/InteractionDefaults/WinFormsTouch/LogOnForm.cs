@@ -149,7 +149,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
                 status = LogOnStatus.None;
 
                 if (Functions.ShowStaffListAtLogon)
-                    logonMode = LogonModes.UserList;
+                    logonMode = LogonModes.UserList; 
                 else
                     logonMode = LogonModes.Numpad;
 

@@ -78,7 +78,16 @@ namespace Microsoft.Dynamics.Retail.Pos.DiscountTriggers
             {
                 addDiscountInfoCode(posTransaction);
             }
-            
+
+
+            //this is for Blibli total Disc
+            var retailTransaction = posTransaction as RetailTransaction;
+            if (retailTransaction.Comment == "BliBliDiscount")
+            {
+                addDiscountInfoCode(posTransaction);
+                APIAccess.APIAccessClass.posTransaction = posTransaction;
+            }            
+            //APIAccess.APIAccessClass.posTransaction = posTransaction;
         }
 
         

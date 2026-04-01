@@ -791,7 +791,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 
                     if (!string.IsNullOrWhiteSpace(splitInvoice))
                     {
-                        splitInvoice = splitInvoice;
+                        //splitInvoice = splitInvoice;
                     }
                     else
                     {

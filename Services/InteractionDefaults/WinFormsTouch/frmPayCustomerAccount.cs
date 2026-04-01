@@ -125,6 +125,8 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 		public int tenderGrabMart = 16;//for Grabmart PROD by Yonathan 10/11/2023 
 		public int tenderShopee = 15;
 		public int tenderShopeeDev = 15;
+        public int tenderBlibliorder = 37;
+        public int tenderBlibliorderDev = 37;
 		private PictureBox placeHolderQR;
 		public bool isIntegrated = false;
 		public Bitmap croppedQRCodeImage;
@@ -640,6 +642,56 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 				btnInquiry.Visible = false;
 				numPad1.Enabled = false;
 			}
+            else if (int.Parse(this.tenderInfo.TenderID) == tenderBlibliorder || int.Parse(this.tenderInfo.TenderID) == tenderBlibliorderDev)
+            
+            {
+
+
+                if (isIntegrated == true && APIAccess.APIAccessClass.grabOrderState != "")
+                {
+                    if (!string.IsNullOrEmpty(APIAccess.APIAccessClass.blibliCustPhone))
+                    // if (APIAccess.APIAccessClass.grabCustPhone != "" && APIAccess.APIAccessClass.grabCustPhone != null)
+                    {
+                        txtPhone.Text = APIAccess.APIAccessClass.blibliCustPhone.ToString();//"";
+                        txtPhone.ReadOnly = true; //false; //tadinya false karena bisa diketik manual
+                    }
+
+                    if (!string.IsNullOrEmpty(APIAccess.APIAccessClass.blibliCustName))
+
+                    //if (APIAccess.APIAccessClass.grabCustName != "" && APIAccess.APIAccessClass.grabCustName !=null)
+                    {
+                        txtCustName.Text = APIAccess.APIAccessClass.blibliCustName.ToString();// "";
+                        txtCustName.ReadOnly = true; //false; //tadinya false karena bisa diketik manual 
+                    }
+
+                }
+                //else if (isIntegrated == true && APIAccess.APIAccessClass.grabOrderState == "")
+                //{
+                //    using (frmMessage dialog = new frmMessage("Toko ini sudah terintegrasi dengan Grabmart.\nSilakan lakukan proses order dari menu Grabmart Order", MessageBoxButtons.OK, MessageBoxIcon.Stop))
+                //    {
+                //        POSFormsManager.ShowPOSForm(dialog);
+                //        Close();
+                //        pressCancel = "1";
+                //        this.Close();
+                //    }
+                //}
+                //string noOrder = getNoOrder(this.posTransaction.TransactionId);
+                lblReff.Text = "Order Id.";
+                txtReff.ReadOnly = true;
+                txtReff.Text = APIAccess.APIAccessClass.blibliOrderIdLong;
+
+                //prepare form for other payment (default as is)
+                cmbPilihBank.Visible = false;
+                btnRequest.Visible = false;
+                lblPhone.Text = "Phone No.";
+
+
+                lblCustName.Visible = true;
+                txtCustName.Visible = true;
+                btnRequest.Visible = false;
+                btnInquiry.Visible = false;
+                numPad1.Enabled = false;
+            }
 			else
 			{
 				//prepare form for other payment (default as is)
@@ -1480,11 +1532,47 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 				
 
 			}
-			else
-			{
-				pressCancel = "1";
-				timerCount.Stop();
-			}
+            //for blibli
+            if (int.Parse(this.tenderInfo.TenderID) == tenderBlibliorder
+            || int.Parse(this.tenderInfo.TenderID) == tenderBlibliorderDev)
+            {
+                // resuspend the transaction if clicked cancel
+                using (SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection)
+                {
+                    if (connection.State != ConnectionState.Open)
+                        connection.Open();
+
+                    
+                    string query = @"
+                        UPDATE [crt].[SALESTRANSACTION]
+                        SET [DELETEDDATETIME] = NULL
+                        WHERE COMMENT = @Comment";
+
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Comment", APIAccess.APIAccessClass.blibliOrderIdLong);
+
+                        int rowsAffected = command.ExecuteNonQuery();
+
+ 
+                    }
+                }
+
+                pressCancel = "1";
+                RetailTransaction retailPosTransaction = (RetailTransaction)posTransaction;
+                
+                foreach(var itemline in retailPosTransaction.SaleItems)
+                {
+                    retailPosTransaction.VoidItemLine(itemline.LineId);
+                    
+                }
+                PosApplication.Instance.RunOperation(PosisOperations.VoidTransaction,"Transaksi harus void", posTransaction);
+            }
+            else
+            {
+                pressCancel = "1";
+                timerCount.Stop();
+            }
 		}
 
 		
@@ -2137,6 +2225,59 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
                         //APIAccess.APIAccessClass.grabCustPhone = "";
                         //APIAccess.APIAccessClass.grabOrderIdLong = "";
 					}
+                    else if (int.Parse(this.tenderInfo.TenderID) == tenderBlibliorder
+                || int.Parse(this.tenderInfo.TenderID) == tenderBlibliorderDev)
+                    {
+                        APIAccess.APIFunction apiFunction = new APIAccess.APIFunction();
+                        APIAccess.APIParameter.Receiver receiverParm;
+
+                        string functionName = "UpdateStatusTransBlibli";
+                        APIAccess.APIAccessClass APIClass = new APIAccess.APIAccessClass();
+                        string url = APIClass.getURLAPIByFuncName(functionName);
+                        bool error, error2,status = false;
+                        //bool isApiAvailable = apiFunction.CheckApiAvailability(url).Result;
+                        status = apiFunction.CheckForInternetConnection(PosApplication.Instance, url);
+                        if (status == true)
+                        {
+ 
+                            APIAccess.APIParameter.ApiResponseBlibliUpdateTransStatus response = APIAccess.APIFunction.BlibliOrderAPI.updateTransStatus(url, APIAccess.APIAccessClass.blibliOrderIdLong, APIAccess.APIAccessClass.posTransaction.TransactionId);                     
+
+                        
+                        }
+                        else
+                        {
+                            string errText = "Tidak bisa terhubung dengan jaringan API.\nSilakan cek koneksi jaringan\ndan coba secara berkala.";
+                            if (retryCountGrab == 2)
+                            {
+                                errText = "Tidak bisa terhubung dengan jaringan.\nSilakan batalkan transaksi ini dan coba proses ulang dari menu Blibli Order";
+                            }
+                            using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage(errText, MessageBoxButtons.OK, MessageBoxIcon.Error))
+                            {
+                                LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                                retryCountGrab++;
+
+                                if (retryCountGrab >= 3)
+                                {
+                                    btnCancel.Enabled = true;
+                                    btnOk.Enabled = false;
+                                }
+                                else
+                                {
+                                    btnCancel.Enabled = false;
+                                    btnOk.Enabled = true;
+                                }
+
+                                return;
+
+
+                                //btnOk.Enabled = false;
+
+                            }
+
+                        }
+
+                   
+                    }
 				}
 				catch (Exception ex)
 				{

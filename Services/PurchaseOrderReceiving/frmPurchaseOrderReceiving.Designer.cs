@@ -11,6 +11,7 @@ NO TECHNICAL SUPPORT IS PROVIDED.  YOU MAY NOT DISTRIBUTE THIS CODE UNLESS YOU H
 using Microsoft.Dynamics.Retail.Pos.Contracts.Services;
 using Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving;
 using Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.Properties;
+using System;
 
 namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
 {
@@ -127,7 +128,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanelMain.Size = new System.Drawing.Size(2660, 2054);
+            this.tableLayoutPanelMain.Size = new System.Drawing.Size(5932, 4626);
             this.tableLayoutPanelMain.TabIndex = 1;
             // 
             // grInventory
@@ -138,7 +139,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.grInventory.MainView = this.gvInventory;
             this.grInventory.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
             this.grInventory.Name = "grInventory";
-            this.grInventory.Size = new System.Drawing.Size(1682, 1899);
+            this.grInventory.Size = new System.Drawing.Size(3789, 4471);
             this.grInventory.TabIndex = 0;
             this.grInventory.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gvInventory});
@@ -249,11 +250,11 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.tablePanelArrowButtons.Controls.Add(this.btnDown, 2, 0);
             this.tablePanelArrowButtons.Controls.Add(this.btnPgDown, 3, 0);
             this.tablePanelArrowButtons.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tablePanelArrowButtons.Location = new System.Drawing.Point(3, 1965);
+            this.tablePanelArrowButtons.Location = new System.Drawing.Point(3, 4537);
             this.tablePanelArrowButtons.Name = "tablePanelArrowButtons";
             this.tablePanelArrowButtons.RowCount = 1;
             this.tablePanelArrowButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tablePanelArrowButtons.Size = new System.Drawing.Size(1682, 66);
+            this.tablePanelArrowButtons.Size = new System.Drawing.Size(3789, 66);
             this.tablePanelArrowButtons.TabIndex = 19;
             // 
             // btnPgUp
@@ -264,7 +265,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.btnPgUp.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
             this.btnPgUp.Location = new System.Drawing.Point(3, 3);
             this.btnPgUp.Name = "btnPgUp";
-            this.btnPgUp.Size = new System.Drawing.Size(414, 60);
+            this.btnPgUp.Size = new System.Drawing.Size(941, 60);
             this.btnPgUp.TabIndex = 10;
             this.btnPgUp.Tag = "";
             this.btnPgUp.Click += new System.EventHandler(this.btnPgUp_Click);
@@ -275,9 +276,9 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.btnUp.Appearance.Font = new System.Drawing.Font("Wingdings", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
             this.btnUp.Appearance.Options.UseFont = true;
             this.btnUp.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
-            this.btnUp.Location = new System.Drawing.Point(423, 3);
+            this.btnUp.Location = new System.Drawing.Point(950, 3);
             this.btnUp.Name = "btnUp";
-            this.btnUp.Size = new System.Drawing.Size(414, 60);
+            this.btnUp.Size = new System.Drawing.Size(941, 60);
             this.btnUp.TabIndex = 11;
             this.btnUp.Tag = "";
             this.btnUp.Text = "ñ";
@@ -289,9 +290,9 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.btnDown.Appearance.Font = new System.Drawing.Font("Wingdings", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
             this.btnDown.Appearance.Options.UseFont = true;
             this.btnDown.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
-            this.btnDown.Location = new System.Drawing.Point(843, 3);
+            this.btnDown.Location = new System.Drawing.Point(1897, 3);
             this.btnDown.Name = "btnDown";
-            this.btnDown.Size = new System.Drawing.Size(414, 60);
+            this.btnDown.Size = new System.Drawing.Size(941, 60);
             this.btnDown.TabIndex = 12;
             this.btnDown.Tag = "";
             this.btnDown.Text = "ò";
@@ -303,9 +304,9 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.btnPgDown.Appearance.Font = new System.Drawing.Font("Wingdings", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
             this.btnPgDown.Appearance.Options.UseFont = true;
             this.btnPgDown.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
-            this.btnPgDown.Location = new System.Drawing.Point(1263, 3);
+            this.btnPgDown.Location = new System.Drawing.Point(2844, 3);
             this.btnPgDown.Name = "btnPgDown";
-            this.btnPgDown.Size = new System.Drawing.Size(416, 60);
+            this.btnPgDown.Size = new System.Drawing.Size(942, 60);
             this.btnPgDown.TabIndex = 13;
             this.btnPgDown.Tag = "";
             this.btnPgDown.Text = "Ê";
@@ -326,7 +327,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.tableLayoutInputs.Controls.Add(this.txtReceiptNumber, 0, 1);
             this.tableLayoutInputs.Controls.Add(this.txtDriver, 0, 3);
             this.tableLayoutInputs.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutInputs.Location = new System.Drawing.Point(1710, 53);
+            this.tableLayoutInputs.Location = new System.Drawing.Point(3817, 53);
             this.tableLayoutInputs.Name = "tableLayoutInputs";
             this.tableLayoutInputs.RowCount = 11;
             this.tableLayoutPanelMain.SetRowSpan(this.tableLayoutInputs, 2);
@@ -342,13 +343,13 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.tableLayoutInputs.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutInputs.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutInputs.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutInputs.Size = new System.Drawing.Size(669, 1978);
+            this.tableLayoutInputs.Size = new System.Drawing.Size(1512, 4550);
             this.tableLayoutInputs.TabIndex = 20;
             // 
             // txtDelivery
             // 
             this.txtDelivery.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtDelivery.Location = new System.Drawing.Point(3, 187);
+            this.txtDelivery.Location = new System.Drawing.Point(3, 168);
             this.txtDelivery.Name = "txtDelivery";
             // 
             // 
@@ -359,7 +360,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.txtDelivery.Properties.Appearance.Options.UseFont = true;
             this.txtDelivery.Properties.Appearance.Options.UseTextOptions = true;
             this.txtDelivery.Properties.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
-            this.txtDelivery.Size = new System.Drawing.Size(663, 24);
+            this.txtDelivery.Size = new System.Drawing.Size(1506, 24);
             this.txtDelivery.TabIndex = 12;
             // 
             // lblReceiptNumberHeading
@@ -413,7 +414,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.txtPoNumber.Properties.Appearance.Options.UseTextOptions = true;
             this.txtPoNumber.Properties.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
             this.txtPoNumber.Properties.ReadOnly = true;
-            this.txtPoNumber.Size = new System.Drawing.Size(663, 24);
+            this.txtPoNumber.Size = new System.Drawing.Size(1506, 24);
             this.txtPoNumber.TabIndex = 6;
             // 
             // lblDeliveryHeading
@@ -444,7 +445,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             0});
             this.numPad1.EnteredValue = "";
             this.numPad1.EntryType = Microsoft.Dynamics.Retail.Pos.Contracts.UI.NumpadEntryTypes.Barcode;
-            this.numPad1.Location = new System.Drawing.Point(3, 1661);
+            this.numPad1.Location = new System.Drawing.Point(3, 4233);
             this.numPad1.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
             this.numPad1.MaskChar = "";
             this.numPad1.MaskInterval = 0;
@@ -456,7 +457,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.numPad1.NumberOfDecimals = 3;
             this.numPad1.PromptText = "";
             this.numPad1.ShortcutKeysActive = false;
-            this.numPad1.Size = new System.Drawing.Size(663, 314);
+            this.numPad1.Size = new System.Drawing.Size(1506, 314);
             this.numPad1.TabIndex = 9;
             this.numPad1.TimerEnabled = true;
             this.numPad1.EnterButtonPressed += new LSRetailPosis.POSProcesses.WinControls.NumPad.enterbuttonDelegate(this.numPad1_EnterButtonPressed);
@@ -468,7 +469,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.lblDeliveryMethod.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDeliveryMethod.Location = new System.Drawing.Point(3, 106);
             this.lblDeliveryMethod.Name = "lblDeliveryMethod";
-            this.lblDeliveryMethod.Size = new System.Drawing.Size(646, 38);
+            this.lblDeliveryMethod.Size = new System.Drawing.Size(786, 19);
             this.lblDeliveryMethod.TabIndex = 11;
             this.lblDeliveryMethod.Text = "Delivery note cannot be duplicate, if PO has been canceled and you want to receiv" +
     "e again,  the number must be new";
@@ -522,7 +523,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.tablePanelSideButtons.Controls.Add(this.btnReceiveAll, 0, 0);
             this.tablePanelSideButtons.Controls.Add(this.btnSearch, 0, 7);
             this.tablePanelSideButtons.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tablePanelSideButtons.Location = new System.Drawing.Point(2405, 53);
+            this.tablePanelSideButtons.Location = new System.Drawing.Point(5355, 53);
             this.tablePanelSideButtons.Name = "tablePanelSideButtons";
             this.tablePanelSideButtons.RowCount = 5;
             this.tableLayoutPanelMain.SetRowSpan(this.tablePanelSideButtons, 2);
@@ -535,7 +536,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.tablePanelSideButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10.97561F));
             this.tablePanelSideButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10.97561F));
             this.tablePanelSideButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10.97561F));
-            this.tablePanelSideButtons.Size = new System.Drawing.Size(252, 1978);
+            this.tablePanelSideButtons.Size = new System.Drawing.Size(574, 4550);
             this.tablePanelSideButtons.TabIndex = 21;
             // 
             // btnRefresh
@@ -547,9 +548,9 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.btnRefresh.Appearance.Options.UseFont = true;
             this.btnRefresh.Appearance.Options.UseTextOptions = true;
             this.btnRefresh.Appearance.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
-            this.btnRefresh.Location = new System.Drawing.Point(3, 220);
+            this.btnRefresh.Location = new System.Drawing.Point(3, 502);
             this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(246, 211);
+            this.btnRefresh.Size = new System.Drawing.Size(568, 493);
             this.btnRefresh.TabIndex = 13;
             this.btnRefresh.Tag = "BtnNormal";
             this.btnRefresh.Text = "Refresh";
@@ -564,9 +565,9 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.btnSave.Appearance.Options.UseFont = true;
             this.btnSave.Appearance.Options.UseTextOptions = true;
             this.btnSave.Appearance.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
-            this.btnSave.Location = new System.Drawing.Point(3, 437);
+            this.btnSave.Location = new System.Drawing.Point(3, 1001);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(246, 211);
+            this.btnSave.Size = new System.Drawing.Size(568, 493);
             this.btnSave.TabIndex = 12;
             this.btnSave.Tag = "BtnNormal";
             this.btnSave.Text = "Save";
@@ -581,9 +582,9 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.btnReprint.Appearance.Options.UseFont = true;
             this.btnReprint.Appearance.Options.UseTextOptions = true;
             this.btnReprint.Appearance.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
-            this.btnReprint.Location = new System.Drawing.Point(3, 654);
+            this.btnReprint.Location = new System.Drawing.Point(3, 1500);
             this.btnReprint.Name = "btnReprint";
-            this.btnReprint.Size = new System.Drawing.Size(246, 235);
+            this.btnReprint.Size = new System.Drawing.Size(568, 548);
             this.btnReprint.TabIndex = 12;
             this.btnReprint.Tag = "BtnNormal";
             this.btnReprint.Text = "Reprint";
@@ -598,9 +599,9 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.btnCheckRcv.Appearance.Options.UseFont = true;
             this.btnCheckRcv.Appearance.Options.UseTextOptions = true;
             this.btnCheckRcv.Appearance.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
-            this.btnCheckRcv.Location = new System.Drawing.Point(3, 895);
+            this.btnCheckRcv.Location = new System.Drawing.Point(3, 2054);
             this.btnCheckRcv.Name = "btnCheckRcv";
-            this.btnCheckRcv.Size = new System.Drawing.Size(246, 211);
+            this.btnCheckRcv.Size = new System.Drawing.Size(568, 493);
             this.btnCheckRcv.TabIndex = 12;
             this.btnCheckRcv.Tag = "BtnNormal";
             this.btnCheckRcv.Text = "Cek Receive";
@@ -633,9 +634,9 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.btnCommit.Appearance.Options.UseFont = true;
             this.btnCommit.Appearance.Options.UseTextOptions = true;
             this.btnCommit.Appearance.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
-            this.btnCommit.Location = new System.Drawing.Point(3, 1329);
+            this.btnCommit.Location = new System.Drawing.Point(3, 3052);
             this.btnCommit.Name = "btnCommit";
-            this.btnCommit.Size = new System.Drawing.Size(246, 211);
+            this.btnCommit.Size = new System.Drawing.Size(568, 493);
             this.btnCommit.TabIndex = 16;
             this.btnCommit.Tag = "BtnNormal";
             this.btnCommit.Text = "Commit";
@@ -650,10 +651,10 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.btnClose.Appearance.Options.UseFont = true;
             this.btnClose.Appearance.Options.UseTextOptions = true;
             this.btnClose.Appearance.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
-            this.btnClose.Location = new System.Drawing.Point(3, 1763);
+            this.btnClose.Location = new System.Drawing.Point(3, 4050);
             this.btnClose.Margin = new System.Windows.Forms.Padding(3, 3, 3, 5);
             this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(246, 210);
+            this.btnClose.Size = new System.Drawing.Size(568, 495);
             this.btnClose.TabIndex = 18;
             this.btnClose.Tag = "BtnLong";
             this.btnClose.Text = "Close";
@@ -688,7 +689,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.btnReceiveAll.Appearance.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
             this.btnReceiveAll.Location = new System.Drawing.Point(3, 3);
             this.btnReceiveAll.Name = "btnReceiveAll";
-            this.btnReceiveAll.Size = new System.Drawing.Size(246, 211);
+            this.btnReceiveAll.Size = new System.Drawing.Size(568, 493);
             this.btnReceiveAll.TabIndex = 13;
             this.btnReceiveAll.Tag = "BtnNormal";
             this.btnReceiveAll.Text = "Receive all";
@@ -703,9 +704,9 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.btnSearch.Appearance.Options.UseFont = true;
             this.btnSearch.Appearance.Options.UseTextOptions = true;
             this.btnSearch.Appearance.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
-            this.btnSearch.Location = new System.Drawing.Point(3, 1546);
+            this.btnSearch.Location = new System.Drawing.Point(3, 3551);
             this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(246, 211);
+            this.btnSearch.Size = new System.Drawing.Size(568, 493);
             this.btnSearch.TabIndex = 17;
             this.btnSearch.Tag = "BtnLong";
             this.btnSearch.Text = "Search";
@@ -773,6 +774,8 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
 
         }
 
+       
+
         
 
         #endregion
@@ -815,11 +818,14 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
         private LSRetailPosis.POSProcesses.WinControls.SimpleButtonEx btnClose;
         private DevExpress.XtraEditors.PanelControl panelControl1;
         private DevExpress.XtraEditors.TextEdit txtDelivery;
-        private DevExpress.XtraEditors.StyleController styleController;
+        //private DevExpress.XtraEditors.StyleController styleController;
+        private DevExpress.XtraEditors.StyleController styleController2;
         private System.Windows.Forms.TextBox txtSearchBox;
         private DevExpress.XtraEditors.TextEdit txtPoNumber;
         private System.Windows.Forms.Label lblDeliveryHeading;
         private System.Windows.Forms.Label lblDeliveryMethod;
+        private DevExpress.XtraEditors.StyleController styleController;
+        //private DevExpress.XtraEditors.StyleController styleController;
         
     }
 }

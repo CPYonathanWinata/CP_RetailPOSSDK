@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\..\vs.settings" />
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
@@ -8,6 +8,8 @@
     <OutputType>Library</OutputType>
     <RootNamespace>DiscountTriggers</RootNamespace>
     <AssemblyName>DiscountTriggers</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>$(SDKOutputPath)\bin\Debug\</OutputPath>
@@ -16,6 +18,10 @@
     <OutputPath>$(SDKOutputPath)\bin\Release\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="APIAccess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Microsoft Dynamics AX\60\Retail POS\Extensions\APIAccess.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />

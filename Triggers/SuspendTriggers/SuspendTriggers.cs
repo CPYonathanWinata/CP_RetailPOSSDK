@@ -89,15 +89,15 @@ namespace Microsoft.Dynamics.Retail.Pos.SuspendTriggers
             //LSRetailPosis.ApplicationLog.Log("SuspendTriggers.PreSuspendTransaction", "Prior to the suspension of a transaction...", LSRetailPosis.LogTraceLevel.Trace);
 
 
-            using (frmMessage dialog = new frmMessage("Tidak boleh menggunakan suspend feature", MessageBoxButtons.OK, MessageBoxIcon.Error))
-            {
-                LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
-                posTransaction.OperationCancelled = true;
-                return;
-                //Application.RunOperation(PosisOperations.SetQty, itemIdRemove);
-                //Application.RunOperation(PosisOperations.SetQty,itemIdRemove, posTransaction);
+            //using (frmMessage dialog = new frmMessage("Tidak boleh menggunakan suspend feature", MessageBoxButtons.OK, MessageBoxIcon.Error))
+            //{
+            //    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+            //    posTransaction.OperationCancelled = true;
+            //    return;
+            //    //Application.RunOperation(PosisOperations.SetQty, itemIdRemove);
+            //    //Application.RunOperation(PosisOperations.SetQty,itemIdRemove, posTransaction);
 
-            }
+            //}
         }
 
         public void PostSuspendTransaction(IPosTransaction posTransaction)
@@ -113,6 +113,9 @@ namespace Microsoft.Dynamics.Retail.Pos.SuspendTriggers
         public void PostRecallTransaction(IPosTransaction posTransaction)
         {
             LSRetailPosis.ApplicationLog.Log("SuspendTriggers.PostRecallTransaction", "After the recall of a transaction from suspension...", LSRetailPosis.LogTraceLevel.Trace);
+
+            //send posTransaction
+            APIAccess.APIAccessClass.posTransaction = posTransaction;
         }
 
         #endregion

@@ -4,3 +4,4 @@ C:\Users\yonathan.winata\Documents\GitHub\AXRetailSDKPOSCustom\Services\SalesInv
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\SalesInvoice\obj\Debug\SalesInvoice.csprojResolveAssemblyReference.cache
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\SalesInvoice\obj\Debug\Microsoft.Dynamics.Retail.Pos.SalesInvoice.WinFormsTouch.frmGetSalesInvoice.resources
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\SalesInvoice\obj\Debug\SalesInvoice.csproj.GenerateResource.Cache
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\SalesInvoice\obj\Debug\SalesInvoice.dll.licenses

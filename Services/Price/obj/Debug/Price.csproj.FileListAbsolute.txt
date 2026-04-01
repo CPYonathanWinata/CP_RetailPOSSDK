@@ -1,1 +1,2 @@
 C:\Project POS SourceCode\Valid Blank Operation 16 October 2019\POS Plug-ins\Services\Price\obj\Debug\Price.csprojResolveAssemblyReference.cache
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Price\obj\Debug\Price.csprojResolveAssemblyReference.cache

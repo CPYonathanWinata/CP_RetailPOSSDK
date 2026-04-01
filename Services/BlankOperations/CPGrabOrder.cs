@@ -739,15 +739,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     }
                 }
 
-
-                //remainQty = itemNodes == null ? 0 : Convert.ToDecimal(itemNodes[indexRow].Attributes["QtyAvail"].Value.Replace(",", "."), CultureInfo.InvariantCulture);
-                //priceAfterExponentString = orderItem.price.ToString().Substring(0, orderItem.price.ToString().Length - exponent);
-                //decimal.TryParse(priceAfterExponentString, out priceAfterExponent);
-
                 priceAfterExponent = orderItem.price / (decimal)Math.Pow(10, exponent);
-
-
-                //if (orderItem.discAmt != null && orderItem.discAmt != 0)
                 discAfterExponent = orderItem.discAmt / (decimal)Math.Pow(10, exponent);
 
                 //discAfterExponentString = orderItem.discAmt.ToString().Substring(0, orderItem.discAmt.ToString().Length - exponent);

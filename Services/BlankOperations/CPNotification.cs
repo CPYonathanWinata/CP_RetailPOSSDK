@@ -38,6 +38,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
         //test yonathan for timer 19/12/2023
         private Timer timer;
         private Timer timerOnlineOrder;
+        private Timer timerBlibliOrder;
+        private Timer timerCheckConnection;
 
         private int notificationIntervalInMinutes = 1; // Change this value to set the interval
         public string PathDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Extensions\\", "APIConfig.xml");
@@ -214,36 +216,146 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                 timerOnlineOrder.Start();
             }
            //end
-            
+
+            //online Order - yonathan 08112024
+            int notifBlibliInterval = Convert.ToInt16(getFolderPathConfig(PathDirectory, "notifBlibliInterval"));
+            if (notifBlibliInterval != 0)
+            {
+                // Create a timer with the specified interval
+                timerBlibliOrder = new Timer();
+                timerBlibliOrder.Interval = notifBlibliInterval * 60 * 1000; // Convert minutes to milliseconds
+                timerBlibliOrder.Tick += Timer_TickBlibliOrder;
+
+                // Start the timer 
+                timerBlibliOrder.Start();
+            }
+            //end
+
+            //int notifCheckConnection = 1;
+            //if (notifCheckConnection != 0)
+            //{
+            //    // Create a timer with the specified interval
+            //    timerCheckConnection = new Timer();
+            //    timerCheckConnection.Interval = notifCheckConnection * 60 * 1000; // Convert minutes to milliseconds
+            //    timerCheckConnection.Tick += timerCheckConnection_Tick;
+
+            //    // Start the timer 
+            //    timerCheckConnection.Start(); 
+            //}
+
         }
+
+       private void timerCheckConnection_Tick(object sender, EventArgs e)
+       {
+           // check RTS connection
+           bool statusTrans, statusAPI;
+           statusTrans = Application.TransactionServices.CheckConnection();
+
+           // check API Connection
+           string urlAPI = "https://apiqrisdev.cp.co.id";
+           try
+           {
+               var resp = ((HttpWebRequest)WebRequest.Create(urlAPI)).GetResponse();
+               statusAPI = true;
+           }
+           catch
+           {
+               statusAPI = false;
+           }
+
+           // update RTS label
+           if (statusTrans)
+           {
+               lblRTS.Text = "RTS Conn: ON";
+               lblRTS.ForeColor = System.Drawing.Color.Green; // hijau
+           }
+           else
+           {
+               lblRTS.Text = "RTS Conn: OFF";
+               lblRTS.ForeColor = System.Drawing.Color.Red; // merah
+           }
+
+           // update API label
+           if (statusAPI)
+           {
+               lblAPI.Text = "API Conn: ON";
+               lblAPI.ForeColor = System.Drawing.Color.Green; // hijau
+           }
+           else
+           {
+               lblAPI.Text = "API Conn: OFF";
+               lblAPI.ForeColor = System.Drawing.Color.Red; // merah
+           }
+       }
+
+       private void Timer_TickBlibliOrder(object sender, EventArgs e)
+       {
+           APIAccess.APIParameter.ApiResponseBliBliListOrder responseAPI;
+           bool detectDelivered = false;
+           
+           string url = "";
+           APIAccess.APIParameter.Receiver receiverParm;
+           string functionName = "GetBlibliOrderAPI";
+           APIAccess.APIAccessClass APIClass = new APIAccess.APIAccessClass();
+           url = APIClass.getURLAPIByFuncName(functionName);
+
+           System.Net.ServicePointManager.ServerCertificateValidationCallback = (senderX, certificate, chain, sslPolicyErrors) => { return true; };
+
+           responseAPI = APIAccess.APIFunction.BlibliOrderAPI.getBlibliOrderList(url, ApplicationSettings.Terminal.InventLocationId, DateTime.Now.ToString("yyyy-MM-dd 23:59:59"));
+           if (responseAPI.error == true)
+           {
+               using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage(responseAPI.message, MessageBoxButtons.OK, MessageBoxIcon.Stop))
+               {
+                   LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+
+                   timer.Stop();
+
+                   return;
+               }
+           }
+           else
+           {
+               List<APIAccess.APIParameter.OrderData> order = responseAPI.data;
+
+               if (order != null && order.Count > 0)
+               {
+                   PlayNotificationSound();
+
+                   //DialogResult result = CustomMessageBox.Show("PESANAN BARU DITERIMA\nSILAKAN CEK GRABMART ORDER");
+
+                   ShowPopupMessage("BLIBLI ORDER NOTIFICATION", string.Format("PESANAN BARU DITERIMA\nJANGAN LUPA CEK BLIBLI ORDER UNTUK MEMPROSES PESANAN", notificationIntervalInMinutes));
+
+               }
+           }
+       }
 
        private void Timer_TickOnlineOrder(object sender, EventArgs e)
        {
-        APIAccess.APIAccessClass APIClass = new APIAccess.APIAccessClass();
-        APIAccess.APIFunction APIFunction = new APIAccess.APIFunction();
-        string responseAPI;
-        bool detectDelivered = false;
+            APIAccess.APIAccessClass APIClass = new APIAccess.APIAccessClass();
+            APIAccess.APIFunction APIFunction = new APIAccess.APIFunction();
+            string responseAPI;
+            bool detectDelivered = false;
           
-        //"https://devpfm.cp.co.id/api/grab/listOrder"
-        string url = "";//    https://apiqrisdev.cp.co.id/api/jbl/getTotalSalesOrder";
-        APIAccess.APIParameter.Receiver receiverParm;
-        string functionName = "GetOnlineOrderAPI";
+            //"https://devpfm.cp.co.id/api/grab/listOrder"
+            string url = "";//    https://apiqrisdev.cp.co.id/api/jbl/getTotalSalesOrder";
+            APIAccess.APIParameter.Receiver receiverParm;
+            string functionName = "GetOnlineOrderAPI";
          
-        url = APIClass.getURLAPIByFuncName(functionName);
+            url = APIClass.getURLAPIByFuncName(functionName);
 
-        System.Net.ServicePointManager.ServerCertificateValidationCallback = (senderX, certificate, chain, sslPolicyErrors) => { return true; };
+            System.Net.ServicePointManager.ServerCertificateValidationCallback = (senderX, certificate, chain, sslPolicyErrors) => { return true; };
 
-        //ServicePointManager.Expect100Continue = true;
-        //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            //ServicePointManager.Expect100Continue = true;
+            //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
-        responseAPI = APIFunction.getOnlineOrder(Application.Settings.Database.DataAreaID, ApplicationSettings.Terminal.InventLocationId, url);
-        APIParameter.parmResponseOnlineOrder responseOnlineOrder = APIFunction.MyJsonConverter.Deserialize<APIParameter.parmResponseOnlineOrder>(responseAPI);
-        int resultData = responseOnlineOrder.data.total_order;
+            responseAPI = APIFunction.getOnlineOrder(Application.Settings.Database.DataAreaID, ApplicationSettings.Terminal.InventLocationId, url);
+            APIParameter.parmResponseOnlineOrder responseOnlineOrder = APIFunction.MyJsonConverter.Deserialize<APIParameter.parmResponseOnlineOrder>(responseAPI);
+            int resultData = responseOnlineOrder.data.total_order;
 
-        if (resultData != 0 )
-        {
-            ShowPopupMessage("ONLINE ORDER NOTIFICATION", string.Format("Ada {0} Pesanan Online untuk toko ini.\nKlik tombol 'BUKA ORDER' untuk memproses Pesanan Online dan pilih Order Type 'Online Order'.", resultData));
-        }
+            if (resultData != 0 )
+            {
+                ShowPopupMessage("ONLINE ORDER NOTIFICATION", string.Format("Ada {0} Pesanan Online untuk toko ini.\nKlik tombol 'BUKA ORDER' untuk memproses Pesanan Online dan pilih Order Type 'Online Order'.", resultData));
+            }
 
          
  

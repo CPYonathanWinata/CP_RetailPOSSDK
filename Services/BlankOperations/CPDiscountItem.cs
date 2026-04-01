@@ -293,7 +293,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                  //                                   S.TRANSACTIONID = D.TRANSACTIONID AND
                  //                                   S.LINENUM = D.SALELINENUM AND
                  //                                   S.CHANNEL = D.CHANNEL
-                 //                               WHERE S.RECEIPTID != ''
+                 //                               WHERE S.RECEIPTID != ''  
                  //                               AND D.PERIODICDISCOUNTOFFERID = CPPROMOEDQTYPERSTRUKDETAIL.PROMOID
                  //                               AND S.STORE = @STOREID
                  //                               AND S.ITEMID = CPPROMOEDQTYPERSTRUKDETAIL.ITEMID

@@ -64,7 +64,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
 
             if (ApplicationSettings.Terminal.TerminalOperator.UserIsInventoryUser)
             {
-                using (frmPurchaseOrderReceiptSearch dialog = new frmPurchaseOrderReceiptSearch(true))
+                using (frmPurchaseOrderReceiptSearch dialog = new frmPurchaseOrderReceiptSearch())
                 {
                     dialog.RepeatCalled = this.repeatCall;
                     this.Application.ApplicationFramework.POSShowForm(dialog);
@@ -95,7 +95,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
 
             if (ApplicationSettings.Terminal.TerminalOperator.UserIsInventoryUser)
             {
-                using (frmPurchaseOrderReceiptSearch dialog = new frmPurchaseOrderReceiptSearch(true))
+                using (frmPurchaseOrderReceiptSearch dialog = new frmPurchaseOrderReceiptSearch())
                 {
                     dialog.RepeatCalled = this.repeatCall;
                     this.Application.ApplicationFramework.POSShowForm(dialog);

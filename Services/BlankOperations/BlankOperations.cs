@@ -101,6 +101,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 		public static IPosTransaction globalposTransaction;
         public static IPosTransaction grabPosTransaction;
         public static IPosTransaction grabPosTransactionDisc;
+        public static IPosTransaction blibliPosTransaction;
+        public static IPosTransaction blibliPosTransactionDisc;
         public static string itemIdToAdd;
         public static decimal quantityToAdd;
         public static int exponent;
@@ -1035,11 +1037,127 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     }
                 case "27":
                     {
+                        APIAccess.APIAccessClass.isRetur = true;
                         Application.Services.PurchaseOrder.ShowPurchaseOrderList();
+                        
                         //PurchaseOrderReceiving.PurchaseOrderReceiving poReceiving = new PurchaseOrderReceiving.PurchaseOrderReceiving();
                         //poReceiving.Application.
                         //poReceiving.ShowPurchaseOrderReturList();
                         //PurchaseOrderReceiving.PurchaseOrderReceiving.ShowPurchaseOrderReturList();
+                        break;
+                    }
+                case "28":
+                    {
+                        
+                        bool isCartEmpty = true;
+                        bool isIntegrated = false;
+
+                        if (posTransaction.ToString() == "LSRetailPosis.Transaction.RetailTransaction")
+                        {
+                            DE customer = ((RetailTransaction)posTransaction).Customer;
+                            RetailTransaction transaction = posTransaction as RetailTransaction;
+
+                            //GMT TenderID
+                            string tenderId = "37"; //for DEV BliBli
+
+                            if ((customer.CustomerId != null || customer.CustomerId == ""))//&& transaction.SaleItems.Count != 0)
+                            //if ( transaction.SaleItems.Count != 0)
+                            {
+                                if (!validateCustomer(posTransaction, tenderId))
+                                {
+                                    using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Please Choose Correct Customer", MessageBoxButtons.OK, MessageBoxIcon.Stop))
+                                    {
+                                        LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                                        return;
+                                    }
+                                }
+                                else
+                                {
+                                    if (customer.CustomerId != "")
+                                    {
+                                        checkB2bCust(customer.CustomerId);
+                                        string isB2bCust = "";
+
+
+                                        isB2bCust = APIAccess.APIAccessClass.isB2b;
+
+                                        if (isB2bCust == "1" || isB2bCust == "2")
+                                        {
+                                            using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Customer B2B atau Canvas tidak bisa mengakses menu ini", MessageBoxButtons.OK, MessageBoxIcon.Stop))
+                                            {
+                                                LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                                                return;
+                                            }
+                                        }
+                                    }
+
+                                    isCartEmpty = checkCart(transaction);
+                                    if (isCartEmpty == true)
+                                    {
+                                        isIntegrated = true; //validateIntegrationGrabMart();
+                                        if (isIntegrated == true)
+                                        {
+                                            //check the RTS Connection - Yonathan 05122024
+                                            bool status = false;
+                                            string functionName = "GetBlibliOrderAPI";
+                                            string url = "";
+                                            APIAccess.APIFunction apiFunction = new APIAccess.APIFunction();
+
+
+                                            APIAccess.APIAccessClass APIClass = new APIAccess.APIAccessClass();
+                                            url = APIClass.getURLAPIByFuncName(functionName);
+                                            //bool isApiAvailable = apiFunction.CheckApiAvailability(url).Result;
+                                            status = true; //apiFunction.CheckForInternetConnection(Application, url);
+                                            if (status == true)
+                                            {
+                                                //CPGrabOrder CPGrabOrder = new CPGrabOrder(posTransaction, Application);
+                                                CPIBLIBLIORDERS.BlibliOrderList blibliOrderList = new CPIBLIBLIORDERS.BlibliOrderList(posTransaction, Application);
+                                                blibliOrderList.ShowDialog();
+                                            }
+                                            else
+                                            {
+                                                using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Tidak bisa terhubung dengan jaringan.\nCek koneksi API atau RTS", MessageBoxButtons.OK, MessageBoxIcon.Error))
+                                                {
+                                                    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                                                }
+
+                                            }
+
+
+                                        }
+                                        //else
+                                        //{
+                                        //    using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Belum terintegrasi dengan Grabmart.\nSilakan add item order Grabmart secara manual", MessageBoxButtons.OK, MessageBoxIcon.Stop))
+                                        //    {
+                                        //        LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                                        //        return;
+                                        //    }
+                                        //}
+
+                                    }
+                                    else
+                                    {
+                                        using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Kosongkan keranjang terlebih dahulu", MessageBoxButtons.OK, MessageBoxIcon.Stop))
+                                        {
+                                            LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                                            return;
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Please choose customer", MessageBoxButtons.OK, MessageBoxIcon.Stop))
+                                {
+                                    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                                    return;
+                                }
+                            }
+                        }
+                        else
+                        { 
+                        }
+
                         break;
                     }
                 case "88":
@@ -1587,11 +1705,88 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     break;
                 case "105":
                     {
-                        
-                        Application.RunOperation(PosisOperations.LoyaltyCardBalance, "");
 
+                        RetailTransaction transaction = posTransaction as RetailTransaction;
+                        //LSRetailPosis.POSProcesses.ItemSale iSale = new LSRetailPosis.POSProcesses.ItemSale();
+                        ////iSale.OperationID = PosisOperations.ItemSale;
+                        ////iSale.OperationInfo = new LSRetailPosis.POSProcesses.OperationInfo();
+                        ////iSale.Barcode = skuId; disable by Yonathan 21/10/2022
+
+                        ////use blank operation to store the items.
+                         
+                        //RetailTransaction grabPosTransactionLocal = BlankOperations.grabPosTransaction as RetailTransaction;
+                        //BlankOperations.itemIdToAdd = "11310014";
+                        //BlankOperations.quantityToAdd = 3;
+                        //Application.RunOperation(PosisOperations.BlankOperation, "94", posTransaction);
+
+                        Application.RunOperation(PosisOperations.RecallTransaction, "JDELIMA-JDELIMA-R1-15384");
+
+                        //Application.TransactionServices.
+                        //Application.RunOperation(PosisOperations.PayCustomerAccount, "19", posTransaction);
+
+
+                        /*
+                          //Price Override current line without checking permission group
+                        SaleLineItem saleLineItem;
+                        RetailTransaction transaction = posTransaction as RetailTransaction;
+
+                        decimal priceToOverride = 2000m;
+
+
+                        for (int i = 0; i < ((RetailTransaction)posTransaction).SaleItems.Count; i++)
+                        {
+                            //string thisItemId = "";
+                            LSRetailPosis.Transaction.Line.SaleItem.SaleLineItem currentLine = transaction.GetItem(((RetailTransaction)posTransaction).SaleItems.ElementAt(i).LineId);
+                            int lineId = ((RetailTransaction)posTransaction).SaleItems.ElementAt(i).LineId;
+
+                            if (currentLine.LineId == operationInfo.ItemLineId && currentLine.Voided == false)
+                            {
+                                saleLineItem = RetailTransaction.PriceOverride(currentLine, priceToOverride);//transaction.SaleItems.Last.Value, priceToOverride);
+                                Application.BusinessLogic.ItemSystem.CalculatePriceTaxDiscount(posTransaction);
+                                transaction.CalcTotals();
+                                string str = ((IServicesV1)PosApplication.Instance.Services).Rounding.Round(((BaseSaleItem)saleLineItem).OriginalPrice, true);
+                                POSFormsManager.ShowPOSStatusPanelText(ApplicationLocalizer.Language.Translate(3352, new object[3]
+                                {
+                                    (object) ((LineItem) saleLineItem).Description,
+                                    (object) ((BaseSaleItem) saleLineItem).BarcodeId,
+                                    (object) str
+                                }));
+                            }
+                        }
+                         
+                         */
                     }
 
+                    break;
+                case "BliBliTransaction":
+                    {
+                        //int exponent = 0;
+                        //decimal priceAfterExponent = 0;
+                        //string priceAfterExponentString = "";
+
+
+                        /*
+                            priceAfterExponentString = orderItem.price.ToString().Substring(0, orderItem.price.ToString().Length - exponent);
+
+                            decimal.TryParse(priceAfterExponentString, out priceAfterExponent);
+                                */
+                        LSRetailPosis.POSProcesses.ItemSale iSale = new LSRetailPosis.POSProcesses.ItemSale();
+
+                        iSale = new LSRetailPosis.POSProcesses.ItemSale();
+                        iSale.OperationID = PosisOperations.ItemSale;
+                        iSale.OperationInfo = new LSRetailPosis.POSProcesses.OperationInfo();
+                        iSale.Barcode = itemIdToAdd;  // change to this by yonathan 21/10/2022
+                        
+                        //iSale.BarcodeInfo.ItemId = txtSKU.Text;
+                        iSale.OperationInfo.NumpadQuantity = quantityToAdd;//orderItem.id
+                       
+
+                        iSale.POSTransaction = (LSRetailPosis.Transaction.PosTransaction)posTransaction;
+                        iSale.RunOperation();
+                        blibliPosTransaction = iSale.POSTransaction;
+
+                      
+                    }
                     break;
                 //Application.RunOperation(PosisOperations.PayCard, string.Empty, posTransaction);
                 //CP_SalesOrderDetail cpSalesDetail = new CP_SalesOrderDetail(Application);

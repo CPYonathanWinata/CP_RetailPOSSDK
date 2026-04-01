@@ -432,7 +432,6 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
         private void closeBtn_Click(object sender, EventArgs e)
         {
             this.Close();
-        }
-    
+        }    
     }
 }

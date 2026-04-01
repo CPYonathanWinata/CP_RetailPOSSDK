@@ -866,7 +866,8 @@ namespace Microsoft.Dynamics.Retail.Pos.StoreInventoryServices
             IPRDocument prDocument = null;
             //Begin add line NEC-hmz
             DataTable lines = new DataTable();
-
+            //add by Yonathan  #CPPOSPORETUR 03022026
+            bool _isRetur = APIAccessClass.isRetur;
             PurchaseOrderReceiptData prData = StoreInventoryServices.GetPurchaseOrderReceiptData();
 
             try
@@ -951,7 +952,12 @@ namespace Microsoft.Dynamics.Retail.Pos.StoreInventoryServices
                 switch (prType)
                 {
                     case PRCountingType.PurchaseOrder:
-                        this.CallTransactionService(ref succeeded, ref returnMessage, ref retVal, "UpdatePurchaseOrder", importValue);
+                        //add by Yonathan  #CPPOSPORETUR 03022026
+                        if (_isRetur == false)
+                            this.CallTransactionService(ref succeeded, ref returnMessage, ref retVal, "UpdatePurchaseOrder", importValue);
+                        else
+                            this.CallTransactionServiceEx(ref succeeded, ref returnMessage, ref retVal, "UpdatePurchaseOrderRetur", importValue);
+                        //end
                         break;
                     case PRCountingType.TransferIn:
                     case PRCountingType.TransferOut:
@@ -969,7 +975,7 @@ namespace Microsoft.Dynamics.Retail.Pos.StoreInventoryServices
                     if (xmlDeclaration.Success)
                     {
                         retVal = retVal.Replace(xmlDeclaration.Value, string.Empty);
-                    }
+                    }                                                                                                                                                                                
 
                     // Deserialize retVal to IPRDocumentLine
                     IList<IPRDocumentLine> prDocLines = new List<IPRDocumentLine>();

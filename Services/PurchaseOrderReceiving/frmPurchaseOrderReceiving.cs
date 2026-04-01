@@ -446,6 +446,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                 POSFormsManager.ShowPOSMessageDialog(103119);
                 return;
             }
+            //APIAccessClass.isRetur = false;
             this.DialogResult = DialogResult.OK;
             Close();
         }
@@ -1982,11 +1983,11 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
                         unit = reader["Unit"].ToString();
                         if (statusReceipt == "REPRINT" )//|| statusReceipt == "ORIGINAL" || statusReceipt == "COPY") //FIXED 27102025 
                         {
-                            qty = (Math.Truncate(Convert.ToDecimal(reader["QuantityReceived"]) * 1000m) / 1000m);
+                            qty = Math.Abs(Math.Truncate(Convert.ToDecimal(reader["QuantityReceived"]) * 1000m) / 1000m);
                         }
                         else
                         {
-                            qty = (Math.Truncate(Convert.ToDecimal(reader["QuantityReceivedNow"]) * 1000m) / 1000m);
+                            qty = Math.Abs(Math.Truncate(Convert.ToDecimal(reader["QuantityReceivedNow"]) * 1000m) / 1000m);
                         }
                         //mod by Yonathan 25/07/2023 to prevent item 0 qty receive to appear on the receipt.
                         if (qty != 0)
@@ -2068,6 +2069,22 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
             }
             return s;
         }
+
+        void gvInventory_CustomColumnDisplayText(object sender, DevExpress.XtraGrid.Views.Base.CustomColumnDisplayTextEventArgs e)
+        {
+            if (APIAccessClass.isRetur)
+            {
+                if ((e.Column == colOrdered || e.Column == colReceived || e.Column == colReceivedNow) && e.Value != null)
+                {
+                    decimal value;
+                    if (decimal.TryParse(e.Value.ToString(), out value))
+                    {
+                        e.DisplayText = Math.Abs(value).ToString("n3");
+                    }
+                }
+            }
+        }
+
         //To check qty receive
         private void checkQtyItem()
         {
@@ -2075,7 +2092,7 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
             foreach (DataRow row in entryTable.Rows)
             {
                 
-                decimal quantity = row.Field<decimal>(DataAccessConstants.QuantityOrdered) - row.Field<decimal>(DataAccessConstants.QuantityReceivedNow);
+                decimal quantity = Math.Abs( row.Field<decimal>(DataAccessConstants.QuantityOrdered) ) - Math.Abs( row.Field<decimal>(DataAccessConstants.QuantityReceivedNow));
 
                 if (quantity < 0)
                 {
@@ -2364,6 +2381,25 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
             else
                 tempDriverDetails = this.PONumber;
             */
+
+            //if retur, change the amount to negative
+            if (APIAccessClass.isRetur)
+            {
+                foreach (DataRow row in entryTable.Rows)
+                {
+                    decimal? qty = row.Field<decimal?>(DataAccessConstants.QuantityReceivedNow);
+                    if (qty.HasValue)
+                    {
+                        row[DataAccessConstants.QuantityReceivedNow] = -Math.Abs(qty.Value);
+                    }
+                }
+            }
+
+
+
+
+            
+
             try
             {
                 //Begin add NEC
@@ -2960,7 +2996,7 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
         private string cpGetDataDocumentBuffer()//using real-time service
         {
             string deliveryNote = "";
-
+            ReadOnlyCollection<object> containerArray;
             //string connectionString = ConfigurationManager.ConnectionStrings["CPConnection"].ConnectionString;
             //string connectionString = @"Data Source= DYNAMICS01\DEVPRISQLSVR ;Initial Catalog=DevDynamicsAX; Integrated Security=False;User ID=AXPOS;Password=P@ssw0rd;";//Persist Security Info=False;User ID=USER_NAME;Password=USER_PASS;
             //string connectionString = @"Data Source= DYNAMICS16\SQLAXDB1 ;Initial Catalog=PRDDynamicsAX; Integrated Security=False;User ID=AXPOS;Password=P@ssw0rd;";
@@ -2981,7 +3017,14 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
             
             try
             {
-                ReadOnlyCollection<object> containerArray = PurchaseOrderReceiving.InternalApplication.TransactionServices.InvokeExtension("getDataDocumentBuffer", parameterList);
+                if (APIAccessClass.isRetur == false)
+                {
+                    containerArray = PurchaseOrderReceiving.InternalApplication.TransactionServices.InvokeExtension("getDataDocumentBuffer", parameterList);
+                }
+                else
+                {
+                    containerArray = PurchaseOrderReceiving.InternalApplication.TransactionServices.InvokeExtension("getDataDocumentBufferRetur", parameterList);
+                }
 
 
                 if (containerArray[2].ToString() == "true")
