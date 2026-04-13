@@ -875,14 +875,33 @@ namespace Microsoft.Dynamics.Retail.Pos.StoreInventoryServices
                 //Begin add NEC-hmz
                 if (prType == PRCountingType.PurchaseOrder)
                 {
-                    string[] detailOrder = Regex.Split(orderId, "-");
+                    string[] detailOrder;
+                    if (_isRetur == false)
+                    {
+                        detailOrder = Regex.Split(orderId, "-");
+                    }
+                    else
+                    {
+                        detailOrder = Regex.Split(orderId, ";"); //delimiter change
+                    }
+                    
+                    
 
                     //call back
                     orderId = detailOrder[0];
                     //Read line from database
                     lines = prData.GetPurchaseOrderReceiptLines(orderId, receiptNumber);
                     //call back driver with receiptnumber
-                    orderId = orderId + "-" + detailOrder[1];
+                    if (_isRetur == false)
+                    {
+                        orderId = orderId + "-" + detailOrder[1];
+                    }
+                    else
+                    { 
+                        orderId = orderId + ";" + detailOrder[1]; //delimiter change
+                    }
+                    
+
                 }
                 else
                 {

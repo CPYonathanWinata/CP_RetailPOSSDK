@@ -65,6 +65,9 @@ namespace APIAccess
         public static bool isRetur { get; set; }
         public static APIParameter.CheckBalanceData balanceData { get; set; }
  
+        //for PO OTP
+        public static string codeOTP { get; set; }
+        //end
 
         //for blibliorder
         public static string packageId  { get; set; }

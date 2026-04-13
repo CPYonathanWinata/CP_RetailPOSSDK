@@ -96,7 +96,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPIBLIBLIORDERS
                 if (orderItem.product == null)
                     continue;
 
-
+                
                 APIAccess.APIAccessClass.blibliCustName = orderItem.recipient.name;
             }
             
@@ -104,7 +104,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPIBLIBLIORDERS
             //APIAccess.APIAccessClass.blibliCustPhone = item.receiver.phones;
             APIAccess.APIAccessClass.blibliOrderIdLong = orderId;
             APIAccess.APIAccessClass.blibliOrderState = status;
-                
+            
 
             //foreach (var order in orderList)
             //{
@@ -703,6 +703,10 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPIBLIBLIORDERS
 
 
                             MessageBox.Show("Order sudah diambil.\nSilakan siapkan barang dan tunggu driver, baru lanjutkan finalisasi pesanan");
+                            POSFormsManager.ShowPOSStatusPanelText("Blibli order telah diambil. Siapkan pesanan.");
+
+
+                            //application.RunOperation(PosisOperations.DisplayTotal, "");
                             this.DialogResult = DialogResult.OK;
                             this.Close();
                         }

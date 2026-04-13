@@ -20,62 +20,145 @@ namespace PaymentTriggers
         private string statusItem;
         private string itemName;
         public bool findStockEmpty { get; private set; }
+        string labelInfo;
+        private string itemIdMulti;
 
-        public Infolog(XmlNodeList _itemNodes, RetailTransaction transaction)
+        public Infolog(XmlNodeList _itemNodes = null, RetailTransaction transaction = null, string _itemIdString = "", string _infoLabel = "1")
         {
             findStockEmpty = false;
+            labelInfo = _infoLabel;
+
+            if (_itemIdString != "")
+            {
+                itemId = _itemIdString;
+            }
+            
             InitializeComponent();
             InitializeGrid(_itemNodes, transaction);
+
+            
         }
 
         private void InitializeGrid(XmlNodeList _itemNodes, RetailTransaction transaction)
         {
-            var groupedSaleItems = transaction.SaleItems
-               .Where(item => !item.Voided)
-               .GroupBy(item => item.ItemId)
-               .Select(group => new
-               {
-                   ItemId = group.Key,
-                   TotalQuantity = group.Sum(item => item.Quantity),
-                   Description = group.First().Description
-               });
-
-            
-
-            foreach (XmlNode node in _itemNodes)
+            if (labelInfo == "1")
             {
-                itemId = node.Attributes["ItemId"].Value;
-              
+                infoLbl.Text = "Stok barang di bawah ini tidak mencukupi untuk ditransaksikan.\nSilakan hapus atau kurangi jumlahnya agar tidak melebihi stok tersedia";
 
-                remainQty = Convert.ToDecimal(node.Attributes["QtyAvail"].Value.Replace(",", "."), CultureInfo.InvariantCulture);
-              
+                var groupedSaleItems = transaction.SaleItems
+              .Where(item => !item.Voided)
+              .GroupBy(item => item.ItemId)
+              .Select(group => new
+              {
+                  ItemId = group.Key,
+                  TotalQuantity = group.Sum(item => item.Quantity),
+                  Description = group.First().Description
+              });
 
-               
-                var selectedSaleItem =  groupedSaleItems.FirstOrDefault(item => item.ItemId == node.Attributes["ItemId"].Value);
-                statusItem = remainQty - selectedSaleItem.TotalQuantity < 0 ? "Tidak" : "Ya";
-
-                //var selectedSaleItem = transaction.SaleItems.FirstOrDefault(item => item.ItemId == node.Attributes["ItemId"].Value && item.Voided != true);
-                //statusItem = remainQty - selectedSaleItem.Quantity < 0 ? "Tidak" : "Ya";
 
 
-                ////for testing purpose
-                //MessageBox.Show(remainQty + " - " + selectedSaleItem.Quantity);
-                
-                ////add for test
-                
-                if (statusItem == "Tidak")
+                foreach (XmlNode node in _itemNodes)
                 {
-                    itemName = selectedSaleItem.Description.PadRight(35); // Adjust the width as needed
-                    gridViewItem.Rows.Add(itemId, itemName,selectedSaleItem.TotalQuantity, remainQty );
-                    //messageBoxString += itemId + " | " + itemName + " | " + remainQty + "\n";
-                    foreach (var item in transaction.SaleItems.Where(item => item.ItemId == itemId))
+                    itemId = node.Attributes["ItemId"].Value;
+
+
+                    remainQty = Convert.ToDecimal(node.Attributes["QtyAvail"].Value.Replace(",", "."), CultureInfo.InvariantCulture);
+
+
+
+                    var selectedSaleItem = groupedSaleItems.FirstOrDefault(item => item.ItemId == node.Attributes["ItemId"].Value);
+                    statusItem = remainQty - selectedSaleItem.TotalQuantity < 0 ? "Tidak" : "Ya";
+
+                    //var selectedSaleItem = transaction.SaleItems.FirstOrDefault(item => item.ItemId == node.Attributes["ItemId"].Value && item.Voided != true);
+                    //statusItem = remainQty - selectedSaleItem.Quantity < 0 ? "Tidak" : "Ya";
+
+
+                    ////for testing purpose
+                    //MessageBox.Show(remainQty + " - " + selectedSaleItem.Quantity);
+
+                    ////add for test
+
+                    if (statusItem == "Tidak") 
                     {
-                        item.ShouldBeManuallyRemoved = true;
+                        itemName = selectedSaleItem.Description.PadRight(35); // Adjust the width as needed
+                        gridViewItem.Rows.Add(itemId, itemName, selectedSaleItem.TotalQuantity, remainQty);
+                        //messageBoxString += itemId + " | " + itemName + " | " + remainQty + "\n";
+                        foreach (var item in transaction.SaleItems.Where(item => item.ItemId == itemId))
+                        {
+                            item.ShouldBeManuallyRemoved = true;
+                        }
+                        //selectedSaleItem.ShouldBeManuallyRemoved = true;
+                        findStockEmpty = true;
                     }
-                    //selectedSaleItem.ShouldBeManuallyRemoved = true;
-                    findStockEmpty = true;
                 }
             }
+            else if (labelInfo == "2")
+            {
+                infoLbl.Text = "Barang di bawah ini tidak dapat ditransaksikan karena tidak ada di tabel\nCPITEMONHANDSTATUS. Silakan hubungi IT Support untuk sync";
+
+                var groupedSaleItems = transaction.SaleItems
+                                        .Where(item => !item.Voided)
+                                        .GroupBy(item => item.ItemId)
+                                        .Select(group => new
+                                        {
+                                            ItemId = group.Key,
+                                            TotalQuantity = group.Sum(item => item.Quantity),
+                                            Description = group.First().Description
+                                        });
+
+                //itemIdNotList = string.Join(";", notListItemIds);
+                //breakdown the itemid
+                //node.Attributes["ItemId"].Value;
+
+                string[] items = itemId.Split(';');
+                this.gridViewItem.Columns["RemainQty"].Visible = false;
+                foreach (string itemSingle in items)
+                {
+
+                    var selectedSaleItem = groupedSaleItems.FirstOrDefault(item => item.ItemId == itemSingle.ToString());
+                    itemName = selectedSaleItem.Description.PadRight(35);
+                    if (!string.IsNullOrWhiteSpace(itemSingle))
+                    {
+                        gridViewItem.Rows.Add(itemSingle.Trim(), itemName, selectedSaleItem.TotalQuantity);
+
+                        foreach (var item in transaction.SaleItems.Where(item => item.ItemId == itemSingle))
+                        {
+                            item.ShouldBeManuallyRemoved = true;
+                        }
+                        findStockEmpty = true;
+                    }
+                }
+                                
+                //remainQty = Convert.ToDecimal(node.Attributes["QtyAvail"].Value.Replace(",", "."), CultureInfo.InvariantCulture);
+                //var selectedSaleItem = groupedSaleItems.FirstOrDefault(item => item.ItemId == node.Attributes["ItemId"].Value);
+                //statusItem = remainQty - selectedSaleItem.TotalQuantity < 0 ? "Tidak" : "Ya";
+
+                ////var selectedSaleItem = transaction.SaleItems.FirstOrDefault(item => item.ItemId == node.Attributes["ItemId"].Value && item.Voided != true);
+                ////statusItem = remainQty - selectedSaleItem.Quantity < 0 ? "Tidak" : "Ya";
+
+
+                //////for testing purpose
+                ////MessageBox.Show(remainQty + " - " + selectedSaleItem.Quantity);
+
+                //////add for test
+
+                //if (statusItem == "Tidak")
+                //{
+                //    itemName = selectedSaleItem.Description.PadRight(35); // Adjust the width as needed
+                //    gridViewItem.Rows.Add(itemId, itemName, selectedSaleItem.TotalQuantity, remainQty);
+                //    //messageBoxString += itemId + " | " + itemName + " | " + remainQty + "\n";
+                //    foreach (var item in transaction.SaleItems.Where(item => item.ItemId == itemId))
+                //    {
+                //        item.ShouldBeManuallyRemoved = true;
+                //    }
+                //    //selectedSaleItem.ShouldBeManuallyRemoved = true;
+                //    findStockEmpty = true;
+                //}
+
+
+            }
+
+           
 
             if (findStockEmpty == true)
             {

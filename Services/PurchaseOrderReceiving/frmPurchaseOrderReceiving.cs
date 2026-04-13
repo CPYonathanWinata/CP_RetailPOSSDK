@@ -45,6 +45,7 @@ using Microsoft.Dynamics.Retail.Pos.Contracts;
 using System.Printing;
 using System.Management;
 using APIAccess;
+using Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch.CP_OTPForm;
 
 namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
 {
@@ -1459,7 +1460,15 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             if (this.isEdit && rowInEdit != null)
             {
                 // Edit QuantityReceived of an existing row
-                rowInEdit[DataAccessConstants.QuantityReceivedNow] = item.QuantityReceived;
+                if (APIAccessClass.isRetur)
+                {
+                    rowInEdit[DataAccessConstants.QuantityReceivedNow] = -item.QuantityReceived;
+                }
+                else
+                {
+                    rowInEdit[DataAccessConstants.QuantityReceivedNow] = item.QuantityReceived;
+                }
+                
             }
             else
             {
@@ -1670,12 +1679,12 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
                     if (deliverynote == string.Empty || receiptDate == string.Empty)
                     {
                         object[] parameterList = new object[] 
-							{
-								this.PONumber,
+                            {
+                                this.PONumber,
                                 ApplicationSettings.Database.DATAAREAID.ToString()
-								
-								
-							};
+                                
+                                
+                            };
 
                         try
                         {
@@ -1910,12 +1919,12 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
                     if (deliverynote == string.Empty || receiptDate == string.Empty)
                     {
                         object[] parameterList = new object[] 
-							{
-								this.PONumber,
+                            {
+                                this.PONumber,
                                 ApplicationSettings.Database.DATAAREAID.ToString()
-								
-								
-							};
+                                
+                                
+                            };
 
                         try
                         {
@@ -1981,13 +1990,29 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
                         itemName = reader["ItemName"].ToString();
                         itemNumber = reader["ItemNumber"].ToString();
                         unit = reader["Unit"].ToString();
-                        if (statusReceipt == "REPRINT" )//|| statusReceipt == "ORIGINAL" || statusReceipt == "COPY") //FIXED 27102025 
+                        if (statusReceipt == "REPRINT" ) //|| statusReceipt == "ORIGINAL" || statusReceipt == "COPY") //FIXED 27102025 
                         {
-                            qty = Math.Abs(Math.Truncate(Convert.ToDecimal(reader["QuantityReceived"]) * 1000m) / 1000m);
+
+                            if (APIAccessClass.isRetur) //if retur then as is
+                            {
+                                qty = Math.Truncate(Convert.ToDecimal(reader["QuantityReceived"]) * 1000m) / 1000m;
+                            }
+                            else
+                            {
+                                qty = Math.Abs(Math.Truncate(Convert.ToDecimal(reader["QuantityReceived"]) * 1000m) / 1000m);
+                            }
+                            
                         }
                         else
                         {
-                            qty = Math.Abs(Math.Truncate(Convert.ToDecimal(reader["QuantityReceivedNow"]) * 1000m) / 1000m);
+                            if (APIAccessClass.isRetur) //if retur then as is
+                            {
+                                qty =Math.Truncate(Convert.ToDecimal(reader["QuantityReceivedNow"]) * 1000m) / 1000m;
+                            }
+                            else
+                            {
+                                qty = Math.Abs(Math.Truncate(Convert.ToDecimal(reader["QuantityReceivedNow"]) * 1000m) / 1000m);
+                            }
                         }
                         //mod by Yonathan 25/07/2023 to prevent item 0 qty receive to appear on the receipt.
                         if (qty != 0)
@@ -2374,6 +2399,7 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
         private void btnCommit_Click(object sender, EventArgs e)
         {
             string tempDriverDetails;
+            bool isValid = false;
             /*LoadReceiptLinesFromDB();
             //Begin add NEC hmz to manipulate PO Id with driver Details
             if (this.prType == PRCountingType.PurchaseOrder)// || this.prType == PRCountingType.TransferIn)
@@ -2381,10 +2407,27 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
             else
                 tempDriverDetails = this.PONumber;
             */
-
-            //if retur, change the amount to negative
+            //if retur, you have to enter OTP change the amount to negative
             if (APIAccessClass.isRetur)
             {
+                using (var otpForm = new CP_OTPForm(this.PONumber))
+                {
+                    var result = otpForm.ShowDialog();
+
+                    if (result == DialogResult.OK && otpForm.IsValidOTP)
+                    {
+                        isValid = true;
+                    }
+                    else
+                    {
+                        //// batal
+                        //MessageBox.Show("OTP tidak valid / dibatalkan");
+                        isValid = false;
+                    }
+                }
+
+
+
                 foreach (DataRow row in entryTable.Rows)
                 {
                     decimal? qty = row.Field<decimal?>(DataAccessConstants.QuantityReceivedNow);
@@ -2394,242 +2437,266 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
                     }
                 }
             }
-
-
-
-
-            
-
-            try
+            else //if normal PO then forced it to isValid = true
             {
-                //Begin add NEC
-                if (txtDelivery.Text == "")
+                isValid = true;
+            }
+
+
+            //if it is true
+            if (isValid == true)
+            {
+                try
                 {
-                    // Show commit failure message                  
-                    throw new Exception("Please Fill the Delivery note number");
-                }
-                //check item qty
-                this.checkQtyItem();
-                //End add NEC
-                //<CPPOTOCancel>
-                if (this.prType == PRCountingType.TransferIn)
-                {
-                    this.checkQtyReceived();
-                }
-                //</CPPOTOCancel>
-                // Save lines to local database
-                SaveReceipt();
-
-                LoadReceiptLinesFromDB();
-                //Begin add NEC hmz to manipulate PO Id with driver Details
-                if (this.prType == PRCountingType.PurchaseOrder)// || this.prType == PRCountingType.TransferIn)
-                    tempDriverDetails = this.PONumber + "-" + txtDelivery.Text;
-                else
-                    tempDriverDetails = this.PONumber;
-                //End add NEC hmz
-
-                // Commit receipt to AX via webservice
-                // Begin modify line NEC - to pass tempDriverDetails
-                IPRDocument prDoc = PurchaseOrderReceiving.InternalApplication.Services.StoreInventoryServices.CommitOrderReceipt(tempDriverDetails, this.ReceiptNumber, this.prType);
-
-                tempDriverDetails = this.PONumber;
-                // Remove rows that are successfully submitted
-                List<DataRow> removeRows = new List<DataRow>();
-
-                // Success commmit
-                if (prDoc != null)
-                {
-
-                    // print here
-                    // Begin add NEC Hmz to custom print
-                    string s = "";//this.ReceiveDocumentFormat("ORIGINAL");
-
-
-                    string sHeader = "";
-                    string printerName = "";
-                    string sPrint = "";
-
-                    printerName = LSRetailPosis.Settings.HardwareProfiles.Printer.DeviceName;
-                    if (printerName == "EPSON LX-310 ESC/P")
+                    //Begin add NEC
+                    if (txtDelivery.Text == "")
                     {
+                        // Show commit failure message                  
+                        throw new Exception("Please Fill the Delivery note number");
+                    }
 
-                        s = this.ReceiveDocumentFormat("ORIGINAL");
+                    if (txtDelivery.Text != "" && APIAccessClass.isRetur == true)
+                    {
+                        txtDelivery.Text = "CN-" + txtDelivery.Text;
+                    }
+                    //check item qty
+                    this.checkQtyItem();
+                    //End add NEC
+                    //<CPPOTOCancel>
+                    if (this.prType == PRCountingType.TransferIn)
+                    {
+                        this.checkQtyReceived();
+                    }
+                    //</CPPOTOCancel>
+                    // Save lines to local database
+                    SaveReceipt();
+
+                    LoadReceiptLinesFromDB();
+                    //Begin add NEC hmz to manipulate PO Id with driver Details
+                    if (this.prType == PRCountingType.PurchaseOrder)// || this.prType == PRCountingType.TransferIn)
+                    {
+                        if (APIAccessClass.isRetur == true)
+                        {
+                            tempDriverDetails = this.PONumber + ";" + txtDelivery.Text; //change to l for delimiter
+                        }
+                        else
+                        {
+                            tempDriverDetails = this.PONumber + "-" + txtDelivery.Text;
+                        }                  //
                     }
                     else
+                        tempDriverDetails = this.PONumber;
+                    //End add NEC hmz
+
+                    // Commit receipt to AX via webservice
+                    // Begin modify line NEC - to pass tempDriverDetails
+                    IPRDocument prDoc = PurchaseOrderReceiving.InternalApplication.Services.StoreInventoryServices.CommitOrderReceipt(tempDriverDetails, this.ReceiptNumber, this.prType);
+
+                    tempDriverDetails = this.PONumber;
+                    // Remove rows that are successfully submitted
+                    List<DataRow> removeRows = new List<DataRow>();
+
+                    // Success commmit
+                    if (prDoc != null)
                     {
 
-                        s = this.ReceiveDocumentFormatThermal("ORIGINAL");
-                    }
+                        // print here
+                        // Begin add NEC Hmz to custom print
+                        string s = "";//this.ReceiveDocumentFormat("ORIGINAL");
 
-                    PrintDocument p = new PrintDocument();
-                    PrintDialog pd = new PrintDialog();
-                    PaperSize psize = new PaperSize("Custom", 100, Offset + 236);
-                    Margins margins = new Margins(0, 0, 0, 0);
 
-                    pd.Document = p;
-                    pd.Document.DefaultPageSettings.PaperSize = psize;
-                    pd.Document.DefaultPageSettings.Margins = margins;
-                    p.DefaultPageSettings.PaperSize.Width = 600;
-
-                    //add by Yonathan to CHeck whether the printer is online 06082024
-                    bool isPrinterOffline = checkPrinterStatus(p);
-                    if (isPrinterOffline == false)
-                    {
-                        p.PrintPage += delegate(object sender1, PrintPageEventArgs e1)
-                        {
-                            //e1.Graphics.DrawString(s, new Font("Courier New", 9), new SolidBrush(Color.Black), new RectangleF(p.DefaultPageSettings.PrintableArea.Left + 100, 0, p.DefaultPageSettings.PrintableArea.Width, p.DefaultPageSettings.PrintableArea.Height));
-                            //modif by Julius 14 07 2017
-                            e1.Graphics.DrawString(s, new Font("Lucida Console", 7), new SolidBrush(Color.Black), new RectangleF(p.DefaultPageSettings.PrintableArea.Left, 0, p.DefaultPageSettings.PrintableArea.Width, p.DefaultPageSettings.PrintableArea.Height));
-
-                        };
-                        try
-                        {
-                            //Edit by Erwin 23 October 2019
-                            //for (int i = 1; i <= 2; i++)
-                            //{
-                            //    p.Print();
-                            //}
-
-                            p.Print();
-
-                            //End Edit by Erwin 23 October 2019
-                        }
-                        catch (Exception ex)
-                        {
-                            throw new Exception("Exception Occured While Printing", ex);
-                        }
-
-                        //add by Erwin 23 October 2019 print copy receipt
-                        string sCopy = "";//= this.ReceiveDocumentFormat("COPY");
-                         
+                        string sHeader = "";
+                        string printerName = "";
+                        string sPrint = "";
 
                         printerName = LSRetailPosis.Settings.HardwareProfiles.Printer.DeviceName;
                         if (printerName == "EPSON LX-310 ESC/P")
                         {
 
-                            sCopy = this.ReceiveDocumentFormat("COPY");
+                            s = this.ReceiveDocumentFormat("ORIGINAL");
                         }
                         else
                         {
 
-                            sCopy = this.ReceiveDocumentFormatThermal("COPY");
+                            s = this.ReceiveDocumentFormatThermal("ORIGINAL");
                         }
 
-                        PrintDocument pCopy = new PrintDocument();
-                        PrintDialog pdCopy = new PrintDialog();
-                        PaperSize psizeCopy = new PaperSize("Custom", 100, Offset + 236);
-                        Margins marginsCopy = new Margins(0, 0, 0, 0);
+                        PrintDocument p = new PrintDocument();
+                        PrintDialog pd = new PrintDialog();
+                        PaperSize psize = new PaperSize("Custom", 100, Offset + 236);
+                        Margins margins = new Margins(0, 0, 0, 0);
 
-                        pdCopy.Document = pCopy;
-                        pdCopy.Document.DefaultPageSettings.PaperSize = psizeCopy;
-                        pdCopy.Document.DefaultPageSettings.Margins = marginsCopy;
-                        pCopy.DefaultPageSettings.PaperSize.Width = 600;
-                        pCopy.PrintPage += delegate(object sender1, PrintPageEventArgs e1)
+                        pd.Document = p;
+                        pd.Document.DefaultPageSettings.PaperSize = psize;
+                        pd.Document.DefaultPageSettings.Margins = margins;
+                        p.DefaultPageSettings.PaperSize.Width = 600;
+
+                        //add by Yonathan to CHeck whether the printer is online 06082024
+                        bool isPrinterOffline = checkPrinterStatus(p);
+                        if (isPrinterOffline == false)
                         {
-                            //e1.Graphics.DrawString(s, new Font("Courier New", 9), new SolidBrush(Color.Black), new RectangleF(p.DefaultPageSettings.PrintableArea.Left + 100, 0, p.DefaultPageSettings.PrintableArea.Width, p.DefaultPageSettings.PrintableArea.Height));
-                            //modif by Julius 14 07 2017
-                            e1.Graphics.DrawString(sCopy, new Font("Lucida Console", 7), new SolidBrush(Color.Black), new RectangleF(pCopy.DefaultPageSettings.PrintableArea.Left, 0, pCopy.DefaultPageSettings.PrintableArea.Width, pCopy.DefaultPageSettings.PrintableArea.Height));
-
-                        };
-                        try
-                        {
-
-                            pCopy.Print();
-                        }
-                        catch (Exception ex)
-                        {
-                            throw new Exception("Exception Occured While Printing", ex);
-                        }
-                    }                    
-                    else
-                    {
-                        using (frmMessage frm = new frmMessage(errorPrinter, MessageBoxButtons.OK, MessageBoxIcon.Error))
-                        {
-                            POSFormsManager.ShowPOSForm(frm);
-                        }
-                    }
-
-                   
-
-                    //END add by Erwin 23 October 2019 print copy receipt
-
-                    // End add NEC Hmz
-
-                    //Add customization by Yonathan 23 Sept 2022 to input the transaction to CPINVENTORYONHAND table for tracking daily on-hand
-
-                    this.addCPInventoryOnHand();
-
-                    //end customization
-
-
-                    foreach (DataRow row in entryTable.Rows)
-                    {
-                        IPRDocumentLine updatedLine = prDoc.PRDocumentLines.Where(line => string.Equals(line.Guid, row.Field<string>(DataAccessConstants.Guid), StringComparison.OrdinalIgnoreCase)
-                            && line.UpdatedInAx == true).FirstOrDefault();
-
-                        if (updatedLine != null)
-                        {
-                            removeRows.Add(row);
-                        }
-                    }
-                }
-
-                if (removeRows.Count > 0)
-                {
-                    foreach (DataRow row in removeRows)
-                    {
-                        // Remove line from local DB
-                        receiptData.DeleteReceiptLine(row.Field<string>(DataAccessConstants.Guid));
-
-                        // Remove line from form
-                        entryTable.Rows.Remove(row);
-                        entryTable.AcceptChanges();
-                    }
-
-                    if (removeRows.Count == prDoc.PRDocumentLines.Count)
-                    {
-                        // Delete header if all lines are removed
-                        receiptData.DeleteReceipt(prDoc.RecId);
-
-                        // Show commit succeeded message
-                        using (frmMessage dialog = new frmMessage(10314011, MessageBoxButtons.OK, MessageBoxIcon.Information))
-                        {
-                            POSFormsManager.ShowPOSForm(dialog);
-                            if (dialog.DialogResult == DialogResult.OK)
+                            p.PrintPage += delegate(object sender1, PrintPageEventArgs e1)
                             {
-                                this.DialogResult = DialogResult.OK;
-                                Close();
+                                //e1.Graphics.DrawString(s, new Font("Courier New", 9), new SolidBrush(Color.Black), new RectangleF(p.DefaultPageSettings.PrintableArea.Left + 100, 0, p.DefaultPageSettings.PrintableArea.Width, p.DefaultPageSettings.PrintableArea.Height));
+                                //modif by Julius 14 07 2017
+                                e1.Graphics.DrawString(s, new Font("Lucida Console", 7), new SolidBrush(Color.Black), new RectangleF(p.DefaultPageSettings.PrintableArea.Left, 0, p.DefaultPageSettings.PrintableArea.Width, p.DefaultPageSettings.PrintableArea.Height));
+
+                            };
+                            try
+                            {
+                                //Edit by Erwin 23 October 2019
+                                //for (int i = 1; i <= 2; i++)
+                                //{
+                                //    p.Print();
+                                //}
+
+                                p.Print();
+
+                                //End Edit by Erwin 23 October 2019
+                            }
+                            catch (Exception ex)
+                            {
+                                throw new Exception("Exception Occured While Printing", ex);
+                            }
+
+                            //add by Erwin 23 October 2019 print copy receipt
+                            string sCopy = "";//= this.ReceiveDocumentFormat("COPY");
+
+
+                            printerName = LSRetailPosis.Settings.HardwareProfiles.Printer.DeviceName;
+                            if (printerName == "EPSON LX-310 ESC/P")
+                            {
+
+                                sCopy = this.ReceiveDocumentFormat("COPY");
+                            }
+                            else
+                            {
+
+                                sCopy = this.ReceiveDocumentFormatThermal("COPY");
+                            }
+
+                            PrintDocument pCopy = new PrintDocument();
+                            PrintDialog pdCopy = new PrintDialog();
+                            PaperSize psizeCopy = new PaperSize("Custom", 100, Offset + 236);
+                            Margins marginsCopy = new Margins(0, 0, 0, 0);
+
+                            pdCopy.Document = pCopy;
+                            pdCopy.Document.DefaultPageSettings.PaperSize = psizeCopy;
+                            pdCopy.Document.DefaultPageSettings.Margins = marginsCopy;
+                            pCopy.DefaultPageSettings.PaperSize.Width = 600;
+                            pCopy.PrintPage += delegate(object sender1, PrintPageEventArgs e1)
+                            {
+                                //e1.Graphics.DrawString(s, new Font("Courier New", 9), new SolidBrush(Color.Black), new RectangleF(p.DefaultPageSettings.PrintableArea.Left + 100, 0, p.DefaultPageSettings.PrintableArea.Width, p.DefaultPageSettings.PrintableArea.Height));
+                                //modif by Julius 14 07 2017
+                                e1.Graphics.DrawString(sCopy, new Font("Lucida Console", 7), new SolidBrush(Color.Black), new RectangleF(pCopy.DefaultPageSettings.PrintableArea.Left, 0, pCopy.DefaultPageSettings.PrintableArea.Width, pCopy.DefaultPageSettings.PrintableArea.Height));
+
+                            };
+                            try
+                            {
+
+                                pCopy.Print();
+                            }
+                            catch (Exception ex)
+                            {
+                                throw new Exception("Exception Occured While Printing", ex);
+                            }
+                        }
+                        else
+                        {
+                            using (frmMessage frm = new frmMessage(errorPrinter, MessageBoxButtons.OK, MessageBoxIcon.Error))
+                            {
+                                POSFormsManager.ShowPOSForm(frm);
+                            }
+                        }
+
+
+
+                        //END add by Erwin 23 October 2019 print copy receipt
+
+                        // End add NEC Hmz
+
+                        //Add customization by Yonathan 23 Sept 2022 to input the transaction to CPINVENTORYONHAND table for tracking daily on-hand
+
+                        this.addCPInventoryOnHand();
+
+                        //end customization
+
+
+                        foreach (DataRow row in entryTable.Rows)
+                        {
+                            IPRDocumentLine updatedLine = prDoc.PRDocumentLines.Where(line => string.Equals(line.Guid, row.Field<string>(DataAccessConstants.Guid), StringComparison.OrdinalIgnoreCase)
+                                && line.UpdatedInAx == true).FirstOrDefault();
+
+                            if (updatedLine != null)
+                            {
+                                removeRows.Add(row);
                             }
                         }
                     }
+
+                    if (removeRows.Count > 0)
+                    {
+                        foreach (DataRow row in removeRows)
+                        {
+                            // Remove line from local DB
+                            receiptData.DeleteReceiptLine(row.Field<string>(DataAccessConstants.Guid));
+
+                            // Remove line from form
+                            entryTable.Rows.Remove(row);
+                            entryTable.AcceptChanges();
+                        }
+
+                        if (removeRows.Count == prDoc.PRDocumentLines.Count)
+                        {
+                            // Delete header if all lines are removed
+                            receiptData.DeleteReceipt(prDoc.RecId);
+
+                            // Show commit succeeded message
+                            using (frmMessage dialog = new frmMessage(10314011, MessageBoxButtons.OK, MessageBoxIcon.Information))
+                            {
+                                POSFormsManager.ShowPOSForm(dialog);
+                                if (dialog.DialogResult == DialogResult.OK)
+                                {
+                                    this.DialogResult = DialogResult.OK;
+                                    Close();
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // Show partial commit success message
+                            using (frmMessage dialog = new frmMessage(10314012, MessageBoxButtons.OK, MessageBoxIcon.Information))
+                            {
+                                POSFormsManager.ShowPOSForm(dialog);
+                            }
+
+                            grInventory.DataSource = entryTable;
+                            entryTable.AcceptChanges();
+                        }
+                    }
                     else
                     {
-                        // Show partial commit success message
-                        using (frmMessage dialog = new frmMessage(10314012, MessageBoxButtons.OK, MessageBoxIcon.Information))
+                        // Show commit failure message
+                        using (frmMessage dialog = new frmMessage(10314013, MessageBoxButtons.OK, MessageBoxIcon.Information))
                         {
                             POSFormsManager.ShowPOSForm(dialog);
                         }
 
                         grInventory.DataSource = entryTable;
-                        entryTable.AcceptChanges();
+                        entryTable.AcceptChanges(); 
                     }
                 }
-                else
+                finally
                 {
-                    // Show commit failure message
-                    using (frmMessage dialog = new frmMessage(10314013, MessageBoxButtons.OK, MessageBoxIcon.Information))
-                    {
-                        POSFormsManager.ShowPOSForm(dialog);
-                    }
-
-                    grInventory.DataSource = entryTable;
-                    entryTable.AcceptChanges();
+                    Cursor.Current = Cursors.Default;
                 }
             }
-            finally
+            else
             {
-                Cursor.Current = Cursors.Default;
+                MessageBox.Show("Tidak bisa lanjut proses karena OTP salah");
             }
+
+            
         }
 
         private void btnPgDown_Click(object sender, EventArgs e)
@@ -3004,12 +3071,12 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
             //SqlConnection connection = new SqlConnection(connectionString); //LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
 
             object[] parameterList = new object[] 
-							{
-								txtPoNumber.Text.ToString(),
+                            {
+                                txtPoNumber.Text.ToString(),
                                 ApplicationSettings.Database.DATAAREAID.ToString()
-								
-								
-							};
+                                
+                                
+                            };
 
 
             //ReadOnlyCollection<object> containerArray2 = PurchaseOrderReceiving.InternalApplication.TransactionServices.InvokeExtension("getStockOnHand", parameterList);

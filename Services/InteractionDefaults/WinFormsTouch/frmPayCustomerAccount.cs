@@ -647,8 +647,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
             {
 
 
-                if (isIntegrated == true && APIAccess.APIAccessClass.grabOrderState != "")
-                {
+               
                     if (!string.IsNullOrEmpty(APIAccess.APIAccessClass.blibliCustPhone))
                     // if (APIAccess.APIAccessClass.grabCustPhone != "" && APIAccess.APIAccessClass.grabCustPhone != null)
                     {
@@ -664,7 +663,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
                         txtCustName.ReadOnly = true; //false; //tadinya false karena bisa diketik manual 
                     }
 
-                }
+                
                 //else if (isIntegrated == true && APIAccess.APIAccessClass.grabOrderState == "")
                 //{
                 //    using (frmMessage dialog = new frmMessage("Toko ini sudah terintegrasi dengan Grabmart.\nSilakan lakukan proses order dari menu Grabmart Order", MessageBoxButtons.OK, MessageBoxIcon.Stop))

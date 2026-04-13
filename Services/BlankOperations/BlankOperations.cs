@@ -1155,7 +1155,12 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                             }
                         }
                         else
-                        { 
+                        {
+                            using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Please Choose Customer", MessageBoxButtons.OK, MessageBoxIcon.Stop))
+                            {
+                                LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                                return;
+                            }
                         }
 
                         break;

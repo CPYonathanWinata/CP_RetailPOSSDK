@@ -457,7 +457,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
             return input;
         }
 
-        private bool checkPositiveStatus(string _itemId)
+        private string checkPositiveStatus(string _itemId)
         {
             //before checking the stock, check first whether this item type is service
             //string queryString = @" SELECT DISPLAYPRODUCTNUMBER,PRODUCTTYPE  FROM ax.ECORESPRODUCT where DISPLAYPRODUCTNUMBER =@ITEMID";
@@ -477,12 +477,17 @@ namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
                     }
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
+                        //0 non stock controlled, 1 is stock controlled, 2 is not found in record
                         if (reader.Read())
                         {
                             positiveStatus = reader["POSITIVESTATUS"].ToString();
                             ////for testing purpose
                             //MessageBox.Show(positiveStatus);
                             ////
+                        }
+                        else
+                        {
+                            positiveStatus = "2"; //not found
                         }
 
                     }
@@ -502,7 +507,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
             }
             
 
-            return positiveStatus == "1" ? true : false;
+            return positiveStatus;// == "1" ? true : false;
         }
 
         private string getVariantId(string _itemId, SqlConnection connection)
@@ -552,6 +557,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
         private bool checkStock(IPosTransaction posTransaction, out string messageBoxString)
         {
             string itemIdMulti = "";
+            string itemIdNotList = "";
 
             bool findStockEmpty = false;
             decimal remainQty = 0;
@@ -592,7 +598,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
             //new to get item quantity
             //change by Yonathan to add QTY Input 15/08/2024
             var positiveItems = transaction.SaleItems
-            .Where(item => !item.Voided && checkPositiveStatus(item.ItemId))
+            .Where(item => !item.Voided && checkPositiveStatus(item.ItemId) == "1")
             .GroupBy(item => item.ItemId)
             .Select(group => new
             {
@@ -668,116 +674,123 @@ namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
                 
             }*/
 
-            
 
-            
-            try
+            //check item id not on the list table [CPITEMONHANDSTATUS]
+            var notListItems = transaction.SaleItems
+            .Where(item => !item.Voided && checkPositiveStatus(item.ItemId) == "2")
+            .GroupBy(item => item.ItemId)
+            .Select(group => new
             {
+                ItemId = group.Key,
+                Quantity = group.Sum(item => item.Quantity)
+            });
 
-                string queryString = @" SELECT A.INVENTLOCATION, A.INVENTLOCATIONDATAAREAID, C.INVENTSITEID 
-                            FROM ax.RETAILCHANNELTABLE A, ax.RETAILSTORETABLE B, ax.INVENTLOCATION C
-                            WHERE A.RECID=B.RECID AND C.INVENTLOCATIONID=A.INVENTLOCATION AND B.STORENUMBER=@STOREID";
+            var notListItemIds = notListItems
+                .Select(item => item.ItemId.ToString());
 
+            itemIdNotList = string.Join(";", notListItemIds);
 
-                using (SqlCommand command = new SqlCommand(queryString, connection))
-                {
-                    command.Parameters.AddWithValue("@STOREID", posTransaction.StoreId);
+          
 
-                    if (connection.State != ConnectionState.Open)
-                    {
-                        connection.Open();
-
-                    }
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            siteId = reader["INVENTSITEID"].ToString();
-                            warehouseId = reader["INVENTLOCATION"].ToString();
-                        }
-
-                    }
-                }
-
-                //string queryString2 = @"SELECT ID.INVENTDIMID, ITEMID, CONFIGID FROM INVENTDIM ID JOIN INVENTITEMBARCODE IB ON ID.INVENTDIMID = IB.INVENTDIMID
-                //                         WHERE ITEMID = @ITEMID";
-
-            }
-            catch (Exception ex)
+            if (itemIdNotList != "")
             {
-                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
-                throw;
-            }
-            finally
-            {
-                if (connection.State != ConnectionState.Closed)
-                {
-                    connection.Close();
-                }
-            }
-
-            ////for testing purpose
-            //MessageBox.Show(itemIdMulti);
-            ////
-           
-            if (itemIdMulti != "")
-            {
-                //change by Yonathan to add QTY Input 15/08/2024
-                var result = apiFunction.checkStockOnHandMultiNew(Application, urlRTS, Application.Settings.Database.DataAreaID, siteId, ApplicationSettings.Terminal.InventLocationId, itemIdMulti, "", "", configIdMulti, quantityItems, transaction.TransactionId);
-
-                //only for testing with old method
-                //var result = apiFunction.checkStockOnHandMulti(Application, urlRTS, Application.Settings.Database.DataAreaID, siteId, ApplicationSettings.Terminal.InventLocationId, itemIdMulti, "", "", configIdMulti);//, quantityItems, transaction.TransactionId);
-                //end
-                xmlResponse = result[3].ToString();
-                
-                XmlDocument xmlDoc = new XmlDocument(); 
-                xmlDoc.LoadXml(xmlResponse);
-
-                XmlNodeList itemNodes = xmlDoc.SelectNodes("//StockListResult");
-                //messageBoxString = "Stock barang di bawah ini kurang atau tidak cukup untuk ditransaksikan. Silakan hapus atau kurangi quantity-nya.\n\n";//ITEMID   | QTY TERSEDIA \n";
-                //messageBoxString += "ITEMID | NAMA ITEM                | QTY TERSEDIA \n";
-
-                //string[] itemIdsArray = itemIdMulti.Split(';');
-
-                //foreach (XmlNode node in itemNodes)
-                //{
-                //    itemId = node.Attributes["ItemId"].Value;
-                //    remainQty = Convert.ToDecimal(node.Attributes["QtyAvail"].Value);
-                //    var selectedSaleItem = transaction.SaleItems.FirstOrDefault(item => item.ItemId == node.Attributes["ItemId"].Value && item.Voided != true);
-                //    statusItem = remainQty - selectedSaleItem.Quantity < 0 ? "Tidak" : "Ya";
-
-                //    if (statusItem == "Tidak")
-                //    {
-                //        itemName = selectedSaleItem.Description.PadRight(35); // Adjust the width as needed
-                         
-                //        selectedSaleItem.ShouldBeManuallyRemoved = true;
-                //        findStockEmpty = true;
-                //    }
-                //}
-
-
-                //Yonathan for test purposes
-                
-                //end  
-                // Show custom dialog form
-                using (Infolog customDialog = new Infolog(itemNodes,transaction))
+ 
+                using (Infolog customDialog = new Infolog(null, transaction,itemIdNotList,"2"))
                 {
                     findStockEmpty = customDialog.findStockEmpty;
                     if (findStockEmpty == true)
                     {
                         customDialog.ShowDialog();
-
                     }
-                     
-                    
+                }
 
+            }
+            else
+            {
+                try
+                {
+
+                    string queryString = @" SELECT A.INVENTLOCATION, A.INVENTLOCATIONDATAAREAID, C.INVENTSITEID 
+                            FROM ax.RETAILCHANNELTABLE A, ax.RETAILSTORETABLE B, ax.INVENTLOCATION C
+                            WHERE A.RECID=B.RECID AND C.INVENTLOCATIONID=A.INVENTLOCATION AND B.STORENUMBER=@STOREID";
+
+
+                    using (SqlCommand command = new SqlCommand(queryString, connection))
+                    {
+                        command.Parameters.AddWithValue("@STOREID", posTransaction.StoreId);
+
+                        if (connection.State != ConnectionState.Open)
+                        {
+                            connection.Open();
+
+                        }
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                siteId = reader["INVENTSITEID"].ToString();
+                                warehouseId = reader["INVENTLOCATION"].ToString();
+                            }
+
+                        }
+                    }
+
+                    //string queryString2 = @"SELECT ID.INVENTDIMID, ITEMID, CONFIGID FROM INVENTDIM ID JOIN INVENTITEMBARCODE IB ON ID.INVENTDIMID = IB.INVENTDIMID
+                    //                         WHERE ITEMID = @ITEMID";
 
                 }
-                //customDialogForm.Controls.Add(dataGridView);
+                catch (Exception ex)
+                {
+                    LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                    throw;
+                }
+                finally
+                {
+                    if (connection.State != ConnectionState.Closed)
+                    {
+                        connection.Close();
+                    }
+                }
 
-                //// Show the custom dialog form
-                //customDialogForm.ShowDialog();
+                ////for testing purpose
+                //MessageBox.Show(itemIdMulti);
+                ////
+
+                if (itemIdMulti != "")
+                {
+                    //change by Yonathan to add QTY Input 15/08/2024
+                    var result = apiFunction.checkStockOnHandMultiNew(Application, urlRTS, Application.Settings.Database.DataAreaID, siteId, ApplicationSettings.Terminal.InventLocationId, itemIdMulti, "", "", configIdMulti, quantityItems, transaction.TransactionId);
+
+                    //only for testing with old method
+                    //var result = apiFunction.checkStockOnHandMulti(Application, urlRTS, Application.Settings.Database.DataAreaID, siteId, ApplicationSettings.Terminal.InventLocationId, itemIdMulti, "", "", configIdMulti);//, quantityItems, transaction.TransactionId);
+                    //end
+                    xmlResponse = result[3].ToString();
+
+                    XmlDocument xmlDoc = new XmlDocument();
+                    xmlDoc.LoadXml(xmlResponse);
+
+                    XmlNodeList itemNodes = xmlDoc.SelectNodes("//StockListResult");
+                   
+
+                    // Show custom dialog form
+                    using (Infolog customDialog = new Infolog(itemNodes, transaction))
+                    {
+                        findStockEmpty = customDialog.findStockEmpty;
+                        if (findStockEmpty == true)
+                        {
+                            customDialog.ShowDialog();
+
+                        }
+
+
+
+
+                    }
+                    
+                }
             }
+            
+            
 
           
 
