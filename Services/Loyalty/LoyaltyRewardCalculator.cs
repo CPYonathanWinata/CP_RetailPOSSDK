@@ -172,7 +172,8 @@ namespace Microsoft.Dynamics.Retail.Pos.Loyalty
                         break;
                     }
                 }
-
+                //display redeem amount left #debug
+                MessageBox.Show(redeemAmountLeft.ToString());
                 if (redeemAmountLeft > 0m)
                 {
                     LoyaltyGUI.PromptError(50057);

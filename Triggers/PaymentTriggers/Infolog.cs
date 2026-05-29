@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace PaymentTriggers
 {
@@ -39,6 +40,60 @@ namespace PaymentTriggers
             
         }
 
+        public class ItemSummary
+        {
+            public string ItemId { get; set; }
+            public decimal Qty { get; set; }
+        }
+
+        public static List<ItemSummary> ParseAndSummarize(string hex)
+        {
+            
+            if (hex.StartsWith("0x"))
+                hex = hex.Substring(2);
+
+           
+            byte[] bytes = Enumerable.Range(0, hex.Length / 2)
+                .Select(x => Convert.ToByte(hex.Substring(x * 2, 2), 16))
+                .ToArray();
+ 
+            string xmlString = Encoding.UTF8.GetString(bytes);
+
+            
+            XDocument doc = XDocument.Parse(xmlString);
+
+            
+            XNamespace ns = "http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Commerce.Runtime.DataModel";
+
+            // 5. ambil SalesLines
+            var items = doc
+                .Descendants(ns + "SalesLine")
+                .Select(x => new
+                {
+                    ItemId = (string)x.Element(ns + "ItemId"),
+                    Qty = (decimal?)x.Element(ns + "Quantity") ?? 0
+                })
+                .Where(x => !string.IsNullOrEmpty(x.ItemId))
+                .ToList();
+
+            // 6. grouping
+            var result = items
+                .GroupBy(x => x.ItemId)
+                .Select(g => new ItemSummary
+                {
+                    ItemId = g.Key,
+                    Qty = g.Sum(x => x.Qty)
+                })
+                .ToList();
+
+            return result;
+        }
+
+        public decimal getDataSuspend()
+        {
+            return 1;
+        }
+       
         private void InitializeGrid(XmlNodeList _itemNodes, RetailTransaction transaction)
         {
             if (labelInfo == "1")

@@ -480,7 +480,28 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                 additionalQuery = "AND HEADER.PROMOID = '" + promoId + "'";
             }
 
-			string queryStringHeader = @"SELECT 
+
+            string queryStringHeader = @"SELECT 
+                                            PROMOID          AS [Promo ID],
+                                            [DESCRIPTION]    AS [Promo Name],
+                                            [FROMDATE]       AS [From Date],
+                                            [TODATE]         AS [To Date],
+                                            [MINPAYMENTAMOUNT] AS [Min. Payment]
+                                        FROM AX.CPPROMOEDQTY
+                                        WHERE 
+                                            CUSTACCOUNT = @CUSTACC  
+                                            AND ISACTIVE = 1 
+                                            AND FROMDATE <= CAST(GETDATE() AS DATE) 
+                                            AND TODATE   >= CAST(GETDATE() AS DATE)
+                                            AND EXISTS (
+                                                SELECT 1 FROM AX.CPPROMOEDQTYDETAIL
+                                                WHERE PROMOID = AX.CPPROMOEDQTY.PROMOID
+                                                AND RETAILSTOREID = @STOREID
+                                            )"
+                                             + additionalQuery + " " +
+                                            "ORDER BY MINPAYMENTAMOUNT ASC";
+
+			string queryStringHeaderOld = @"SELECT 
 												HEADER.PROMOID AS [Promo ID],                                          
 												[DESCRIPTION] as [Promo Name], 
 												[FROMDATE] as [From Date], 
@@ -528,7 +549,76 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 			}
 		}
 
-		private void dataGridHeader_CellClick(object sender, DataGridViewCellEventArgs e)
+        /* temp fix query 27042026 - Yonathan 
+         private void LoadDataHeader()
+{
+    RetailTransaction retailTransaction = posTransaction as RetailTransaction;
+    SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+
+    totalAmountTextBox.Text = "TOTAL BELANJA : " + retailTransaction.NetAmountWithTax.ToString("N2");
+
+    string queryStringHeader = @"
+        SELECT 
+            HEADER.PROMOID AS [Promo ID],                                          
+            HEADER.[DESCRIPTION] as [Promo Name], 
+            HEADER.[FROMDATE] as [From Date], 
+            HEADER.[TODATE] as [To Date], 
+            HEADER.[MINPAYMENTAMOUNT] as [Min. Payment],
+            DETAIL.RETAILSTOREID AS [Store]
+        FROM AX.CPPROMOEDQTY HEADER
+        OUTER APPLY (
+            SELECT TOP 1 D.RETAILSTOREID
+            FROM AX.CPPROMOEDQTYDETAIL D
+            WHERE D.PROMOID = HEADER.PROMOID
+              AND D.RETAILSTOREID = @STOREID
+        ) DETAIL
+        WHERE 
+            HEADER.CUSTACCOUNT = @CUSTACC
+            AND HEADER.ISACTIVE = 1
+            AND HEADER.FROMDATE <= CAST(GETDATE() AS date)
+            AND HEADER.TODATE >= CAST(GETDATE() AS date)
+    ";
+
+    // tambahan filter promoId (pakai parameter, bukan concat)
+    if (!string.IsNullOrEmpty(promoId))
+    {
+        queryStringHeader += " AND HEADER.PROMOID = @PROMOID ";
+    }
+
+    queryStringHeader += " ORDER BY HEADER.MINPAYMENTAMOUNT ASC ";
+
+    using (SqlCommand command = new SqlCommand(queryStringHeader, connection))
+    {
+        command.Parameters.AddWithValue("@STOREID", posTransaction.StoreId);
+        command.Parameters.AddWithValue("@CUSTACC", retailTransaction.Customer.CustomerId);
+
+        if (!string.IsNullOrEmpty(promoId))
+        {
+            command.Parameters.AddWithValue("@PROMOID", promoId);
+        }
+
+        // optional: biar ga gampang timeout
+        command.CommandTimeout = 60;
+
+        if (connection.State != ConnectionState.Open)
+        {
+            connection.Open();
+        }
+
+        SqlDataAdapter adapter = new SqlDataAdapter(command);
+        DataTable dataTable = new DataTable();
+        adapter.Fill(dataTable);
+
+        dataGridHeader.DataSource = dataTable;
+
+        // hindari double subscribe kalau method ini dipanggil berulang
+        dataGridHeader.CellClick -= dataGridHeader_CellClick;
+        dataGridHeader.CellClick += dataGridHeader_CellClick;
+    }
+}
+         */
+
+        private void dataGridHeader_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			// Retrieve the selected PromoId from the clicked row
 			int rowIndex = e.RowIndex;
@@ -572,7 +662,157 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 
 		// Usage
 
-		private void LoadData()
+        /* //TEMP FIX 27042026- Yonathan
+         private void LoadData()
+{
+    RetailTransaction retailTransaction = posTransaction as RetailTransaction;
+    SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+
+    List<string> excludeList = new List<string>();
+
+    foreach (var items in retailTransaction.CalculableSalesLines)
+    {
+        if (items.PeriodicDiscountLines.Count == 0)
+        {
+            excludeList.Add(items.ItemId);
+        }
+        else
+        {
+            foreach (var discountLines in items.PeriodicDiscountLines)
+            {
+                PeriodicDiscountItem periodDiscItem = discountLines as PeriodicDiscountItem;
+                if (!periodDiscItem.OfferId.StartsWith(promoCode))
+                {
+                    excludeList.Add(items.ItemId);
+                }
+            }
+        }
+    }
+
+    try
+    {
+        string query = @"
+        SELECT 
+            H.[DESCRIPTION] as [Promo Name], 
+            H.[FROMDATE] as [From Date], 
+            H.[TODATE] as [To Date], 
+            H.[MINPAYMENTAMOUNT] as [Min. Payment], 
+            D.[ITEMID] as [ItemId], 
+            D.[PRODUCTNAME] as [Item Name], 
+            D.[DISCAMOUNT] as [Disc. Amount], 
+            D.[DISCPERCENTAGE] as [Disc. Percentage], 
+            D.[MAXQTY] as [Max Qty], 
+            D.PROMOID AS [Promo ID],
+            ISNULL(SUMS.QTY, 0) AS TERJUAL
+        FROM AX.CPPROMOEDQTY H
+        INNER JOIN AX.CPPROMOEDQTYDETAIL D 
+            ON D.PROMOID = H.PROMOID
+
+        LEFT JOIN (
+            SELECT 
+                S.ITEMID,
+                S.COMMENT AS PROMOID,
+                S.STORE,
+                SUM(ABS(S.QTY)) AS QTY
+            FROM RETAILTRANSACTIONSALESTRANS S
+            WHERE 
+                S.RECEIPTID != ''
+                AND S.TRANSACTIONSTATUS != 1
+                AND S.STORE = @STOREID
+            GROUP BY S.ITEMID, S.COMMENT, S.STORE
+        ) SUMS
+            ON SUMS.ITEMID = D.ITEMID
+            AND SUMS.PROMOID = D.PROMOID
+            AND SUMS.STORE = @STOREID
+
+        WHERE 
+            H.CUSTACCOUNT = @CUSTACC
+            AND H.ISACTIVE = 1
+            AND H.FROMDATE <= CAST(GETDATE() AS date)
+            AND H.TODATE >= CAST(GETDATE() AS date)
+            AND D.RETAILSTOREID = @STOREID
+        ";
+
+        // dynamic filter (pakai parameter)
+        if (!string.IsNullOrEmpty(promoId))
+        {
+            query += " AND H.PROMOID = @PROMOID ";
+        }
+
+        if (!string.IsNullOrEmpty(promoIdString))
+        {
+            query += " AND D.PROMOID = @PROMOID2 ";
+        }
+
+        // exclude list pakai parameter
+        if (excludeList.Count > 0)
+        {
+            var paramNames = new List<string>();
+            for (int i = 0; i < excludeList.Count; i++)
+            {
+                paramNames.Add("@EX" + i);
+            }
+
+            query += " AND D.ITEMID NOT IN (" + string.Join(",", paramNames) + ") ";
+        }
+
+        query += " ORDER BY H.MINPAYMENTAMOUNT ASC ";
+
+        using (SqlCommand command = new SqlCommand(query, connection))
+        {
+            command.Parameters.AddWithValue("@STOREID", posTransaction.StoreId);
+            command.Parameters.AddWithValue("@CUSTACC", retailTransaction.Customer.CustomerId);
+
+            if (!string.IsNullOrEmpty(promoId))
+                command.Parameters.AddWithValue("@PROMOID", promoId);
+
+            if (!string.IsNullOrEmpty(promoIdString))
+                command.Parameters.AddWithValue("@PROMOID2", promoIdString);
+
+            // isi parameter exclude
+            for (int i = 0; i < excludeList.Count; i++)
+            {
+                command.Parameters.AddWithValue("@EX" + i, excludeList[i]);
+            }
+
+            command.CommandTimeout = 60;
+
+            if (connection.State != ConnectionState.Open)
+                connection.Open();
+
+            SqlDataAdapter adapter = new SqlDataAdapter(command);
+            DataTable dataTable = new DataTable();
+            adapter.Fill(dataTable);
+
+            dataGridResult.DataSource = dataTable;
+
+            // cegah duplicate button column
+            if (!dataGridResult.Columns.Contains("btnSelect"))
+            {
+                DataGridViewButtonColumn btn = new DataGridViewButtonColumn();
+                btn.HeaderText = "";
+                btn.Name = "btnSelect";
+                btn.Text = "Pilih";
+                btn.UseColumnTextForButtonValue = true;
+                dataGridResult.Columns.Add(btn);
+            }
+
+            gridStyle();
+        }
+    }
+    catch
+    {
+        throw;
+    }
+    finally
+    {
+        if (connection.State != ConnectionState.Closed)
+            connection.Close();
+    }
+}
+         */
+
+        private void LoadData()
 		{
 			RetailTransaction retailTransaction = posTransaction as RetailTransaction;
 			SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
@@ -670,7 +910,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 				 
 				string queryString = @"SELECT 
 											 
-											[DESCRIPTION] as [Promo Name], 
+											[DESCRIPTION] as [Promo Name],  
 											[FROMDATE] as [From Date], 
 											[TODATE] as [To Date], 
 											[MINPAYMENTAMOUNT] as [Min. Payment], 
@@ -820,7 +1060,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 					for (int i = 0; i < ((RetailTransaction)posTransaction).SaleItems.Count; i++)
 					{
 						//string thisItemId = "";
-						LSRetailPosis.Transaction.Line.SaleItem.SaleLineItem currentLine = transaction.GetItem(((RetailTransaction)posTransaction).SaleItems.ElementAt(i).LineId);
+						LSRetailPosis.Transaction.Line.SaleItem.SaleLineItem currentLine = transaction.GetItem(((RetailTransaction)posTransaction).SaleItems .ElementAt(i).LineId);
 						int lineId = ((RetailTransaction)posTransaction).SaleItems.ElementAt(i).LineId;
 
 						if (currentLine.ItemId == itemId && currentLine.Voided == false)
@@ -870,6 +1110,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 
                             else
                             {
+                                //MessageBox.Show(qtySelected.ToString() + " " + qtyMax.ToString());
+                                // 5 2000
                                 //check if the cart has already same item that selects. if yes then add the qty, if not then treat is as add new line
                                 var matchingLines = transaction.SaleItems.Where(line => line.ItemId == itemId).ToList(); 
 
@@ -888,8 +1130,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                                     }
                                     calculateAllLinesPromo(transaction, promoId, promoName);
                                     /*promoCode = "QS";
-                    commentCode = "PROMORCPT";
-                    lineCommentCode = "AddItem-QS";*/
+                                    commentCode = "PROMORCPT";
+                                    lineCommentCode = "AddItem-QS";*/
                                     //transaction.Comment = "PROMOED";
                                     transaction.Comment = commentCode;
                                     transaction.CalcTotals();
@@ -1051,6 +1293,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 			var matchingLines = _transaction.SaleItems.Where(line => line.Comment == _promoId).ToList();
 			decimal pctDisc = 0;
 			decimal amtDisc = 0;
+            decimal discInclTax = 0;
 			DateTime fromDate = DateTime.MinValue;
             DateTime toDate = DateTime.MinValue; 
 			foreach (var line in matchingLines)
@@ -1059,11 +1302,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 				LSRetailPosis.Transaction.Line.Discount.LineDiscountItem lineDisc = new LSRetailPosis.Transaction.Line.Discount.LineDiscountItem();
                 if (operationId == "23")
                 {
-                    selectPromoItem(line.ItemId, _promoId, out pctDisc, out amtDisc, out fromDate, out toDate);
+                    selectPromoItem(line.ItemId, _promoId, out pctDisc, out amtDisc, out fromDate, out toDate);//, out discInclTax); //include discInclTax CP_MDF_POSPDI - Yonathan 26052026
                 }
                 else if (operationId == "25")
                 {
-                    selectPromoItemReceipt(line.ItemId, _promoId, out pctDisc, out amtDisc, out fromDate, out toDate);
+                    selectPromoItemReceipt(line.ItemId, _promoId, out pctDisc, out amtDisc, out fromDate, out toDate);//, out discInclTax); //include discInclTax CP_MDF_POSPDI - Yonathan 26052026
                 }
 				
                 //check if this line already has a discount with the same promo ID
@@ -1083,6 +1326,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     if (pctDisc == 0)
                     {
                         discItem.Amount = amtDisc;
+                        
                     }
                     else if (amtDisc == 0)
                     {
@@ -1132,20 +1376,22 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 			//transaction.CurrentSaleLineItem.DiscountLines.AddFirst(discItem);
 		}
 
-		private void selectPromoItem(string itemId, string promoId, out decimal pctDisc, out decimal amtDisc, out DateTime fromDate, out DateTime toDate)
+		private void selectPromoItem(string itemId, string promoId, out decimal pctDisc, out decimal amtDisc, out DateTime fromDate, out DateTime toDate)//, out decimal discInclTax)
 		{
 			amtDisc = 0;
 			pctDisc = 0;
+            //discInclTax = 0;
 			fromDate = DateTime.Now;
 			toDate = DateTime.Now;
             SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
             try
             {
 			    string queryString = "";
+                //,[DISCINCLTAX] 
 			    queryString = @"SELECT LINES.[PROMOID]       
 							      ,[ITEMID]     
 							      ,[DISCAMOUNT]
-							      ,[DISCPERCENTAGE]      
+							      ,[DISCPERCENTAGE]
 							      ,[RETAILSTOREID]
 							      ,[FROMDATE]
 							      ,[TODATE]
@@ -1174,6 +1420,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 
 							    pctDisc = Convert.ToDecimal(reader["DISCPERCENTAGE"]);
 							    amtDisc = Convert.ToDecimal(reader["DISCAMOUNT"]);
+                                //discInclTax = Convert.ToDecimal(reader["DISCINCLTAX"]);
 							    fromDate = Convert.ToDateTime(reader["FROMDATE"].ToString());
 							    toDate = Convert.ToDateTime(reader["TODATE"].ToString());
 						    }
@@ -1195,10 +1442,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                 }
             }
 		}
-        private void selectPromoItemReceipt(string itemId, string promoId, out decimal pctDisc, out decimal amtDisc, out DateTime fromDate, out DateTime toDate)
+        private void selectPromoItemReceipt(string itemId, string promoId, out decimal pctDisc, out decimal amtDisc, out DateTime fromDate, out DateTime toDate)//, out decimal discInclTax)
         {
             amtDisc = 0;
             pctDisc = 0;
+            //discInclTax = 0;
             fromDate = DateTime.Now;
             toDate = DateTime.Now;
             SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;

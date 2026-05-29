@@ -46,6 +46,7 @@ using System.Printing;
 using System.Management;
 using APIAccess;
 using Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch.CP_OTPForm;
+using System.Globalization;
 
 namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
 {
@@ -250,6 +251,8 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
 
         private void TranslateLabels()
         {
+            
+
             //
             // Get all text through the Translation function in the ApplicationLocalizer
             //
@@ -269,6 +272,12 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                     colReceivedNow.Caption = ApplicationLocalizer.Language.Translate(1031482); //Received Now
                     this.Text = lblHeader.Text = ApplicationLocalizer.Language.Translate(103140); //Receiving 
                     btnReceiveAll.Text = ApplicationLocalizer.Language.Translate(103118); //Receive All
+                    if (APIAccessClass.isRetur == true)
+                    {
+                        this.Text = lblHeader.Text = "Retur Barang";
+                        //this.lblHeading.Text = "Purchase Order Retur";
+                    }
+
                     //start - add modification by Yonathan to disable Receive All button 10/10/2022
                     btnReceiveAll.Visible = false;
                     numPad1.NumberOfDecimals = 3;
@@ -525,14 +534,27 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
         {
             //Add by Erwin 15 July 2019
 
+           
+
             DataRow row = GetCurrentRow();
             numPad1.Focus();
 
             if (row != null)
             {
-                this.isEdit = true;
-                string itemNumber = row.Field<string>(DataAccessConstants.ItemNumber);
-                this.InventoryLookup(itemNumber);
+
+                //custom to add validation check 
+                if (Math.Abs(row.Field<decimal>(DataAccessConstants.QuantityOrdered)) < Convert.ToDecimal( numPad1.EnteredValue))
+                {
+                    throw new Exception("Quantity receive tidak boleh lebih besar dari quantity ordered");
+                }
+                else
+                { 
+                    //original
+                    this.isEdit = true;
+                    string itemNumber = row.Field<string>(DataAccessConstants.ItemNumber);               
+                    this.InventoryLookup(itemNumber);
+                    //original
+                }
             }
 
             //End Add by Erwin 15 July 2019
@@ -1407,8 +1429,64 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             return true; 
         }
 
+        //add by Yonathan 2026
+        private string getSiteId(string inventLocation)
+        {
+            string siteId = "";
+            SqlConnection connection = ApplicationSettings.Database.LocalConnection;
+            try
+            {
+
+
+                string queryString = @" SELECT INVENTLOCATIONID, INVENTSITEID FROM AX.INVENTLOCATION
+                            WHERE INVENTLOCATION.INVENTLOCATIONID = @INVENTLOCATIONID";
+                
+
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+                    command.Parameters.AddWithValue("@INVENTLOCATIONID", ApplicationSettings.Terminal.InventLocationId
+);
+
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+
+                    }
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            siteId = reader["INVENTSITEID"].ToString();
+                            
+                        }
+
+                    }
+                }
+
+                //string queryString2 = @"SELECT ID.INVENTDIMID, ITEMID, CONFIGID FROM INVENTDIM ID JOIN INVENTITEMBARCODE IB ON ID.INVENTDIMID = IB.INVENTDIMID
+                //                         WHERE ITEMID = @ITEMID";
+
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+                }
+            }
+
+            return siteId;
+        }
+        //end 
+
         private void InventoryLookup(string barcode)
         {
+            string checkPositiveStatus = "0";
             if (inputMode == NumPadMode.Barcode)
             {
                 if (GetItemInfo(barcode, this.isEdit) && (this.isEdit || this.ValidateItemIdAndVariantsForPicking(this.saleLineItem)))
@@ -1426,6 +1504,59 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             }
             else if ((inputMode == NumPadMode.Quantity) && (saleLineItem != null) && !string.IsNullOrEmpty(numPad1.EnteredValue))
             {
+                 //add checkstock 2026 - Yonathan
+                 
+                if(APIAccessClass.isRetur)
+                {
+                    decimal qtyFromAx = 0;
+                    string functionNameAX = "GetStockAX%"; // "GetStockAXPFMPOC"; //change to GetStockAX
+                   
+                    APIAccess.APIFunction apiFunction = new APIAccess.APIFunction();
+                    RetailTransaction transaction = posTransaction as RetailTransaction;
+                    APIAccess.APIAccessClass APIClass = new APIAccess.APIAccessClass();
+                    string urlRTS = APIClass.getURLAPIByFuncName(functionNameAX);
+                    checkPositiveStatus = APIAccess.APIFunction.checkPositiveStatusNew(barcode, ApplicationSettings.Database.LocalConnection);
+                    if (checkPositiveStatus == "2")
+                    {
+                        MessageBox.Show("Item " + barcode + " tidak terdata di table CPITEMONHANDSTATUS.\nHubungi IT Support");
+                    }
+                    else
+                    {
+                        //check stock
+
+                        if (checkPositiveStatus == "1")
+                        {
+
+                            //if qty retur > qty in stock, messagebox.show and auto add reamaining qty in stock
+                            var result = apiFunction.checkStockOnHandMultiNew(PurchaseOrderReceiving.InternalApplication, urlRTS, PurchaseOrderReceiving.InternalApplication.Settings.Database.DataAreaID, getSiteId(ApplicationSettings.Terminal.InventLocationId), ApplicationSettings.Terminal.InventLocationId, barcode, "", "", "", this.saleLineItem.Quantity.ToString("N0"), posTransaction.TransactionId);
+                            //checkStockOnHandAXAPI(PurchaseOrderReceiving.InternalApplication, urlRTS, Application.Settings.Database.DataAreaID, getSiteId(ApplicationSettings.Terminal.InventLocationId), ApplicationSettings.Terminal.InventLocationId, this.saleLineItem.ItemId, "QTY", "", posTransaction.TransactionId);
+                            string xmlResponse = result[3].ToString();
+
+                            XmlDocument xmlDoc = new XmlDocument();
+                            xmlDoc.LoadXml(xmlResponse);
+
+                            XmlNodeList itemNodes = xmlDoc.SelectNodes("//StockListResult");
+
+                            foreach (XmlNode node in itemNodes)
+                            {
+
+                                 //qtyFromAx = ParseFlexibleDecimal(node.Attributes["QtyAvail"].ToString());
+                                qtyFromAx = Convert.ToDecimal(node.Attributes["QtyAvail"].Value.Replace(",", "."), CultureInfo.InvariantCulture);
+                                if (Convert.ToDecimal( numPad1.EnteredValue) >  qtyFromAx) 
+                                {
+                                    MessageBox.Show("Stok barang ini sisa " + qtyFromAx.ToString() + ".\nQty akan otomatis terinput sesuai stok tersedia.");
+                                    numPad1.EnteredValue = node.Attributes["QtyAvail"].Value; 
+                                }
+                                //numPad1.EnteredValue = node.Attributes["QtyAvail"]; 
+                                //Convert.ToDecimal(node.Attributes["QtyAvail"].Value.Replace(",", "."), CultureInfo.InvariantCulture);
+                            }
+                            
+                            //end
+                        }
+                    }
+                    
+                }
+
                 // Add to list
                 EntryItem item = new EntryItem()
                 {
@@ -1451,6 +1582,37 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                 }
             }
             numPad1.Select();
+        }
+
+        public static decimal ParseFlexibleDecimal(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return 0;
+
+            input = input.Trim();
+
+            int lastComma = input.LastIndexOf(',');
+            int lastDot = input.LastIndexOf('.');
+
+            // Tentukan decimal separator (yang paling kanan)
+            char decimalSeparator = lastComma > lastDot ? ',' : '.';
+
+            // Remove thousands separator (yang bukan decimal separator)
+            if (decimalSeparator == ',')
+            {
+                input = input.Replace(".", "");
+                input = input.Replace(",", ".");
+            }
+            else
+            {
+                input = input.Replace(",", "");
+            }
+
+            decimal result;
+            if (!decimal.TryParse(input, NumberStyles.Any, CultureInfo.InvariantCulture, out result))
+                throw new FormatException("Invalid number format: " + input);
+
+            return result;
         }
 
         private void AddItem(EntryItem item)
@@ -1629,7 +1791,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             string itemName = "";
             string itemNumber = "";
             decimal qty = 0;
-
+            ReadOnlyCollection<object> containerArray = null;
             //string sumUnit, ItemName, ItemNumber, QtyReceivedNow = "";
             string connectionString = GetSettingFromConfigFile();
             string storeid = GetStoreId();
@@ -1688,8 +1850,16 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
 
                         try
                         {
-                            ReadOnlyCollection<object> containerArray = PurchaseOrderReceiving.InternalApplication.TransactionServices.InvokeExtension("getPackingSlipInfoPO", parameterList);
-
+                            //TODO add for PO RETUR REPRINT
+                            if (APIAccessClass.isRetur)
+                            {
+                                 containerArray = PurchaseOrderReceiving.InternalApplication.TransactionServices.InvokeExtension("getPackingSlipInfoPORetur", parameterList);
+                            }
+                            
+                            else
+                            {
+                                 containerArray = PurchaseOrderReceiving.InternalApplication.TransactionServices.InvokeExtension("getPackingSlipInfoPO", parameterList);
+                            }
 
                             if (containerArray[2].ToString() == "Success")
                             {
@@ -1862,6 +2032,7 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
             string itemNumber = "";
             string unit = "";
             decimal qty = 0;
+            ReadOnlyCollection<object> containerArray = null;
 
             //string sumUnit, ItemName, ItemNumber, QtyReceivedNow = "";
             string connectionString = GetSettingFromConfigFile();
@@ -1928,8 +2099,15 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
 
                         try
                         {
-                            ReadOnlyCollection<object> containerArray = PurchaseOrderReceiving.InternalApplication.TransactionServices.InvokeExtension("getPackingSlipInfoPO", parameterList);
+                            if (APIAccessClass.isRetur)
+                            {
+                                containerArray = PurchaseOrderReceiving.InternalApplication.TransactionServices.InvokeExtension("getPackingSlipInfoPORetur", parameterList);
+                            }
 
+                            else
+                            {
+                                containerArray = PurchaseOrderReceiving.InternalApplication.TransactionServices.InvokeExtension("getPackingSlipInfoPO", parameterList);
+                            }
 
                             if (containerArray[2].ToString() == "Success")
                             {
@@ -2121,7 +2299,7 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
 
                 if (quantity < 0)
                 {
-                    throw new Exception("Quantity receive greater than quantity ordered");
+                    throw new Exception("Quantity receive tidak boleh lebih besar dari quantity ordered");
                 }
 
                 totalQty += row.Field<decimal>(DataAccessConstants.QuantityReceivedNow);
@@ -2410,6 +2588,9 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
             //if retur, you have to enter OTP change the amount to negative
             if (APIAccessClass.isRetur)
             {
+
+              
+
                 using (var otpForm = new CP_OTPForm(this.PONumber))
                 {
                     var result = otpForm.ShowDialog();

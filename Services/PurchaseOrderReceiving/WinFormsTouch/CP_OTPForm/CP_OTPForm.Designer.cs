@@ -36,17 +36,19 @@
             // 
             // txtCodeOTP
             // 
-            this.txtCodeOTP.Location = new System.Drawing.Point(12, 59);
+            this.txtCodeOTP.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtCodeOTP.Location = new System.Drawing.Point(12, 70);
             this.txtCodeOTP.Name = "txtCodeOTP";
-            this.txtCodeOTP.Size = new System.Drawing.Size(168, 20);
+            this.txtCodeOTP.Size = new System.Drawing.Size(132, 29);
             this.txtCodeOTP.TabIndex = 0;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 40);
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(62, 13);
+            this.label1.Size = new System.Drawing.Size(105, 24);
             this.label1.TabIndex = 1;
             this.label1.Text = "Input OTP :";
             // 
@@ -54,9 +56,10 @@
             // 
             this.btnCheck.AutoSize = true;
             this.btnCheck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCheck.Location = new System.Drawing.Point(197, 56);
+            this.btnCheck.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCheck.Location = new System.Drawing.Point(149, 67);
             this.btnCheck.Name = "btnCheck";
-            this.btnCheck.Size = new System.Drawing.Size(75, 25);
+            this.btnCheck.Size = new System.Drawing.Size(83, 36);
             this.btnCheck.TabIndex = 2;
             this.btnCheck.Text = "Periksa";
             this.btnCheck.UseVisualStyleBackColor = true;
@@ -65,10 +68,11 @@
             // lblError
             // 
             this.lblError.AutoSize = true;
+            this.lblError.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblError.ForeColor = System.Drawing.Color.Red;
-            this.lblError.Location = new System.Drawing.Point(15, 86);
+            this.lblError.Location = new System.Drawing.Point(12, 33);
             this.lblError.Name = "lblError";
-            this.lblError.Size = new System.Drawing.Size(35, 13);
+            this.lblError.Size = new System.Drawing.Size(60, 24);
             this.lblError.TabIndex = 3;
             this.lblError.Text = "label2";
             // 
@@ -76,7 +80,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 103);
+            this.ClientSize = new System.Drawing.Size(242, 137);
             this.Controls.Add(this.lblError);
             this.Controls.Add(this.btnCheck);
             this.Controls.Add(this.label1);

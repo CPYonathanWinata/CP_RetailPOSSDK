@@ -1,4 +1,4 @@
-/*
+﻿/*
 SAMPLE CODE NOTICE
 
 THIS SAMPLE CODE IS MADE AVAILABLE AS IS.  MICROSOFT MAKES NO WARRANTIES, WHETHER EXPRESS OR IMPLIED, 
@@ -29,7 +29,7 @@ using System.IO;
 using System.Text;
 using System.Security.Cryptography;
 using System.Collections.Generic;
-
+using System.Linq;
 using APIAccess;
 //using MySql.Data.MySqlClient;
 using System.ServiceProcess;
@@ -621,6 +621,9 @@ namespace Microsoft.Dynamics.Retail.Pos.ApplicationTriggers
 
 			//addEndPointBinding();
 			//addNodeTcpBinding();
+            
+            //cancel monthly blbli #DISABLE PRJ
+            //getThisMonthCancelledBlibli();
 		}
 
 
@@ -955,6 +958,171 @@ namespace Microsoft.Dynamics.Retail.Pos.ApplicationTriggers
 			// Save the modified configuration file
 			configXml.Save(configFilePath);
 		}
+
+        public void getThisMonthCancelledBlibli()
+        {
+            List<string> comments = new List<string>();
+            APIAccess.APIParameter.ApiResponseBliBliListOrder responseAPI;
+            string url = "";
+            APIAccess.APIParameter.Receiver receiverParm;
+            string functionName = "GetBlibliOrderAPI";
+            
+            bool foundSuspended = false;
+
+            SqlConnection connectionStore = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+            try
+            {
+                string queryString = @"SELECT TOP 1 TRANSACTIONID FROM CRT.SALESTRANSACTION";
+
+                using (SqlCommand command = new SqlCommand(queryString, connectionStore))
+                {
+                    if (connectionStore.State != ConnectionState.Open)
+                    {
+                        connectionStore.Open();
+                    }
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (!reader.HasRows)
+                        {
+
+                            foundSuspended = false;
+                        }
+                        else
+                        {
+                            foundSuspended = true;
+                        }
+
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+            finally
+            {
+                if (connectionStore.State != ConnectionState.Closed)
+                {
+                    connectionStore.Close();
+                }
+            }
+
+
+            if (foundSuspended == true)
+            {
+                APIAccess.APIAccessClass APIClass = new APIAccess.APIAccessClass();
+                url = APIClass.getURLAPIByFuncName(functionName);
+                if (url == "")
+                {
+                    throw new Exception(string.Format("Function not found : {0},\nPlease contact your ItSupport", functionName));
+                }
+                else
+                {
+                    responseAPI = APIAccess.APIFunction.BlibliOrderAPI.getBlibliOrderList(url, ApplicationSettings.Terminal.InventLocationId, DateTime.Now.ToString("yyyy-MM-dd 23:59:59"));
+
+                    if (responseAPI.error == false)
+                    {
+                        if (responseAPI.data != null && responseAPI.data.Any())
+                        {
+                            List<APIAccess.APIParameter.OrderData> order = responseAPI.data;
+
+                            string selectedStatus = "X";
+
+                            IEnumerable<APIAccess.APIParameter.OrderData> filteredOrder;
+
+
+                            filteredOrder = order.Where(x =>
+                                !string.IsNullOrEmpty(x.status) &&
+                                x.status.Equals(selectedStatus, StringComparison.OrdinalIgnoreCase));
+
+                            var groupedData = filteredOrder
+                                .GroupBy(item => item.order_id)
+                                .Select(group => new
+                                {
+                                    OrderID = group.Key,
+                                    Items = group.ToList()
+                                });
+
+                            foreach (var group in groupedData)
+                            {
+
+                                foreach (var item in group.Items)
+                                {
+
+                                    if (!string.IsNullOrEmpty(item.order_id))
+                                    {
+                                        comments.Add(item.order_id);
+                                    }
+                                }
+                            }
+                            if (comments != null)
+                            {
+                                CleanUpSuspendedTrans(comments);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show(responseAPI.message);
+                    }
+                }
+
+            }
+
+            
+        }
+
+
+        public void CleanUpSuspendedTrans(List<string> comments)
+        {
+            if (comments == null || comments.Count == 0)
+                return;
+
+            SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+
+            try
+            {
+                if (connection.State != ConnectionState.Open)
+                    connection.Open();
+
+                using (SqlCommand command = connection.CreateCommand())
+                {
+                    List<string> paramNames = new List<string>();
+
+                    for (int i = 0; i < comments.Count; i++)
+                    {
+                        string paramName = "@comment" + i;
+                        command.Parameters.AddWithValue(paramName, comments[i]);
+                        paramNames.Add(paramName);
+                    }
+
+                    command.CommandText =
+                            @"DELETE FROM [crt].[SALESTRANSACTION]
+                              WHERE COMMENT IN (" + string.Join(",", paramNames) + @")
+                                AND DELETEDDATETIME IS NULL
+                                AND CREATEDDATETIME >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
+                                AND CREATEDDATETIME < DATEADD(DAY, 1, CAST(GETDATE() AS DATE))";
+
+                    command.CommandTimeout = 0;
+
+                    int affectedRows = command.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(
+                    this.ToString(), ex);
+                throw;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                    connection.Close();
+            }
+        }
 		#endregion
 
 	}

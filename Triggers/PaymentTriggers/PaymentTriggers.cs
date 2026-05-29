@@ -47,6 +47,7 @@ using DE = Microsoft.Dynamics.Retail.Pos.Contracts.DataEntity.ICustomer;
 using LSRetailPosis.Settings;
 using System.Xml;
 using System.Drawing;
+using System.Xml.Linq;
 
 namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
 {
@@ -830,7 +831,59 @@ namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
             //throw new NotImplementedException();
         }
 
+        //check qty item of suspended transaction
+ 
+        public static decimal GetItemQtySuspendTrans(string itemId)
+        {
+            decimal totalQty = 0;
 
+            using (SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection)
+            {
+                if (connection.State != System.Data.ConnectionState.Open)
+                    connection.Open();
+
+                string query = @"
+                                SELECT TRANSACTIONDATA
+                                FROM [crt].[SALESTRANSACTION]
+                                WHERE COMMENT != ''
+                                  AND DELETEDDATETIME IS NULL
+                                  AND CREATEDDATETIME >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
+                                  AND CREATEDDATETIME < DATEADD(DAY, 1, CAST(GETDATE() AS DATE))
+                                ";
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    XNamespace ns = "http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Commerce.Runtime.DataModel";
+
+                    while (reader.Read())
+                    {
+                        if (reader["TRANSACTIONDATA"] == DBNull.Value)
+                            continue;
+
+                        try
+                        {
+                            byte[] data = (byte[])reader["TRANSACTIONDATA"];
+                            string xml = Encoding.UTF8.GetString(data);
+
+                            XDocument doc = XDocument.Parse(xml);
+
+                            var qty = doc.Descendants(ns + "SalesLine")
+                                         .Where(x => (string)x.Element(ns + "ItemId") == itemId)
+                                         .Sum(x => (decimal?)x.Element(ns + "Quantity") ?? 0);
+
+                            totalQty += qty;
+                        }
+                        catch
+                        {
+                            // skip kalau ada XML corrupt
+                        }
+                    }
+                }
+            }
+
+            return totalQty;
+        }
 
         /// <summary>
         /// Triggered before voiding of a payment.

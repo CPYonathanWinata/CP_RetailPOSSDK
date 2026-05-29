@@ -1224,9 +1224,11 @@ namespace Microsoft.Dynamics.Retail.Pos.StoreInventoryServices
                        
                         break;
                     case PrDocListType.TransferOrder:
+                        if (_isRetur == false) //add to exclude the TO when PO Retur form opened - Yonathan W
                         this.CallTransactionService(ref succeeded, ref returnMessage, ref retVal, "GetOpenTransferOrders", ApplicationSettings.Terminal.InventLocationId);//, "POS");
                         break;
                     case PrDocListType.PickingList:
+                        if (_isRetur == false)//add to exclude the PL when PO Retur form opened - Yonathan W
                         this.CallTransactionService(ref succeeded, ref returnMessage, ref retVal, "GetPickingLists", ApplicationSettings.Terminal.InventLocationId);
                         break;
                 }

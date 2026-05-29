@@ -382,47 +382,48 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
                     //getSiteWH(out  siteId);
                     //checkStockItem(itemIdMulti, qtyMulti, siteId);
                     getPrintLayout();
-                    CP_PrintLabel(xmlLayout);
+                    if (xmlLayout != "")
+                    {
+                        CP_PrintLabel(xmlLayout);
+                    }
+                    else
+                    {
+                        ShowMsgBoxInformation("Layout print label belum ada.\n- Hubungi IT Support untuk cek layout\n- Sync 1070/1090");
+                    }
+                    
                 }
             }           
             
         }
-        
+
         private void CP_PrintLabel(string xmlLayout)
         {
             string printerName = LSRetailPosis.Settings.HardwareProfiles.Printer.DeviceName;
-            int heightPaper = 170; //default 152
+            int heightPaper = 170;
             byte[] xmlBytes = new byte[xmlLayout.Length / 2];
             for (int i = 0; i < xmlLayout.Length; i += 2)
-            {
                 xmlBytes[i / 2] = Convert.ToByte(xmlLayout.Substring(i, 2), 16);
-            }
 
             string xmlString = Encoding.UTF8.GetString(xmlBytes);
-            xmlString.Replace("\0", string.Empty).Trim();
-            string cleanXML = Regex.Replace(xmlString, @"[^\u0020-\u007E\u000A\u000D]", string.Empty).Trim();
-           
+            string cleanXML = Regex.Replace(
+                xmlString.Replace("\0", string.Empty).Trim(),
+                @"[^\u0020-\u007E\u000A\u000D]", string.Empty).Trim();
 
             XDocument xmlDoc = XDocument.Parse(cleanXML);
             lines = xmlDoc.Descendants("line")
-                              .OrderBy(x => int.Parse((string)x.Attribute("nr") ?? "0"))
-                              .ToList();
-
-            Console.ReadLine();
+                .OrderBy(x => int.Parse((string)x.Attribute("nr") ?? "0"))
+                .ToList();
 
             PrintDocument p = new PrintDocument();
-            
 
             if (printerName.Contains("LX-310"))
             {
-                // Dot matrix (tractor feed)
-                p.DefaultPageSettings.PaperSize = new PaperSize("Custom", 320, heightPaper); // per item
+                p.DefaultPageSettings.PaperSize = new PaperSize("Custom", 320, heightPaper);
                 p.DefaultPageSettings.Margins = new Margins(0, 0, 0, 0);
             }
             else
             {
-                // Thermal printer (roll)
-                p.DefaultPageSettings.PaperSize = new PaperSize("Custom", 280, 10000); 
+                p.DefaultPageSettings.PaperSize = new PaperSize("Custom", 280, 10000);
                 p.DefaultPageSettings.Margins = new Margins(0, 0, 0, 0);
             }
 
@@ -439,25 +440,22 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
             {
                 if (row.IsNewRow) continue;
 
-                 
                 string sku = Convert.ToString(row.Cells[0].Value);
                 string barang = Convert.ToString(row.Cells[1].Value);
-                string unitId  = Convert.ToString(row.Cells[2].Value);
+                string unitId = Convert.ToString(row.Cells[2].Value);
                 string barcode = Convert.ToString(row.Cells[3].Value);
                 string priceStr = Convert.ToString(row.Cells[4].Value);
                 string discStr = Convert.ToString(row.Cells[5].Value);
                 string validFrom = Convert.ToString(row.Cells[6].Value);
                 string validTo = Convert.ToString(row.Cells[7].Value);
 
-                decimal price = 0;
-                decimal disc = 0;
-
+                decimal price = 0, disc = 0;
                 decimal.TryParse(priceStr, out price);
                 decimal.TryParse(discStr, out disc);
 
                 listItemId.Add(sku);
                 listItemName.Add(barang);
-                listItemBarcode.Add(barcode); 
+                listItemBarcode.Add(barcode);
                 listUnitId.Add(unitId);
                 listPrice.Add(price);
                 listDisc.Add(disc);
@@ -465,73 +463,35 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
                 listValidTo.Add(validTo);
             }
 
-
-
             p.PrintPage += p_PrintPage;
-                
-            //    (sender, e) =>
-            //{
-                
 
             try
             {
                 feedLines = false;
+                currentPrintIndex = 0; // always reset before printing
                 p.Print();
-                
-
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Print error: " + ex.Message);
             }
         }
-        
 
         private void p_PrintPage(object sender, PrintPageEventArgs e)
         {
+            string printerName = LSRetailPosis.Settings.HardwareProfiles.Printer.DeviceName;
+            bool isLX310 = printerName.Contains("LX-310");
+
             float y = 0;
             float leftMargin = 0;
-            float pageHeight = 144; // e.MarginBounds.Height; 
-            float lineHeight = 18;
-            int spaceHeader = 6;
-            int spaceLine = 8;
-            bool twoLines = false;
-            bool emptyLines = false;
+            float lineHeight = 18f;
+            // FIX: pageHeight must match the actual paper height set in PaperSize (170 units)
+            // Use a safe margin so the check fires before the very last pixel
+            float pageHeight = isLX310 ? 160f : float.MaxValue;
+            float baseXOffset = isLX310 ? 95f : 0f;
 
-            string printerName = LSRetailPosis.Settings.HardwareProfiles.Printer.DeviceName;
-
-            if (printerName == "EPSON LX-310 ESC/P")//"Microsoft XPS Document Writer")
-            {
-                spaceHeader = 95;
-                spaceLine = 95;
-            }
-            else //for thermal printer
-            {
-                spaceHeader = 0;
-                spaceLine = 0;
-            }
-            //"".PadLeft(spaceHeader) 
-            float baseXOffset = spaceHeader; 
-            //for (int i = 0; i < listItemId.Count; i++)
-            //{ 
             while (currentPrintIndex < listItemId.Count && feedLines == false)
             {
-
-                if (printerName.Contains("LX-310"))
-                {
-                    if (y + lineHeight >= pageHeight)
-                    { 
-                        e.HasMorePages = true;
-                        return;
-                    }
-                }
-
-
-                //PrintDocument p = new PrintDocument();
-                //p.DefaultPageSettings.PaperSize = new PaperSize("Custom", 280, 250);
-
-                //p.PrintPage += (sender, e) =>
-                //{
                 string itemId = listItemId[currentPrintIndex];
                 string itemName = listItemName[currentPrintIndex];
                 string barCode = listItemBarcode[currentPrintIndex];
@@ -541,159 +501,135 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
                 string validFrom = listValidFrom[currentPrintIndex];
                 string validTo = listValidTo[currentPrintIndex];
 
+                // Calculate how many lines this item needs before drawing
+                // so we can page-break cleanly for LX-310
+                float itemHeight = lines.Count * lineHeight + 18; // rough estimate
+                if (isLX310 && y + itemHeight > pageHeight)
+                {
+                    e.HasMorePages = true;
+                    return; // come back on next page, currentPrintIndex NOT incremented
+                }
+
                 foreach (var line in lines)
                 {
+                    // FIX: flags declared PER LINE, outside charpos loop
+                    bool twoLines = false;
+                    bool emptyLines = false;
+
                     var charposList = line.Elements("charpos")
                         .OrderBy(c => int.Parse((string)c.Attribute("nr") ?? "0"))
                         .ToList();
 
+                    // FIX: currentY captured ONCE per line, not reset per charpos
                     float currentY = y;
+
                     foreach (var cp in charposList)
                     {
-                        twoLines =  false;
-                        emptyLines = false;
                         int nr = int.Parse((string)cp.Attribute("nr") ?? "0");
                         string rawVal = (string)cp.Attribute("value") ?? "";
                         string value = rawVal;
                         int fontStyle = int.Parse((string)cp.Attribute("FontStyle") ?? "0");
-                        int fontSize = 9; //int.Parse((string)cp.Attribute("FontSize") ?? "9");
-                         
+                        int fontSize = 9;
 
-                        FontStyle fs = FontStyle.Regular;
-                        if (fontStyle == 1) fs = FontStyle.Bold;
+                        FontStyle fs = fontStyle == 1 ? FontStyle.Bold : FontStyle.Regular;
 
-
-                        //leftMargin = -3;
                         leftMargin = -3 + baseXOffset;
                         float x = leftMargin + nr * 2.2f;
-
-
 
                         switch (rawVal.ToUpperInvariant())
                         {
                             case "STORE":
+                                // FIX: removed stray "y = y - 10" that shifted everything
                                 value = "PRIMA FRESH MART";
                                 e.Graphics.DrawString(value, new Font("Calibri", 8, fs),
-                                  Brushes.Black, new PointF(x, currentY));
-                                y = y - 10;
+                                    Brushes.Black, new PointF(x, currentY));
                                 break;
-                            //case "UNITID":
-                            //    value = "Unit: " + unitId;
-                            //    e.Graphics.DrawString(value, new Font("Calibri", 8, fs),
-                            //      Brushes.Black, new PointF(x, currentY + 10));
-                            //    break;
+
                             case "ITEMID":
-                                value =  itemId;
+                                value = itemId;
                                 e.Graphics.DrawString(value, new Font("Calibri", 8, fs),
-                                  Brushes.Black, new PointF(x, currentY + 10));
+                                    Brushes.Black, new PointF(x, currentY));
                                 break;
+
                             case "BARCODE":
-                                //value = itemId;
                                 try
                                 {
-
-                                    using (Bitmap barcodeBmp = GenerateAnyBarcode(barCode, width: 200, height: 20)) // GenerateAnyBarcode
+                                    using (Bitmap barcodeBmp = GenerateAnyBarcode(barCode, width: 200, height: 20))
                                     {
-
-                                        float barcodeX = leftMargin;// +(280 - barcodeBmp.Width) / 2;
-                                        e.Graphics.DrawImage(barcodeBmp, barcodeX, currentY);
+                                        e.Graphics.DrawImage(barcodeBmp, leftMargin, currentY);
                                     }
-                                    currentY = currentY + 20;
-                                    e.Graphics.DrawString(barCode, new Font("Calibri", 9), Brushes.Black, new PointF(x + 60, currentY));
-                                    //y = y = 4;
-
+                                    // Draw barcode number just below the image
+                                    e.Graphics.DrawString(barCode, new Font("Calibri", 9),
+                                        Brushes.Black, new PointF(x + 60, currentY + 20));
                                 }
-                                catch (Exception ex)
+                                catch
                                 {
-
-                                    e.Graphics.DrawString(itemId, new Font("Calibri", 9), Brushes.Black, new PointF(x, currentY));
-
+                                    e.Graphics.DrawString(itemId, new Font("Calibri", 9),
+                                        Brushes.Black, new PointF(x, currentY));
                                 }
+                                // Barcode row is tall — treat as twoLines so y advances enough
+                                twoLines = true;
                                 break;
-                            //case "ITEMNAME":
-                            //  //  value = itemName;
-                            //  //  e.Graphics.DrawString(value, new Font("Arial Narrow", 10, FontStyle.Bold),
-                            //  //Brushes.Black, new PointF(x, currentY + 5));
-                            //    value = itemName;
 
-                            //    using (Font f = new Font("Arial Narrow", 10, FontStyle.Bold))
-                            //    {
-                            //        // Lebar area tulisan (misal 200 px), sesuaikan sendiri
-                            //        float maxWidth = 200f;
-
-                            //        RectangleF rect = new RectangleF(x, currentY + 5, maxWidth, 100f); 
-                            //        // 100f itu tinggi maksimal, boleh dibesarkan
-
-                            //        e.Graphics.DrawString(value, f, Brushes.Black, rect);
-                            //    }
-                            //    break;
                             case "ITEMNAME":
                                 value = itemName;
-
                                 using (Font f = new Font("Arial Narrow", 10, FontStyle.Bold))
                                 {
-                                    float lineHeight2 = f.GetHeight(e.Graphics);
+                                    float lh2 = f.GetHeight(e.Graphics);
                                     float padding = 5f;
 
                                     if (value.Length <= 20)
                                     {
-                                        e.Graphics.DrawString(value, f, Brushes.Black, new PointF(x, currentY + padding));
-                                        currentY += (int)(lineHeight2 + padding);
+                                        e.Graphics.DrawString(value, f, Brushes.Black,
+                                            new PointF(x, currentY + padding));
                                     }
                                     else
                                     {
-                                        string line1 = value.Substring(0, 24);
-                                        string line2 = value.Substring(24);
+                                        // FIX: guard against itemName shorter than 24 chars
+                                        int splitAt = Math.Min(24, value.Length);
+                                        string line1 = value.Substring(0, splitAt);
+                                        string line2 = value.Length > splitAt
+                                            ? value.Substring(splitAt) : string.Empty;
 
-                                        e.Graphics.DrawString(line1, f, Brushes.Black, new PointF(x, currentY + padding));
-                                        currentY += (int)lineHeight2;
+                                        e.Graphics.DrawString(line1, f, Brushes.Black,
+                                            new PointF(x, currentY + padding));
 
-                                        e.Graphics.DrawString(line2, f, Brushes.Black, new PointF(x, currentY + padding));
-                                        currentY += (int)(lineHeight2 + padding);
-                                        
+                                        if (!string.IsNullOrEmpty(line2))
+                                            e.Graphics.DrawString(line2, f, Brushes.Black,
+                                                new PointF(x, currentY + padding + lh2));
                                     }
                                     twoLines = true;
                                 }
-
                                 break;
 
                             case "PROMOPERIOD":
-                                //value = value;
-
-                                //if (!string.IsNullOrEmpty(validFrom))
-                                //{
-                                //    value = "Promo : " + validFrom + "-" + validTo;
-                                //}
                                 if (!string.IsNullOrEmpty(validFrom))
                                 {
-                                    DateTime fromDate = DateTime.Parse(validFrom);
-                                    DateTime toDate = DateTime.Parse(validTo);
+                                    DateTime fromDate = DateTime.ParseExact(validFrom, "dd/MM/yyyy",
+                                        CultureInfo.InvariantCulture);
+                                    DateTime toDate = DateTime.ParseExact(validTo, "dd/MM/yyyy",
+                                        CultureInfo.InvariantCulture);
 
                                     var indo = new System.Globalization.CultureInfo("id-ID");
+                                    string vFrom = fromDate.ToString("dd MMM", indo);
+                                    string vTo = toDate.ToString("dd MMM yyyy", indo);
 
-                                    validFrom = fromDate.ToString("dd MMM", indo);
-                                    validTo = toDate.ToString("dd MMM yyyy", indo);
-
-                                    value = "Promo : " + validFrom + " - " + validTo;
+                                    value = "Promo : " + vFrom + " - " + vTo;
                                     e.Graphics.DrawString(value, new Font("Arial", 8, fs),
-                              Brushes.Black, new PointF(x, currentY));
+                                        Brushes.Black, new PointF(x, currentY));
                                 }
                                 else
                                 {
-                                    if (printerName.Contains("LX-310"))
-                                    {
-                                        value = " ";
-                                        e.Graphics.DrawString(value, new Font("Arial", 8, fs),
-                                  Brushes.Black, new PointF(x, currentY));
-                                    }
-
+                                    // LX-310: draw a space so tractor feed still advances
+                                    if (isLX310)
+                                        e.Graphics.DrawString(" ", new Font("Arial", 8, fs),
+                                            Brushes.Black, new PointF(x, currentY));
 
                                     emptyLines = true;
                                 }
-                                
                                 break;
+
                             case "PRICE":
-                                //value = "Rp. " + price.ToString("N0");
                                 if (disc > 0 && disc < price)
                                 {
                                     using (Bitmap bmp = new Bitmap(150, 25))
@@ -710,149 +646,549 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
                                 }
                                 else
                                 {
-                                    if (printerName.Contains("LX-310"))
-                                    {    value = " ";
-                                        e.Graphics.DrawString(value, new Font("Arial", 1, fs),
-                                      Brushes.Black, new PointF(x, currentY));
-                                    }
+                                    if (isLX310)
+                                        e.Graphics.DrawString(" ", new Font("Arial", 1, fs),
+                                            Brushes.Black, new PointF(x, currentY));
 
-                                  //  value = "-";
-                                  //  e.Graphics.DrawString(value, new Font("Arial", 1, fs),
-                                  //Brushes.White, new PointF(x, currentY));
                                     emptyLines = true;
                                 }
-
                                 break;
+
                             case "DISCOUNT":
                             case "DISC":
-                                //value = (disc > 0 && disc < price) ? disc.ToString("N0") : "";
                                 if (disc > 0 && disc < price)
                                 {
-                                    e.Graphics.DrawString("Rp. " + disc.ToString("N0") + "/" + unitId, new Font("Arial Black", 12, fs),
-                                    Brushes.Black, new PointF(x + 10, currentY));
+                                    e.Graphics.DrawString(
+                                        "Rp. " + disc.ToString("N0") + "/" + unitId,
+                                        new Font("Arial Black", 12, fs),
+                                        Brushes.Black, new PointF(x + 10, currentY));
                                 }
                                 else if (disc == 0)
                                 {
-                                    e.Graphics.DrawString("Rp. " + price.ToString("N0") + "/" + unitId, new Font("Arial Black", 12, fs),
+                                    e.Graphics.DrawString(
+                                        "Rp. " + price.ToString("N0") + "/" + unitId,
+                                        new Font("Arial Black", 12, fs),
                                         Brushes.Black, new PointF(x, currentY));
-
                                 }
                                 break;
+
                             case "PRINTED":
                                 value = "Printed : " + DateTime.Now.ToString("dd/MM/yyyy HH:mm");
-                                e.Graphics.DrawString(value, new Font("Calibri", 8, FontStyle.Italic | FontStyle.Bold),
-                              Brushes.Black, new PointF(x, currentY));
+                                e.Graphics.DrawString(value,
+                                    new Font("Calibri", 8, FontStyle.Italic | FontStyle.Bold),
+                                    Brushes.Black, new PointF(x, currentY));
                                 break;
+
                             default:
                                 e.Graphics.DrawString(value, new Font("Calibri", fontSize, fs),
-                               Brushes.Black, new PointF(x, currentY));
+                                    Brushes.Black, new PointF(x, currentY));
                                 break;
                         }
+                    } // end charpos loop
 
+                    // FIX: advance y ONCE per line using the flags set during charpos loop
+                    if (twoLines)
+                        y += lineHeight + 18;
+                    else if (emptyLines)
+                        y += 0; // no space wasted for skipped optional rows (thermal)
+                    else
+                        y += lineHeight;
 
-                    }
-                    if (printerName.Contains("LX-310"))
-                    {
-                        if (twoLines == true)
-                        { y += lineHeight + 18; } // line spacing}
-                        else 
-                        {
+                } // end line loop
 
-                            y += lineHeight;
-                        }
-                    }
-                    else //we assuming it's thermal printer
-                    {
-                        if (twoLines == true)
-                        { y += lineHeight + 18; } // line spacing}
-                        else if (emptyLines == true)
-                        {
-                            y += lineHeight + 18;
-                        }
-                        else
-                        { y += lineHeight; }// line spacing}
-                    }
-
-                  
-                    
-
-
-                }
-
-                //};
-
-                //p.EndPrint += (s, e) =>
-                //{
-                //    string printerName = p.PrinterSettings.PrinterName;
-
-                //    // hilangkan extra feed
-                //    Thread.Sleep(200);
-                //    RawPrinterHelper.SendStringToPrinter(printerName, "\x1D\x56\x42\x00"); // cut tanpa feed
-                //};
-
-                //try
-                //{
-
-                //    p.Print();
-                //}
-                //catch (Exception ex)
-                //{
-                //    Console.WriteLine("Print error: " + ex.Message);
-                //}
-                //RawPrinterHelper.SendStringToPrinter(p.PrinterSettings.PrinterName, "\x1B\x64\x02"); // feed
-                //    RawPrinterHelper.SendStringToPrinter(p.PrinterSettings.PrinterName, "\x1D\x56\x01"); // partial cut
-                //y += 8;
-                //e.Graphics.DrawString("------------------------------------------",
-                //    new Font("Consolas", 8), Brushes.Black, new PointF(leftMargin, y));
-                //y += 20;
-                //if (printerName.Contains("LX-310") && currentPrintIndex ==  listItemId.Count)
-                //{
-                //    // reset y to the last safe drawing position before page end
-                //    if (y + (lineHeight * 10) > pageHeight)
-                //        y = pageHeight - (lineHeight * 10);
-
-                //    y += lineHeight * 10;
-
-                //    e.Graphics.DrawString("LINE", new Font("Calibri", 9, FontStyle.Regular),
-                //              Brushes.Black, new PointF(3, y));
-                //}
-
-
-                
                 currentPrintIndex++;
 
-            }
+            } // end while
 
-            //This won't print unless for the last time e.hasmorepage and feedlines == true
-            if (feedLines == true)
+            // Feed extra lines at the end for LX-310 physical paper advance
+            if (feedLines && isLX310)
             {
-                if (printerName.Contains("LX-310"))
-                {
-              
-                    if (y + (lineHeight * 10) > pageHeight)
-                        y = pageHeight - (lineHeight * 10);
-
-                    y += lineHeight * 15;
-
-                    e.Graphics.DrawString("--", new Font("Calibri", 8, FontStyle.Regular),
-                        Brushes.Black, new PointF(3, y));
-                }
+                y += lineHeight * 15;
+                e.Graphics.DrawString("--", new Font("Calibri", 8, FontStyle.Regular),
+                    Brushes.Black, new PointF(3, y));
             }
 
-          
-            //this won't trigger twice, cause of feedlines becoming true after this.
-            if (currentPrintIndex >= listItemId.Count && feedLines == false)
+            // Trigger one final page for the feed lines pass
+            if (currentPrintIndex >= listItemId.Count && !feedLines)
             {
                 feedLines = true;
                 e.HasMorePages = true;
                 return;
             }
 
-
             e.HasMorePages = false;
-            currentPrintIndex = 0;  
-            //};
+            currentPrintIndex = 0;
         }
+
+        //private void CP_PrintLabel(string xmlLayout)
+        //{
+        //    string printerName = LSRetailPosis.Settings.HardwareProfiles.Printer.DeviceName;
+        //    int heightPaper = 170; //default 152
+        //    byte[] xmlBytes = new byte[xmlLayout.Length / 2];
+        //    for (int i = 0; i < xmlLayout.Length; i += 2)
+        //    {
+        //        xmlBytes[i / 2] = Convert.ToByte(xmlLayout.Substring(i, 2), 16);
+        //    }
+
+        //    string xmlString = Encoding.UTF8.GetString(xmlBytes);
+        //    xmlString.Replace("\0", string.Empty).Trim();
+        //    string cleanXML = Regex.Replace(xmlString, @"[^\u0020-\u007E\u000A\u000D]", string.Empty).Trim();
+           
+
+        //    XDocument xmlDoc = XDocument.Parse(cleanXML);
+        //    lines = xmlDoc.Descendants("line")
+        //                      .OrderBy(x => int.Parse((string)x.Attribute("nr") ?? "0"))
+        //                      .ToList();
+
+        //    Console.ReadLine();
+
+        //    PrintDocument p = new PrintDocument();
+            
+
+        //    if (printerName.Contains("LX-310"))
+        //    {
+        //        // Dot matrix (tractor feed)
+        //        p.DefaultPageSettings.PaperSize = new PaperSize("Custom", 320, heightPaper); // per item
+        //        p.DefaultPageSettings.Margins = new Margins(0, 0, 0, 0);
+        //    }
+        //    else
+        //    {
+        //        // Thermal printer (roll)
+        //        p.DefaultPageSettings.PaperSize = new PaperSize("Custom", 280, 10000); 
+        //        p.DefaultPageSettings.Margins = new Margins(0, 0, 0, 0);
+        //    }
+
+        //    listItemId.Clear();
+        //    listItemName.Clear();
+        //    listItemBarcode.Clear();
+        //    listUnitId.Clear();
+        //    listPrice.Clear();
+        //    listDisc.Clear();
+        //    listValidFrom.Clear();
+        //    listValidTo.Clear();
+
+        //    foreach (DataGridViewRow row in dataGridView1.Rows)
+        //    {
+        //        if (row.IsNewRow) continue;
+
+                 
+        //        string sku = Convert.ToString(row.Cells[0].Value);
+        //        string barang = Convert.ToString(row.Cells[1].Value);
+        //        string unitId  = Convert.ToString(row.Cells[2].Value);
+        //        string barcode = Convert.ToString(row.Cells[3].Value);
+        //        string priceStr = Convert.ToString(row.Cells[4].Value);
+        //        string discStr = Convert.ToString(row.Cells[5].Value);
+        //        string validFrom = Convert.ToString(row.Cells[6].Value);
+        //        string validTo = Convert.ToString(row.Cells[7].Value);
+
+        //        decimal price = 0;
+        //        decimal disc = 0;
+
+        //        decimal.TryParse(priceStr, out price);
+        //        decimal.TryParse(discStr, out disc);
+
+        //        listItemId.Add(sku);
+        //        listItemName.Add(barang);
+        //        listItemBarcode.Add(barcode); 
+        //        listUnitId.Add(unitId);
+        //        listPrice.Add(price);
+        //        listDisc.Add(disc);
+        //        listValidFrom.Add(validFrom);
+        //        listValidTo.Add(validTo);
+        //    }
+
+
+
+        //    p.PrintPage += p_PrintPage;
+                
+        //    //    (sender, e) =>
+        //    //{
+                
+
+        //    try
+        //    {
+        //        feedLines = false;
+        //        p.Print();
+                
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine("Print error: " + ex.Message);
+        //    }
+        //}
+        
+
+        //private void p_PrintPage(object sender, PrintPageEventArgs e)
+        //{
+        //    float y = 0;
+        //    float leftMargin = 0;
+        //    float pageHeight = 144; // e.MarginBounds.Height; 
+        //    float lineHeight = 18;
+        //    int spaceHeader = 6;
+        //    int spaceLine = 8;
+        //    bool twoLines = false;
+        //    bool emptyLines = false;
+
+        //    string printerName = LSRetailPosis.Settings.HardwareProfiles.Printer.DeviceName;
+
+        //    if (printerName == "EPSON LX-310 ESC/P")//"Microsoft XPS Document Writer")
+        //    {
+        //        spaceHeader = 95;
+        //        spaceLine = 95;
+        //    }
+        //    else //for thermal printer
+        //    {
+        //        spaceHeader = 0;
+        //        spaceLine = 0;
+        //    }
+        //    //"".PadLeft(spaceHeader) 
+        //    float baseXOffset = spaceHeader; 
+        //    //for (int i = 0; i < listItemId.Count; i++)
+        //    //{ 
+        //    while (currentPrintIndex < listItemId.Count && feedLines == false)
+        //    {
+
+        //        if (printerName.Contains("LX-310"))
+        //        {
+        //            if (y + lineHeight >= pageHeight)
+        //            { 
+        //                e.HasMorePages = true;
+        //                return;
+        //            }
+        //        }
+
+
+        //        //PrintDocument p = new PrintDocument();
+        //        //p.DefaultPageSettings.PaperSize = new PaperSize("Custom", 280, 250);
+
+        //        //p.PrintPage += (sender, e) =>
+        //        //{
+        //        string itemId = listItemId[currentPrintIndex];
+        //        string itemName = listItemName[currentPrintIndex];
+        //        string barCode = listItemBarcode[currentPrintIndex];
+        //        string unitId = listUnitId[currentPrintIndex];
+        //        decimal price = listPrice[currentPrintIndex];
+        //        decimal disc = listDisc[currentPrintIndex];
+        //        string validFrom = listValidFrom[currentPrintIndex];
+        //        string validTo = listValidTo[currentPrintIndex];
+
+        //        foreach (var line in lines)
+        //        {
+        //            var charposList = line.Elements("charpos")
+        //                .OrderBy(c => int.Parse((string)c.Attribute("nr") ?? "0"))
+        //                .ToList();
+
+        //            float currentY = y;
+        //            foreach (var cp in charposList)
+        //            {
+        //                twoLines =  false;
+        //                emptyLines = false;
+        //                int nr = int.Parse((string)cp.Attribute("nr") ?? "0");
+        //                string rawVal = (string)cp.Attribute("value") ?? "";
+        //                string value = rawVal;
+        //                int fontStyle = int.Parse((string)cp.Attribute("FontStyle") ?? "0");
+        //                int fontSize = 9; //int.Parse((string)cp.Attribute("FontSize") ?? "9");
+                         
+
+        //                FontStyle fs = FontStyle.Regular;
+        //                if (fontStyle == 1) fs = FontStyle.Bold;
+
+
+        //                //leftMargin = -3;
+        //                leftMargin = -3 + baseXOffset;
+        //                float x = leftMargin + nr * 2.2f;
+
+
+
+        //                switch (rawVal.ToUpperInvariant())
+        //                {
+        //                    case "STORE":
+        //                        value = "PRIMA FRESH MART";
+        //                        e.Graphics.DrawString(value, new Font("Calibri", 8, fs),
+        //                          Brushes.Black, new PointF(x, currentY));
+        //                        y = y - 10;
+        //                        break;
+        //                    //case "UNITID":
+        //                    //    value = "Unit: " + unitId;
+        //                    //    e.Graphics.DrawString(value, new Font("Calibri", 8, fs),
+        //                    //      Brushes.Black, new PointF(x, currentY + 10));
+        //                    //    break;
+        //                    case "ITEMID":
+        //                        value =  itemId;
+        //                        e.Graphics.DrawString(value, new Font("Calibri", 8, fs),
+        //                          Brushes.Black, new PointF(x, currentY + 10));
+        //                        break;
+        //                    case "BARCODE":
+        //                        //value = itemId;
+        //                        try
+        //                        {
+
+        //                            using (Bitmap barcodeBmp = GenerateAnyBarcode(barCode, width: 200, height: 20)) // GenerateAnyBarcode
+        //                            {
+
+        //                                float barcodeX = leftMargin;// +(280 - barcodeBmp.Width) / 2;
+        //                                e.Graphics.DrawImage(barcodeBmp, barcodeX, currentY);
+        //                            }
+        //                            currentY = currentY + 20;
+        //                            e.Graphics.DrawString(barCode, new Font("Calibri", 9), Brushes.Black, new PointF(x + 60, currentY));
+        //                            //y = y = 4;
+
+        //                        }
+        //                        catch (Exception ex)
+        //                        {
+
+        //                            e.Graphics.DrawString(itemId, new Font("Calibri", 9), Brushes.Black, new PointF(x, currentY));
+
+        //                        }
+        //                        break;
+        //                    //case "ITEMNAME":
+        //                    //  //  value = itemName;
+        //                    //  //  e.Graphics.DrawString(value, new Font("Arial Narrow", 10, FontStyle.Bold),
+        //                    //  //Brushes.Black, new PointF(x, currentY + 5));
+        //                    //    value = itemName;
+
+        //                    //    using (Font f = new Font("Arial Narrow", 10, FontStyle.Bold))
+        //                    //    {
+        //                    //        // Lebar area tulisan (misal 200 px), sesuaikan sendiri
+        //                    //        float maxWidth = 200f;
+
+        //                    //        RectangleF rect = new RectangleF(x, currentY + 5, maxWidth, 100f); 
+        //                    //        // 100f itu tinggi maksimal, boleh dibesarkan
+
+        //                    //        e.Graphics.DrawString(value, f, Brushes.Black, rect);
+        //                    //    }
+        //                    //    break;
+        //                    case "ITEMNAME":
+        //                        value = itemName;
+
+        //                        using (Font f = new Font("Arial Narrow", 10, FontStyle.Bold))
+        //                        {
+        //                            float lineHeight2 = f.GetHeight(e.Graphics);
+        //                            float padding = 5f;
+
+        //                            if (value.Length <= 20)
+        //                            {
+        //                                e.Graphics.DrawString(value, f, Brushes.Black, new PointF(x, currentY + padding));
+        //                                currentY += (int)(lineHeight2 + padding);
+        //                            }
+        //                            else
+        //                            {
+        //                                string line1 = value.Substring(0, 24);
+        //                                string line2 = value.Substring(24);
+
+        //                                e.Graphics.DrawString(line1, f, Brushes.Black, new PointF(x, currentY + padding));
+        //                                currentY += (int)lineHeight2;
+
+        //                                e.Graphics.DrawString(line2, f, Brushes.Black, new PointF(x, currentY + padding));
+        //                                currentY += (int)(lineHeight2 + padding);
+                                        
+        //                            }
+        //                            twoLines = true;
+        //                        }
+
+        //                        break;
+
+        //                    case "PROMOPERIOD":
+        //                        //value = value;
+
+        //                        //if (!string.IsNullOrEmpty(validFrom))
+        //                        //{
+        //                        //    value = "Promo : " + validFrom + "-" + validTo;
+        //                        //}
+        //                        if (!string.IsNullOrEmpty(validFrom))
+        //                        {
+                                    
+        //                            DateTime fromDate = DateTime.ParseExact(validFrom, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+        //                            DateTime toDate = DateTime.ParseExact(validTo, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+
+        //                            //DateTime fromDate = DateTime.Parse(validFrom);
+        //                            //DateTime toDate = DateTime.Parse(validTo);
+
+        //                            var indo = new System.Globalization.CultureInfo("id-ID");
+
+        //                            validFrom = fromDate.ToString("dd MMM", indo);
+        //                            validTo = toDate.ToString("dd MMM yyyy", indo);
+
+        //                            value = "Promo : " + validFrom + " - " + validTo;
+        //                            e.Graphics.DrawString(value, new Font("Arial", 8, fs),
+        //                      Brushes.Black, new PointF(x, currentY));
+        //                        }
+        //                        else
+        //                        {
+        //                            if (printerName.Contains("LX-310"))
+        //                            {
+        //                                value = " ";
+        //                                e.Graphics.DrawString(value, new Font("Arial", 8, fs),
+        //                          Brushes.Black, new PointF(x, currentY));
+        //                            }
+
+
+        //                            emptyLines = true;
+        //                        }
+                                
+        //                        break;
+        //                    case "PRICE":
+        //                        //value = "Rp. " + price.ToString("N0");
+        //                        if (disc > 0 && disc < price)
+        //                        {
+        //                            using (Bitmap bmp = new Bitmap(150, 25))
+        //                            using (Graphics g = Graphics.FromImage(bmp))
+        //                            {
+        //                                g.Clear(Color.White);
+        //                                Font f = new Font("Calibri", 9);
+        //                                string oldPrice = price.ToString("N0");
+        //                                SizeF ts = g.MeasureString(oldPrice, f);
+        //                                g.DrawString("Rp. " + oldPrice + "/" + unitId, f, Brushes.Black, 0, 0);
+        //                                g.DrawLine(Pens.Black, 0, ts.Height / 2, ts.Width, ts.Height / 2);
+        //                                e.Graphics.DrawImage(bmp, x + 12, currentY + 5);
+        //                            }
+        //                        }
+        //                        else
+        //                        {
+        //                            if (printerName.Contains("LX-310"))
+        //                            {    value = " ";
+        //                                e.Graphics.DrawString(value, new Font("Arial", 1, fs),
+        //                              Brushes.Black, new PointF(x, currentY));
+        //                            }
+
+        //                          //  value = "-";
+        //                          //  e.Graphics.DrawString(value, new Font("Arial", 1, fs),
+        //                          //Brushes.White, new PointF(x, currentY));
+        //                            emptyLines = true;
+        //                        }
+
+        //                        break;
+        //                    case "DISCOUNT":
+        //                    case "DISC":
+        //                        //value = (disc > 0 && disc < price) ? disc.ToString("N0") : "";
+        //                        if (disc > 0 && disc < price)
+        //                        {
+        //                            e.Graphics.DrawString("Rp. " + disc.ToString("N0") + "/" + unitId, new Font("Arial Black", 12, fs),
+        //                            Brushes.Black, new PointF(x + 10, currentY));
+        //                        }
+        //                        else if (disc == 0)
+        //                        {
+        //                            e.Graphics.DrawString("Rp. " + price.ToString("N0") + "/" + unitId, new Font("Arial Black", 12, fs),
+        //                                Brushes.Black, new PointF(x, currentY));
+
+        //                        }
+        //                        break;
+        //                    case "PRINTED":
+        //                        value = "Printed : " + DateTime.Now.ToString("dd/MM/yyyy HH:mm");
+        //                        e.Graphics.DrawString(value, new Font("Calibri", 8, FontStyle.Italic | FontStyle.Bold),
+        //                      Brushes.Black, new PointF(x, currentY));
+        //                        break;
+        //                    default:
+        //                        e.Graphics.DrawString(value, new Font("Calibri", fontSize, fs),
+        //                       Brushes.Black, new PointF(x, currentY));
+        //                        break;
+        //                }
+
+
+        //            }
+        //            if (printerName.Contains("LX-310"))
+        //            {
+        //                if (twoLines == true)
+        //                { y += lineHeight + 18; } // line spacing}
+        //                else 
+        //                {
+
+        //                    y += lineHeight;
+        //                }
+        //            }
+        //            else //we assuming it's thermal printer
+        //            {
+        //                if (twoLines == true)
+        //                { y += lineHeight + 18; } // line spacing}
+        //                else if (emptyLines == true)
+        //                {
+        //                    y += lineHeight + 18;
+        //                }
+        //                else
+        //                { y += lineHeight; }// line spacing}
+        //            }
+
+                  
+                    
+
+
+        //        }
+
+        //        //};
+
+        //        //p.EndPrint += (s, e) =>
+        //        //{
+        //        //    string printerName = p.PrinterSettings.PrinterName;
+
+        //        //    // hilangkan extra feed
+        //        //    Thread.Sleep(200);
+        //        //    RawPrinterHelper.SendStringToPrinter(printerName, "\x1D\x56\x42\x00"); // cut tanpa feed
+        //        //};
+
+        //        //try
+        //        //{
+
+        //        //    p.Print();
+        //        //}
+        //        //catch (Exception ex)
+        //        //{
+        //        //    Console.WriteLine("Print error: " + ex.Message);
+        //        //}
+        //        //RawPrinterHelper.SendStringToPrinter(p.PrinterSettings.PrinterName, "\x1B\x64\x02"); // feed
+        //        //    RawPrinterHelper.SendStringToPrinter(p.PrinterSettings.PrinterName, "\x1D\x56\x01"); // partial cut
+        //        //y += 8;
+        //        //e.Graphics.DrawString("------------------------------------------",
+        //        //    new Font("Consolas", 8), Brushes.Black, new PointF(leftMargin, y));
+        //        //y += 20;
+        //        //if (printerName.Contains("LX-310") && currentPrintIndex ==  listItemId.Count)
+        //        //{
+        //        //    // reset y to the last safe drawing position before page end
+        //        //    if (y + (lineHeight * 10) > pageHeight)
+        //        //        y = pageHeight - (lineHeight * 10);
+
+        //        //    y += lineHeight * 10;
+
+        //        //    e.Graphics.DrawString("LINE", new Font("Calibri", 9, FontStyle.Regular),
+        //        //              Brushes.Black, new PointF(3, y));
+        //        //}
+
+
+                
+        //        currentPrintIndex++;
+
+        //    }
+
+        //    //This won't print unless for the last time e.hasmorepage and feedlines == true
+        //    if (feedLines == true)
+        //    {
+        //        if (printerName.Contains("LX-310"))
+        //        {
+              
+        //            if (y + (lineHeight * 10) > pageHeight)
+        //                y = pageHeight - (lineHeight * 10);
+
+        //            y += lineHeight * 15;
+
+        //            e.Graphics.DrawString("--", new Font("Calibri", 8, FontStyle.Regular),
+        //                Brushes.Black, new PointF(3, y));
+        //        }
+        //    }
+
+          
+        //    //this won't trigger twice, cause of feedlines becoming true after this.
+        //    if (currentPrintIndex >= listItemId.Count && feedLines == false)
+        //    {
+        //        feedLines = true;
+        //        e.HasMorePages = true;
+        //        return;
+        //    }
+
+
+        //    e.HasMorePages = false;
+        //    currentPrintIndex = 0;  
+        //    //};
+        //}
 
 
         /*private void p_PrintPage(object sender, PrintPageEventArgs e)

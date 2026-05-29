@@ -8,6 +8,24 @@ namespace APIAccess
 {
     public class APIParameter
     {
+
+        //public class parmRequestAddTransaction
+        //{
+        //    public string ITEMID { get; set; }
+        //    public string QTY { get; set; }
+        //    public string UNITID { get; set; }
+        //    public string DATAAREAID { get; set; }
+        //    public string WAREHOUSE { get; set; }
+        //    public string TYPE { get; set; }
+        //    public string REFERENCESNUMBER { get; set; }
+        //    public string RETAILVARIANTID { get; set; }
+        //}
+
+        //public class parmMultiRequestAddTrans
+        //{
+        //    public List<parmRequestAddTransaction> parmRequest { get; set; }
+        //}
+
         public class parmRequestStockSO
         {
             public string ITEMID { get; set; }

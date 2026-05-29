@@ -15,11 +15,19 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch.CP_
     {
         public bool IsValidOTP { get; set; }
         string poNumber = "";
+        OtpNumpad otpNumpad1;
         public CP_OTPForm(string _poNumber)
         {
             InitializeComponent();
             poNumber = _poNumber;
             lblError.Text = "";
+            //otpNumpad1.TargetTextBox = txtCodeOTP;
+
+            //// optional: biar user gak bisa ngetik manual
+            //txtCodeOTP.ReadOnly = true;
+
+            //// optional: limit panjang OTP
+            //txtCodeOTP.MaxLength = 6;
         }
 
         private void btnCheck_Click(object sender, EventArgs e)
@@ -28,8 +36,8 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch.CP_
             //get OTP from AX
             ReadOnlyCollection<object> containerArray;
             containerArray = PurchaseOrderReceiving.InternalApplication.TransactionServices.InvokeExtension("getOtpPO", poNumber);
-            string otpPO = containerArray[3].ToString();;
-            if (txtCodeOTP.Text == otpPO) 
+            string otpPO = containerArray[3].ToString(); ;
+            if (txtCodeOTP.Text == otpPO)
             {
                 IsValidOTP = true;
                 this.DialogResult = DialogResult.OK;
@@ -40,5 +48,31 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch.CP_
                 lblError.Text = "OTP salah";
             }
         }
+
+        //public bool IsValidOTP { get; set; }
+        //string poNumber = "";
+        //OtpNumpad otpNumpad1;
+
+        //public CP_OTPForm(string _poNumber)
+        //{
+        //    InitializeComponent();
+
+        //    poNumber = _poNumber;
+        //    lblError.Text = "";
+ 
+        //    otpNumpad1 = new OtpNumpad();
+
+       
+        //    otpNumpad1.TargetTextBox = txtCodeOTP;
+
+            
+        //    txtCodeOTP.ReadOnly = true;
+        //    txtCodeOTP.MaxLength = 6;
+ 
+        //    otpNumpad1.Top = txtCodeOTP.Bottom + 10;
+        //    otpNumpad1.Left = txtCodeOTP.Left;
+
+        //    this.Controls.Add(otpNumpad1);
+        //}
     }
 }

@@ -114,7 +114,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SuspendTriggers
         {
             LSRetailPosis.ApplicationLog.Log("SuspendTriggers.PostRecallTransaction", "After the recall of a transaction from suspension...", LSRetailPosis.LogTraceLevel.Trace);
 
-            //send posTransaction
+            //send posTransaction BLIBLI 2026 - Yonathan
             APIAccess.APIAccessClass.posTransaction = posTransaction;
         }
 

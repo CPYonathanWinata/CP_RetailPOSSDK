@@ -220,6 +220,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch
         {
             this.btnReturnTransaction.Visible = false;
             this.btnInvoice.Visible = false;
+            //this.btnReceipt.Visible = false;
 
         }
         private void SetupButtonVisibility()
@@ -1749,7 +1750,9 @@ namespace Microsoft.Dynamics.Retail.Pos.Dialog.WinFormsTouch
                 if (transaction != null)
                 {
                     ITransactionSystem transSys = this.Application.BusinessLogic.TransactionSystem;
-                    transSys.PrintTransaction(transaction, true, true);
+                    //transSys.PrintTransaction(transaction, true, true); //prevent open journal 19052026 - yonathan
+
+                    Application.Services.Printing.PrintReceipt(FormType.Receipt, transaction, true);
                 }
             }
             catch (Exception ex)

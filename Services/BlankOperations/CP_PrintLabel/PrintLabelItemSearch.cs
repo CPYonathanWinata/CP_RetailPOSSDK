@@ -1,4 +1,5 @@
-﻿using Microsoft.Dynamics.Retail.Pos.Contracts;
+﻿using LSRetailPosis.Settings;
+using Microsoft.Dynamics.Retail.Pos.Contracts;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -308,7 +309,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
             try
             {
 
-                string query = @"SELECT TOP 1 
+                string query2 = @"SELECT TOP 1 
                                     RP.ISDISCOUNTCODEREQUIRED,
                                     RP.STATUS,
                                     RPL.OFFERID,
@@ -336,11 +337,49 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
                                 ORDER BY RP.VALIDFROM DESC;
 
                                 ";
-
+                string query = @"SELECT TOP 1 
+                                    RP.ISDISCOUNTCODEREQUIRED,
+                                    RP.STATUS,
+                                    RPL.OFFERID,
+                                    ERP.DISPLAYPRODUCTNUMBER,
+                                    RPL.NAME,
+                                    RDLO.DISCPCT,
+                                    RDLO.DISCAMOUNT,
+                                    RDLO.OFFERPRICE,
+                                    RDLO.OFFERPRICEINCLTAX,
+                                    RP.VALIDFROM,
+                                    RP.VALIDTO
+                                FROM RETAILPERIODICDISCOUNT RP
+                                INNER JOIN RETAILPERIODICDISCOUNTLINE RPL
+                                    ON RP.OFFERID = RPL.OFFERID
+                                INNER JOIN RETAILGROUPMEMBERLINE RGM
+                                    ON RPL.RETAILGROUPMEMBERLINE = RGM.RECID
+                                INNER JOIN ECORESPRODUCT ERP
+                                    ON RGM.PRODUCT = ERP.RECID
+                                INNER JOIN RETAILDISCOUNTLINEOFFER RDLO
+                                    ON RDLO.RECID = RPL.RECID
+                                WHERE RP.STATUS = 1
+                                    AND RP.ISDISCOUNTCODEREQUIRED = 0
+                                    AND GETDATE() BETWEEN RP.VALIDFROM AND RP.VALIDTO
+                                    AND ERP.DISPLAYPRODUCTNUMBER = @ItemId
+                                    AND EXISTS (
+                                        SELECT 1
+                                        FROM RETAILDISCOUNTPRICEGROUP RDPG
+                                        INNER JOIN PRICEDISCGROUP PG
+                                            ON RDPG.PRICEDISCGROUP = PG.RECID
+                                        INNER JOIN RETAILCHANNELPRICEGROUP RPG
+                                            ON RPG.PRICEGROUP = PG.RECID
+                                        INNER JOIN RETAILCHANNELTABLE RCT
+                                            ON RPG.RETAILCHANNEL = RCT.RECID
+                                        WHERE RDPG.OFFERID = RP.OFFERID
+                                            AND RCT.INVENTLOCATION = @InventLoc
+                                    )
+                                ORDER BY RP.VALIDFROM DESC";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@ItemId", selectedSKU);
+                    command.Parameters.AddWithValue(@"InventLoc", ApplicationSettings.Terminal.InventLocationId);
                     //command.Parameters.AddWithValue("@SearchName", itemString);
                     if (connection.State != ConnectionState.Open)
                     {

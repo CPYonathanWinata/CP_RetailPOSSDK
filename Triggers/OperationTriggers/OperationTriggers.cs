@@ -101,8 +101,8 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
                      * - 
                      */
 
-                     
-                    if (posisOperation != PosisOperations.PayCustomerAccount && posisOperation != PosisOperations.PayCash && posisOperation != PosisOperations.PayCard && posisOperation != PosisOperations.VoidTransaction && posisOperation != PosisOperations.ChangeBack  && posisOperation  != PosisOperations.DisplayTotal && posisOperation  != PosisOperations.BlankOperation && posisOperation != PosisOperations.ItemSale )//bukan itemsale dan bukan PROMOED) )
+                    //24042026 - Yonathan - Add Pay gift card to support payment after promo buy 1 get 1
+                    if (posisOperation != PosisOperations.PayCustomerAccount && posisOperation != PosisOperations.PayCash && posisOperation != PosisOperations.PayCard && posisOperation != PosisOperations.PayGiftCertificate && posisOperation != PosisOperations.VoidTransaction && posisOperation != PosisOperations.ChangeBack && posisOperation != PosisOperations.DisplayTotal && posisOperation != PosisOperations.BlankOperation && posisOperation != PosisOperations.ItemSale)//bukan itemsale dan bukan PROMOED) )
                     {
 
                         if (posisOperation == PosisOperations.LinkedItemsAdd && transaction.SaleItems.Last().IsInfoCodeItem == true)

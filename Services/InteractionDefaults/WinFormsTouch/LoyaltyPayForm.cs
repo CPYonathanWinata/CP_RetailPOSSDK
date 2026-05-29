@@ -371,8 +371,8 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
                 loyaltyFullName = containerArray[4].ToString();
                 labelNameTitle.Text = loyaltyFullName;
                 //GetLoyaltyBalanceInfo
-
-                MessageBox.Show("Available Points "+containerArray[5].ToString() + " - " + "Point will be used "+ loyaltyCardData.BalancePoints);
+                //DEBUG POINT
+                //MessageBox.Show("Available Points "+containerArray[5].ToString() + " - " + "Point will be used "+ loyaltyCardData.BalancePoints);
             }
             
             

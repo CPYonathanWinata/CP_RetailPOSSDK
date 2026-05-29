@@ -61,7 +61,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPIBLIBLIORDERS
             string itemName = "";
             bool noNameDetected = false;
             application = _application;
-                                                                                                  
+            btnCancel.Visible = false ;                                                                           
             // Setup DataGridView untuk produk
             //dgvOrderItems.Columns.Clear();
             //dgvOrderItems.Columns.Add("itemid", "ItemId");
@@ -288,7 +288,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPIBLIBLIORDERS
                             .Sum(a => a.amount);                    
                     }
 
-                  
+                    totalAdjustment = Math.Abs(totalAdjustment);
                     priceAfterExponent = item.itemPrice / (decimal)Math.Pow(10, exponent);
 
 
@@ -363,7 +363,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPIBLIBLIORDERS
                     }
                 }
             }
-
+            //totalAdjustment = 5000;
 
             lblSubtotal.Text = string.Format("Subtotal: Rp {0:N0}", total);
             total = total - Math.Abs(totalAdjustment);
@@ -428,7 +428,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPIBLIBLIORDERS
             APIAccess.APIAccessClass APIClass = new APIAccess.APIAccessClass();
             string url = APIClass.getURLAPIByFuncName(functionName);
             bool error, error2 = false;
-
+            IPosTransaction suspendTrans = null;
             if (btnProcess.Text == "Finalisasi Pesanan")
             { 
                  DialogResult results = MessageBox.Show(
@@ -473,7 +473,34 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPIBLIBLIORDERS
 
                          RetailTransaction transaction = APIAccess.APIAccessClass.posTransaction as RetailTransaction;
                          //transaction.CalcTotals();
-                       
+                         //applydiscount voucher blibli (if any)
+                         if (totalAdjustment != 0)
+                         {
+                             //transaction.SetLoyaltyDiscAmount()
+                             transaction.SetTotalDiscAmount(totalAdjustment);
+                             transaction.Comment = "BliBliDiscount";
+                             try
+                             {
+                                 PreTriggerResult preTriggerResult = new LSRetailPosis.POSProcesses.PreTriggerResult();
+                                 PosApplication.Instance.Triggers.Invoke<IDiscountTrigger>((Action<IDiscountTrigger>)(t => t.PostTotalDiscountAmount(APIAccess.APIAccessClass.posTransaction)));
+                                 //LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSMessageDialog(2611); 
+
+                             }
+                             catch (Exception ex)
+                             {
+                                 LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                             }
+
+                             application.BusinessLogic.ItemSystem.CalculatePriceTaxDiscount(transaction);
+
+                             //application.Services.Tax.CalculateTax( transaction);
+
+
+                             transaction.CalcTotals();
+                             //end
+
+                         }
+                        
                          foreach (var itemSale in transaction.SaleItems)
                          {
                              IApplication applicationLocal = PosApplication.Instance as IApplication;
@@ -488,6 +515,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPIBLIBLIORDERS
                              itemSale.GrossAmount = foundItem.itemPrice;
                              itemSale.OriginalPrice = foundItem.itemPrice;
                              itemSale.Price = foundItem.itemPrice;
+                             //itemSale.TaxAmount
                              //salesLine.TradeAgreementPriceGroup = result[1];
                              itemSale.TradeAgreementPrice = foundItem.itemPrice;
 
@@ -515,32 +543,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPIBLIBLIORDERS
 
                         
 
-                         //applydiscount voucher blibli (if any)
-                         if(totalAdjustment!=0)
-                         {
-                             transaction.SetTotalDiscAmount(totalAdjustment);
-                             transaction.Comment = "BliBliDiscount";
-                             try
-                             {
-                                 PreTriggerResult preTriggerResult = new LSRetailPosis.POSProcesses.PreTriggerResult();
-                                 PosApplication.Instance.Triggers.Invoke<IDiscountTrigger>((Action<IDiscountTrigger>)(t => t.PostTotalDiscountAmount(APIAccess.APIAccessClass.posTransaction)));
-                                 //LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSMessageDialog(2611); 
-
-                             }
-                             catch (Exception ex)
-                             {
-                                 LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
-                             }
-
-                             application.BusinessLogic.ItemSystem.CalculatePriceTaxDiscount(transaction);
-
-                             //application.Services.Tax.CalculateTax( transaction);
-
-
-                             transaction.CalcTotals();
-                             //end
-
-                         }
+                        
                         
 
                          //transaction = APIAccess.APIAccessClass.posTransaction as RetailTransaction; 
@@ -575,7 +578,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPIBLIBLIORDERS
                          transaction.CalcTotals();
                          transaction.Save();
 
-                         applicationLoc.RunOperation(PosisOperations.PayCustomerAccount, "37", transaction);
+                         applicationLoc.RunOperation(PosisOperations.PayCustomerAccount, "42", transaction); //42 PROD 37 DEV 
 
 
                          //APIAccess.APIParameter.ApiResponseBlibliUpdateTransStatus response = APIAccess.APIFunction.BlibliOrderAPI.updateTransStatus(url, lblOrderNo.Text.ToString(), APIAccess.APIAccessClass.posTransaction.TransactionId);
@@ -615,6 +618,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPIBLIBLIORDERS
                                     MessageBoxButtons.OK,
                                     MessageBoxIcon.Warning
                                 );
+
+                    btnCancel.Visible = true;
                 }
                 else
                 {
@@ -628,20 +633,14 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPIBLIBLIORDERS
                     // Cek jawaban user
                     if (result == DialogResult.Yes)
                     {
-                        error = createPackage();
-                        if (error == false)
-                        {
-                            error2 = fulfillOrder(packageId);
-                        }
+                        LSRetailPosis.POSProcesses.ItemSale iSale = new LSRetailPosis.POSProcesses.ItemSale();
+                        //iSale.OperationID = PosisOperations.ItemSale;
+                        //iSale.OperationInfo = new LSRetailPosis.POSProcesses.OperationInfo();
+                        //iSale.Barcode = skuId; disable by Yonathan 21/10/2022
 
-                        if (error2 == false)
+                        //use blank operation to store the items.
+                        try
                         {
-                            LSRetailPosis.POSProcesses.ItemSale iSale = new LSRetailPosis.POSProcesses.ItemSale();
-                            //iSale.OperationID = PosisOperations.ItemSale;
-                            //iSale.OperationInfo = new LSRetailPosis.POSProcesses.OperationInfo();
-                            //iSale.Barcode = skuId; disable by Yonathan 21/10/2022
-
-                            //use blank operation to store the items.
                             foreach (DataGridViewRow row in dgvOrderItems.Rows)
                             {
                                 if (!row.IsNewRow) // hindari baris kosong terakhir
@@ -655,7 +654,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPIBLIBLIORDERS
                                     BlankOperations.itemIdToAdd = itemId;
                                     BlankOperations.quantityToAdd = quantity;
 
-                                    
+
                                     applicationLoc.RunOperation(PosisOperations.BlankOperation, "BliBliTransaction", blibliPosTransactionLocal);
                                 }
 
@@ -687,29 +686,169 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPIBLIBLIORDERS
                                 var application = PosApplication.Instance as IApplication;
 
 
-                               
+
                                 transaction = blibliPosTransaction; // (RetailTransaction)BlankOperations.grabPosTransactionDisc; 
                                 transaction.Comment = lblOrderNo.Text.ToString();
                                 //applicationLoc.BusinessLogic.ItemSystem.CalculatePriceTaxDiscount(transaction);
                                 transaction.CalcTotals();
                                 transaction.Save();
-
-
-                                application.RunOperation(PosisOperations.SuspendTransaction, 1, transaction);
+                                suspendTrans =  application.RunOperation(PosisOperations.SuspendTransaction, 1, transaction);
+                                
                             }
 
-                            //this.Close();//continue to suspend
+                            
+                            RetailTransaction child = (RetailTransaction)suspendTrans;
+
+                            
+                            
+                             //if exist, then proceed to API blibli
+                            if (child.EntryStatus == PosTransaction.TransactionStatus.OnHold)
+                            {
+
+                                //application.RunOperation(PosisOperations.DisplayTotal, "");
+                                int tryCount = 0;
+
+                                do
+                                {
+                                    error = createPackage();
+
+                                    if (error == false)
+                                    {
+                                        error2 = fulfillOrder(packageId);
+                                        //this.Close();//continue to suspend
 
 
+                                        MessageBox.Show(
+                                            "Order sudah diambil.\nSilakan siapkan barang dan tunggu driver, baru lanjutkan finalisasi pesanan",
+                                            "Info",
+                                            MessageBoxButtons.OK,
+                                            MessageBoxIcon.Information
+                                        );
+                                        //MessageBox.Show("Order sudah diambil.\nSilakan siapkan barang dan tunggu driver, baru lanjutkan finalisasi pesanan");
+                                        POSFormsManager.ShowPOSStatusPanelText("Blibli order telah diambil. Siapkan pesanan.");
 
-                            MessageBox.Show("Order sudah diambil.\nSilakan siapkan barang dan tunggu driver, baru lanjutkan finalisasi pesanan");
-                            POSFormsManager.ShowPOSStatusPanelText("Blibli order telah diambil. Siapkan pesanan.");
 
+                                        this.DialogResult = DialogResult.OK;
+                                        this.Close();
 
-                            //application.RunOperation(PosisOperations.DisplayTotal, "");
-                            this.DialogResult = DialogResult.OK;
-                            this.Close();
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        tryCount++;
+                                    }
+
+                                }
+                                while (tryCount < 3);
+                            }
+                            else
+                            {
+                                MessageBox.Show(
+                                    "Gagal proses transaksi Blibli.\nHubungi IT untuk cek permission suspend transaksi.",
+                                    "Error",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Warning
+                                );
+                               
+                            }
+                               
                         }
+                        catch (Exception ex)
+                        {
+                            LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                            throw;
+                        }
+                        //TESTING
+
+                        //error = createPackage();
+                        //if (error == false)
+                        //{
+                        //    error2 = fulfillOrder(packageId);
+                        //}
+
+                        //if (error2 == false)
+                        //{
+                        //    LSRetailPosis.POSProcesses.ItemSale iSale = new LSRetailPosis.POSProcesses.ItemSale();
+                        //    //iSale.OperationID = PosisOperations.ItemSale;
+                        //    //iSale.OperationInfo = new LSRetailPosis.POSProcesses.OperationInfo();
+                        //    //iSale.Barcode = skuId; disable by Yonathan 21/10/2022
+
+                        //    //use blank operation to store the items.
+                        //    try
+                        //    {
+                        //        foreach (DataGridViewRow row in dgvOrderItems.Rows)
+                        //        {
+                        //            if (!row.IsNewRow) // hindari baris kosong terakhir
+                        //            {
+                        //                // Contoh ambil value dari kolom "ItemId" dan "Quantity"
+                        //                string itemId = row.Cells["itemid"].Value.ToString();
+                        //                decimal quantity = Convert.ToDecimal(row.Cells["qty"].Value);
+
+
+                        //                RetailTransaction blibliPosTransactionLocal = BlankOperations.blibliPosTransaction as RetailTransaction;
+                        //                BlankOperations.itemIdToAdd = itemId;
+                        //                BlankOperations.quantityToAdd = quantity;
+
+
+                        //                applicationLoc.RunOperation(PosisOperations.BlankOperation, "BliBliTransaction", blibliPosTransactionLocal);
+                        //            }
+
+
+
+
+                        //            RetailTransaction blibliPosTransaction = BlankOperations.blibliPosTransaction as RetailTransaction;
+
+
+                        //            //Disable Cust Disc 06082025 - Yonathan
+
+                        //            int indexLines = 0;
+
+                        //            string isB2bCust = APIAccess.APIAccessClass.isB2b;
+                        //            string priceGroup = APIAccess.APIAccessClass.priceGroup;//.ToString();
+                        //            string lineDiscGroup = APIAccess.APIAccessClass.lineDiscGroup;//.ToString();
+
+
+
+
+
+                        //            blibliPosTransaction.CalcTotals();
+                        //            blibliPosTransaction.Save();
+
+                        //            BlankOperations.blibliPosTransactionDisc = blibliPosTransaction;
+
+
+                        //            RetailTransaction transaction = posTransaction as RetailTransaction;
+                        //            var application = PosApplication.Instance as IApplication;
+
+
+
+                        //            transaction = blibliPosTransaction; // (RetailTransaction)BlankOperations.grabPosTransactionDisc; 
+                        //            transaction.Comment = lblOrderNo.Text.ToString();
+                        //            //applicationLoc.BusinessLogic.ItemSystem.CalculatePriceTaxDiscount(transaction);
+                        //            transaction.CalcTotals();
+                        //            transaction.Save();
+                        //            application.RunOperation(PosisOperations.SuspendTransaction, 1, transaction);
+                        //        }
+
+                        //        //this.Close();//continue to suspend
+
+
+
+                        //        MessageBox.Show("Order sudah diambil.\nSilakan siapkan barang dan tunggu driver, baru lanjutkan finalisasi pesanan");
+                        //        POSFormsManager.ShowPOSStatusPanelText("Blibli order telah diambil. Siapkan pesanan.");
+
+
+                        //        //application.RunOperation(PosisOperations.DisplayTotal, "");
+                        //        this.DialogResult = DialogResult.OK;
+                        //        this.Close();
+                        //    }
+                        //    catch (Exception ex)
+                        //    {
+                        //        LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                        //        throw;
+                        //    }
+                            
+                        //}
                     }
                 }
             }

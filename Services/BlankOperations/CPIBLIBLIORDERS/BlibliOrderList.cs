@@ -319,7 +319,9 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPIBLIBLIORDERS
 
                 if (result == DialogResult.OK)
                 {
+                    
                     this.Close();
+                    
                 }
                 else if (result == DialogResult.Cancel)
                 {

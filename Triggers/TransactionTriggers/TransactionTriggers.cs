@@ -2234,7 +2234,7 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 			string siteId = "";
 			string url = "";// "http://10.204.3.174:80/api/stockOnHand/addItemMultiple";
 			//string PathDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Extensions\\", "APIConfig.xml");
-
+            int retryCount = 0;
 			//url = getFolderPath(PathDirectory, "urlAPI") + "api/stockOnHand/addItemMultiple";
 			string functionName = "AddItemMultipleAPI";
 			APIAccess.APIAccessClass APIClass = new APIAccess.APIAccessClass();
@@ -2348,25 +2348,94 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 					var jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(resList);
 					return jsonString;
 					 */
-					using (StreamWriter streamWriter = new StreamWriter(httpRequest.GetRequestStream()))
-					{
-						streamWriter.Write(multiData);
-						streamWriter.Flush();
-					}
+ 
+                    //disable for CPPOSITIVESTOCKPOS 2105/2026 - Yonathan
+                    //using (StreamWriter streamWriter = new StreamWriter(httpRequest.GetRequestStream()))
+                    //{
+                    //    streamWriter.Write(multiData);
+                    //    streamWriter.Flush();
+                    //}
 
-					try
-					{
-						HttpWebResponse httpResponse = (HttpWebResponse)httpRequest.GetResponse();
-						using (StreamReader streamReader = new StreamReader(httpResponse.GetResponseStream()))
-						{
-							result = streamReader.ReadToEnd();
-						}
-					}
-					catch (Exception ex)
-					{
-						LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
-						throw;
-					}
+                    //try
+                    //{
+                    //    HttpWebResponse httpResponse = (HttpWebResponse)httpRequest.GetResponse();
+                    //    using (StreamReader streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                    //    {
+                    //        result = streamReader.ReadToEnd();
+                    //    }
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                    //    throw;
+                    //}
+
+                    //change to this retryCount #CPPOSITIVESTOCKPOS
+                    //httpRequest.Timeout = 1; // 1 millisecond — will almost certainly time out
+                   
+                    using (StreamWriter streamWriter = new StreamWriter(httpRequest.GetRequestStream()))
+                    {
+                        streamWriter.Write(multiData);
+                        streamWriter.Flush();
+                    }
+
+                    while (retryCount != 3)
+                    {
+                        try
+                        {
+                            HttpWebResponse httpResponse = (HttpWebResponse)httpRequest.GetResponse();
+                            using (StreamReader streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                            {
+                                result = streamReader.ReadToEnd();
+                            }
+                            break; // Success, exit the loop
+                        }
+                        catch (Exception ex)
+                        {
+                            retryCount++;
+                            //LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+
+                            if (retryCount == 3)
+                            {
+                                // Log the error
+                                //LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                                //LSRetailPosis.Trace.Tracer.LogStaticText(this.ToString(),
+                                //    string.Format("[ERROR] Max retry reached. Failed to send request after 3 attempts. Error: {0}", ex.Message));
+
+                                // Insert pack variable into CPINVENTORYONHAND_TEMP
+                                //using (SqlConnection conn = new System.Data.SqlClient.SqlConnection(LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection.ConnectionString))
+                                using (SqlConnection conn = new SqlConnection(LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection.ConnectionString))
+                                {
+                                    conn.Open();
+                                    string insertQuery =
+                                        "INSERT INTO [ax].[CPINVENTORYONHAND_TEMP] " +
+                                        "([RECEIPTID], [ITEMID], [QTY], [UNITID], [DATAAREA], [WAREHOUSE], [TRANSTYPE], [VARIANTID]) " +
+                                        "VALUES " +
+                                        "(@RECEIPTID, @ITEMID, @QTY, @UNITID, @DATAAREA, @WAREHOUSE, @TRANSTYPE, @VARIANTID)";
+
+                                    foreach (var pack in packList)
+                                    {
+                                        using (SqlCommand cmd = new SqlCommand(insertQuery, conn))
+                                        {
+                                            cmd.Parameters.Add("@RECEIPTID", SqlDbType.NVarChar).Value = pack.REFERENCESNUMBER;
+                                            cmd.Parameters.Add("@ITEMID", SqlDbType.NVarChar).Value = pack.ITEMID;
+                                            cmd.Parameters.Add("@QTY", SqlDbType.Decimal).Value = pack.QTY;
+                                            cmd.Parameters.Add("@UNITID", SqlDbType.NVarChar).Value = pack.UNITID;
+                                            cmd.Parameters.Add("@DATAAREA", SqlDbType.NVarChar).Value = pack.DATAAREAID;
+                                            cmd.Parameters.Add("@WAREHOUSE", SqlDbType.NVarChar).Value = pack.WAREHOUSE;
+                                            cmd.Parameters.Add("@TRANSTYPE", SqlDbType.Int).Value = pack.TYPE;
+                                            cmd.Parameters.Add("@VARIANTID", SqlDbType.NVarChar).Value = pack.RETAILVARIANTID;
+
+                                            cmd.ExecuteNonQuery();
+                                        }
+                                    }
+                                }
+
+                                throw;
+                            }
+                        }
+                    }
+                    //end #CPPOSITIVESTOCKPOS
 
 					//DialogResult res = MessageBox.Show(result.ToString(), "Confirmation", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
 

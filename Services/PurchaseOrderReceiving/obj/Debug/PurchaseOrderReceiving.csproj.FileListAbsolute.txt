@@ -116,3 +116,4 @@ C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Pu
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.pdb
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\PurchaseOrderReceiving\obj\Debug\PurchaseOrderReceiving.csprojResolveAssemblyReference.cache
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\PurchaseOrderReceiving\obj\Debug\Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch.CP_OTPForm.CP_OTPForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\PurchaseOrderReceiving\obj\Debug\Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving.WinFormsTouch.CP_OTPForm.OtpNumpad.resources

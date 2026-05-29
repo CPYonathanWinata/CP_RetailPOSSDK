@@ -96,6 +96,48 @@ namespace APIAccess
 			}
 
 		}
+
+        public ReadOnlyCollection<object> checkStockOnHandAXAPI(IApplication _application, string url, string parmCompanyCode = "", string parmSiteId = "", string parmWareHouse = "", string parmItemId = "", string parmMaxQty = "", string parmBarcodeSetupId = "", string parmConfigId = "")
+        {
+            //System.Diagnostics.Stopwatch timer = new Stopwatch();
+            string itemId, siteId, wareHouse, maxQty, barCode, company = "";
+            bool status = false;
+            string message = "";
+            //object[] array = Array.Empty<object>();
+
+            Application = _application;
+            ReadOnlyCollection<object> containerArray = new ReadOnlyCollection<object>(new object[0]);
+
+            try
+            {
+                object[] parameterList = new object[] 
+							{
+								url,
+								parmSiteId,
+								parmWareHouse,
+								parmItemId,
+								"",
+								"",
+								
+							};
+
+
+                containerArray = Application.TransactionServices.InvokeExtension("getStockOnHandSingle", parameterList);
+
+
+
+                return containerArray;
+
+
+            }
+            catch (Exception ex)
+            {
+                return containerArray;
+
+            }
+
+        }
+
         //public ReadOnlyCollection<object> checkStockOnHandMulti(IApplication _application, string url, string parmCompanyCode = "", string parmSiteId = "", string parmWareHouse = "", string parmItemId = "", string parmMaxQty = "", string parmBarcodeSetupId = "", string parmConfigId = "")
             public ReadOnlyCollection<object> checkStockOnHandMultiNew(IApplication _application, string url, string parmCompanyCode = "", string parmSiteId = "", string parmWareHouse = "", string parmItemId = "", string parmMaxQty = "", string parmBarcodeSetupId = "", string parmConfigId = "",  string parmQtyInput = "", string parmTransId = "")
         {
@@ -899,9 +941,60 @@ namespace APIAccess
 
             return positiveStatus == "1" ? true : false;
         }
-        
-            
 
+
+        public static string checkPositiveStatusNew(string _itemId, SqlConnection _connectionString)
+        {
+            //before checking the stock, check first whether this item type is service
+            //string queryString = @" SELECT DISPLAYPRODUCTNUMBER,PRODUCTTYPE  FROM ax.ECORESPRODUCT where DISPLAYPRODUCTNUMBER =@ITEMID";
+            string positiveStatus = "0";
+            SqlConnection connection = _connectionString;
+            string queryString = @"SELECT ITEMID,POSITIVESTATUS,DATAAREAID FROM ax.CPITEMONHANDSTATUS where ITEMID=@ITEMID";
+            try
+            {
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+                    command.Parameters.AddWithValue("@ITEMID", _itemId);
+
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+
+                    }
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            positiveStatus = reader["POSITIVESTATUS"].ToString();
+                            ////for testing purpose
+                            //MessageBox.Show(positiveStatus);
+                            ////
+                        }
+                        else
+                        {
+                            positiveStatus = "2"; //if not exist in table
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(typeof(APIFunction).ToString(), ex);
+                throw;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+                }
+            }
+
+
+            return positiveStatus;
+        }
 
         //public async Task<bool> CheckApiAvailability(string url)
         //{
@@ -1633,97 +1726,233 @@ namespace APIAccess
 
         public class BlibliOrderAPI
         {
-            public static APIAccess.APIParameter.ApiResponseBliBliListOrder getBlibliOrderList(string _url, string _warehouse, string _parmDate)
+            //public static APIAccess.APIParameter.ApiResponseBliBliListOrder getBlibliOrderList(string _url, string _warehouse, string _parmDate, string _fromDate = "NOT INIT")
+            //{
+            //    DateTime _datefrom;
+            //    //int rowIndex;
+            //    //string amountCashout = "";
+
+            //    //string PathDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Extensions\\", "APIConfig.xml");
+            //    //var url = "https://devpfm.cp.co.id/api/grab/listOrder"
+            //    string url = "";
+            //    APIAccess.APIParameter.Receiver receiverParm;
+            //    //string functionName = "getBlibliOrderList";
+            //    APIAccess.APIAccessClass APIClass = new APIAccess.APIAccessClass();
+            //    url = _url; //APIClass.getURLAPIByFuncName(functionName);
+            //    APIAccess.APIParameter.ApiResponseBliBliListOrder responseData = null;
+            //    ServicePointManager.Expect100Continue = true;
+            //    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |
+            //                                   SecurityProtocolType.Tls11 |
+            //                                   SecurityProtocolType.Tls12;
+
+            //    System.Net.ServicePointManager.ServerCertificateValidationCallback = (senderX, certificate, chain, sslPolicyErrors) => { return true; };
+
+            //    var httpRequest = (HttpWebRequest)WebRequest.Create(url);
+            //    string result = "";
+            //    httpRequest.Method = "POST";
+            //    httpRequest.ContentType = "application/json";
+            //    httpRequest.Headers.Add("Authorization", "PFM");
+           
+                
+ 
+            //    DateTime tanggal = DateTime.ParseExact(_parmDate, "yyyy-MM-dd HH:mm:ss", null);
+            //    if (_fromDate == "NOT INIT")
+            //    {
+            //        _datefrom = new DateTime(tanggal.Year, tanggal.Month, tanggal.Day, 0, 0, 0);
+            //    }
+            //    else
+            //    {
+            //        _datefrom = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            //    }
+            //    DateTime _dateto = new DateTime(tanggal.Year, tanggal.Month, tanggal.Day, 23, 59, 59);
+             
+            //    string strDateFrom = _datefrom.ToString("yyyy-MM-dd HH:mm:ss");
+            //    string strDateTo = _dateto.ToString("yyyy-MM-dd HH:mm:ss");
+
+            //    var pack = new APIAccess.APIParameter.ApiRequestBliBliListOrder()
+            //    {
+            //        warehouse = _warehouse,
+            //        dateFrom = strDateFrom, //"2026-02-23 00:00:00", //DateTime.Now.ToString("yyyy-MM-dd 00:00:00"),//"2023-11-10 00:00:00", //DateTime.Now.ToString("yyyy-MM-dd 00:00:00"),                    
+            //        dateTo = strDateTo //"2026-02-23 23:59:59"//DateTime.Now.ToString("yyyy-MM-dd 23:59:59") //"2023-11-10 23:59:59"
+            //    };
+
+
+            //    try
+            //    {
+            //        var data = APIAccess.APIFunction.MyJsonConverter.Serialize(pack);
+            //        //var data = APIAccess.APIFunction.MyJsonConverter.Serialize(pack);
+            //        //MessageBox.Show(data);
+            //        using (var streamWriter = new StreamWriter(httpRequest.GetRequestStream()))
+            //        {
+            //            streamWriter.Write(data);
+            //        }
+
+            //        var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
+            //        using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            //        {
+            //            result = streamReader.ReadToEnd();
+            //            //responseData = APIAccess.APIFunction.MyJsonConverter.Deserialize<APIAccess.APIParameter.ApiResponseBliBliListOrder>(result); //
+            //            var rawResponse = APIAccess.APIFunction.MyJsonConverter.Deserialize<APIAccess.APIParameter.ApiResponseBliBliListOrderRaw>(result);
+            //            List<APIAccess.APIParameter.OrderData> orderList;
+            //            if (string.IsNullOrWhiteSpace(rawResponse.data) || rawResponse.data == "[]")
+            //            {
+            //                orderList = new List<APIAccess.APIParameter.OrderData>(); // kosong
+            //            }
+            //            else
+            //            {
+                             
+            //                orderList = APIAccess.APIFunction.MyJsonConverter.Deserialize<List<APIAccess.APIParameter.OrderData>>(rawResponse.data);
+            //            }
+
+            //            responseData = new APIAccess.APIParameter.ApiResponseBliBliListOrder
+            //            {
+            //                status = rawResponse.status,
+            //                error = rawResponse.error,
+            //                message = rawResponse.message,
+            //                data = orderList
+            //            };
+            //        }
+            //    }
+            //    catch (WebException ex)
+            //    {
+            //        if (ex.Status == WebExceptionStatus.Timeout)
+            //        {
+            //            MessageBox.Show("Request timeout.");
+            //        }
+            //        else
+            //        {
+            //            MessageBox.Show("Gagal koneksi ke server.\n" + ex.Message);
+            //        }
+            //    }
+               
+            //    return responseData;
+            //}
+
+            public static APIAccess.APIParameter.ApiResponseBliBliListOrder getBlibliOrderList(
+    string _url,
+    string _warehouse,
+    string _parmDate,
+    string _fromDate = "NOT INIT")
             {
-
-                //int rowIndex;
-                //string amountCashout = "";
-
-                //string PathDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Extensions\\", "APIConfig.xml");
-                //var url = "https://devpfm.cp.co.id/api/grab/listOrder"
-                string url = "";
-                APIAccess.APIParameter.Receiver receiverParm;
-                //string functionName = "getBlibliOrderList";
-                APIAccess.APIAccessClass APIClass = new APIAccess.APIAccessClass();
-                url = _url; //APIClass.getURLAPIByFuncName(functionName);
+                DateTime _datefrom;
                 APIAccess.APIParameter.ApiResponseBliBliListOrder responseData = null;
+
                 ServicePointManager.Expect100Continue = true;
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |
-                                               SecurityProtocolType.Tls11 |
-                                               SecurityProtocolType.Tls12;
+                                                       SecurityProtocolType.Tls11 |
+                                                       SecurityProtocolType.Tls12;
 
-                System.Net.ServicePointManager.ServerCertificateValidationCallback = (senderX, certificate, chain, sslPolicyErrors) => { return true; };
+                ServicePointManager.ServerCertificateValidationCallback =
+                    (senderX, certificate, chain, sslPolicyErrors) => true;
 
-                var httpRequest = (HttpWebRequest)WebRequest.Create(url);
-                string result = "";
+                var httpRequest = (HttpWebRequest)WebRequest.Create(_url);
                 httpRequest.Method = "POST";
                 httpRequest.ContentType = "application/json";
                 httpRequest.Headers.Add("Authorization", "PFM");
 
-           
-                
- 
-                DateTime tanggal = DateTime.ParseExact(_parmDate, "yyyy-MM-dd HH:mm:ss", null); 
-                DateTime _datefrom = new DateTime(tanggal.Year, tanggal.Month, tanggal.Day, 0, 0, 0);              
-                DateTime _dateto = new DateTime(tanggal.Year, tanggal.Month, tanggal.Day, 23, 59, 59);
-             
-                string strDateFrom = _datefrom.ToString("yyyy-MM-dd HH:mm:ss");
-                string strDateTo = _dateto.ToString("yyyy-MM-dd HH:mm:ss");
-
-                var pack = new APIAccess.APIParameter.ApiRequestBliBliListOrder()
-                {
-                    warehouse = _warehouse,
-                    dateFrom = strDateFrom, //"2026-02-23 00:00:00", //DateTime.Now.ToString("yyyy-MM-dd 00:00:00"),//"2023-11-10 00:00:00", //DateTime.Now.ToString("yyyy-MM-dd 00:00:00"),                    
-                    dateTo = strDateTo //"2026-02-23 23:59:59"//DateTime.Now.ToString("yyyy-MM-dd 23:59:59") //"2023-11-10 23:59:59"
-                };
-
+                string result = "";
 
                 try
                 {
+                  
+                    DateTime tanggal;
+                    if (!DateTime.TryParseExact(_parmDate, "yyyy-MM-dd HH:mm:ss",
+                        null, System.Globalization.DateTimeStyles.None, out tanggal))
+                    {
+                        throw new Exception("Format _parmDate salah");
+                    }
+
+                    if (_fromDate == "NOT INIT")
+                    {
+                        _datefrom = new DateTime(tanggal.Year, tanggal.Month, tanggal.Day, 0, 0, 0);
+                    }
+                    else
+                    {
+                        _datefrom = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                    }
+
+                    DateTime _dateto = new DateTime(tanggal.Year, tanggal.Month, tanggal.Day, 23, 59, 59);
+
+                    string strDateFrom = _datefrom.ToString("yyyy-MM-dd HH:mm:ss");
+                    string strDateTo = _dateto.ToString("yyyy-MM-dd HH:mm:ss");
+
+                   
+                    var pack = new APIAccess.APIParameter.ApiRequestBliBliListOrder()
+                    {
+                        warehouse = _warehouse,
+                        dateFrom = strDateFrom,
+                        dateTo = strDateTo
+                    };
+
                     var data = APIAccess.APIFunction.MyJsonConverter.Serialize(pack);
+
                     using (var streamWriter = new StreamWriter(httpRequest.GetRequestStream()))
                     {
                         streamWriter.Write(data);
                     }
 
-                    var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
+                   
+                    using (var httpResponse = (HttpWebResponse)httpRequest.GetResponse())
                     using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                     {
                         result = streamReader.ReadToEnd();
-                        //responseData = APIAccess.APIFunction.MyJsonConverter.Deserialize<APIAccess.APIParameter.ApiResponseBliBliListOrder>(result); //
-                        var rawResponse = APIAccess.APIFunction.MyJsonConverter.Deserialize<APIAccess.APIParameter.ApiResponseBliBliListOrderRaw>(result);
-                        List<APIAccess.APIParameter.OrderData> orderList;
-                        if (string.IsNullOrWhiteSpace(rawResponse.data) || rawResponse.data == "[]")
-                        {
-                            orderList = new List<APIAccess.APIParameter.OrderData>(); // kosong
-                        }
-                        else
-                        {
-                             
-                            orderList = APIAccess.APIFunction.MyJsonConverter.Deserialize<List<APIAccess.APIParameter.OrderData>>(rawResponse.data);
-                        }
-
-                        responseData = new APIAccess.APIParameter.ApiResponseBliBliListOrder
-                        {
-                            status = rawResponse.status,
-                            error = rawResponse.error,
-                            message = rawResponse.message,
-                            data = orderList
-                        };
                     }
                 }
                 catch (WebException ex)
                 {
+                    
                     if (ex.Status == WebExceptionStatus.Timeout)
                     {
                         MessageBox.Show("Request timeout.");
+                        return null;
+                    }
+
+                    if (ex.Response != null)
+                    {
+                        using (var streamReader = new StreamReader(ex.Response.GetResponseStream()))
+                        {
+                            result = streamReader.ReadToEnd();
+                        }
                     }
                     else
                     {
-                        MessageBox.Show("Gagal koneksi ke server.");
+                        MessageBox.Show("Gagal koneksi ke server.\n" + ex.Message);
+                        return null;
                     }
                 }
-               
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error:\n" + ex.Message);
+                    return null;
+                }
+
+              
+                if (!string.IsNullOrEmpty(result))
+                {
+                    var rawResponse = APIAccess.APIFunction.MyJsonConverter
+                        .Deserialize<APIAccess.APIParameter.ApiResponseBliBliListOrderRaw>(result);
+
+                    List<APIAccess.APIParameter.OrderData> orderList;
+
+                    if (string.IsNullOrWhiteSpace(rawResponse.data) || rawResponse.data == "[]")
+                    {
+                        orderList = new List<APIAccess.APIParameter.OrderData>();
+                    }
+                    else
+                    {
+                        orderList = APIAccess.APIFunction.MyJsonConverter
+                            .Deserialize<List<APIAccess.APIParameter.OrderData>>(rawResponse.data);
+                    }
+
+                    responseData = new APIAccess.APIParameter.ApiResponseBliBliListOrder
+                    {
+                        status = rawResponse.status,
+                        error = rawResponse.error,
+                        message = rawResponse.message,
+                        data = orderList
+                    };
+                }
+
                 return responseData;
             }
 
@@ -1838,16 +2067,43 @@ namespace APIAccess
 
                     }
                 }
-                catch (WebException ex)
+                //catch (WebException ex)
+                //{
+                //    if (ex.Status == WebExceptionStatus.Timeout)
+                //    {
+                //        MessageBox.Show("Request timeout.");
+                //    }
+                //    else
+                //    {
+                //        MessageBox.Show("Gagal koneksi ke server.");
+                //    }
+                //}
+                //catch (WebException ex)
+                //{
+
+                //    if (ex.Status == WebExceptionStatus.Timeout)
+                //    {
+                //        MessageBox.Show("Request timeout.");
+                //        return null;
+                //    }
+
+                //    if (ex.Response != null)
+                //    {
+                //        using (var streamReader = new StreamReader(ex.Response.GetResponseStream()))
+                //        {
+                //            result = streamReader.ReadToEnd();
+                //        }
+                //    }
+                //    else
+                //    {
+                //        MessageBox.Show("Gagal koneksi ke server.\n" + ex.Message);
+                //        return null;
+                //    }
+                //}
+                catch (Exception ex)
                 {
-                    if (ex.Status == WebExceptionStatus.Timeout)
-                    {
-                        MessageBox.Show("Request timeout.");
-                    }
-                    else
-                    {
-                        MessageBox.Show("Gagal koneksi ke server.");
-                    }
+                    MessageBox.Show("Error:\n" + ex.Message);
+                    return null;
                 }
 
                 return responseData;
@@ -1884,9 +2140,39 @@ namespace APIAccess
                 };
 
 
-                try  
+                //try  
+                //{
+                //     var data = APIAccess.APIFunction.MyJsonConverter.Serialize(pack);
+                //    using (var streamWriter = new StreamWriter(httpRequest.GetRequestStream()))
+                //    {
+                //        streamWriter.Write(data);
+                //    }
+
+                //    var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
+                //    using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                //    {
+                //        result = streamReader.ReadToEnd();
+                //        //responseData = APIAccess.APIFunction.MyJsonConverter.Deserialize<APIAccess.APIParameter.ApiResponseBliBliListOrder>(result); //
+                //        responseData = APIAccess.APIFunction.MyJsonConverter.Deserialize<APIAccess.APIParameter.ApiResponseBlibliCreatePackage>(result);
+
+
+                //    }
+                //}
+                //catch (WebException ex)
+                //{
+                //    if (ex.Status == WebExceptionStatus.Timeout)
+                //    {
+                //        MessageBox.Show("Request timeout.");
+                //    }
+                //    else
+                //    {
+                //        MessageBox.Show("Gagal koneksi ke server.");
+                //    }
+                //}
+                try
                 {
-                     var data = APIAccess.APIFunction.MyJsonConverter.Serialize(pack);
+                    var data = APIAccess.APIFunction.MyJsonConverter.Serialize(pack);
+
                     using (var streamWriter = new StreamWriter(httpRequest.GetRequestStream()))
                     {
                         streamWriter.Write(data);
@@ -1896,15 +2182,29 @@ namespace APIAccess
                     using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                     {
                         result = streamReader.ReadToEnd();
-                        //responseData = APIAccess.APIFunction.MyJsonConverter.Deserialize<APIAccess.APIParameter.ApiResponseBliBliListOrder>(result); //
-                        responseData = APIAccess.APIFunction.MyJsonConverter.Deserialize<APIAccess.APIParameter.ApiResponseBlibliCreatePackage>(result);
-
-
+                        responseData = APIAccess.APIFunction.MyJsonConverter
+                            .Deserialize<APIAccess.APIParameter.ApiResponseBlibliCreatePackage>(result);
                     }
                 }
                 catch (WebException ex)
                 {
-                    if (ex.Status == WebExceptionStatus.Timeout)
+                    string errorResponse = "";
+
+                    if (ex.Response != null)
+                    {
+                        using (var stream = ex.Response.GetResponseStream())
+                        using (var reader = new StreamReader(stream))
+                        {
+                            errorResponse = reader.ReadToEnd();
+                        }
+
+                        // Optional: deserialize juga biar ambil message-nya
+                        var errorData = APIAccess.APIFunction.MyJsonConverter
+                            .Deserialize<APIAccess.APIParameter.ApiResponseBlibliCreatePackage>(errorResponse);
+
+                        responseData = errorData;
+                    }
+                    else if (ex.Status == WebExceptionStatus.Timeout)
                     {
                         MessageBox.Show("Request timeout.");
                     }
@@ -1913,7 +2213,6 @@ namespace APIAccess
                         MessageBox.Show("Gagal koneksi ke server.");
                     }
                 }
-
                 return responseData;
             }
 

@@ -618,9 +618,9 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                             RetailTransaction transaction = posTransaction as RetailTransaction;
 
                              //GMT TenderID
-                            //string tenderId = "19"; //for DEV 
+                            string tenderIdDev = "19"; //for DEV 
                             string tenderId = "16"; //for PROD
-                            if (!validateCustomer(posTransaction, tenderId))
+                            if (!validateCustomer(posTransaction, tenderId) && !validateCustomer(posTransaction, tenderIdDev))
                             {
                                 using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Please Choose Correct Customer", MessageBoxButtons.OK, MessageBoxIcon.Stop))
 								{
@@ -1037,6 +1037,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     }
                 case "27":
                     {
+                        //PO Retur by Yonathan 03/2026
                         APIAccess.APIAccessClass.isRetur = true;
                         Application.Services.PurchaseOrder.ShowPurchaseOrderList();
                         
@@ -1058,12 +1059,12 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                             RetailTransaction transaction = posTransaction as RetailTransaction;
 
                             //GMT TenderID
-                            string tenderId = "37"; //for DEV BliBli
-
+                            string tenderId = "42"; //for DEV BliBli
+                            string tenderIdDev = "37";
                             if ((customer.CustomerId != null || customer.CustomerId == ""))//&& transaction.SaleItems.Count != 0)
                             //if ( transaction.SaleItems.Count != 0)
                             {
-                                if (!validateCustomer(posTransaction, tenderId))
+                                if (!validateCustomer(posTransaction, tenderId) && !validateCustomer(posTransaction, tenderIdDev))
                                 {
                                     using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Please Choose Correct Customer", MessageBoxButtons.OK, MessageBoxIcon.Stop))
                                     {
@@ -1113,6 +1114,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                                                 //CPGrabOrder CPGrabOrder = new CPGrabOrder(posTransaction, Application);
                                                 CPIBLIBLIORDERS.BlibliOrderList blibliOrderList = new CPIBLIBLIORDERS.BlibliOrderList(posTransaction, Application);
                                                 blibliOrderList.ShowDialog();
+                                                //Application.RunOperation(PosisOperations.VoidTransaction, posTransaction);
                                             }
                                             else
                                             {
@@ -1791,6 +1793,64 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                         blibliPosTransaction = iSale.POSTransaction;
 
                       
+                    }
+                    break;
+                case "106": //tes query SuspendTransaction
+                    {
+                        var dict = new Dictionary<string, decimal>();
+
+                        using (SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection)
+                        {
+                            if (connection.State != System.Data.ConnectionState.Open)
+                                connection.Open();
+
+                            string query = @"
+                                    SELECT TRANSACTIONDATA
+                                    FROM [crt].[SALESTRANSACTION]
+                                    WHERE COMMENT != ''
+                                      AND DELETEDDATETIME IS NULL
+                                      AND CREATEDDATETIME >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
+                                      AND CREATEDDATETIME < DATEADD(DAY, 1, CAST(GETDATE() AS DATE))
+                                    ";
+
+                            using (SqlCommand cmd = new SqlCommand(query, connection))
+                            using (SqlDataReader reader = cmd.ExecuteReader())
+                            {
+                                XNamespace ns = "http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Commerce.Runtime.DataModel";
+
+                                while (reader.Read())
+                                {
+                                    if (reader["TRANSACTIONDATA"] == DBNull.Value)
+                                        continue;
+
+                                    byte[] data = (byte[])reader["TRANSACTIONDATA"];
+                                    string xml = Encoding.UTF8.GetString(data);
+
+                                    XDocument doc = XDocument.Parse(xml);
+
+                                    var items = doc.Descendants(ns + "SalesLine")
+                                                   .Select(x => new
+                                                   {
+                                                       ItemId = (string)x.Element(ns + "ItemId"),
+                                                       Qty = (decimal?)x.Element(ns + "Quantity") ?? 0
+                                                   })
+                                                   .Where(x => !string.IsNullOrEmpty(x.ItemId));
+
+                                    foreach (var item in items)
+                                    {
+                                        if (!dict.ContainsKey(item.ItemId))
+                                            dict[item.ItemId] = 0;
+
+                                        dict[item.ItemId] += item.Qty;
+                                    }
+                                }
+                            }
+                        }
+
+                        // convert ke List<string>
+                        var result = dict
+                            .Select(x => x.Key + ":" + x.Value)
+                            .ToList();
                     }
                     break;
                 //Application.RunOperation(PosisOperations.PayCard, string.Empty, posTransaction);

@@ -125,7 +125,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 		public int tenderGrabMart = 16;//for Grabmart PROD by Yonathan 10/11/2023 
 		public int tenderShopee = 15;
 		public int tenderShopeeDev = 15;
-        public int tenderBlibliorder = 37;
+        public int tenderBlibliorder = 42;
         public int tenderBlibliorderDev = 37;
 		private PictureBox placeHolderQR;
 		public bool isIntegrated = false;
@@ -625,7 +625,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 						this.Close();
 					}
 				}
-				string noOrder = getNoOrder(this.posTransaction.TransactionId);
+				string noOrder = getNoOrder(this.posTransaction.TransactionId); 
 				lblReff.Text = "Order Id.";
 				txtReff.ReadOnly = true;
 				txtReff.Text = noOrder;
@@ -642,7 +642,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 				btnInquiry.Visible = false;
 				numPad1.Enabled = false;
 			}
-            else if (int.Parse(this.tenderInfo.TenderID) == tenderBlibliorder || int.Parse(this.tenderInfo.TenderID) == tenderBlibliorderDev)
+            else if (int.Parse(this.tenderInfo.TenderID) == tenderBlibliorder ) // || int.Parse(this.tenderInfo.TenderID) == tenderBlibliorderDev)
             
             {
 
@@ -1532,8 +1532,8 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 
 			}
             //for blibli
-            if (int.Parse(this.tenderInfo.TenderID) == tenderBlibliorder
-            || int.Parse(this.tenderInfo.TenderID) == tenderBlibliorderDev)
+            if (int.Parse(this.tenderInfo.TenderID) == tenderBlibliorder)
+            //|| int.Parse(this.tenderInfo.TenderID) == tenderBlibliorderDev)
             {
                 // resuspend the transaction if clicked cancel
                 using (SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection)
@@ -2224,8 +2224,8 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
                         //APIAccess.APIAccessClass.grabCustPhone = "";
                         //APIAccess.APIAccessClass.grabOrderIdLong = "";
 					}
-                    else if (int.Parse(this.tenderInfo.TenderID) == tenderBlibliorder
-                || int.Parse(this.tenderInfo.TenderID) == tenderBlibliorderDev)
+                    else if (int.Parse(this.tenderInfo.TenderID) == tenderBlibliorder)
+                //|| int.Parse(this.tenderInfo.TenderID) == tenderBlibliorderDev)
                     {
                         APIAccess.APIFunction apiFunction = new APIAccess.APIFunction();
                         APIAccess.APIParameter.Receiver receiverParm;
@@ -2235,7 +2235,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
                         string url = APIClass.getURLAPIByFuncName(functionName);
                         bool error, error2,status = false;
                         //bool isApiAvailable = apiFunction.CheckApiAvailability(url).Result;
-                        status = apiFunction.CheckForInternetConnection(PosApplication.Instance, url);
+                        status = true;// apiFunction.CheckForInternetConnection(PosApplication.Instance, url); 
                         if (status == true)
                         {
  
