@@ -254,6 +254,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 	                                        [PRODUCTNAME] as [Item Name], 
 	                                        [DISCAMOUNT] as [Disc. Amount], 
 	                                        [DISCPERCENTAGE] as [Disc. Percentage], 
+                                            [DISCINCLTAX] as [Disc. Incl Tax],
 	                                        [MAXQTY] as [Max Qty], 
 	                                        CPPROMOEDQTYPERSTRUKDETAIL.PROMOID AS [Promo ID],
 	                                        CPPROMOEDQTYPERSTRUKDETAIL.MAXQTYPERRECEIPT AS [Max Qty per Rcpt],
@@ -351,7 +352,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 
                     }
 
-                    SqlDataAdapter adapter = new SqlDataAdapter(command);
+                    SqlDataAdapter adapter = new SqlDataAdapter(command); 
                     DataTable dataTable = new DataTable();
                     adapter.Fill(dataTable);
 
@@ -918,7 +919,9 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 											[PRODUCTNAME] as [Item Name], 
 											[DISCAMOUNT] as [Disc. Amount], 
 											[DISCPERCENTAGE] as [Disc. Percentage], 
+                                            [DISCINCLTAX] as [Disc. Incl Tax],
 											[MAXQTY] as [Max Qty], 
+                                            
 											CPPROMOEDQTYDETAIL.PROMOID AS [Promo ID],
 											(
 												SELECT  ISNULL(ABS(SUM(S.QTY)),0) QTY 
@@ -1024,6 +1027,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 			decimal maxDisc = 0;
 			decimal pctDisc = 0;
 			decimal amtDisc = 0;
+            decimal discInclTax = 0;
 			decimal minPaymAmt = 0;
 			decimal amountPct = 0;
 			string message = "";
@@ -1041,7 +1045,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 			promoId = dataGridResult.Rows[e.RowIndex].Cells["Promo ID"].Value.ToString();
 			promoName = dataGridResult.Rows[e.RowIndex].Cells["Promo Name"].Value.ToString();
 			pctDisc = Convert.ToDecimal(dataGridResult.Rows[e.RowIndex].Cells["Disc. Percentage"].Value);
-			amtDisc = Convert.ToDecimal(dataGridResult.Rows[e.RowIndex].Cells["Disc. Amount"].Value); 
+			amtDisc = Convert.ToDecimal(dataGridResult.Rows[e.RowIndex].Cells["Disc. Amount"].Value);
+            discInclTax = Convert.ToDecimal(dataGridResult.Rows[e.RowIndex].Cells["Disc. Incl Tax"].Value);
 			minPaymAmt = Convert.ToDecimal(dataGridResult.Rows[e.RowIndex].Cells["Min. Payment"].Value);
 			itemId = dataGridResult.Rows[e.RowIndex].Cells["ItemId"].Value.ToString();
 			qtyMax = Convert.ToDecimal(dataGridResult.Rows[e.RowIndex].Cells["Max Qty"].Value);
@@ -1302,11 +1307,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 				LSRetailPosis.Transaction.Line.Discount.LineDiscountItem lineDisc = new LSRetailPosis.Transaction.Line.Discount.LineDiscountItem();
                 if (operationId == "23")
                 {
-                    selectPromoItem(line.ItemId, _promoId, out pctDisc, out amtDisc, out fromDate, out toDate);//, out discInclTax); //include discInclTax CP_MDF_POSPDI - Yonathan 26052026
+                    selectPromoItem(line.ItemId, _promoId, out pctDisc, out amtDisc, out fromDate, out toDate, out discInclTax); //include discInclTax CP_MDF_POSPDI - Yonathan 26052026
                 }
                 else if (operationId == "25")
                 {
-                    selectPromoItemReceipt(line.ItemId, _promoId, out pctDisc, out amtDisc, out fromDate, out toDate);//, out discInclTax); //include discInclTax CP_MDF_POSPDI - Yonathan 26052026
+                    selectPromoItemReceipt(line.ItemId, _promoId, out pctDisc, out amtDisc, out fromDate, out toDate, out discInclTax); //include discInclTax CP_MDF_POSPDI - Yonathan 26052026
                 }
 				
                 //check if this line already has a discount with the same promo ID
@@ -1323,15 +1328,41 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                 if (existingDiscount == null)
                 {
                     DiscountItem discItem = new PeriodicDiscountItem();
-                    if (pctDisc == 0)
+
+                    if (amtDisc != 0)
                     {
                         discItem.Amount = amtDisc;
-                        
+                        discItem.DealPrice = 0;
+                        discItem.Percentage = 0;
+                        discItem.EffectiveAmount = 0;
                     }
-                    else if (amtDisc == 0)
+                    else if (pctDisc != 0)
                     {
                         discItem.Percentage = pctDisc;
+                        discItem.DealPrice = 0;
+                        discItem.Amount = 0;
+                        discItem.EffectiveAmount = 0;
                     }
+                    else if (discInclTax != 0)
+                    {
+                        discItem.DealPrice = discInclTax;
+                        discItem.Percentage = 0;
+                        discItem.Amount = 0;
+                        discItem.EffectiveAmount = 0;
+                        // Diskon berdasarkan nominal termasuk pajak
+                    }
+                   
+
+                    //if (pctDisc == 0)
+                    //{
+                    //    discItem.Amount = amtDisc;
+                        
+                    //}
+                    //else if (amtDisc == 0)
+                    //{
+                    //    discItem.Percentage = pctDisc;
+                    //}
+                    
 
                     PeriodicDiscountItem periodDiscItem = discItem as PeriodicDiscountItem;
                     periodDiscItem.OfferId = _promoId;
@@ -1376,11 +1407,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 			//transaction.CurrentSaleLineItem.DiscountLines.AddFirst(discItem);
 		}
 
-		private void selectPromoItem(string itemId, string promoId, out decimal pctDisc, out decimal amtDisc, out DateTime fromDate, out DateTime toDate)//, out decimal discInclTax)
+		private void selectPromoItem(string itemId, string promoId, out decimal pctDisc, out decimal amtDisc, out DateTime fromDate, out DateTime toDate, out decimal discInclTax)
 		{
 			amtDisc = 0;
 			pctDisc = 0;
-            //discInclTax = 0;
+            discInclTax = 0;
 			fromDate = DateTime.Now;
 			toDate = DateTime.Now;
             SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
@@ -1394,6 +1425,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 							      ,[DISCPERCENTAGE]
 							      ,[RETAILSTOREID]
 							      ,[FROMDATE]
+                                  ,[DISCINCLTAX]
 							      ,[TODATE]
 						      FROM [ax].[CPPROMOEDQTYDETAIL] LINES
 						      LEFT JOIN [AX].[CPPROMOEDQTY] HEADER
@@ -1420,7 +1452,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 
 							    pctDisc = Convert.ToDecimal(reader["DISCPERCENTAGE"]);
 							    amtDisc = Convert.ToDecimal(reader["DISCAMOUNT"]);
-                                //discInclTax = Convert.ToDecimal(reader["DISCINCLTAX"]);
+                                discInclTax = Convert.ToDecimal(reader["DISCINCLTAX"]);
 							    fromDate = Convert.ToDateTime(reader["FROMDATE"].ToString());
 							    toDate = Convert.ToDateTime(reader["TODATE"].ToString());
 						    }
@@ -1442,11 +1474,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                 }
             }
 		}
-        private void selectPromoItemReceipt(string itemId, string promoId, out decimal pctDisc, out decimal amtDisc, out DateTime fromDate, out DateTime toDate)//, out decimal discInclTax)
+        private void selectPromoItemReceipt(string itemId, string promoId, out decimal pctDisc, out decimal amtDisc, out DateTime fromDate, out DateTime toDate, out decimal discInclTax)
         {
             amtDisc = 0;
             pctDisc = 0;
-            //discInclTax = 0;
+            discInclTax = 0;
             fromDate = DateTime.Now;
             toDate = DateTime.Now;
             SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
@@ -1456,7 +1488,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                 queryString = @"SELECT LINES.[PROMOID]       
 							  ,[ITEMID]     
 							  ,[DISCAMOUNT]
-							  ,[DISCPERCENTAGE]      
+							  ,[DISCPERCENTAGE]
+                              ,[DISCINCLTAX]      
 							  ,[RETAILSTOREID]
 							  ,[FROMDATE]
 							  ,[TODATE]
@@ -1485,6 +1518,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 
                                 pctDisc = Convert.ToDecimal(reader["DISCPERCENTAGE"]);
                                 amtDisc = Convert.ToDecimal(reader["DISCAMOUNT"]);
+                                discInclTax = Convert.ToDecimal(reader["DISCINCLTAX"]);
                                 fromDate = Convert.ToDateTime(reader["FROMDATE"].ToString());
                                 toDate = Convert.ToDateTime(reader["TODATE"].ToString());
                             }
@@ -2037,10 +2071,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 			dataGridResult.Columns[7].DefaultCellStyle.Format = "N2";
 			dataGridResult.Columns[8].Width = 70;
 			dataGridResult.Columns[8].DefaultCellStyle.Format = "N2";
-			dataGridResult.Columns[9].Visible = false;
+            dataGridResult.Columns[9].Width = 70;
+            //dataGridResult.Columns[9].Visible = false;
 			dataGridResult.Columns[10].Width = 80;
 			dataGridResult.Columns[10].DefaultCellStyle.Format = "N2";
-
+            dataGridResult.Columns[10].Visible = false;
             if (dataGridResult.Columns[11] != null)
             {
                 dataGridResult.Columns[11].Width = 80;

@@ -1067,6 +1067,7 @@ namespace APIAccess
             APIAccess.APIAccessClass.izoneTraceNumber = "";
             APIAccess.APIAccessClass.receiptIzone = "";
             APIAccess.APIAccessClass.isRetur = false;
+            APIAccess.APIAccessClass.blibliOrderIdLong = "";
         }
         public void LogErrorToEventViewer(string errorDetails)
         {
