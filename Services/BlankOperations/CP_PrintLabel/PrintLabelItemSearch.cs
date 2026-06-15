@@ -122,7 +122,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
                                         INNER JOIN [AX].[INVENTTABLEMODULE] ITM 
                                             ON ITM.ITEMID = ERP.[DISPLAYPRODUCTNUMBER]
                                             AND ITM.MODULETYPE = 2
-                                        INNER JOIN [AX].[INVENTITEMBARCODE] IIB
+                                        LEFT JOIN [AX].[INVENTITEMBARCODE] IIB
 	                                        ON IIB.ITEMID = ERP.[DISPLAYPRODUCTNUMBER]
                                         WHERE (ERP.[DISPLAYPRODUCTNUMBER] LIKE @ProductNumber OR [NAME] LIKE @SearchName)
                                           AND EPT.LANGUAGEID = 'en-us'
