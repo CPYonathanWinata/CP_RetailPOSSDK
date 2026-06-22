@@ -411,7 +411,7 @@ namespace Microsoft.Dynamics.Retail.Pos.ApplicationTriggers
 
 			result = checkTaxTable(storeId, dataAreaId);
 
-
+            //disable for PRJ
             result = checkCustomTablesAndFields(storeId, dataAreaId); //checkCustomTables(storeId, dataAreaId);
             if (result == false)
             {
@@ -611,6 +611,7 @@ namespace Microsoft.Dynamics.Retail.Pos.ApplicationTriggers
 			}
 
 			//add by Yonathan for connecting to SQL
+            //disable PRJ
 			getDataSql();
 			//end add
 			//APIFunction.getMysqlConn(application);//add by Yonathan to lookup for API URL 08/08/2023

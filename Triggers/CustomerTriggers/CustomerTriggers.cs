@@ -92,8 +92,8 @@ namespace Microsoft.Dynamics.Retail.Pos.CustomerTriggers
             LSRetailPosis.ApplicationLog.Log("ICustomerTriggersV2.PostCustomer", "Triggered at the end.", LSRetailPosis.LogTraceLevel.Trace);
 
             RetailTransaction   transaction = posTransaction as RetailTransaction;
-            if (Application.TransactionServices.CheckConnection())
-			{ 
+            //if (Application.TransactionServices.CheckConnection())
+			//{ 
 			    try
 			    {
                     //CHANGE TO LOCAL 30102024 - YONATHAN
@@ -115,7 +115,7 @@ namespace Microsoft.Dynamics.Retail.Pos.CustomerTriggers
                     LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
                     throw;
                 }
-            }  
+            //}  
 
             ////check if already add item first before adding the customer canvas or b2b 
             //if ( ( APIAccess.APIAccessClass.isB2b  == "1" || APIAccess.APIAccessClass.isB2b  == "2") && ( transaction.SaleItems.Count != 0 || transaction.SaleItems != null))
@@ -213,8 +213,8 @@ namespace Microsoft.Dynamics.Retail.Pos.CustomerTriggers
             }
 
             RetailTransaction transaction = posTransaction as RetailTransaction;
-            if (Application.TransactionServices.CheckConnection())
-            {
+            //if (Application.TransactionServices.CheckConnection())
+            //{
                 try
                 {
                     //CHANGE TO LOCAL 30102024 - YONATHAN
@@ -242,7 +242,7 @@ namespace Microsoft.Dynamics.Retail.Pos.CustomerTriggers
                     LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
                     throw;
                 }
-            }
+            //}
 
             //check if already add item first before adding the customer canvas or b2b 
             if ((APIAccess.APIAccessClass.isB2b == "1" || APIAccess.APIAccessClass.isB2b == "2") )//|| transaction.SaleItems != null))

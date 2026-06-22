@@ -773,12 +773,15 @@ namespace Microsoft.Dynamics.Retail.Pos.Customer
                 }
 
                 // we need the TS call regardless because we need the replication counter to identify the pending transactions.
+                //for PRJ DISABLE
                 CustomerBalances customerBalances = Customer.GetCustomerBalances(tempCust.CustomerId, tempCust.InvoiceAccount);
 
                 //check against the balance data (posted and local pending transactions)
+                //for PRJ DISABLE
                 valid = IsBalanceOverTheLimit(tempCust, customerBalances, ref comment);
 
                 // Use the InvoiceAccount if it is present.
+                //for PRJ DISABLE
                 if (!string.IsNullOrEmpty(tempCust.InvoiceAccount))
                 {
                     // we add the local balances to the amount of the order. 
@@ -790,6 +793,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Customer
                     decimal amountToCheck = amount + customerBalances.LocalPendingBalance;
                     this.Application.TransactionServices.ValidateCustomerStatus(ref valid, ref comment, tempCust.CustomerId, amountToCheck, retailTransaction.StoreCurrencyCode);
                 }
+                
 
                 if (!valid)
                 {

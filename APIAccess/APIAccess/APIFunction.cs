@@ -1382,7 +1382,7 @@ namespace APIAccess
         {
 
 
-            public static void GetApiConfig(string _apiUrl, string _storeId, string _dataAreaId, IApplication _application )
+            public static void GetApiConfig(string _apiUrl, string _storeId, string _dataAreaId, IApplication _application = null )
             {
                 ServicePointManager.Expect100Continue = true;
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |

@@ -391,6 +391,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Printing
                         case "CASHIER":
                             return LSRetailPosis.Settings.ApplicationSettings.Terminal.TerminalOperator.Name;
                         case "CUSTOMERNAME":
+                            //for PRJ
                             getMemberName(theTransaction);
                             if (loyaltyFullName != string.Empty)
                             {

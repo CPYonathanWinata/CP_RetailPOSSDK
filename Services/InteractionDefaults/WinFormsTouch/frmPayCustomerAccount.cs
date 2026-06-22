@@ -49,6 +49,7 @@ using System.Net;
 using System.IO;
 using System.Drawing.Printing;
 using APIAccess;
+using System.Xml;
 
 namespace Microsoft.Dynamics.Retail.Pos.Interaction
 {
@@ -529,6 +530,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 			else if ((int.Parse(this.tenderInfo.TenderID) == tenderShopee
 				|| int.Parse(this.tenderInfo.TenderID) == tenderShopeeDev) && isIntegrated == true)
 			{
+                
 				getURLAPI(); //disable temporarily for testing JOFFICE 11092024
 
                 //temp code to define URL for SHOPEE
@@ -4111,6 +4113,8 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 		#region QRIS custom Code
         private void getURLAPI()
         {
+            //disable for PRJ
+            //getDataSql();
 
             if (APIAccessClass.QrisUrlConfig.ContainsKey("SHOPEEPAY"))
             {
@@ -4316,6 +4320,95 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
             amountAdmFee = (Math.Truncate(Convert.ToDecimal(admFee) * 1000m) / 1000m);
             return amountAdmFee;
         }
+
+        public void getDataSql()
+        {
+            string PathDirectory = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Pos.exe.config");
+            string storeId = getFolderPath(PathDirectory, "StoreId");
+            string dataAreaId = PosApplication.Instance.Settings.Database.DataAreaID.ToString();
+            bool result = true;
+            //APIAccess.MySQLConnect connectSQL = new APIAccess.MySQLConnect();
+
+            //connectSQL.connectToDB(storeID, dataAreaId);
+
+            connectToDB(storeId, dataAreaId);
+ 
+        }
+
+        public string getFolderPath(string ProcessingDirectory, string typeFolder)
+        {
+            string Folder = "";
+
+            XmlDocument xdoc = new XmlDocument();
+            xdoc.Load(ProcessingDirectory);
+            XmlNode xnodes = xdoc.SelectSingleNode("configuration");
+            XmlNodeList xmlList = xnodes.SelectNodes("AxRetailPOS");
+
+            foreach (XmlNode xmlNodeS in xmlList)
+            {
+                Folder += "," + xmlNodeS.Attributes.GetNamedItem(typeFolder).Value;
+            }
+            return Folder.Substring(1);
+        }
+
+        public void connectToDB(string _storeId, string _dataAreaId)
+        {
+            //var pack = new APIParameter.parmRequestAPIConfig()
+            //{
+            //    STOREID = _storeId,
+            //    DATAAREAID = _dataAreaId
+            //};
+
+           
+
+            string urlAPI = "";
+            string PathDirectory = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Extensions\\", "APIConfig.xml");
+            try
+            {
+
+                urlAPI = getFolderPathConfig(PathDirectory, "urlAPI");
+                APIFunction.APIService.GetApiConfig(urlAPI, _storeId, _dataAreaId);
+
+                //APIFunction.APIService.GetApiConfig("https://apiqrisdev.cp.co.id/api/pos/config/getConfig", _storeId, _dataAreaId);
+                //http://10.1.4.74
+
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+
+
+                using (frmMessage dialogError = new frmMessage(string.Format("{0}", ex.Message), MessageBoxButtons.OK, MessageBoxIcon.Error))
+                {
+                    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialogError);
+
+                    Close();
+                    pressCancel = "1";
+                    this.Close();
+                }
+                throw;
+            }
+            finally
+            {
+                
+            }
+        }
+
+        public string getFolderPathConfig(string ProcessingDirectory, string typeFolder)
+        {
+            string Folder = "";
+
+            XmlDocument xdoc = new XmlDocument();
+            xdoc.Load(ProcessingDirectory);
+            XmlNode xnodes = xdoc.SelectSingleNode("configuration");
+            XmlNodeList xmlList = xnodes.SelectNodes("folderpath");
+
+            foreach (XmlNode xmlNodeS in xmlList)
+            {
+                Folder += "," + xmlNodeS.Attributes.GetNamedItem(typeFolder).Value;
+            }
+            return Folder.Substring(1);
+        }
 	}
 
     class Printer
@@ -4460,6 +4553,8 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
             // Print the image at the top-left corner of the page
             e.Graphics.DrawImage(imageToPrint, 0, 0, e.PageBounds.Width, e.PageBounds.Height);
         }
+
+        
     }
 
 }
