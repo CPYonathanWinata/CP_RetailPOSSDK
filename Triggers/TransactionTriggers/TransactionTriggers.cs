@@ -339,6 +339,12 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 				// END CPVOUCHERCODE CUSTOMIZATION
 
 
+                //add by Yonathan to update status 02062026 BLIBLI MART
+                if (APIAccess.APIAccessClass.blibliOrderIdLong != "")
+                {
+                    UpdateStatusBlibliMart(posTransaction); 
+                }
+                
 				//added customization by yonathan 08/09/2022
 				//loop through all of the item transaction
 				AddItemTransaction(posTransaction); //disable this for PRJ
@@ -376,6 +382,21 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 		 
 		}
 
+        private void UpdateStatusBlibliMart(IPosTransaction posTransaction)
+        {
+            APIAccess.APIFunction apiFunction = new APIAccess.APIFunction();
+            APIAccess.APIParameter.Receiver receiverParm;
+
+            string functionName = "UpdateStatusTransBlibli";
+            APIAccess.APIAccessClass APIClass = new APIAccess.APIAccessClass();
+            string url = APIClass.getURLAPIByFuncName(functionName); 
+            bool error, error2, status = false;
+            //bool isApiAvailable = apiFunction.CheckApiAvailability(url).Result;
+            status = true;
+
+            APIAccess.APIParameter.ApiResponseBlibliUpdateTransStatus response = APIAccess.APIFunction.BlibliOrderAPI.updateTransStatus(url, APIAccess.APIAccessClass.blibliOrderIdLong, posTransaction.ReceiptId);     
+        }
+
         private void topupPayment(IPosTransaction posTransaction)
         {
             int retryCount = 0;
@@ -387,7 +408,7 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
             APIAccess.APIAccessClass APIClass = new APIAccess.APIAccessClass();
             url = APIClass.getURLAPIByFuncName(functionName);
 
-            //check status first
+            //check status first  
             APIAccess.APIParameter.ApiResponseCheckTransIzone responseAPICheckStatus = APIAccess.APIFunction.IzoneAPI.checkStatusTransaction(LSRetailPosis.Settings.ApplicationSettings.Database.DATAAREAID, LSRetailPosis.Settings.ApplicationSettings.Database.StoreID, ApplicationSettings.Terminal.TerminalId, APIAccess.APIAccessClass.izoneTraceNumber, url);
 
             //if  error, then process to payment

@@ -851,11 +851,12 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                                     {
                                         PeriodicDiscountItem periodDiscItem = discountLines as PeriodicDiscountItem;
                                         //this to exclude the other discount ID
-                                        if (periodDiscItem.OfferId.StartsWith("PDI")) //if (periodDiscItem.OfferId.StartsWith("ED")) //if (periodDiscItem.OfferId.StartsWith("PDI")) //
-                                        {
-                                            //promoID = periodDiscItem.OfferId;
-                                        }
-                                        else if (periodDiscItem.OfferId.StartsWith("PDIS")) //if (periodDiscItem.OfferId.StartsWith("QS"))
+                                        //if (periodDiscItem.OfferId.StartsWith("PDI")) //if (periodDiscItem.OfferId.StartsWith("ED")) //if (periodDiscItem.OfferId.StartsWith("PDI")) //
+                                        //{
+                                        //    //promoID = periodDiscItem.OfferId;
+                                        //}
+                                        //else 
+                                        if (periodDiscItem.OfferId.StartsWith("PDIS")) //if (periodDiscItem.OfferId.StartsWith("QS"))
                                         {
                                             using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Tidak bisa akses ke menu ini karena sudah mendapat diskon", MessageBoxButtons.OK, MessageBoxIcon.Stop))
                                             {
@@ -1347,6 +1348,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                         {
                             lineDisc.Amount += 1000;
                             Application.Services.Discount.AddLineDiscountAmount(item,lineDisc);
+
+                         
 
                             
 
@@ -1852,6 +1855,33 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                             .Select(x => x.Key + ":" + x.Value)
                             .ToList();
                     }
+                    break;
+                     case "107":
+
+                    {
+                        RetailTransaction transaction;
+                        transaction = posTransaction as RetailTransaction;
+                        LSRetailPosis.Transaction.Line.Discount.LineDiscountItem lineDisc = new LSRetailPosis.Transaction.Line.Discount.LineDiscountItem();
+                        //lineDisc.Amount = 1000;
+                      
+                        foreach (var item in transaction.SaleItems)
+                        {                             
+
+                            lineDisc.Amount = 20000;                            
+                            Application.Services.Discount.AddLineDiscountAmount(item, lineDisc);
+                        }
+                        Application.BusinessLogic.ItemSystem.CalculatePriceTaxDiscount(transaction);
+                        //globalTransaction.CalcTotals();
+                        transaction.CalcTotals();
+                        transaction.Save();
+
+                        Application.RunOperation(PosisOperations.DisplayTotal, "");
+
+                        //Application.RunOperation(PosisOperations.LineDiscountAmount);
+                         
+
+                    }
+                    
                     break;
                 //Application.RunOperation(PosisOperations.PayCard, string.Empty, posTransaction);
                 //CP_SalesOrderDetail cpSalesDetail = new CP_SalesOrderDetail(Application);

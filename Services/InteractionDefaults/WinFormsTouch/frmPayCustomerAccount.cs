@@ -2229,53 +2229,57 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
                     else if (int.Parse(this.tenderInfo.TenderID) == tenderBlibliorder)
                 //|| int.Parse(this.tenderInfo.TenderID) == tenderBlibliorderDev)
                     {
-                        APIAccess.APIFunction apiFunction = new APIAccess.APIFunction();
-                        APIAccess.APIParameter.Receiver receiverParm;
 
-                        string functionName = "UpdateStatusTransBlibli";
-                        APIAccess.APIAccessClass APIClass = new APIAccess.APIAccessClass();
-                        string url = APIClass.getURLAPIByFuncName(functionName);
-                        bool error, error2,status = false;
-                        //bool isApiAvailable = apiFunction.CheckApiAvailability(url).Result;
-                        status = true;// apiFunction.CheckForInternetConnection(PosApplication.Instance, url); 
-                        if (status == true)
-                        {
+                        //disable update trans from here, moved to transactionTrigger UpdateStatusBlibliMart
+
+
+                        //APIAccess.APIFunction apiFunction = new APIAccess.APIFunction();
+                        //APIAccess.APIParameter.Receiver receiverParm;
+
+                        //string functionName = "UpdateStatusTransBlibli";
+                        //APIAccess.APIAccessClass APIClass = new APIAccess.APIAccessClass();
+                        //string url = APIClass.getURLAPIByFuncName(functionName);
+                        //bool error, error2,status = false;
+                        ////bool isApiAvailable = apiFunction.CheckApiAvailability(url).Result;
+                        //status = true;// apiFunction.CheckForInternetConnection(PosApplication.Instance, url); 
+                        //if (status == true)
+                        //{
  
-                            APIAccess.APIParameter.ApiResponseBlibliUpdateTransStatus response = APIAccess.APIFunction.BlibliOrderAPI.updateTransStatus(url, APIAccess.APIAccessClass.blibliOrderIdLong, APIAccess.APIAccessClass.posTransaction.TransactionId);                     
+                        //    APIAccess.APIParameter.ApiResponseBlibliUpdateTransStatus response = APIAccess.APIFunction.BlibliOrderAPI.updateTransStatus(url, APIAccess.APIAccessClass.blibliOrderIdLong, APIAccess.APIAccessClass.posTransaction.TransactionId);                     
 
                         
-                        }
-                        else
-                        {
-                            string errText = "Tidak bisa terhubung dengan jaringan API.\nSilakan cek koneksi jaringan\ndan coba secara berkala.";
-                            if (retryCountGrab == 2)
-                            {
-                                errText = "Tidak bisa terhubung dengan jaringan.\nSilakan batalkan transaksi ini dan coba proses ulang dari menu Blibli Order";
-                            }
-                            using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage(errText, MessageBoxButtons.OK, MessageBoxIcon.Error))
-                            {
-                                LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
-                                retryCountGrab++;
+                        //}
+                        //else
+                        //{
+                        //    string errText = "Tidak bisa terhubung dengan jaringan API.\nSilakan cek koneksi jaringan\ndan coba secara berkala.";
+                        //    if (retryCountGrab == 2)
+                        //    {
+                        //        errText = "Tidak bisa terhubung dengan jaringan.\nSilakan batalkan transaksi ini dan coba proses ulang dari menu Blibli Order";
+                        //    }
+                        //    using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage(errText, MessageBoxButtons.OK, MessageBoxIcon.Error))
+                        //    {
+                        //        LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                        //        retryCountGrab++;
 
-                                if (retryCountGrab >= 3)
-                                {
-                                    btnCancel.Enabled = true;
-                                    btnOk.Enabled = false;
-                                }
-                                else
-                                {
-                                    btnCancel.Enabled = false;
-                                    btnOk.Enabled = true;
-                                }
+                        //        if (retryCountGrab >= 3)
+                        //        {
+                        //            btnCancel.Enabled = true;
+                        //            btnOk.Enabled = false;
+                        //        }
+                        //        else
+                        //        {
+                        //            btnCancel.Enabled = false;
+                        //            btnOk.Enabled = true;
+                        //        }
 
-                                return;
+                        //        return;
 
 
-                                //btnOk.Enabled = false;
+                        //        //btnOk.Enabled = false;
 
-                            }
+                        //    }
 
-                        }
+                        //}
 
                    
                     }

@@ -585,6 +585,112 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPIBLIBLIORDERS
                          //this.DialogResult = DialogResult.OK;
                          //this.Close();
                      }
+                     else //if not exists, then create one and then pay customer
+                     {
+
+                        LSRetailPosis.POSProcesses.ItemSale iSale = new LSRetailPosis.POSProcesses.ItemSale();
+                        
+                        
+                        foreach (DataGridViewRow row in dgvOrderItems.Rows)
+                        {
+                            if (!row.IsNewRow) // hindari baris kosong terakhir
+                            {
+                                // Contoh ambil value dari kolom "ItemId" dan "Quantity"
+                                string itemId = row.Cells["itemid"].Value.ToString();
+                                decimal quantity = Convert.ToDecimal(row.Cells["qty"].Value);
+
+
+                                RetailTransaction blibliPosTransactionLocal = BlankOperations.blibliPosTransaction as RetailTransaction;
+                                BlankOperations.itemIdToAdd = itemId;
+                                BlankOperations.quantityToAdd = quantity;
+
+
+                                applicationLoc.RunOperation(PosisOperations.BlankOperation, "BliBliTransaction", blibliPosTransactionLocal);
+                            }                          
+                                
+                        }
+
+                         RetailTransaction blibliPosTransaction = BlankOperations.blibliPosTransaction as RetailTransaction;
+                         //transaction.CalcTotals();
+                         //applydiscount voucher blibli (if any)
+                         if (totalAdjustment != 0)
+                         {
+                             //transaction.SetLoyaltyDiscAmount()
+                             blibliPosTransaction.SetTotalDiscAmount(totalAdjustment);
+                             blibliPosTransaction.Comment = "BliBliDiscount";
+                             try
+                             {
+                                 PreTriggerResult preTriggerResult = new LSRetailPosis.POSProcesses.PreTriggerResult();
+                                 PosApplication.Instance.Triggers.Invoke<IDiscountTrigger>((Action<IDiscountTrigger>)(t => t.PostTotalDiscountAmount(APIAccess.APIAccessClass.posTransaction)));
+                                 //LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSMessageDialog(2611); 
+
+                             }
+                             catch (Exception ex)
+                             {
+                                 LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                             }
+                             application.BusinessLogic.ItemSystem.CalculatePriceTaxDiscount(blibliPosTransaction);
+                             blibliPosTransaction.CalcTotals();
+                             //end
+
+                         }
+                        
+                         foreach (var itemSale in blibliPosTransaction.SaleItems)
+                         {
+                             IApplication applicationLocal = PosApplication.Instance as IApplication;
+
+                             var foundItem = orderList
+                                            .Where(o => o.product != null)
+                                            .SelectMany(o => o.product)
+                                            .FirstOrDefault(p => p.sellerSku == itemSale.ItemId);
+
+
+                             itemSale.CustomerPrice = foundItem.itemPrice;
+                             itemSale.GrossAmount = foundItem.itemPrice;
+                             itemSale.OriginalPrice = foundItem.itemPrice;
+                             itemSale.Price = foundItem.itemPrice;
+                             //itemSale.TaxAmount
+                             //salesLine.TradeAgreementPriceGroup = result[1];
+                             itemSale.TradeAgreementPrice = foundItem.itemPrice;
+
+                             itemSale.ClearPeriodicDiscounts();
+                             itemSale.ClearCustomerDiscountLines(true);                              
+                             applicationLoc.Services.Tax.CalculateTax(itemSale, blibliPosTransaction);
+
+ 
+                         }
+                         //applicationLoc.Services.Discount.AddTotalDiscountAmount(transaction, 10000);
+                     
+                         this.DialogResult = DialogResult.OK;
+                         this.Close();
+
+                         //remove discount
+                         foreach (var salesLine in blibliPosTransaction.CalculableSalesLines)
+                         {
+
+                             foreach (var lineDiscount in salesLine.DiscountLines.ToList())
+                             {
+
+                                 if (lineDiscount.ToString() != "LSRetailPosis.Transaction.Line.Discount.TotalDiscountItem")
+                                 {
+
+                                     salesLine.DiscountLines.Remove(lineDiscount);
+
+
+                                 }
+
+                             }
+
+                         }
+                        
+                         blibliPosTransaction.CalcTotals();
+                         blibliPosTransaction.Save();
+
+                         applicationLoc.RunOperation(PosisOperations.PayCustomerAccount, "42", blibliPosTransaction); 
+
+                         
+
+                     }
                  }
 
                

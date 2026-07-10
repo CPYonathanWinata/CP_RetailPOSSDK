@@ -233,8 +233,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 	        }
 	        //end
 
-	        //check temp table to send to API - Yonathan 22052026
-            /*
+            //check temp table to send to API - Yonathan 22052026 CPPOSITIVESTOCKPOS
+            
             int checkTempTableAPI = Convert.ToInt16(getFolderPathConfig(PathDirectory, "checkTempTableAPI"));
             if (checkTempTableAPI != 0)
             {
@@ -245,7 +245,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 
                 // Start the timer 
                 timerCheckTempTableAPI.Start();
-            }*/
+            }
 
 	        //int notifCheckConnection = 1;
 	        //if (notifCheckConnection != 0)

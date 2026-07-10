@@ -624,7 +624,7 @@ namespace Microsoft.Dynamics.Retail.Pos.ApplicationTriggers
 			//addNodeTcpBinding();
             
             //cancel monthly blbli #DISABLE PRJ
-            //getThisMonthCancelledBlibli();
+            getThisMonthCancelledBlibli();
 		}
 
 
