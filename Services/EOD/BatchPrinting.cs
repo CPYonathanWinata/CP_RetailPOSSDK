@@ -65,7 +65,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             StringBuilder reportLayout = new StringBuilder(2500);
 
             //Begin add NEC Hamzah
-            decimal totalDebit, totalCredit, totalGiftCard, totalPoint;
+            decimal totalDebit, totalCredit, totalGiftCard, totalPoint, totalPFMCOM;
             totalDebit = 0;
             totalCredit = 0;
             totalGiftCard = 0;
@@ -80,7 +80,126 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             DataTable dtPaymentContainer = new DataTable();
 
             dtItemContainer = BatchCalculation.getItemContainer(batch);
+
+            //add by Yonathan CP_MDFPOSPRINTXZ move & merge primafreshmart.com transaction to regular POS trans 24062026
+            //add by Yonathan to include the Cust Order for today 30082024
+            string returnString;
+            ReadOnlyCollection<object> containerArray;
+
+            string fromDate = batch.StartDateTime.ToString("yyyy-MM-dd HH:mm:ss"); // "29/08/2024 00:00:00";
+            string fromDateUtc = "";
+            string toDateUtc = "";
+            string toDate = reportType == ReportType.ZReport ? batch.CloseDateTime.ToString("yyyy-MM-dd HH:mm:ss") : DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"); //"29/08/2024 16:00:00";
+            string itemGroupLines = "";
+            decimal totalAmount, totalSales;
+            string returnValue = "false";
+            //containerArray = EOD.InternalApplication.TransactionServices.InvokeExtension("getSalesOrderSummary", "JKT", "WH_JDELIMA", fromDate, toDate);
+
+            string salesOrderParam = "";
+            // Example datetime
+            DateTime batchStartDateTime = batch.StartDateTime; // Use your batch.StartDateTime here
+            DateTime batchToDateTime = reportType == ReportType.ZReport ? batch.CloseDateTime : DateTime.Now; //"29/08/2024 16:00:00";
+            // Convert DateTime to DateTimeOffset to get the local timezone offset
+            DateTimeOffset fromDatelocalDateTimeOffset = new DateTimeOffset(batchStartDateTime, TimeZoneInfo.Local.GetUtcOffset(batchStartDateTime));
+            DateTimeOffset toDateLocalDateTimeOffset = new DateTimeOffset(batchToDateTime, TimeZoneInfo.Local.GetUtcOffset(batchToDateTime));
+            // Subtract the offset to get the UTC time
+            DateTime fromUtcDateTime = fromDatelocalDateTimeOffset.UtcDateTime;
+            DateTime toUtcDateTime = toDateLocalDateTimeOffset.UtcDateTime;
+            fromDateUtc = fromUtcDateTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture); //add InvariantCulture for global datetime format - yonathan 14102024 
+            toDateUtc = toUtcDateTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture); //add InvariantCulture for global datetime format - yonathan 14102024
+            // Format the UTC datetime to a string
+
+            //add online order from primafreshmart.com via RTS 24062026
+            salesOrderParam = getOnlineOrderTransaction(fromDateUtc, toDateUtc);
+            containerArray = EOD.InternalApplication.TransactionServices.InvokeExtension("getInvoiceOnlineSalesOrder", salesOrderParam);
+            returnString = containerArray[3].ToString();
+            returnValue = containerArray[1].ToString();
+
+
+            totalAmount = 0;
+            totalSales = 0;
+            totalPFMCOM = 0;
+
+            if (containerArray[1].ToString() != "False")
+            {
+
+
+                returnString = containerArray[3].ToString();
+                XDocument xdoc = XDocument.Parse(returnString);
+                var cultureInfo = new CultureInfo("id-ID");
+
+                var groupedData = xdoc.Descendants("CustInvoiceTrans")
+                     .Where(e => e.Attribute("ItemLines") != null)
+                     .Select(e =>
+                     {
+                         var fields = e.Attribute("ItemLines").Value.Split(';');
+                         return new
+                         {
+                             ItemId = fields[0],
+                             ItemName = fields[1],
+                             Quantity = decimal.Parse(fields[2], NumberStyles.Number, cultureInfo),
+                             LineAmount = decimal.Parse(fields[3], NumberStyles.Number, cultureInfo),
+                             CustAccount = fields.Last().Trim().Equals("Primafreshmart", StringComparison.OrdinalIgnoreCase)
+                                           ? "Primafreshmart"
+                                           : "Other"
+                         };
+                     })
+                     .GroupBy(x => x.CustAccount)
+                     .OrderByDescending(g => g.Key == "Primafreshmart")
+                     .Select(group => new
+                     {
+                         CustAccount = group.Key,
+                         Items = group
+                             .GroupBy(g => new { g.ItemId, g.ItemName })
+                             .Select(itemGroup => new
+                             {
+                                 itemGroup.Key.ItemId,
+                                 itemGroup.Key.ItemName,
+                                 TotalQty = itemGroup.Sum(x => x.Quantity),
+                                 TotalLineAmount = itemGroup.Sum(x => x.LineAmount)
+                             })
+                             .ToList()
+                     });
+
+
+                foreach (var group in groupedData)
+                {
+                    foreach (var item in group.Items)
+                    {
+                        // Check if item already exists in itemContainer
+                        DataRow existingRow = dtItemContainer.AsEnumerable()
+                            .FirstOrDefault(r => r.Field<string>("ITEMID") == item.ItemId);
+
+                        if (existingRow != null)
+                        {
+                            // Merge: add qty and amount to existing row
+                            existingRow["QTY"] = Math.Round((decimal)existingRow["QTY"] + item.TotalQty, 3, MidpointRounding.AwayFromZero);
+                            existingRow["AMOUNT"] = Math.Round((decimal)existingRow["AMOUNT"] + item.TotalLineAmount, 2, MidpointRounding.AwayFromZero);
+                        }
+                        else
+                        {
+                            // Add new row
+                            dtItemContainer.Rows.Add(
+                                item.ItemId,
+                                item.ItemName,
+                                Math.Round(item.TotalQty, 3, MidpointRounding.AwayFromZero),
+                                Math.Round(item.TotalLineAmount, 2, MidpointRounding.AwayFromZero),
+                                "" // VARIANT - not available from online transaction
+                            );
+                        }
+
+                        totalPFMCOM += item.TotalLineAmount;
+                    }
+                }
+
+               
+
+            }
+            //end
+            
             dtPaymentContainer = BatchCalculation.getPaymentDebit(batch);
+
+
 
             decimal AmountWalkInCustom = BatchCalculation.getAmountWalkIn(batch);
             decimal CountWalkInCustom = BatchCalculation.getCountWalkIn(batch);
@@ -361,6 +480,11 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
                     }
                 }
             }
+
+            //add by Yonathan 24062026 for PRIMAFRESHMART.COM
+            //string amountPFMCOM = totalPFMCOM.ToString();
+            reportLayout.AppendReportLine("Primafreshmart", RoundDecimal(totalPFMCOM));
+
             //END ADD BY ERWIN
 
             reportLayout.AppendLine();
@@ -443,6 +567,8 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
 
             reportLayout.AppendLine();
 
+            
+
             //add by Yonathan 20/20/2022
             Cashout cashOut = new Cashout();
 
@@ -513,33 +639,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             reportLayout.AppendLine();
 
 
-            //add by Yonathan to include the Cust Order for today 30082024
-            string returnString;
-            ReadOnlyCollection<object> containerArray;
             
-            string fromDate = batch.StartDateTime.ToString("yyyy-MM-dd HH:mm:ss"); // "29/08/2024 00:00:00";
-            string fromDateUtc = "";
-            string toDateUtc = "";
-            string toDate = reportType == ReportType.ZReport ? batch.CloseDateTime.ToString("yyyy-MM-dd HH:mm:ss") :  DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"); //"29/08/2024 16:00:00";
-            string itemGroupLines = "";
-            decimal totalAmount, totalSales;
-            string returnValue = "false";
-            //containerArray = EOD.InternalApplication.TransactionServices.InvokeExtension("getSalesOrderSummary", "JKT", "WH_JDELIMA", fromDate, toDate);
-            
-            string salesOrderParam = "";
-            // Example datetime
-            DateTime batchStartDateTime = batch.StartDateTime; // Use your batch.StartDateTime here
-            DateTime batchToDateTime = reportType == ReportType.ZReport ? batch.CloseDateTime : DateTime.Now; //"29/08/2024 16:00:00";
-            // Convert DateTime to DateTimeOffset to get the local timezone offset
-            DateTimeOffset fromDatelocalDateTimeOffset = new DateTimeOffset(batchStartDateTime, TimeZoneInfo.Local.GetUtcOffset(batchStartDateTime));
-            DateTimeOffset toDateLocalDateTimeOffset = new DateTimeOffset(batchToDateTime, TimeZoneInfo.Local.GetUtcOffset(batchToDateTime));
-            // Subtract the offset to get the UTC time
-            DateTime fromUtcDateTime = fromDatelocalDateTimeOffset.UtcDateTime;
-            DateTime toUtcDateTime = toDateLocalDateTimeOffset.UtcDateTime;
-            fromDateUtc = fromUtcDateTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture); //add InvariantCulture for global datetime format - yonathan 14102024 
-            toDateUtc = toUtcDateTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture); //add InvariantCulture for global datetime format - yonathan 14102024
-            // Format the UTC datetime to a string
-
             salesOrderParam = getCustOrderTransaction(fromDateUtc, toDateUtc);
             //"SO/24/0000000034;SO/24/0000000033;SO/24/0000000032;SO/24/0000000031";
             containerArray = EOD.InternalApplication.TransactionServices.InvokeExtension("getInvoiceSalesOrder", salesOrderParam);
@@ -626,10 +726,13 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
 
             }
             //section for online order - Yonathan 19112024
+            /*
             salesOrderParam = getOnlineOrderTransaction(fromDateUtc, toDateUtc);
             //old
             //containerArray = EOD.InternalApplication.TransactionServices.InvokeExtension("getInvoiceSalesOrder", salesOrderParam);
             //new -- Yonathan 10092025 to include only online order printxz checked
+
+
             containerArray = EOD.InternalApplication.TransactionServices.InvokeExtension("getInvoiceOnlineSalesOrder", salesOrderParam);
             returnString = containerArray[3].ToString();
             returnValue = containerArray[1].ToString();
@@ -637,68 +740,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
 
             totalAmount = 0;
             totalSales = 0;
-            //if (containerArray[1].ToString() != "False")
-            //{
-            //    reportLayout.AppendLine("");
-            //    reportLayout.AppendLine("-------------------------------------------------------");
-            //    reportLayout.AppendLine("Online Order Summary");
-            //    reportLayout.AppendLine("-------------------------------------------------------");
-            //    returnString = containerArray[3].ToString();
-            //    // Load XML into XDocument
-            //    XDocument xdoc = XDocument.Parse(returnString);
-            //    var cultureInfo = new CultureInfo("id-ID");
-            //    // Parse the XML and group by ItemId and ItemName
-            //    var groupedData = xdoc.Descendants("CustInvoiceTrans")
-            //        .Where(e => e.Attribute("ItemLines") != null)
-            //        .Select(e => e.Attribute("ItemLines").Value.Split(';'))
-            //        .GroupBy(
-            //            fields => new { ItemId = fields[0], ItemName = fields[1] }, // Group by ItemId and ItemName
-            //            fields => new
-            //            {
-            //                Quantity = decimal.Parse(fields[2], NumberStyles.Number, cultureInfo),
-            //                LineAmount = decimal.Parse(fields[3], NumberStyles.Number, cultureInfo),
-            //                SalesId = fields[4]
-            //            }
-            //        )
-            //        .Select(group => new
-            //        {
-            //            group.Key.ItemId,
-            //            group.Key.ItemName,
-            //            TotalQty = group.Sum(x => x.Quantity),
-            //            TotalLineAmount = group.Sum(x => x.LineAmount),
-            //            //SalesIdCount = group.Select(x => x.SalesId).Distinct().Count()
-            //        });
-
-            //    // Output the results
-            //    foreach (var data in groupedData)
-            //    {
-            //        reportLayout.AppendLine(string.Format("{0}        {1} - {2}", data.ItemId.ToString(), data.TotalQty, RoundDecimal(Convert.ToDecimal(data.TotalLineAmount))));
-
-            //        reportLayout.AppendLine(string.Format("{0}", data.ItemName.ToString()));
-            //        /*reportLayout.AppendLine(string.Format("{0} - {1}", data.ItemId.ToString(), data.ItemName.ToString()));
-
-            //        reportLayout.AppendLine(string.Format("{0} - {1}", data.TotalQty, RoundDecimal(Convert.ToDecimal(data.TotalLineAmount))));*/
-            //        /*reportLayout.AppendLine(string.Format("{0} - {1}", data.ItemId.ToString(), data.ItemName.ToString()));
-
-            //        reportLayout.AppendLine(string.Format("{0} - {1}", data.TotalQty, RoundDecimal(Convert.ToDecimal(data.TotalLineAmount))));*/
-            //        totalAmount += data.TotalLineAmount;
-            //        //totalSales = data.SalesIdCount;
-            //    }
-            //    XmlDocument xmlDoc = new XmlDocument();
-              
-            //    var distinctSalesIds = xdoc.Descendants("CustInvoiceTrans")
-            //        .Where(e => e.Attribute("ItemLines") != null)
-            //        .Select(e => e.Attribute("ItemLines").Value.Split(';').Last()) // Extract the last part (SalesId)
-            //        .Distinct() // Get distinct SalesId values
-            //        .Count(); // Count the number of distinct SalesId values
-
-            //    reportLayout.AppendLine("-------------------------------------------------------");
-             
-            //    reportLayout.AppendLine(string.Format("Total Amount Sales Order : {0}", RoundDecimal(Convert.ToDecimal(totalAmount))));
-              
-            //    reportLayout.AppendLine(string.Format("Total Sales Order : {0}", RoundDecimal(distinctSalesIds)));
-                 
-            //}
+           
 
 
             if (containerArray[1].ToString() != "False")
@@ -768,7 +810,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
 
                 
             }
-
+            */
 
             //end
 

@@ -1856,6 +1856,33 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                             .ToList();
                     }
                     break;
+                     case "107":
+
+                    {
+                        RetailTransaction transaction;
+                        transaction = posTransaction as RetailTransaction;
+                        LSRetailPosis.Transaction.Line.Discount.LineDiscountItem lineDisc = new LSRetailPosis.Transaction.Line.Discount.LineDiscountItem();
+                        //lineDisc.Amount = 1000;
+                      
+                        foreach (var item in transaction.SaleItems)
+                        {                             
+
+                            lineDisc.Amount = 20000;                            
+                            Application.Services.Discount.AddLineDiscountAmount(item, lineDisc);
+                        }
+                        Application.BusinessLogic.ItemSystem.CalculatePriceTaxDiscount(transaction);
+                        //globalTransaction.CalcTotals();
+                        transaction.CalcTotals();
+                        transaction.Save();
+
+                        Application.RunOperation(PosisOperations.DisplayTotal, "");
+
+                        //Application.RunOperation(PosisOperations.LineDiscountAmount);
+                         
+
+                    }
+                    
+                    break;
                 //Application.RunOperation(PosisOperations.PayCard, string.Empty, posTransaction);
                 //CP_SalesOrderDetail cpSalesDetail = new CP_SalesOrderDetail(Application);
                 //cpSalesDetail.ShowDialog();
