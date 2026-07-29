@@ -57,7 +57,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
         {
             // TextID's for the Z/X Report are reserved at 7000 - 7099 
 
-            if (EOD.InternalApplication.Services.Peripherals.FiscalPrinter.FiscalPrinterEnabled()) 
+            if (EOD.InternalApplication.Services.Peripherals.FiscalPrinter.FiscalPrinterEnabled())
             {
                 paperWidth = EOD.InternalApplication.Services.Peripherals.FiscalPrinter.GetLineLegth(null);
             }
@@ -65,14 +65,16 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             StringBuilder reportLayout = new StringBuilder(2500);
 
             //Begin add NEC Hamzah
-            decimal totalDebit, totalCredit, totalGiftCard, totalPoint, totalPFMCOM;
+            decimal totalDebit, totalCredit, totalGiftCard, totalPoint;
             totalDebit = 0;
             totalCredit = 0;
             totalGiftCard = 0;
             totalPoint = 0;
             decimal salesTotalCustom = BatchCalculation.getSalesTotal(batch);
             decimal paymentCashCustom = BatchCalculation.getPaymentCash(batch);
- //           decimal paymentEzeelinkCustom = BatchCalculation.getPaymentEzeelink(batch);
+            int lineWidth = 50; // matches the dashed separator width
+            decimal onlineOrderTotal = 0;
+            //           decimal paymentEzeelinkCustom = BatchCalculation.getPaymentEzeelink(batch);
             decimal giftCardTotal = BatchCalculation.getGiftCard(batch);
             decimal loyaltyCardTotal = BatchCalculation.getLoyaltyCard(batch);
 
@@ -80,126 +82,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             DataTable dtPaymentContainer = new DataTable();
 
             dtItemContainer = BatchCalculation.getItemContainer(batch);
-
-            //add by Yonathan CP_MDFPOSPRINTXZ move & merge primafreshmart.com transaction to regular POS trans 24062026
-            //add by Yonathan to include the Cust Order for today 30082024
-            string returnString;
-            ReadOnlyCollection<object> containerArray;
-
-            string fromDate = batch.StartDateTime.ToString("yyyy-MM-dd HH:mm:ss"); // "29/08/2024 00:00:00";
-            string fromDateUtc = "";
-            string toDateUtc = "";
-            string toDate = reportType == ReportType.ZReport ? batch.CloseDateTime.ToString("yyyy-MM-dd HH:mm:ss") : DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"); //"29/08/2024 16:00:00";
-            string itemGroupLines = "";
-            decimal totalAmount, totalSales;
-            string returnValue = "false";
-            //containerArray = EOD.InternalApplication.TransactionServices.InvokeExtension("getSalesOrderSummary", "JKT", "WH_JDELIMA", fromDate, toDate);
-
-            string salesOrderParam = "";
-            // Example datetime
-            DateTime batchStartDateTime = batch.StartDateTime; // Use your batch.StartDateTime here
-            DateTime batchToDateTime = reportType == ReportType.ZReport ? batch.CloseDateTime : DateTime.Now; //"29/08/2024 16:00:00";
-            // Convert DateTime to DateTimeOffset to get the local timezone offset
-            DateTimeOffset fromDatelocalDateTimeOffset = new DateTimeOffset(batchStartDateTime, TimeZoneInfo.Local.GetUtcOffset(batchStartDateTime));
-            DateTimeOffset toDateLocalDateTimeOffset = new DateTimeOffset(batchToDateTime, TimeZoneInfo.Local.GetUtcOffset(batchToDateTime));
-            // Subtract the offset to get the UTC time
-            DateTime fromUtcDateTime = fromDatelocalDateTimeOffset.UtcDateTime;
-            DateTime toUtcDateTime = toDateLocalDateTimeOffset.UtcDateTime;
-            fromDateUtc = fromUtcDateTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture); //add InvariantCulture for global datetime format - yonathan 14102024 
-            toDateUtc = toUtcDateTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture); //add InvariantCulture for global datetime format - yonathan 14102024
-            // Format the UTC datetime to a string
-
-            //add online order from primafreshmart.com via RTS 24062026
-            salesOrderParam = getOnlineOrderTransaction(fromDateUtc, toDateUtc);
-            containerArray = EOD.InternalApplication.TransactionServices.InvokeExtension("getInvoiceOnlineSalesOrder", salesOrderParam);
-            returnString = containerArray[3].ToString();
-            returnValue = containerArray[1].ToString();
-
-
-            totalAmount = 0;
-            totalSales = 0;
-            totalPFMCOM = 0;
-
-            if (containerArray[1].ToString() != "False")
-            {
-
-
-                returnString = containerArray[3].ToString();
-                XDocument xdoc = XDocument.Parse(returnString);
-                var cultureInfo = new CultureInfo("id-ID");
-
-                var groupedData = xdoc.Descendants("CustInvoiceTrans")
-                     .Where(e => e.Attribute("ItemLines") != null)
-                     .Select(e =>
-                     {
-                         var fields = e.Attribute("ItemLines").Value.Split(';');
-                         return new
-                         {
-                             ItemId = fields[0],
-                             ItemName = fields[1],
-                             Quantity = decimal.Parse(fields[2], NumberStyles.Number, cultureInfo),
-                             LineAmount = decimal.Parse(fields[3], NumberStyles.Number, cultureInfo),
-                             CustAccount = fields.Last().Trim().Equals("Primafreshmart", StringComparison.OrdinalIgnoreCase)
-                                           ? "Primafreshmart"
-                                           : "Other"
-                         };
-                     })
-                     .GroupBy(x => x.CustAccount)
-                     .OrderByDescending(g => g.Key == "Primafreshmart")
-                     .Select(group => new
-                     {
-                         CustAccount = group.Key,
-                         Items = group
-                             .GroupBy(g => new { g.ItemId, g.ItemName })
-                             .Select(itemGroup => new
-                             {
-                                 itemGroup.Key.ItemId,
-                                 itemGroup.Key.ItemName,
-                                 TotalQty = itemGroup.Sum(x => x.Quantity),
-                                 TotalLineAmount = itemGroup.Sum(x => x.LineAmount)
-                             })
-                             .ToList()
-                     });
-
-
-                foreach (var group in groupedData)
-                {
-                    foreach (var item in group.Items)
-                    {
-                        // Check if item already exists in itemContainer
-                        DataRow existingRow = dtItemContainer.AsEnumerable()
-                            .FirstOrDefault(r => r.Field<string>("ITEMID") == item.ItemId);
-
-                        if (existingRow != null)
-                        {
-                            // Merge: add qty and amount to existing row
-                            existingRow["QTY"] = Math.Round((decimal)existingRow["QTY"] + item.TotalQty, 3, MidpointRounding.AwayFromZero);
-                            existingRow["AMOUNT"] = Math.Round((decimal)existingRow["AMOUNT"] + item.TotalLineAmount, 2, MidpointRounding.AwayFromZero);
-                        }
-                        else
-                        {
-                            // Add new row
-                            dtItemContainer.Rows.Add(
-                                item.ItemId,
-                                item.ItemName,
-                                Math.Round(item.TotalQty, 3, MidpointRounding.AwayFromZero),
-                                Math.Round(item.TotalLineAmount, 2, MidpointRounding.AwayFromZero),
-                                "" // VARIANT - not available from online transaction
-                            );
-                        }
-
-                        totalPFMCOM += item.TotalLineAmount;
-                    }
-                }
-
-               
-
-            }
-            //end
-            
             dtPaymentContainer = BatchCalculation.getPaymentDebit(batch);
-
-
 
             decimal AmountWalkInCustom = BatchCalculation.getAmountWalkIn(batch);
             decimal CountWalkInCustom = BatchCalculation.getCountWalkIn(batch);
@@ -218,7 +101,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             reportLayout.AppendReportLine(7015);
             //reportLayout.AppendReportLine(7016, RoundDecimal(batch.SalesTotal));
             //reportLayout.AppendReportLine(7017, RoundDecimal(batch.ReturnsTotal));
-            
+
             reportLayout.AppendLine();
             reportLayout.AppendReportLine(14000, RoundDecimal(salesTotalCustom));
             //reportLayout.AppendReportLine(7018, RoundDecimal(batch.TaxTotal));
@@ -267,31 +150,45 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             //    reportLayout.AppendReportLine(7042, batch.SuspendedTransactionsCount);
             //}
 
+
             foreach (DataRow row in dtItemContainer.Rows)
             {
-                reportLayout.AppendLine(string.Format("{0}        {1} - {2}", row[0].ToString(),row[2], RoundDecimal(Convert.ToDecimal(row[3]))));
-                if (row[4].ToString() != "")
-                {
-                    reportLayout.AppendLine(string.Format("{0}", row[4].ToString())); //added by yonathan for displaying the variant id
-                }
-                reportLayout.AppendLine(string.Format("{0}", row[1].ToString()));
+                string label = string.Format("{0} - {1}", row[0].ToString(), row[2]);
+                string amount = RoundDecimal(Convert.ToDecimal(row[3])).ToString();
+                int padding = lineWidth - label.Length - amount.Length;
+                if (padding < 1) padding = 1;
 
-                    /*reportLayout.AppendLine(string.Format("{0} - {1}", row[0].ToString(), row[1].ToString()));
-                if (row[4].ToString() != "")
-                {
-                    reportLayout.AppendLine(string.Format("{0}", row[4].ToString())); //added by yonathan for displaying the variant id
-                }
-                reportLayout.AppendLine(string.Format("{0} - {1}", row[2], RoundDecimal(Convert.ToDecimal(row[3]))));*/
-                
+                //reportLayout.AppendLine(label + new string(' ', padding) + amount);
+                reportLayout.AppendReportLine(label, RoundDecimal(Convert.ToDecimal(row[3])));
+
+                reportLayout.AppendLine(string.Format("{0}", row[1].ToString()));
             }
+
+            //foreach (DataRow row in dtItemContainer.Rows)
+            //{
+            //    reportLayout.AppendLine(string.Format("{0}        {1} - {2}", row[0].ToString(), row[2], RoundDecimal(Convert.ToDecimal(row[3]))));
+            //    if (row[4].ToString() != "")
+            //    {
+            //        reportLayout.AppendLine(string.Format("{0}", row[4].ToString())); //added by yonathan for displaying the variant id
+            //    }
+            //    reportLayout.AppendLine(string.Format("{0}", row[1].ToString()));
+
+            //    /*reportLayout.AppendLine(string.Format("{0} - {1}", row[0].ToString(), row[1].ToString()));
+            //if (row[4].ToString() != "")
+            //{
+            //    reportLayout.AppendLine(string.Format("{0}", row[4].ToString())); //added by yonathan for displaying the variant id
+            //}
+            //reportLayout.AppendLine(string.Format("{0} - {1}", row[2], RoundDecimal(Convert.ToDecimal(row[3]))));*/
+
+            //}
 
             reportLayout.AppendLine();
 
             reportLayout.AppendReportLine(14010);
             reportLayout.AppendReportLine(14011, RoundDecimal(paymentCashCustom));
 
-  //          if (paymentEzeelinkCustom != 0)
-  //              reportLayout.AppendReportLine("Ezeelink", RoundDecimal(paymentEzeelinkCustom));
+            //          if (paymentEzeelinkCustom != 0)
+            //              reportLayout.AppendReportLine("Ezeelink", RoundDecimal(paymentEzeelinkCustom));
 
             foreach (DataRow row in dtPaymentContainer.Rows)
             {
@@ -356,7 +253,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
                     }
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        while(reader.Read())
+                        while (reader.Read())
                         {
                             /*string sqlCashTotal = "SELECT sum(L.AMOUNTCUR)" +
                                                     "FROM RETAILTRANSACTIONPAYMENTTRANS As L " +
@@ -391,13 +288,13 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             }
 
             //add to receipt
-            foreach(string tender in tenderID)
+            foreach (string tender in tenderID)
             {
                 SqlConnection conCustAccount = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
 
                 try
                 {
-                  //to do change to LOOKUP TENDERNAME FROM MASTER - YONATHAN 
+                    //to do change to LOOKUP TENDERNAME FROM MASTER - YONATHAN 
                     /*string queryCustAccount = @"
                                                 SELECT  
                                                     C.TenderName, 
@@ -480,16 +377,11 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
                     }
                 }
             }
-
-            //add by Yonathan 24062026 for PRIMAFRESHMART.COM
-            //string amountPFMCOM = totalPFMCOM.ToString();
-            reportLayout.AppendReportLine("Primafreshmart", RoundDecimal(totalPFMCOM));
-
             //END ADD BY ERWIN
 
             reportLayout.AppendLine();
             reportLayout.AppendLine();
-            
+
             #region CPECRBCA
             /*
              * Add Ambil Tunai Amount to X & Z Reports
@@ -567,8 +459,6 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
 
             reportLayout.AppendLine();
 
-            
-
             //add by Yonathan 20/20/2022
             Cashout cashOut = new Cashout();
 
@@ -584,7 +474,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             {
                 amountCashOut = (Math.Truncate(Convert.ToDecimal(cashOut.getAmountCashout(batch.StartDateTime.ToString("yyyy-MM-dd HH:mm:ss"), DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))) * 1000m) / 1000m);
             }
-            
+
             //calcuate dataAmountCash out
             string stringCashout = amountCashOut.ToString();
             reportLayout.AppendLine(string.Format("Cash Out : {0}", RoundDecimal(amountCashOut)));
@@ -597,7 +487,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             #endregion
             //END ADD BY ERWIN
 
-            
+
 
             reportLayout.AppendLine(string.Format("Walk In Cust : {0} = {1}", RoundDecimal(AmountWalkInCustom), CountWalkInCustom));
             //disable cust order calc because have details in below - Yonathan 02092024
@@ -610,12 +500,12 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             decimal avgBasket;
             if (custCountTotal != 0)
             {
-                  avgBasket = Math.Round((decimal)custAmountTotal, 0, MidpointRounding.AwayFromZero) / custCountTotal;
+                avgBasket = Math.Round((decimal)custAmountTotal, 0, MidpointRounding.AwayFromZero) / custCountTotal;
 
             }
             else
             {
-                  avgBasket = 0;
+                avgBasket = 0;
             }
 
             reportLayout.AppendLine(string.Format("Avg. Basket : {0} / Orang", RoundDecimal(avgBasket)));
@@ -639,7 +529,33 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             reportLayout.AppendLine();
 
 
-            
+            //add by Yonathan to include the Cust Order for today 30082024
+            string returnString;
+            ReadOnlyCollection<object> containerArray;
+
+            string fromDate = batch.StartDateTime.ToString("yyyy-MM-dd HH:mm:ss"); // "29/08/2024 00:00:00";
+            string fromDateUtc = "";
+            string toDateUtc = "";
+            string toDate = reportType == ReportType.ZReport ? batch.CloseDateTime.ToString("yyyy-MM-dd HH:mm:ss") : DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"); //"29/08/2024 16:00:00";
+            string itemGroupLines = "";
+            decimal totalAmount, totalSales;
+            string returnValue = "false";
+            //containerArray = EOD.InternalApplication.TransactionServices.InvokeExtension("getSalesOrderSummary", "JKT", "WH_JDELIMA", fromDate, toDate);
+
+            string salesOrderParam = "";
+            // Example datetime
+            DateTime batchStartDateTime = batch.StartDateTime; // Use your batch.StartDateTime here
+            DateTime batchToDateTime = reportType == ReportType.ZReport ? batch.CloseDateTime : DateTime.Now; //"29/08/2024 16:00:00";
+            // Convert DateTime to DateTimeOffset to get the local timezone offset
+            DateTimeOffset fromDatelocalDateTimeOffset = new DateTimeOffset(batchStartDateTime, TimeZoneInfo.Local.GetUtcOffset(batchStartDateTime));
+            DateTimeOffset toDateLocalDateTimeOffset = new DateTimeOffset(batchToDateTime, TimeZoneInfo.Local.GetUtcOffset(batchToDateTime));
+            // Subtract the offset to get the UTC time
+            DateTime fromUtcDateTime = fromDatelocalDateTimeOffset.UtcDateTime;
+            DateTime toUtcDateTime = toDateLocalDateTimeOffset.UtcDateTime;
+            fromDateUtc = fromUtcDateTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture); //add InvariantCulture for global datetime format - yonathan 14102024 
+            toDateUtc = toUtcDateTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture); //add InvariantCulture for global datetime format - yonathan 14102024
+            // Format the UTC datetime to a string
+
             salesOrderParam = getCustOrderTransaction(fromDateUtc, toDateUtc);
             //"SO/24/0000000034;SO/24/0000000033;SO/24/0000000032;SO/24/0000000031";
             containerArray = EOD.InternalApplication.TransactionServices.InvokeExtension("getInvoiceSalesOrder", salesOrderParam);
@@ -656,7 +572,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
                 reportLayout.AppendLine("POS Customer Order Summary");
                 reportLayout.AppendLine("-------------------------------------------------------");
 
-                
+
                 returnString = containerArray[3].ToString();
                 // Load XML into XDocument
                 XDocument xdoc = XDocument.Parse(returnString);
@@ -699,7 +615,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
                 XmlDocument xmlDoc = new XmlDocument();
                 //xmlDoc.LoadXml(containerArray[3].ToString());
 
-                
+
 
                 // Extract distinct SalesId values from the XML
                 var distinctSalesIds = xdoc.Descendants("CustInvoiceTrans")
@@ -717,22 +633,19 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
                 reportLayout.AppendLine(string.Format("Total Amount Sales Order : {0}", RoundDecimal(Convert.ToDecimal(totalAmount))));
                 //   totalSales = eachNode.Attributes["TotalSales"].Value;
                 reportLayout.AppendLine(string.Format("Total Sales Order : {0}", RoundDecimal(distinctSalesIds)));
-                    //purchid = node.Attributes["PURCHID"].Value;
-                    //itemid = node.Attributes["ITEMID"].Value;
+                //purchid = node.Attributes["PURCHID"].Value;
+                //itemid = node.Attributes["ITEMID"].Value;
                 //}
-               
-               
+
+
 
 
             }
             //section for online order - Yonathan 19112024
-            /*
             salesOrderParam = getOnlineOrderTransaction(fromDateUtc, toDateUtc);
             //old
             //containerArray = EOD.InternalApplication.TransactionServices.InvokeExtension("getInvoiceSalesOrder", salesOrderParam);
             //new -- Yonathan 10092025 to include only online order printxz checked
-
-
             containerArray = EOD.InternalApplication.TransactionServices.InvokeExtension("getInvoiceOnlineSalesOrder", salesOrderParam);
             returnString = containerArray[3].ToString();
             returnValue = containerArray[1].ToString();
@@ -740,8 +653,68 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
 
             totalAmount = 0;
             totalSales = 0;
-           
+            //if (containerArray[1].ToString() != "False")
+            //{
+            //    reportLayout.AppendLine("");
+            //    reportLayout.AppendLine("-------------------------------------------------------");
+            //    reportLayout.AppendLine("Online Order Summary");
+            //    reportLayout.AppendLine("-------------------------------------------------------");
+            //    returnString = containerArray[3].ToString();
+            //    // Load XML into XDocument
+            //    XDocument xdoc = XDocument.Parse(returnString);
+            //    var cultureInfo = new CultureInfo("id-ID");
+            //    // Parse the XML and group by ItemId and ItemName
+            //    var groupedData = xdoc.Descendants("CustInvoiceTrans")
+            //        .Where(e => e.Attribute("ItemLines") != null)
+            //        .Select(e => e.Attribute("ItemLines").Value.Split(';'))
+            //        .GroupBy(
+            //            fields => new { ItemId = fields[0], ItemName = fields[1] }, // Group by ItemId and ItemName
+            //            fields => new
+            //            {
+            //                Quantity = decimal.Parse(fields[2], NumberStyles.Number, cultureInfo),
+            //                LineAmount = decimal.Parse(fields[3], NumberStyles.Number, cultureInfo),
+            //                SalesId = fields[4]
+            //            }
+            //        )
+            //        .Select(group => new
+            //        {
+            //            group.Key.ItemId,
+            //            group.Key.ItemName,
+            //            TotalQty = group.Sum(x => x.Quantity),
+            //            TotalLineAmount = group.Sum(x => x.LineAmount),
+            //            //SalesIdCount = group.Select(x => x.SalesId).Distinct().Count()
+            //        });
 
+            //    // Output the results
+            //    foreach (var data in groupedData)
+            //    {
+            //        reportLayout.AppendLine(string.Format("{0}        {1} - {2}", data.ItemId.ToString(), data.TotalQty, RoundDecimal(Convert.ToDecimal(data.TotalLineAmount))));
+
+            //        reportLayout.AppendLine(string.Format("{0}", data.ItemName.ToString()));
+            //        /*reportLayout.AppendLine(string.Format("{0} - {1}", data.ItemId.ToString(), data.ItemName.ToString()));
+
+            //        reportLayout.AppendLine(string.Format("{0} - {1}", data.TotalQty, RoundDecimal(Convert.ToDecimal(data.TotalLineAmount))));*/
+            //        /*reportLayout.AppendLine(string.Format("{0} - {1}", data.ItemId.ToString(), data.ItemName.ToString()));
+
+            //        reportLayout.AppendLine(string.Format("{0} - {1}", data.TotalQty, RoundDecimal(Convert.ToDecimal(data.TotalLineAmount))));*/
+            //        totalAmount += data.TotalLineAmount;
+            //        //totalSales = data.SalesIdCount;
+            //    }
+            //    XmlDocument xmlDoc = new XmlDocument();
+
+            //    var distinctSalesIds = xdoc.Descendants("CustInvoiceTrans")
+            //        .Where(e => e.Attribute("ItemLines") != null)
+            //        .Select(e => e.Attribute("ItemLines").Value.Split(';').Last()) // Extract the last part (SalesId)
+            //        .Distinct() // Get distinct SalesId values
+            //        .Count(); // Count the number of distinct SalesId values
+
+            //    reportLayout.AppendLine("-------------------------------------------------------");
+
+            //    reportLayout.AppendLine(string.Format("Total Amount Sales Order : {0}", RoundDecimal(Convert.ToDecimal(totalAmount))));
+
+            //    reportLayout.AppendLine(string.Format("Total Sales Order : {0}", RoundDecimal(distinctSalesIds)));
+
+            //}
 
             if (containerArray[1].ToString() != "False")
             {
@@ -765,88 +738,116 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
                              ItemName = fields[1],
                              Quantity = decimal.Parse(fields[2], NumberStyles.Number, cultureInfo),
                              LineAmount = decimal.Parse(fields[3], NumberStyles.Number, cultureInfo),
-                             CustAccount = fields.Last().Trim().Equals("Primafreshmart", StringComparison.OrdinalIgnoreCase)
-                                           ? "Primafreshmart"
-                                           : "Other"
+                             CustAccount = fields.Last().Trim()
                          };
                      })
                      .GroupBy(x => x.CustAccount)
-                     .OrderByDescending(g => g.Key == "Primafreshmart") 
+                     .OrderByDescending(g => g.Key.Equals("Primafreshmart", StringComparison.OrdinalIgnoreCase))
                      .Select(group => new
                      {
                          CustAccount = group.Key,
                          Items = group
-                             .GroupBy(g => new { g.ItemId, g.ItemName })
-                             .Select(itemGroup => new
-                             {
-                                 itemGroup.Key.ItemId,
-                                 itemGroup.Key.ItemName,
-                                 TotalQty = itemGroup.Sum(x => x.Quantity),
-                                 TotalLineAmount = itemGroup.Sum(x => x.LineAmount)
-                             })
-                             .ToList()
-                     });
+                            .GroupBy(g => new { g.ItemId, g.ItemName, g.LineAmount })
+                            .Select(itemGroup => new
+                            {
+                                itemGroup.Key.ItemId,
+                                itemGroup.Key.ItemName,
+                                itemGroup.Key.LineAmount,
+                                TotalQty = itemGroup.Sum(x => x.Quantity),
+                                TotalLineAmount = itemGroup.Sum(x => x.LineAmount)
+                            })
+                            .ToList(),
+                         TotalAmount = group.Sum(x => x.LineAmount)
+                     })
+                     .ToList();
 
+                
 
                 foreach (var custGroup in groupedData)
                 {
-                    reportLayout.AppendLine("-------------------------------------------------------");
-                    reportLayout.AppendLine(string.Format("{0}", custGroup.CustAccount));
-                    reportLayout.AppendLine("-------------------------------------------------------");
-
                     foreach (var item in custGroup.Items)
                     {
-                        reportLayout.AppendLine(string.Format("{0}        {1} - {2}",
-                            item.ItemId,
-                            item.TotalQty,
-                            RoundDecimal(Convert.ToDecimal(item.TotalLineAmount))));
-                        reportLayout.AppendLine(item.ItemName);
+                        string label = string.Format("{0} - {1}", item.ItemId, item.TotalQty);
+                        string amount = RoundDecimal(Convert.ToDecimal(item.TotalLineAmount)).ToString();
+                        int padding = lineWidth - label.Length - amount.Length;
+                        if (padding < 1) padding = 1;
 
-                        totalAmount += item.TotalLineAmount;
+                        //reportLayout.AppendLine(label + new string(' ', padding) + amount);
+                        reportLayout.AppendReportLine(label, RoundDecimal(Convert.ToDecimal(item.TotalLineAmount)));
+
+                        reportLayout.AppendLine(item.ItemName);
                     }
-                    reportLayout.AppendLine("-------------------------------------------------------");
-                    reportLayout.AppendLine(string.Format("Total Amount : {0}", RoundDecimal(Convert.ToDecimal(totalAmount))));
+
+                    totalAmount += custGroup.TotalAmount;
                 }
 
-                
-            }
-            */
+                reportLayout.AppendLine("-------------------------------------------------------");
 
+                // one total line per customer account, name left-aligned, amount right-aligned
+                foreach (var custGroup in groupedData)
+                {
+                    string label = custGroup.CustAccount.ToUpper();
+                    string amount = RoundDecimal(Convert.ToDecimal(custGroup.TotalAmount)).ToString();
+                    int padding = lineWidth - label.Length - amount.Length;
+                    if (padding < 1) padding = 1;
+
+                    reportLayout.AppendLine(label + new string(' ', padding) + amount);
+                    //reportLayout.AppendReportLine(label, RoundDecimal(Convert.ToDecimal(custGroup.TotalAmount)));
+                }
+
+                // grand total across all customers for this online order block
+                onlineOrderTotal = groupedData.Sum(g => g.TotalAmount);
+                reportLayout.AppendLine("-------------------------------------------------------");
+                {
+                    string label = "TOTAL ONLINE ORDER";
+                    string amount = RoundDecimal(Convert.ToDecimal(onlineOrderTotal)).ToString();
+                    int padding = lineWidth - label.Length - 3 - amount.Length;
+                    if (padding < 1) padding = 1;
+
+                    reportLayout.AppendLine(label + new string(' ', padding) + amount);
+                    //reportLayout.AppendReportLine(label, RoundDecimal(onlineOrderTotal));
+                }
+            }
+            reportLayout.AppendLine();
+            reportLayout.AppendLine();
+            reportLayout.AppendLine("-------------------------------------------------------");
+            reportLayout.AppendReportLine("GRAND TOTAL", RoundDecimal(salesTotalCustom+onlineOrderTotal));
+            reportLayout.AppendLine("-------------------------------------------------------");
             //end
 
             // End add and comment standard NEC
             // Income/Expense
             // Begin comment standard NEC
-           /* if (batch.AccountLines.Count > 0)
-            {
-                reportLayout.AppendReportLine(7030);
-                foreach (BatchAccountLine accountLine in batch.AccountLines.OrderBy(a => a.AccountType))
-                {
-                    int typeResourceId = 0;
+            /* if (batch.AccountLines.Count > 0)
+             {
+                 reportLayout.AppendReportLine(7030);
+                 foreach (BatchAccountLine accountLine in batch.AccountLines.OrderBy(a => a.AccountType))
+                 {
+                     int typeResourceId = 0;
 
-                    switch (accountLine.AccountType)
-                    {
-                        case IncomeExpenseAccountType.Income:
-                            typeResourceId = 7031;
-                            break;
+                     switch (accountLine.AccountType)
+                     {
+                         case IncomeExpenseAccountType.Income:
+                             typeResourceId = 7031;
+                             break;
 
-                        case IncomeExpenseAccountType.Expense:
-                            typeResourceId = 7032;
-                            break;
+                         case IncomeExpenseAccountType.Expense:
+                             typeResourceId = 7032;
+                             break;
 
-                        default:
-                            String message = string.Format("Unsupported account Type '{0}'.", accountLine.AccountType);
-                            NetTracer.Error(message);
-                            throw new NotSupportedException(message);
-                    }
+                         default:
+                             String message = string.Format("Unsupported account Type '{0}'.", accountLine.AccountType);
+                             NetTracer.Error(message);
+                             throw new NotSupportedException(message);
+                     }
 
-                    reportLayout.AppendReportLine(string.Format(typeFormat, accountLine.AccountNumber, ApplicationLocalizer.Language.Translate(typeResourceId)),
-                            RoundDecimal(accountLine.Amount));
-                }
+                     reportLayout.AppendReportLine(string.Format(typeFormat, accountLine.AccountNumber, ApplicationLocalizer.Language.Translate(typeResourceId)),
+                             RoundDecimal(accountLine.Amount));
+                 }
 
-                reportLayout.AppendLine();
-            }
-            */
+                 reportLayout.AppendLine();
+             }
+             */
             // NEC disable Tender
             // Tenders
             /*if (reportType == ReportType.ZReport && batch.TenderLines.Count > 0)
@@ -886,7 +887,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
                 }
             }
             */
-            if (((object) EOD.InternalApplication.Services.Printing) is IPrintingV2)
+            if (((object)EOD.InternalApplication.Services.Printing) is IPrintingV2)
             {   // Print to the default printer
                 EOD.InternalApplication.Services.Printing.PrintDefault(true, reportLayout.ToString());
             }
@@ -905,16 +906,16 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
         private static string getCustOrderTransaction(string fromDate, string toDate)
         {
             SqlConnection localConnection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
-            string salesIdMulti = "" ;
+            string salesIdMulti = "";
             string salesIds = "";
-             
+
             decimal totalTunai = 0;
             try
             {
                 string queryData = @"SELECT SALESORDERID, MODIFIEDDATETIME, TRANSACTIONID FROM ax.RETAILTRANSACTIONTABLE WHERE 
 		                            SALESORDERID !='' 
-		                            AND MODIFIEDDATETIME BETWEEN  '" + fromDate + "'  AND '" + toDate + "' ORDER BY SALESORDERID DESC"; 
-                
+		                            AND MODIFIEDDATETIME BETWEEN  '" + fromDate + "'  AND '" + toDate + "' ORDER BY SALESORDERID DESC";
+
                 using (SqlCommand cmd = new SqlCommand(queryData, localConnection))
                 {
 
@@ -933,7 +934,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
                         while (reader.Read())
                         {
                             // Retrieve SALESORDERID from the reader
-                              salesIdMulti = reader["SALESORDERID"].ToString();
+                            salesIdMulti = reader["SALESORDERID"].ToString();
 
                             // Append salesOrderId followed by a semicolon
                             if (salesIdBuilder.Length > 0)
@@ -944,7 +945,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
                         }
 
                         // Convert the StringBuilder to a string
-                          salesIds = salesIdBuilder.ToString();
+                        salesIds = salesIdBuilder.ToString();
                     }
                 }
             }
@@ -965,83 +966,83 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             //throw new NotImplementedException();
         }
 
-//        private static string getOnlineOrderTransaction(string fromDate, string toDate)
-//        {
-//            SqlConnection localConnection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
-//            string salesIdMulti = "";
-//            string salesIds = "";
-//            string custIds = "";
-//            string custAccMulti = "";
-//            decimal totalTunai = 0;
-//            try
-//            {
-//                string queryData = @"SELECT RETAILSTOREID,
-//                                            SALESID,
-//                                            STAFFID,
-//                                            TRANSDATETIME,
-//                                            CUSTACCOUNT,
-//                                            DATAAREAID FROM ax.CPPOSONLINEORDER WHERE 
-//		                            SALESID !='' 
-//		                            AND TRANSDATETIME BETWEEN  '" + fromDate + "'  AND '" + toDate + "' ORDER BY SALESID DESC";
-//                //DATEADD(HOUR, -(DATEPART(TZOFFSET, SYSDATETIMEOFFSET()) / 60), SYSDATETIME()) 
-//                //C.BANK != 'QRISBCA'
-//                using (SqlCommand cmd = new SqlCommand(queryData, localConnection))
-//                {
+        //        private static string getOnlineOrderTransaction(string fromDate, string toDate)
+        //        {
+        //            SqlConnection localConnection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+        //            string salesIdMulti = "";
+        //            string salesIds = "";
+        //            string custIds = "";
+        //            string custAccMulti = "";
+        //            decimal totalTunai = 0;
+        //            try
+        //            {
+        //                string queryData = @"SELECT RETAILSTOREID,
+        //                                            SALESID,
+        //                                            STAFFID,
+        //                                            TRANSDATETIME,
+        //                                            CUSTACCOUNT,
+        //                                            DATAAREAID FROM ax.CPPOSONLINEORDER WHERE 
+        //		                            SALESID !='' 
+        //		                            AND TRANSDATETIME BETWEEN  '" + fromDate + "'  AND '" + toDate + "' ORDER BY SALESID DESC";
+        //                //DATEADD(HOUR, -(DATEPART(TZOFFSET, SYSDATETIMEOFFSET()) / 60), SYSDATETIME()) 
+        //                //C.BANK != 'QRISBCA'
+        //                using (SqlCommand cmd = new SqlCommand(queryData, localConnection))
+        //                {
 
 
-//                    if (localConnection.State != ConnectionState.Open)
-//                    {
-//                        localConnection.Open();
-//                    }
+        //                    if (localConnection.State != ConnectionState.Open)
+        //                    {
+        //                        localConnection.Open();
+        //                    }
 
-//                    //int flagFirstItem = 0;
+        //                    //int flagFirstItem = 0;
 
-//                    using (SqlDataReader reader = cmd.ExecuteReader())
-//                    {
-//                        StringBuilder salesIdBuilder = new StringBuilder();
-//                        StringBuilder custAccBuilder = new StringBuilder();
-//                        while (reader.Read())
-//                        {
-//                            // Retrieve SALESORDERID from the reader
-//                            salesIdMulti = reader["SALESID"].ToString();
+        //                    using (SqlDataReader reader = cmd.ExecuteReader())
+        //                    {
+        //                        StringBuilder salesIdBuilder = new StringBuilder();
+        //                        StringBuilder custAccBuilder = new StringBuilder();
+        //                        while (reader.Read())
+        //                        {
+        //                            // Retrieve SALESORDERID from the reader
+        //                            salesIdMulti = reader["SALESID"].ToString();
 
-//                            custAccMulti = reader["CUSTACCOUNT"].ToString();
-//                            // Append salesOrderId followed by a semicolon
-//                            if (salesIdBuilder.Length > 0)
-//                            {
-//                                salesIdBuilder.Append(";");
-//                            }
-//                            salesIdBuilder.Append(salesIdMulti);
+        //                            custAccMulti = reader["CUSTACCOUNT"].ToString();
+        //                            // Append salesOrderId followed by a semicolon
+        //                            if (salesIdBuilder.Length > 0)
+        //                            {
+        //                                salesIdBuilder.Append(";");
+        //                            }
+        //                            salesIdBuilder.Append(salesIdMulti);
 
-//                            //if (custAccBuilder.Length > 0)
-//                            //{
-//                            //    custAccBuilder.Append(";");
-//                            //}
-//                            //custAccBuilder.Append(custAccMulti);
-//                        }
+        //                            //if (custAccBuilder.Length > 0)
+        //                            //{
+        //                            //    custAccBuilder.Append(";");
+        //                            //}
+        //                            //custAccBuilder.Append(custAccMulti);
+        //                        }
 
-//                        // Convert the StringBuilder to a string
-//                        salesIds = salesIdBuilder.ToString();
-//                        //custIds = custAccBuilder.ToString();
-//                    }
-//                }
-//            }
-//            catch (Exception ex)
-//            {
-//                //LSRetailPosis.ApplicationExceptionHandler.HandleException();
-//                throw;
-//            }
-//            finally
-//            {
-//                if (localConnection.State != ConnectionState.Closed)
-//                {
-//                    localConnection.Close();
-//                }
-//            }
+        //                        // Convert the StringBuilder to a string
+        //                        salesIds = salesIdBuilder.ToString();
+        //                        //custIds = custAccBuilder.ToString();
+        //                    }
+        //                }
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                //LSRetailPosis.ApplicationExceptionHandler.HandleException();
+        //                throw;
+        //            }
+        //            finally
+        //            {
+        //                if (localConnection.State != ConnectionState.Closed)
+        //                {
+        //                    localConnection.Close();
+        //                }
+        //            }
 
-//            return salesIds;
-//            //throw new NotImplementedException();
-//        }
+        //            return salesIds;
+        //            //throw new NotImplementedException();
+        //        }
 
         private static string getOnlineOrderTransaction(string fromDate, string toDate)
         {
@@ -1062,7 +1063,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
 
                 using (SqlCommand cmd = new SqlCommand(queryData, localConnection))
                 {
-                    
+
                     cmd.Parameters.AddWithValue("@fromDate", fromDate);
                     cmd.Parameters.AddWithValue("@toDate", toDate);
 
@@ -1110,7 +1111,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
 
         //private string getSalesOrderSummary()
         //{
-            
+
 
         //    return containerArray[3].ToString();
         //}
@@ -1242,24 +1243,24 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             {
                 getOpenCloseBy(batch, out openBy, out closeBy, out setorBy);
             }
-            
+
             getCashiersOnDuty(batch, reportType, out cashierOnDutyList);
-           
+
             reportLayout.AppendLine("Printed By    : " + operatorName(ApplicationSettings.Terminal.TerminalOperator.OperatorId));
             reportLayout.AppendLine("Print Date    : " + DateTime.UtcNow.ToLocalTime().ToString());
-            reportLayout.AppendLine("OpenShift By  : " );
-            reportLayout.AppendLine( openBy + "-" + operatorName(openBy) );//, true);
+            reportLayout.AppendLine("OpenShift By  : ");
+            reportLayout.AppendLine(openBy + "-" + operatorName(openBy));//, true);
             if (reportType == ReportType.ZReport)
             {
-                
-                reportLayout.AppendLine("CloseShift By : " );//, true);
+
+                reportLayout.AppendLine("CloseShift By : ");//, true);
                 reportLayout.AppendLine(closeBy + "-" + operatorName(closeBy));//, true);
 
                 reportLayout.AppendLine("Setor By : ");
                 reportLayout.AppendLine(setorBy + "-" + operatorName(setorBy));
 
-                
-                
+
+
 
             }
 
@@ -1360,28 +1361,28 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             string opName = "";
             try
             {
-            string queryString = @"SELECT WORKER.PERSONNELNUMBER, DIRPARTY.NAME FROM AX.HCMWORKER WORKER
+                string queryString = @"SELECT WORKER.PERSONNELNUMBER, DIRPARTY.NAME FROM AX.HCMWORKER WORKER
                                   LEFT JOIN AX.DIRPARTYTABLE DIRPARTY
                                   ON WORKER.PERSON = DIRPARTY.RECID
                                   WHERE PERSONNELNUMBER = @STAFFID";
-            using (SqlCommand command = new SqlCommand(queryString, connection))
-            {
-                command.Parameters.Add(new SqlParameter("@STAFFID", openBy));
-                if (connection.State != ConnectionState.Open)
+                using (SqlCommand command = new SqlCommand(queryString, connection))
                 {
-                    connection.Open();
-                }
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
+                    command.Parameters.Add(new SqlParameter("@STAFFID", openBy));
+                    if (connection.State != ConnectionState.Open)
                     {
+                        connection.Open();
+                    }
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
 
-                        opName = reader[1].ToString();
-                       
+                            opName = reader[1].ToString();
 
+
+                        }
                     }
                 }
-            }
             }
             catch (Exception ex)
             {
@@ -1407,7 +1408,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
             setorBy = "";
             try
             {
-               
+
                 string queryString = @"SELECT BATCHID, OPENBY, CLOSEBY, SETORBY
                                       FROM  [ax].[CPRETAILPOSBATCHTABLEEXTEND]
                                       where BATCHID = @BATCHID";
@@ -1427,7 +1428,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
                             openBy = reader[1].ToString();
                             closeBy = reader[2].ToString();
                             setorBy = reader[3].ToString();
-                            
+
                         }
                     }
                 }
@@ -1528,24 +1529,24 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
         private static string RoundDecimal(decimal value, string currency)
         {
             return EOD.InternalApplication.Services.Rounding.RoundForDisplay(value, currency, true, false);
-            
+
         }
 
         #endregion
 
 
         #region custom method
-        
 
-        
 
-        
 
-        #endregion  
+
+
+
+        #endregion
 
     }
 
-    
+
 
     public class Cashout
     {
@@ -1672,8 +1673,8 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
                     using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                     {
                         result = streamReader.ReadToEnd();
-                        
-                        
+
+
                     }
                 }
                 catch (Exception ex)
@@ -1690,7 +1691,7 @@ namespace Microsoft.Dynamics.Retail.Pos.EOD
                 return responseCashout.response_data.ToString();
             }
         }
-            
+
     }
-    
+
 }

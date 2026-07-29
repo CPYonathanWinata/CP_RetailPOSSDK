@@ -833,6 +833,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPIBLIBLIORDERS
                                         //MessageBox.Show("Order sudah diambil.\nSilakan siapkan barang dan tunggu driver, baru lanjutkan finalisasi pesanan");
                                         POSFormsManager.ShowPOSStatusPanelText("Blibli order telah diambil. Siapkan pesanan.");
 
+                                        APIAccess.APIAccessClass.blibliOrderIdLong = "";
+                                        APIAccess.APIAccessClass.blibliOrderState = "";
 
                                         this.DialogResult = DialogResult.OK;
                                         this.Close();
