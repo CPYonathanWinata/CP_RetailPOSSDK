@@ -1450,11 +1450,19 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 						    if (reader.Read())
 						    {
 
-							    pctDisc = Convert.ToDecimal(reader["DISCPERCENTAGE"]);
-							    amtDisc = Convert.ToDecimal(reader["DISCAMOUNT"]);
-                                discInclTax = Convert.ToDecimal(reader["DISCINCLTAX"]);
-							    fromDate = Convert.ToDateTime(reader["FROMDATE"].ToString());
-							    toDate = Convert.ToDateTime(reader["TODATE"].ToString());
+
+                                //pctDisc = Convert.ToDecimal(reader["DISCPERCENTAGE"]);
+                                //amtDisc = Convert.ToDecimal(reader["DISCAMOUNT"]);
+                                //discInclTax = Convert.ToDecimal(reader["DISCINCLTAX"]);
+                                //fromDate = Convert.ToDateTime(reader["FROMDATE"].ToString());
+                                //toDate = Convert.ToDateTime(reader["TODATE"].ToString());
+
+                                pctDisc = reader["DISCPERCENTAGE"] == DBNull.Value ? 0m : Convert.ToDecimal(reader["DISCPERCENTAGE"]);
+                                amtDisc = reader["DISCAMOUNT"] == DBNull.Value ? 0m : Convert.ToDecimal(reader["DISCAMOUNT"]);
+                                discInclTax = reader["DISCINCLTAX"] == DBNull.Value ? 0m : Convert.ToDecimal(reader["DISCINCLTAX"]);
+
+                                fromDate = Convert.ToDateTime(reader["FROMDATE"].ToString());
+                                toDate = Convert.ToDateTime(reader["TODATE"].ToString());
 						    }
 					    }
 				    } 
@@ -1516,9 +1524,16 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                             if (reader.Read())
                             {
 
-                                pctDisc = Convert.ToDecimal(reader["DISCPERCENTAGE"]);
-                                amtDisc = Convert.ToDecimal(reader["DISCAMOUNT"]);
-                                discInclTax = Convert.ToDecimal(reader["DISCINCLTAX"]);
+                                //pctDisc = Convert.ToDecimal(reader["DISCPERCENTAGE"]);
+                                //amtDisc = Convert.ToDecimal(reader["DISCAMOUNT"]);
+                                //discInclTax = Convert.ToDecimal(reader["DISCINCLTAX"]);
+                                //fromDate = Convert.ToDateTime(reader["FROMDATE"].ToString());
+                                //toDate = Convert.ToDateTime(reader["TODATE"].ToString());
+
+                                pctDisc = reader["DISCPERCENTAGE"] == DBNull.Value ? 0m : Convert.ToDecimal(reader["DISCPERCENTAGE"]);
+                                amtDisc = reader["DISCAMOUNT"] == DBNull.Value ? 0m : Convert.ToDecimal(reader["DISCAMOUNT"]);
+                                discInclTax = reader["DISCINCLTAX"] == DBNull.Value ? 0m : Convert.ToDecimal(reader["DISCINCLTAX"]);
+
                                 fromDate = Convert.ToDateTime(reader["FROMDATE"].ToString());
                                 toDate = Convert.ToDateTime(reader["TODATE"].ToString());
                             }
