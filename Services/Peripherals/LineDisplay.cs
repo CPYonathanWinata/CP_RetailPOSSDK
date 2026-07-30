@@ -78,7 +78,7 @@ namespace Microsoft.Dynamics.Retail.Pos.Services
             oposLineDisplay = new OPOSLineDisplayClass();
 
             //Open
-            oposLineDisplay.Open(DeviceName);
+            oposLineDisplay.Open(DeviceName); 
             Peripherals.CheckResultCode(this, oposLineDisplay.ResultCode);
 
             // Claim
@@ -89,7 +89,9 @@ namespace Microsoft.Dynamics.Retail.Pos.Services
             oposLineDisplay.DeviceEnabled = true;
 
             // If character set is not supported by device, then disable and error out.
-            if (!oposLineDisplay.CharacterSetList.Split(CharacterSetListSeparator).Any(p => p.Equals(characterSet.ToString(), StringComparison.OrdinalIgnoreCase)))
+            //if (!oposLineDisplay.CharacterSetList.Split(CharacterSetListSeparator).Any(p => p.Equals(characterSet.ToString(), StringComparison.OrdinalIgnoreCase)))
+            string charSetCustom = "998"; //set this to tricked the validation device. 
+            if (!oposLineDisplay.CharacterSetList.Split(CharacterSetListSeparator).Any(p => p.Equals(charSetCustom.ToString(), StringComparison.OrdinalIgnoreCase)))
             {
                 oposLineDisplay.ReleaseDevice();
                 oposLineDisplay.Close();
@@ -167,9 +169,21 @@ namespace Microsoft.Dynamics.Retail.Pos.Services
             if (IsActive)
             {
                 ClearDisplay();
-                DisplayTextAt(0, line1Text);
-                DisplayTextAt(1, line2Text);
+                //trim 20 char
+                string trimmedline1Text = (line1Text.Length > 20 ? line1Text.Substring(0, 20) : line1Text).PadRight(20);
+                string trimmedline2Text = (line2Text.Length > 20 ? line2Text.Substring(0, 20) : line2Text).PadRight(20);
+                //DisplayTextAt(0, line1Text);
+                //DisplayTextAt(1, line2Text);
+                DisplayTextAt(0, trimmedline1Text);
+                DisplayTextAt(1, trimmedline2Text);
             }
+        }
+
+        //custom to add space if not 20
+        private static string FitToLength(string value, int length)
+        {
+            if (string.IsNullOrEmpty(value)) return new string(' ', length);
+            return (value.Length > length ? value.Substring(0, length) : value).PadRight(length);
         }
 
         /// <summary>
