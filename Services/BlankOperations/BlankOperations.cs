@@ -59,6 +59,7 @@ using LSRetailPosis.Transaction.Line.Discount;
 using System.Text.RegularExpressions;
 using System.Drawing.Printing;
 using System.Drawing;
+using Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator;
 
 
 
@@ -1115,6 +1116,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                                                 //CPGrabOrder CPGrabOrder = new CPGrabOrder(posTransaction, Application);
                                                 CPIBLIBLIORDERS.BlibliOrderList blibliOrderList = new CPIBLIBLIORDERS.BlibliOrderList(posTransaction, Application);
                                                 blibliOrderList.ShowDialog();
+
                                                 //Application.RunOperation(PosisOperations.VoidTransaction, posTransaction);
                                             }
                                             else
@@ -1372,7 +1374,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     {
                         RetailTransaction transaction;
                         transaction = posTransaction as RetailTransaction;
-                        string itemID = "10150018";
+                        string itemID = "11310014";
 
 
                         LSRetailPosis.POSProcesses.ItemSale iSale = new LSRetailPosis.POSProcesses.ItemSale();
@@ -1883,6 +1885,13 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     }
                     
                     break;
+                     case "108": //for reprint last transaction BCA 30/03/2023 Yonathan
+                    {
+                        //MessageBox.Show("Trigger 18 settlement");
+                        CPPricingSimulator.PricingSimulator cpPricingSim = new PricingSimulator(posTransaction, Application);
+                        cpPricingSim.ShowDialog();
+                        break;
+                    }
                 //Application.RunOperation(PosisOperations.PayCard, string.Empty, posTransaction);
                 //CP_SalesOrderDetail cpSalesDetail = new CP_SalesOrderDetail(Application);
                 //cpSalesDetail.ShowDialog();

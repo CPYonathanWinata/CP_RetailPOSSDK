@@ -23,6 +23,7 @@ using Microsoft.Dynamics.Retail.Notification.Contracts;
 using Microsoft.Dynamics.Retail.Notification.Proxy;
 using Microsoft.Dynamics.Retail.Pos.Contracts.DataEntity;
 using Microsoft.Dynamics.Retail.Pos.Contracts.Services;
+using System.Diagnostics;
 
 namespace Microsoft.Dynamics.Retail.Pos.Services
 {
@@ -78,7 +79,11 @@ namespace Microsoft.Dynamics.Retail.Pos.Services
             oposLineDisplay = new OPOSLineDisplayClass();
 
             //Open
-            oposLineDisplay.Open(DeviceName); 
+            oposLineDisplay.Open(DeviceName);
+
+          
+
+
             Peripherals.CheckResultCode(this, oposLineDisplay.ResultCode);
 
             // Claim
@@ -90,14 +95,14 @@ namespace Microsoft.Dynamics.Retail.Pos.Services
 
             // If character set is not supported by device, then disable and error out.
             //if (!oposLineDisplay.CharacterSetList.Split(CharacterSetListSeparator).Any(p => p.Equals(characterSet.ToString(), StringComparison.OrdinalIgnoreCase)))
-            string charSetCustom = "998"; //set this to tricked the validation device. 
-            if (!oposLineDisplay.CharacterSetList.Split(CharacterSetListSeparator).Any(p => p.Equals(charSetCustom.ToString(), StringComparison.OrdinalIgnoreCase)))
-            {
-                oposLineDisplay.ReleaseDevice();
-                oposLineDisplay.Close();
+            //string charSetCustom = "998"; //set this to tricked the validation device. 
+            //if (!oposLineDisplay.CharacterSetList.Split(CharacterSetListSeparator).Any(p => p.Equals(charSetCustom.ToString(), StringComparison.OrdinalIgnoreCase)))
+            //{
+            //    oposLineDisplay.ReleaseDevice();
+            //    oposLineDisplay.Close();
 
-                throw new NotSupportedException(string.Format("Peripheral [LineDisplay] - Character set '{0}' is not supported by device.", characterSet));
-            }
+            //    throw new NotSupportedException(string.Format("Peripheral [LineDisplay] - Character set '{0}' is not supported by device.", characterSet));
+            //}
 
             oposLineDisplay.CharacterSet = characterSet;
             IsActive = true;

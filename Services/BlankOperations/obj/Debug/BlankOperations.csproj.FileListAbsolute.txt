@@ -306,3 +306,5 @@ C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Bl
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\aa\BlankOperations.resources.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\BlankOperations.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\BlankOperations.pdb
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator.PricingSimulator.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator.ItemSearch.resources
