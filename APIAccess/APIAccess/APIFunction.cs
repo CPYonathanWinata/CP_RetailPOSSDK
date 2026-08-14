@@ -1063,11 +1063,14 @@ namespace APIAccess
             APIAccess.APIAccessClass.nationalityIndex = -1;
             APIAccess.APIAccessClass.isB2b = "";
             //CPIZONEPRABAYAR - 05012026 - Yonathan
+            APIAccess.APIAccessClass.grabOrderIdLong = "";
+            APIAccess.APIAccessClass.grabOrderState = "";
             APIAccess.APIAccessClass.isPlnTrans = false;
             APIAccess.APIAccessClass.izoneTraceNumber = "";
             APIAccess.APIAccessClass.receiptIzone = "";
             APIAccess.APIAccessClass.isRetur = false;
             APIAccess.APIAccessClass.blibliOrderIdLong = "";
+           
         }
         public void LogErrorToEventViewer(string errorDetails)
         {

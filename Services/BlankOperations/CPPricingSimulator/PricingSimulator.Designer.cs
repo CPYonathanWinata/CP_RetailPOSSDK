@@ -29,7 +29,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -40,13 +40,19 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
             this.btnClose = new System.Windows.Forms.Button();
             this.clearBtn = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.lblTotal = new System.Windows.Forms.Label();
+            this.txtTotal = new System.Windows.Forms.TextBox();
+            this.lblCustomer = new System.Windows.Forms.Label();
+            this.txtCustomer = new System.Windows.Forms.TextBox();
+            this.btnCustomer = new System.Windows.Forms.Button();
+            this.btnClearCust = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // textBox1
             // 
             this.textBox1.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(877, 597);
+            this.textBox1.Location = new System.Drawing.Point(812, 557);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -103,19 +109,19 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
             this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.dataGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
             this.dataGridView1.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(145)))), ((int)(((byte)(191)))));
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(145)))), ((int)(((byte)(191)))));
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridView1.ColumnHeadersHeight = 32;
-            this.dataGridView1.Location = new System.Drawing.Point(14, 89);
+            this.dataGridView1.Location = new System.Drawing.Point(14, 135);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.Size = new System.Drawing.Size(977, 558);
+            this.dataGridView1.Size = new System.Drawing.Size(977, 483);
             this.dataGridView1.TabIndex = 5;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView1_CellClick);
             // 
@@ -171,11 +177,77 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
             this.label1.TabIndex = 16;
             this.label1.Text = "Pricing Simulator";
             // 
+            // lblTotal
+            // 
+            this.lblTotal.AutoSize = true;
+            this.lblTotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTotal.Location = new System.Drawing.Point(686, 627);
+            this.lblTotal.Name = "lblTotal";
+            this.lblTotal.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.lblTotal.Size = new System.Drawing.Size(104, 17);
+            this.lblTotal.TabIndex = 17;
+            this.lblTotal.Text = "Total Belanja";
+            // 
+            // txtTotal
+            // 
+            this.txtTotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtTotal.Location = new System.Drawing.Point(796, 627);
+            this.txtTotal.Name = "txtTotal";
+            this.txtTotal.ReadOnly = true;
+            this.txtTotal.Size = new System.Drawing.Size(195, 23);
+            this.txtTotal.TabIndex = 18;
+            // 
+            // lblCustomer
+            // 
+            this.lblCustomer.AutoSize = true;
+            this.lblCustomer.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCustomer.Location = new System.Drawing.Point(13, 106);
+            this.lblCustomer.Name = "lblCustomer";
+            this.lblCustomer.Size = new System.Drawing.Size(76, 17);
+            this.lblCustomer.TabIndex = 19;
+            this.lblCustomer.Text = "Customer :";
+            // 
+            // txtCustomer
+            // 
+            this.txtCustomer.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtCustomer.Location = new System.Drawing.Point(96, 106);
+            this.txtCustomer.Name = "txtCustomer";
+            this.txtCustomer.ReadOnly = true;
+            this.txtCustomer.Size = new System.Drawing.Size(383, 23);
+            this.txtCustomer.TabIndex = 20;
+            this.txtCustomer.TextChanged += new System.EventHandler(this.txtCustomer_TextChanged);
+            // 
+            // btnCustomer
+            // 
+            this.btnCustomer.Location = new System.Drawing.Point(496, 106);
+            this.btnCustomer.Name = "btnCustomer";
+            this.btnCustomer.Size = new System.Drawing.Size(98, 23);
+            this.btnCustomer.TabIndex = 21;
+            this.btnCustomer.Text = "Add Customer";
+            this.btnCustomer.UseVisualStyleBackColor = true;
+            this.btnCustomer.Click += new System.EventHandler(this.btnCustomer_Click);
+            // 
+            // btnClearCust
+            // 
+            this.btnClearCust.Location = new System.Drawing.Point(600, 106);
+            this.btnClearCust.Name = "btnClearCust";
+            this.btnClearCust.Size = new System.Drawing.Size(105, 23);
+            this.btnClearCust.TabIndex = 22;
+            this.btnClearCust.Text = "Clear Customer";
+            this.btnClearCust.UseVisualStyleBackColor = true;
+            this.btnClearCust.Click += new System.EventHandler(this.btnClearCust_Click);
+            // 
             // PricingSimulator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1008, 729);
+            this.ClientSize = new System.Drawing.Size(1008, 761);
+            this.Controls.Add(this.btnClearCust);
+            this.Controls.Add(this.btnCustomer);
+            this.Controls.Add(this.txtCustomer);
+            this.Controls.Add(this.lblCustomer);
+            this.Controls.Add(this.txtTotal);
+            this.Controls.Add(this.lblTotal);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.addBtn);
             this.Controls.Add(this.btnClose);
@@ -190,7 +262,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "PricingSimulator";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "PricingSimulator";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
@@ -212,5 +284,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
         private Button btnClose;
         private Button clearBtn;
         private Label label1;
+        private Label lblTotal;
+        private TextBox txtTotal;
+        private Label lblCustomer;
+        private TextBox txtCustomer;
+        private Button btnCustomer;
+        private Button btnClearCust;
     }
 }

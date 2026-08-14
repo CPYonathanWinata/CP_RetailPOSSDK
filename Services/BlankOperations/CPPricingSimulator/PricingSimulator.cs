@@ -36,7 +36,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
         {
             localApplication = _application;
             posTransaction = _posTransaction;
-
+            ICustomer   localCustomer = null;
             //Create a list for item´s to be removed
             LinkedList<SaleLineItem> newSaleLinesList = new LinkedList<SaleLineItem>();
             //PosTransaction posTransDummy = new PosTransaction();
@@ -49,10 +49,66 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
             dummyRetailTransaction.OperatorNameOnReceipt = posTransaction.OperatorNameOnReceipt;
             localPosTransaction = dummyRetailTransaction as PosTransaction;
 
+            //LSRetailPosis.POSProcesses.CustomerOperation customer = new LSRetailPosis.POSProcesses.CustomerOperation();
+            ////LSRetailPosis.Transaction.Customer customer = new LSRetailPosis.Transaction.Customer();
+            //customer.CustomerId = "C000000001";
+            //customer.PartyNumber = "000000020";
+           
+            //customer.OperationID = PosisOperations.CustomerAdd;
+
+
+
+            //customer.OperationInfo = new LSRetailPosis.POSProcesses.OperationInfo();
+            //customer.POSTransaction = (PosTransaction)localPosTransaction;
+
+            //customer.RunOperation();
+
+            //localApplication.RunOperation(PosisOperations.Customer, "C000000001");
+            
             InitializeComponent();
-            SetupGridColumns(); 
+            SetupGridColumns();
+
+            this.FormBorderStyle = FormBorderStyle.None;
+            this.ControlBox = false;
+
+            this.ShowInTaskbar = false;
+            txtCustomer.Text = dummyRetailTransaction.Customer.Name == null ? "" : dummyRetailTransaction.Customer.CustomerId + " - " + dummyRetailTransaction.Customer.Name;           
            
         }
+
+        //private void SetupGridColumns()
+        //{
+        //    dataGridView1.AutoGenerateColumns = false;
+        //    dataGridView1.Columns.Clear();
+
+        //    dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { Name = "ItemId", HeaderText = "ItemId", DataPropertyName = "ItemId" });
+        //    dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { Name = "Description", HeaderText = "Description", DataPropertyName = "Description" });
+        //    dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { Name = "VariantId", HeaderText = "VariantId", DataPropertyName = "VariantId" });
+        //    dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { Name = "Qty", HeaderText = "Qty", DataPropertyName = "QuantityOrdered" });
+        //    dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { Name = "OrigPrice", HeaderText = "OrigPrice", DataPropertyName = "OriginalPrice" });
+        //    dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { Name = "NetAmount", HeaderText = "NetAmount", DataPropertyName = "NetAmount" });
+        //    dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { Name = "Discount", HeaderText = "Discount", DataPropertyName = "PeriodicDiscount" });
+        //    dataGridView1.Columns.Add(new DataGridViewButtonColumn
+        //    {
+        //        Name = "EditQty",
+        //        HeaderText = "",
+        //        Text = "Edit Qty",
+        //        UseColumnTextForButtonValue = true,
+        //        Width = 80
+        //    });
+
+        //    dataGridView1.Columns.Add(new DataGridViewButtonColumn
+        //    {
+        //        Name = "Delete",
+        //        HeaderText = "",
+        //        Text = "Delete",
+        //        UseColumnTextForButtonValue = true,
+        //        Width = 70
+        //    });
+        //    dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+        //    dataGridView1.ReadOnly = true;
+        //    dataGridView1.AllowUserToAddRows = false;
+        //}
 
         private void SetupGridColumns()
         {
@@ -63,9 +119,31 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
             dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { Name = "Description", HeaderText = "Description", DataPropertyName = "Description" });
             dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { Name = "VariantId", HeaderText = "VariantId", DataPropertyName = "VariantId" });
             dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { Name = "Qty", HeaderText = "Qty", DataPropertyName = "QuantityOrdered" });
-            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { Name = "OrigPrice", HeaderText = "OrigPrice", DataPropertyName = "OriginalPrice" });
-            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { Name = "NetAmount", HeaderText = "NetAmount", DataPropertyName = "NetAmount" });
-            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { Name = "Discount", HeaderText = "Discount", DataPropertyName = "PeriodicDiscount" });
+
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "OrigPrice",
+                HeaderText = "OrigPrice",
+                DataPropertyName = "OriginalPrice",
+                DefaultCellStyle = new DataGridViewCellStyle { Format = "N2", Alignment = DataGridViewContentAlignment.MiddleRight }
+            });
+
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "NetAmount",
+                HeaderText = "NetAmount",
+                DataPropertyName = "NetAmount",
+                DefaultCellStyle = new DataGridViewCellStyle { Format = "N2", Alignment = DataGridViewContentAlignment.MiddleRight }
+            });
+
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Discount",
+                HeaderText = "Discount",
+                DataPropertyName = "PeriodicDiscount",
+                DefaultCellStyle = new DataGridViewCellStyle { Format = "N2", Alignment = DataGridViewContentAlignment.MiddleRight }
+            });
+
             dataGridView1.Columns.Add(new DataGridViewButtonColumn
             {
                 Name = "EditQty",
@@ -83,6 +161,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
                 UseColumnTextForButtonValue = true,
                 Width = 70
             });
+
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.ReadOnly = true;
             dataGridView1.AllowUserToAddRows = false;
@@ -162,15 +241,20 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
                 }
 
                 firstNode.Value.Quantity = newQty;
-                //firstNode.Value.QuantityOrdered = newQty; // keep QuantityOrdered in sync too, since your grid displays this field
+                firstNode.Value.QuantityOrdered = newQty; // keep QuantityOrdered in sync too, since your grid displays this field
             }
 
             POSFormsManager.ShowPOSStatusPanelText("");
             localApplication.BusinessLogic.ItemSystem.CalculatePriceTaxDiscount(dummyRetailTransaction);
 
+            foreach (var line in dummyRetailTransaction.SaleItems)
+            {
+                line.Quantity = line.PriceQty;
+                line.QuantityOrdered = line.PriceQty;
+            }
             //foreach
-            // Refresh the grid
-          
+            //Refresh the grid
+            
 
             RefreshGrid();
         }
@@ -223,7 +307,9 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
             }
 
             dataGridView1.DataSource = null;
-            dataGridView1.DataSource = dummyRetailTransaction.SaleItems.ToList();
+            dataGridView1.DataSource = dummyRetailTransaction.SaleItems
+                .OrderBy(x => x.ItemId)
+                .ToList();
 
             if (selectedItemId != null)
             {
@@ -237,6 +323,9 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
                     }
                 }
             }
+            dummyRetailTransaction.CalcTotals();
+            
+            txtTotal.Text = dummyRetailTransaction.NetAmountWithTax.ToString("N2");
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -277,9 +366,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
                 localApplication.BusinessLogic.ItemSystem.CalculatePriceTaxDiscount(dummyRetailTransaction);
             }
 
-            // Refresh the grid with the latest data
-            dataGridView1.DataSource = null;
-            dataGridView1.DataSource = dummyRetailTransaction.SaleItems.ToList();
+
+            RefreshGrid();
+            //// Refresh the grid with the latest data
+            //dataGridView1.DataSource = null;
+            //dataGridView1.DataSource = dummyRetailTransaction.SaleItems.ToList();
         }
 
         //private void button1_Click(object sender, EventArgs e)
@@ -512,6 +603,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
 
             // Tampilkan dialog
             itemSearchForm.ShowDialog(this);
+            RefreshGrid();
         }
 
         private void ItemSearchForm_ItemSelected(object sender, ItemSearch.ItemSelectedEventArgs e)
@@ -523,6 +615,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
             string selectedUnitId = e.SelectedUnitId;
             decimal selectedPrice = e.SelectedPrice;
             decimal selectedDisc = e.SelectedDisc;
+            decimal selectedQty = e.SelectedQty;
             //add period 04122025
             string selectedDiscFrom = e.SelectedDiscFrom;
             string selectedDiscTo = e.SelectedDiscTo;
@@ -559,11 +652,55 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
                     iSale.OperationInfo = new LSRetailPosis.POSProcesses.OperationInfo();
                     iSale.Barcode = selectedSKU;
                     iSale.OperationInfo.NumpadQuantity = quantityToAdd;
+                   
                     iSale.POSTransaction = (PosTransaction)localPosTransaction;
 
                     iSale.RunOperation();
                     POSFormsManager.ShowPOSStatusPanelText("");
                     localApplication.BusinessLogic.ItemSystem.CalculatePriceTaxDiscount(dummyRetailTransaction);
+
+                    if (selectedQty != 0)
+                    {
+                       
+                        var firstItem = dummyRetailTransaction.SaleItems.FirstOrDefault(x => x.ItemId == selectedSKU);
+
+                        if (firstItem != null)
+                        {
+                            var firstNode = dummyRetailTransaction.SaleItems.Find(firstItem);
+                            var node = firstNode.Next;
+
+                            while (node != null)
+                            {
+                                var next = node.Next; // save reference before removing
+
+                                if (node.Value.ItemId == selectedSKU)
+                                {
+                                    decimal qtyToMove = node.Value.Quantity;
+                                    dummyRetailTransaction.SaleItems.Remove(node);
+                                    firstNode.Value.Quantity += qtyToMove;
+                                }
+
+                                node = next;
+                            }
+
+                            firstNode.Value.Quantity = selectedQty;
+                            firstNode.Value.QuantityOrdered = selectedQty; // keep QuantityOrdered in sync too, since your grid displays this field
+                        }
+
+                        POSFormsManager.ShowPOSStatusPanelText("");
+                        localApplication.BusinessLogic.ItemSystem.CalculatePriceTaxDiscount(dummyRetailTransaction);
+
+                        foreach (var line in dummyRetailTransaction.SaleItems)
+                        {
+                            line.Quantity = line.PriceQty;
+                            line.QuantityOrdered = line.PriceQty;
+                        }
+                        //foreach
+                        // Refresh the grid
+
+
+                        RefreshGrid();
+                    }
                 }
                 else
                 {
@@ -581,9 +718,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
                     localApplication.BusinessLogic.ItemSystem.CalculatePriceTaxDiscount(dummyRetailTransaction);
                 }
 
-                // Refresh the grid with the latest data
-                dataGridView1.DataSource = null;
-                dataGridView1.DataSource = dummyRetailTransaction.SaleItems.ToList();
+
+                //// Refresh the grid with the latest data
+                //dataGridView1.DataSource = null;
+                //dataGridView1.DataSource = dummyRetailTransaction.SaleItems.ToList();
+                RefreshGrid();
             }
 
         }
@@ -601,6 +740,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
 
         private void btnClose_Click(object sender, EventArgs e)
         {
+            dummyRetailTransaction = null;
             this.Close();
         }
 
@@ -609,8 +749,25 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
 
         }
 
-        
+        private void txtCustomer_TextChanged(object sender, EventArgs e)
+        {
 
-        
+        }
+
+        private void btnCustomer_Click(object sender, EventArgs e)
+        {
+            ICustomer customer = localApplication.Services.Customer.Search();
+
+            localApplication.Services.Customer.AddCustomerToTransaction(customer, localPosTransaction);
+            txtCustomer.Text = dummyRetailTransaction.Customer.Name == null ? "" : dummyRetailTransaction.Customer.CustomerId + " - " + dummyRetailTransaction.Customer.Name;           
+        }
+
+        private void btnClearCust_Click(object sender, EventArgs e)
+        {
+            localApplication.RunOperation(PosisOperations.CustomerClear, "");
+            txtCustomer.Text = "";
+
+        }
+
     }
 }

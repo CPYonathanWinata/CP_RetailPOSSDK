@@ -31,8 +31,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
             public decimal SelectedDisc { get; set; }
             public string SelectedDiscFrom { get; set; }
             public string SelectedDiscTo { get; set; }
+            public decimal SelectedQty { get; set; }
+
+
             
-            public ItemSelectedEventArgs(string selectedSKU, string selectedBarang, string selectedBarcode, string selectedUnitId, decimal selectedPrice, decimal selectedDisc, string selectedDiscFrom, string selectedDiscTo)
+            public ItemSelectedEventArgs(string selectedSKU, string selectedBarang, string selectedBarcode, string selectedUnitId, decimal selectedPrice, decimal selectedDisc, string selectedDiscFrom, string selectedDiscTo, decimal selectedQty)
             {
                 SelectedSKU = selectedSKU;
                 SelectedBarang = selectedBarang;
@@ -42,6 +45,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
                 SelectedDisc = selectedDisc;
                 SelectedDiscFrom = selectedDiscFrom;
                 SelectedDiscTo = selectedDiscTo;
+                SelectedQty = selectedQty;
 
             }
         }
@@ -186,22 +190,46 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
             // Get the selected SKU from the selected row
             if (itemGrid.SelectedRows.Count > 0)
             {
-                string selectedDiscFrom, selectedDiscTo;
+                 
                 string selectedSKU = itemGrid.SelectedRows[0].Cells["SKU"].Value.ToString();
                 string selectedBarang = itemGrid.SelectedRows[0].Cells["Nama Barang"].Value.ToString();
                 string selectedBarcode = itemGrid.SelectedRows[0].Cells["Barcode"].Value.ToString();
                 string selectedUnitId = itemGrid.SelectedRows[0].Cells["Unit Id"].Value.ToString();
                 decimal selectedPrice = Application.Services.Price.GetItemPrice(selectedSKU, selectedUnitId);
-                decimal selectedDisc = getDiscount(selectedSKU, selectedPrice, out selectedDiscFrom, out selectedDiscTo);
+                decimal selectedDisc = 0;//getDiscount(selectedSKU, selectedPrice, out selectedDiscFrom, out selectedDiscTo);
+                decimal selectedQty = EditQtyForItem();
+
+
                 if (ItemSelected != null)
                 {
-                    ItemSelected(this, new ItemSelectedEventArgs(selectedSKU, selectedBarang, selectedBarcode, selectedUnitId, selectedPrice, selectedDisc, selectedDiscFrom, selectedDiscTo));
+                    ItemSelected(this, new ItemSelectedEventArgs(selectedSKU, selectedBarang, selectedBarcode, selectedUnitId, selectedPrice, selectedDisc, "", "", selectedQty));
                 }
                 
             }
 
             // Close the form or perform any other necessary actions
            // this.Close();
+           
+        }
+
+        private decimal EditQtyForItem()
+        {
+            decimal newQty;
+            string input = Microsoft.VisualBasic.Interaction.InputBox(
+                "Enter new quantity for {itemId}:", "Edit Quantity", "1");
+
+           
+
+
+            if (!decimal.TryParse(input, out newQty) || newQty <= 0)
+            {
+                MessageBox.Show("Please enter a valid quantity greater than 0.");
+                
+            }         
+
+            
+
+            return newQty;
         }
          
         public decimal getDiscount(string selectedSKU, decimal selectedPrice, out string validFrom, out string validTo)

@@ -320,7 +320,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             lblPoNumberHeading.Text = ApplicationLocalizer.Language.Translate(103142); //Order number
             lblDriverHeading.Text = ApplicationLocalizer.Language.Translate(103143); //Driver details
             lblDeliveryHeading.Text = ApplicationLocalizer.Language.Translate(103144); //Delivery note number
-            lblDeliveryMethod.Text = "Delivery note cannot be duplicate, if PO has been canceled and you want to receive again,  the number must be new"; //ApplicationLocalizer.Language.Translate(56362); //Delivery method
+            lblDeliveryMethod.Text = ""; //"Delivery note cannot be duplicate, if PO has been canceled and you want to receive again,  the number must be new"; //ApplicationLocalizer.Language.Translate(56362); //Delivery method
             btnClose.Text = ApplicationLocalizer.Language.Translate(103153); //Close
             btnSearch.Text = ApplicationLocalizer.Language.Translate(103152); //Search
             btnEdit.Text = ApplicationLocalizer.Language.Translate(103106); //Edit quantity

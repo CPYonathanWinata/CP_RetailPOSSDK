@@ -803,6 +803,7 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 			string value = "After voiding the transaction...";
 			LSRetailPosis.ApplicationLog.Log(source, value, LSRetailPosis.LogTraceLevel.Trace);
 			LSRetailPosis.ApplicationLog.WriteAuditEntry(source, value);
+            //clearRetailTransExtended();
 		}
 
 		public void PreReturnTransaction(IPreTriggerResult preTriggerResult, IRetailTransaction originalTransaction, IPosTransaction posTransaction)
