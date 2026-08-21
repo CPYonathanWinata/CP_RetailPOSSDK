@@ -192,7 +192,6 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                     numPad1.Visible = false;
                     txtDelivery.Visible = false; //temp disable 22072024
                     txtDriver.Visible = false;
-
                     //additional by Yonathan to enable the reprint button 23072024
                     btnReprint.Visible = true;
                     //end
@@ -1039,7 +1038,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             PrintDialog pd = new PrintDialog();
             PaperSize psize = new PaperSize("Custom", 100, Offset + 236);
             Margins margins = new Margins(0, 0, 0, 0);
-            int normal = 7;
+            int normal = 6;
             int bigger = 12;
             Font normalFont = new Font("Lucida Console", normal);
             Font biggerFont = new Font("Lucida Console", bigger);
