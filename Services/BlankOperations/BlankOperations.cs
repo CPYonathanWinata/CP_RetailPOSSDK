@@ -2854,7 +2854,37 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 			return true;
 		}
 
-		private int getCustVoucherCode(string custID)
+        private int getCustVoucherCode(string custID)
+        {
+            bool returnValue = false;
+
+            try
+            {
+                if (this.Application.TransactionServices.CheckConnection())
+                {
+                    ReadOnlyCollection<object> result =
+                        this.Application.TransactionServices.InvokeExtension("checkCustVoucherCode", custID);
+
+                    bool success = Convert.ToBoolean(result[0]);
+                    string isRequired = Convert.ToString(result[3]);
+
+                    //if (isRequired == "true")
+
+                    returnValue = Convert.ToBoolean(result[3]);
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+
+            return returnValue == true ? 1 : 0;
+        }
+
+		private int getCustVoucherCodeLocal(string custID)
 		{
 			SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
 			int returnValue = 0;

@@ -48,6 +48,7 @@ using LSRetailPosis.Settings;
 using System.Xml;
 using System.Drawing;
 using System.Xml.Linq;
+using System.Collections.ObjectModel;
 
 namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
 {
@@ -227,13 +228,20 @@ namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
                         this.getCustAddNoOrder(customer.CustomerId);
                         this.getNoOrder(posTransaction.TransactionId);
 
-                        //Validation customer External Voucher (SAMSUNG GIFT) - ES 14 November 2019
+                        ////Validation customer External Voucher (SAMSUNG GIFT) - ES 14 November 2019
+                        //if (checkCustVoucherCode(customer.CustomerId) && !checkVoucherCode())
+                        //{
+                        //    MessageBox.Show("For this customer you have to 'Add Voucher Code' , select from Additional task ");
+                        //    preTriggerResult.ContinueOperation = false;
+                        //}
+                        ////END Validation customer External Voucher (SAMSUNG GIFT) - ES 14 November 2019
+
+                        // Validation customer External Voucher (SAMSUNG GIFT) - Change to RTS - Yonathan 28092026
                         if (checkCustVoucherCode(customer.CustomerId) && !checkVoucherCode())
                         {
-                            MessageBox.Show("For this customer you have to 'Add Voucher Code' , select from Additional task ");
+                            MessageBox.Show("For this customer you have to 'Add Voucher Code', select from Additional task ");
                             preTriggerResult.ContinueOperation = false;
                         }
-                        //END Validation customer External Voucher (SAMSUNG GIFT) - ES 14 November 2019
 
 
                         // Validate lock tender - ES 15 May 2022
@@ -1089,7 +1097,39 @@ namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
             }
         }
         */
+
+        //change check customer voucher code via RTS 
         private bool checkCustVoucherCode(string custID)
+        {
+            bool returnValue = false;
+
+            try
+            {
+                if (this.Application.TransactionServices.CheckConnection())
+                {
+                    ReadOnlyCollection<object> result =
+                        this.Application.TransactionServices.InvokeExtension("checkCustVoucherCode", custID);
+
+                    bool success = Convert.ToBoolean(result[0]);
+                    string isRequired = Convert.ToString(result[3]);
+
+                    //if (isRequired == "true")
+
+                    returnValue = Convert.ToBoolean(result[3]);
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                throw;
+            }
+
+            return returnValue;
+        }
+
+
+        private bool checkCustVoucherCodeLocal(string custID)
         {
             bool returnValue = false;
             SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;

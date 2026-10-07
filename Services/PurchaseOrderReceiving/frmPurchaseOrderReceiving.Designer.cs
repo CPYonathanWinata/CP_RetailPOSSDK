@@ -67,6 +67,8 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.colItemDetail = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colReceiveDetail = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colExpiredDate = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colDeleteDetail = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.repositoryItemButtonEditDelete = new DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit();
             this.tableLayoutInputs = new System.Windows.Forms.TableLayoutPanel();
             this.txtDelivery = new DevExpress.XtraEditors.TextEdit();
             this.lblReceiptNumberHeading = new System.Windows.Forms.Label();
@@ -105,6 +107,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             ((System.ComponentModel.ISupportInitialize)(this.gvInventory)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grDetail)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gvDetail)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemButtonEditDelete)).BeginInit();
             this.tableLayoutInputs.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtDelivery.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtPoNumber.Properties)).BeginInit();
@@ -141,7 +144,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 350F));
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 320F));
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanelMain.Size = new System.Drawing.Size(1024, 768);
+            this.tableLayoutPanelMain.Size = new System.Drawing.Size(1842, 1411);
             this.tableLayoutPanelMain.TabIndex = 1;
             // 
             // grInventory
@@ -152,7 +155,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.grInventory.MainView = this.gvInventory;
             this.grInventory.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
             this.grInventory.Name = "grInventory";
-            this.grInventory.Size = new System.Drawing.Size(628, 337);
+            this.grInventory.Size = new System.Drawing.Size(1155, 337);
             this.grInventory.TabIndex = 0;
             this.grInventory.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gvInventory});
@@ -189,6 +192,11 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.gvInventory.RowHeight = 30;
             this.gvInventory.ScrollStyle = DevExpress.XtraGrid.Views.Grid.ScrollStyleFlags.None;
             this.gvInventory.FocusedRowChanged += new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(this.gvInventory_FocusedRowChanged);
+
+            //additional
+            this.gvInventory.FocusedRowChanged += new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(this.gvInventory_FocusedRowChanged);
+            this.gvInventory.CustomColumnDisplayText += new DevExpress.XtraGrid.Views.Base.CustomColumnDisplayTextEventHandler(this.gvInventory_CustomColumnDisplayText);
+            //
             // 
             // colItemNumber
             // 
@@ -258,7 +266,9 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.grDetail.MainView = this.gvDetail;
             this.grDetail.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
             this.grDetail.Name = "grDetail";
-            this.grDetail.Size = new System.Drawing.Size(628, 307);
+            this.grDetail.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
+            this.repositoryItemButtonEditDelete});
+            this.grDetail.Size = new System.Drawing.Size(1155, 307);
             this.grDetail.TabIndex = 0;
             this.grDetail.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gvDetail});
@@ -274,13 +284,13 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.gvDetail.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
             this.colItemDetail,
             this.colReceiveDetail,
-            this.colExpiredDate});
+            this.colExpiredDate,
+            this.colDeleteDetail});
             this.gvDetail.CustomizationFormBounds = new System.Drawing.Rectangle(854, 527, 208, 196);
             this.gvDetail.FocusRectStyle = DevExpress.XtraGrid.Views.Grid.DrawFocusRectStyle.None;
             this.gvDetail.GridControl = this.grDetail;
             this.gvDetail.HorzScrollVisibility = DevExpress.XtraGrid.Views.Base.ScrollVisibility.Never;
             this.gvDetail.Name = "gvDetail";
-            this.gvDetail.OptionsBehavior.Editable = false;
             this.gvDetail.OptionsCustomization.AllowFilter = false;
             this.gvDetail.OptionsSelection.EnableAppearanceFocusedCell = false;
             this.gvDetail.OptionsView.AutoCalcPreviewLineCount = true;
@@ -291,7 +301,9 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.gvDetail.PreviewLineCount = 5;
             this.gvDetail.RowHeight = 30;
             this.gvDetail.ScrollStyle = DevExpress.XtraGrid.Views.Grid.ScrollStyleFlags.None;
-            this.gvDetail.FocusedRowChanged += new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(this.gvDetail_FocusedRowChanged);
+            this.gvDetail.RowClick += new DevExpress.XtraGrid.Views.Grid.RowClickEventHandler(this.gvDetail_RowClick);
+            this.gvDetail.RowClick += new DevExpress.XtraGrid.Views.Grid.RowClickEventHandler(this.gvDetail_RowClick);
+            this.gvDetail.CustomColumnDisplayText += new DevExpress.XtraGrid.Views.Base.CustomColumnDisplayTextEventHandler(this.gvDetail_CustomColumnDisplayText);
             // 
             // colItemDetail
             // 
@@ -324,6 +336,26 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.colExpiredDate.Visible = true;
             this.colExpiredDate.VisibleIndex = 2;
             // 
+            // colDeleteDetail
+            // 
+            this.colDeleteDetail.ColumnEdit = this.repositoryItemButtonEditDelete;
+            this.colDeleteDetail.FieldName = "DetailLineId";
+            this.colDeleteDetail.Name = "colDeleteDetail";
+            this.colDeleteDetail.OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
+            this.colDeleteDetail.OptionsColumn.ShowCaption = false;
+            this.colDeleteDetail.Visible = true;
+            this.colDeleteDetail.VisibleIndex = 3;
+            this.colDeleteDetail.Width = 50;
+            // 
+            // repositoryItemButtonEditDelete
+            // 
+            this.repositoryItemButtonEditDelete.AutoHeight = false;
+            this.repositoryItemButtonEditDelete.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Delete)});
+            this.repositoryItemButtonEditDelete.Name = "repositoryItemButtonEditDelete";
+            this.repositoryItemButtonEditDelete.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.HideTextEditor;
+            this.repositoryItemButtonEditDelete.ButtonClick += new DevExpress.XtraEditors.Controls.ButtonPressedEventHandler(this.repositoryItemButtonEditDelete_ButtonClick);
+            // 
             // tableLayoutInputs
             // 
             this.tableLayoutInputs.ColumnCount = 1;
@@ -341,7 +373,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.tableLayoutInputs.Controls.Add(this.lblExpiredDate, 0, 7);
             this.tableLayoutInputs.Controls.Add(this.txtExpiredDate, 0, 8);
             this.tableLayoutInputs.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutInputs.Location = new System.Drawing.Point(656, 53);
+            this.tableLayoutInputs.Location = new System.Drawing.Point(1183, 53);
             this.tableLayoutInputs.Name = "tableLayoutInputs";
             this.tableLayoutInputs.RowCount = 11;
             this.tableLayoutPanelMain.SetRowSpan(this.tableLayoutInputs, 2);
@@ -357,7 +389,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.tableLayoutInputs.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutInputs.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutInputs.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutInputs.Size = new System.Drawing.Size(247, 664);
+            this.tableLayoutInputs.Size = new System.Drawing.Size(458, 664);
             this.tableLayoutInputs.TabIndex = 20;
             // 
             // txtDelivery
@@ -374,7 +406,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.txtDelivery.Properties.Appearance.Options.UseFont = true;
             this.txtDelivery.Properties.Appearance.Options.UseTextOptions = true;
             this.txtDelivery.Properties.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
-            this.txtDelivery.Size = new System.Drawing.Size(241, 24);
+            this.txtDelivery.Size = new System.Drawing.Size(452, 24);
             this.txtDelivery.TabIndex = 12;
             // 
             // lblReceiptNumberHeading
@@ -428,7 +460,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.txtPoNumber.Properties.Appearance.Options.UseTextOptions = true;
             this.txtPoNumber.Properties.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
             this.txtPoNumber.Properties.ReadOnly = true;
-            this.txtPoNumber.Size = new System.Drawing.Size(241, 24);
+            this.txtPoNumber.Size = new System.Drawing.Size(452, 24);
             this.txtPoNumber.TabIndex = 6;
             // 
             // lblDeliveryHeading
@@ -452,8 +484,8 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.lblDeliveryMethod.Name = "lblDeliveryMethod";
             this.lblDeliveryMethod.Size = new System.Drawing.Size(0, 19);
             this.lblDeliveryMethod.TabIndex = 11;
-            this.lblDeliveryMethod.Click += new System.EventHandler(this.lblDeliveryMethod_Click);
             this.lblDeliveryMethod.Visible = false;
+            this.lblDeliveryMethod.Click += new System.EventHandler(this.lblDeliveryMethod_Click);
             // 
             // numPad1
             // 
@@ -483,7 +515,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.numPad1.NumberOfDecimals = 3;
             this.numPad1.PromptText = "";
             this.numPad1.ShortcutKeysActive = false;
-            this.numPad1.Size = new System.Drawing.Size(248, 314);
+            this.numPad1.Size = new System.Drawing.Size(452, 314);
             this.numPad1.TabIndex = 9;
             this.numPad1.TimerEnabled = true;
             this.numPad1.EnterButtonPressed += new LSRetailPosis.POSProcesses.WinControls.NumPad.enterbuttonDelegate(this.numPad1_EnterButtonPressed);
@@ -536,7 +568,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             // txtExpiredDate
             // 
             this.txtExpiredDate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtExpiredDate.EditValue = new System.DateTime(2026, 8, 11, 0, 0, 0, 0);
+            this.txtExpiredDate.EditValue = new System.DateTime(2026, 9, 7, 0, 0, 0, 0);
             this.txtExpiredDate.Location = new System.Drawing.Point(3, 179);
             this.txtExpiredDate.Name = "txtExpiredDate";
             // 
@@ -546,15 +578,10 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.txtExpiredDate.Properties.Appearance.Options.UseFont = true;
             this.txtExpiredDate.Properties.Appearance.Options.UseTextOptions = true;
             this.txtExpiredDate.Properties.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
-            // 
-            // 
-            // 
-            this.txtExpiredDate.Properties.CalendarTimeProperties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.txtExpiredDate.Size = new System.Drawing.Size(241, 24);
+            this.txtExpiredDate.Size = new System.Drawing.Size(452, 24);
             this.txtExpiredDate.TabIndex = 8;
-            this.txtExpiredDate.Enter += new System.EventHandler(this.txtExpiredDate_Enter);
             this.txtExpiredDate.Click += new System.EventHandler(this.txtExpiredDate_Enter);
+            this.txtExpiredDate.Enter += new System.EventHandler(this.txtExpiredDate_Enter);
             // 
             // tablePanelSideButtons
             // 
@@ -571,7 +598,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.tablePanelSideButtons.Controls.Add(this.btnReceiveAll, 0, 0);
             this.tablePanelSideButtons.Controls.Add(this.btnSearch, 0, 7);
             this.tablePanelSideButtons.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tablePanelSideButtons.Location = new System.Drawing.Point(929, 53);
+            this.tablePanelSideButtons.Location = new System.Drawing.Point(1667, 53);
             this.tablePanelSideButtons.Name = "tablePanelSideButtons";
             this.tablePanelSideButtons.RowCount = 5;
             this.tableLayoutPanelMain.SetRowSpan(this.tablePanelSideButtons, 2);
@@ -584,7 +611,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.tablePanelSideButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10.97561F));
             this.tablePanelSideButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10.97561F));
             this.tablePanelSideButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10.97561F));
-            this.tablePanelSideButtons.Size = new System.Drawing.Size(92, 664);
+            this.tablePanelSideButtons.Size = new System.Drawing.Size(172, 664);
             this.tablePanelSideButtons.TabIndex = 21;
             // 
             // btnRefresh
@@ -598,7 +625,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.btnRefresh.Appearance.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
             this.btnRefresh.Location = new System.Drawing.Point(3, 75);
             this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(86, 66);
+            this.btnRefresh.Size = new System.Drawing.Size(166, 66);
             this.btnRefresh.TabIndex = 13;
             this.btnRefresh.Tag = "BtnNormal";
             this.btnRefresh.Text = "Refresh";
@@ -615,7 +642,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.btnSave.Appearance.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
             this.btnSave.Location = new System.Drawing.Point(3, 147);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(86, 66);
+            this.btnSave.Size = new System.Drawing.Size(166, 66);
             this.btnSave.TabIndex = 12;
             this.btnSave.Tag = "BtnNormal";
             this.btnSave.Text = "Save";
@@ -632,7 +659,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.btnReprint.Appearance.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
             this.btnReprint.Location = new System.Drawing.Point(3, 219);
             this.btnReprint.Name = "btnReprint";
-            this.btnReprint.Size = new System.Drawing.Size(86, 74);
+            this.btnReprint.Size = new System.Drawing.Size(166, 74);
             this.btnReprint.TabIndex = 12;
             this.btnReprint.Tag = "BtnNormal";
             this.btnReprint.Text = "Reprint";
@@ -649,7 +676,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.btnCheckRcv.Appearance.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
             this.btnCheckRcv.Location = new System.Drawing.Point(3, 299);
             this.btnCheckRcv.Name = "btnCheckRcv";
-            this.btnCheckRcv.Size = new System.Drawing.Size(86, 66);
+            this.btnCheckRcv.Size = new System.Drawing.Size(166, 66);
             this.btnCheckRcv.TabIndex = 12;
             this.btnCheckRcv.Tag = "BtnNormal";
             this.btnCheckRcv.Text = "Cek Receive";
@@ -684,7 +711,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.btnCommit.Appearance.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
             this.btnCommit.Location = new System.Drawing.Point(3, 443);
             this.btnCommit.Name = "btnCommit";
-            this.btnCommit.Size = new System.Drawing.Size(86, 66);
+            this.btnCommit.Size = new System.Drawing.Size(166, 66);
             this.btnCommit.TabIndex = 16;
             this.btnCommit.Tag = "BtnNormal";
             this.btnCommit.Text = "Commit";
@@ -702,7 +729,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.btnClose.Location = new System.Drawing.Point(3, 587);
             this.btnClose.Margin = new System.Windows.Forms.Padding(3, 3, 3, 5);
             this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(86, 72);
+            this.btnClose.Size = new System.Drawing.Size(166, 72);
             this.btnClose.TabIndex = 18;
             this.btnClose.Tag = "BtnLong";
             this.btnClose.Text = "Close";
@@ -737,7 +764,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.btnReceiveAll.Appearance.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
             this.btnReceiveAll.Location = new System.Drawing.Point(3, 3);
             this.btnReceiveAll.Name = "btnReceiveAll";
-            this.btnReceiveAll.Size = new System.Drawing.Size(86, 66);
+            this.btnReceiveAll.Size = new System.Drawing.Size(166, 66);
             this.btnReceiveAll.TabIndex = 13;
             this.btnReceiveAll.Tag = "BtnNormal";
             this.btnReceiveAll.Text = "Receive all";
@@ -754,7 +781,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             this.btnSearch.Appearance.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
             this.btnSearch.Location = new System.Drawing.Point(3, 515);
             this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(86, 66);
+            this.btnSearch.Size = new System.Drawing.Size(166, 66);
             this.btnSearch.TabIndex = 17;
             this.btnSearch.Tag = "BtnLong";
             this.btnSearch.Text = "Search";
@@ -885,6 +912,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             ((System.ComponentModel.ISupportInitialize)(this.gvInventory)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.grDetail)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gvDetail)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemButtonEditDelete)).EndInit();
             this.tableLayoutInputs.ResumeLayout(false);
             this.tableLayoutInputs.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtDelivery.Properties)).EndInit();
@@ -909,10 +937,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
         }));
         }
 
-        private void gvDetail_FocusedRowChanged(object sender, DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
+        
 
 
 
@@ -933,8 +958,11 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
         private DevExpress.XtraGrid.Columns.GridColumn colItemDetail;
         private DevExpress.XtraGrid.Columns.GridColumn colReceiveDetail;
         private DevExpress.XtraGrid.Columns.GridColumn colExpiredDate;
+
         private DevExpress.XtraGrid.GridControl grDetail;
         private DevExpress.XtraGrid.Views.Grid.GridView gvDetail;
+        private DevExpress.XtraGrid.Columns.GridColumn colDeleteDetail;
+        private DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit repositoryItemButtonEditDelete;
         //END
 
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelMain;

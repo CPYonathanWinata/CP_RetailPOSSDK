@@ -1617,6 +1617,7 @@ namespace Microsoft.Dynamics.Retail.Pos.StoreInventoryServices
         /// <returns>A order docuemnt with a list of receipt document lines</returns>
         public IList<IPRDocumentLine> GetOrderReceiptLines(string orderNumber, PRCountingType prType)
         {
+            bool _isRetur = APIAccessClass.isRetur;
             try
             {
 
@@ -1626,7 +1627,10 @@ namespace Microsoft.Dynamics.Retail.Pos.StoreInventoryServices
 
                 if (prType == PRCountingType.PurchaseOrder)
                 {
-                    this.CallTransactionService(ref succeeded, ref returnMessage, ref retVal, "GetPurchaseOrder", orderNumber, ApplicationSettings.Terminal.InventLocationId);
+                    //if (_isRetur == false)
+                        this.CallTransactionService(ref succeeded, ref returnMessage, ref retVal, "GetPurchaseOrder", orderNumber, ApplicationSettings.Terminal.InventLocationId);
+                    //else
+                    //    this.CallTransactionServiceEx(ref succeeded, ref returnMessage, ref retVal, "GetPurchaseOrderRetur", orderNumber, ApplicationSettings.Terminal.InventLocationId);
                 }
                 else if (prType == PRCountingType.TransferIn || prType == PRCountingType.TransferOut)
                 {
@@ -1654,11 +1658,24 @@ namespace Microsoft.Dynamics.Retail.Pos.StoreInventoryServices
                             root = doc.Elements("PurchTable").FirstOrDefault();
                             if (root != null)
                             {
+                                APIAccess.APIAccessClass.localExpiredStatusByRecId.Clear(); 
                                 prDocLines = root.Elements("PurchLine").Select<XElement, IPRDocumentLine>(
                                     (poLine) =>
                                     {
                                         IPRDocumentLine poDocumentLine = new PRDocumentLine();
                                         poDocumentLine.Parse(poLine);
+
+                                        //custom to get expiredStatus of item lines - yonathan 11092026
+                                        string recId = poLine.Attribute("RecId") != null ? poLine.Attribute("RecId").Value : string.Empty;
+                                        string expStatus = poLine.Attribute("expStatus") != null ? poLine.Attribute("expStatus").Value : string.Empty;
+
+                                        if (!string.IsNullOrEmpty(recId))
+                                        {
+                                            APIAccess.APIAccessClass.localExpiredStatusByRecId[recId] = expStatus;
+                                        }
+
+                                        //end
+
                                         return poDocumentLine;
                                     }).ToList<IPRDocumentLine>();
                             }

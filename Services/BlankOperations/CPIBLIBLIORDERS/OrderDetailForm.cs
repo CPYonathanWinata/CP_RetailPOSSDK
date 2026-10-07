@@ -102,8 +102,9 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPIBLIBLIORDERS
             
             //APIAccess.APIAccessClass.blibliCustName = item.receiver.name;
             //APIAccess.APIAccessClass.blibliCustPhone = item.receiver.phones;
-            APIAccess.APIAccessClass.blibliOrderIdLong = orderId;
-            APIAccess.APIAccessClass.blibliOrderState = status;
+
+            //move to when process order
+            
             
 
             //foreach (var order in orderList)
@@ -405,6 +406,9 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPIBLIBLIORDERS
         {
             //this.DialogResult = DialogResult.OK;
             this.DialogResult = DialogResult.Yes;
+            APIAccess.APIAccessClass.blibliOrderIdLong = "";
+            APIAccess.APIAccessClass.blibliOrderState = "";
+            
             this.Close();
         }
         
@@ -570,10 +574,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPIBLIBLIORDERS
                          }
                          //end
 
-                        
+                         //move to here to prevent storing the value when not process - 22092026
+                         APIAccess.APIAccessClass.blibliOrderIdLong = lblOrderNo.Text;
+                         APIAccess.APIAccessClass.blibliOrderState = lblStatus.Text;
 
-
-
+          
 
                          transaction.CalcTotals();
                          transaction.Save();
@@ -685,7 +690,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPIBLIBLIORDERS
                         
                          blibliPosTransaction.CalcTotals();
                          blibliPosTransaction.Save();
-
+                         //37 dev //42 prod
                          applicationLoc.RunOperation(PosisOperations.PayCustomerAccount, "42", blibliPosTransaction); 
 
                          

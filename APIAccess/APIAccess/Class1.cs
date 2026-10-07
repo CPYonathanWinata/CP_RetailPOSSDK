@@ -89,6 +89,10 @@ namespace APIAccess
         public static List<string> itemListPLN = new List<string>(); 
         
 
+        //add for expiredDatePO - yonathan 11092026
+        public static Dictionary<string, string> localExpiredStatusByRecId = new Dictionary<string, string>();
+        //
+
         public string getURLAPIByFuncName(string _funcName)
         {
             string URL = "";

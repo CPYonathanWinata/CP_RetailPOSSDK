@@ -170,8 +170,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
             {
                 LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
                 throw;
-            }
-             
+            }             
         }
 
         private void btnValidate_ClickOld(object sender, EventArgs e) //using CPCOnnection

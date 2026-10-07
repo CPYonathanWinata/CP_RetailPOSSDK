@@ -1,6 +1,7 @@
 ﻿using LSRetailPosis.POSControls;
 using LSRetailPosis.Settings;
 using LSRetailPosis.Transaction;
+using LSRetailPosis.Transaction.Line.Discount;
 using LSRetailPosis.Transaction.Line.SaleItem;
 using Microsoft.Dynamics.Retail.Pos.Contracts;
 using Microsoft.Dynamics.Retail.Pos.Contracts.DataEntity;
@@ -165,11 +166,16 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.ReadOnly = true;
             dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView1.MultiSelect = false; 
         }
 
         private void DataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0) return; // header row click, ignore
+            if (e.RowIndex < 0 || e.ColumnIndex < 0)
+            {
+                return; // clicked header row or row-header column, ignore
+            }
 
             string columnName = dataGridView1.Columns[e.ColumnIndex].Name;
             string itemId = dataGridView1.Rows[e.RowIndex].Cells["ItemId"].Value.ToString();
@@ -262,7 +268,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
         //private void EditQtyForItem(string itemId)
         //{
         //    var item = dummyRetailTransaction.SaleItems.FirstOrDefault(x => x.ItemId == itemId);
-        //    if (item == null) return;
+        //    if (item == null) return;                                                        
 
         //    decimal currentQty = item.Quantity;
 
@@ -726,11 +732,27 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
             }
 
         }
-
+        /*
         private void clearBtn_Click(object sender, EventArgs e)
         {
             // Clear all rows in the DataGridView
             dataGridView1.Rows.Clear();
+        }*/
+
+        private void clearBtn_Click(object sender, EventArgs e)
+        {
+            var confirm = MessageBox.Show("Clear all items from the transaction?", "Confirm", MessageBoxButtons.YesNo);
+            if (confirm != DialogResult.Yes)
+            {
+                return;
+            }
+
+            dummyRetailTransaction.SaleItems.Clear();
+
+            POSFormsManager.ShowPOSStatusPanelText("");
+            localApplication.BusinessLogic.ItemSystem.CalculatePriceTaxDiscount(dummyRetailTransaction);
+
+            RefreshGrid();
         }
 
         private void MainFormCheckStock_FormClosing(object sender, FormClosingEventArgs e)
@@ -767,6 +789,59 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
             localApplication.RunOperation(PosisOperations.CustomerClear, "");
             txtCustomer.Text = "";
 
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            string operationId = "23";
+            openPromoDiscountForm(localPosTransaction, localApplication, operationId);
+        }
+
+        private void btnPDIS_Click(object sender, EventArgs e)
+        {
+            string operationId = "25";
+            openPromoDiscountForm(localPosTransaction, localApplication, operationId);
+            //CPDiscountItem cpDiscItem = new CPDiscountItem(localPosTransaction, localApplication, "", operationId);
+            //cpDiscItem.ShowDialog();
+            //RefreshGrid();
+        }
+
+        private void openPromoDiscountForm(IPosTransaction localPosTransaction, IApplication localApplication, string operationId)
+        {
+            if ((dummyRetailTransaction.Customer.CustomerId != null || dummyRetailTransaction.Customer.CustomerId == ""))
+            {
+                foreach (var lineItem in dummyRetailTransaction.SaleItems)
+                {
+                    foreach (var discountLines in lineItem.PeriodicDiscountLines)
+                    {
+                        PeriodicDiscountItem periodDiscItem = discountLines as PeriodicDiscountItem;
+
+                        //if (periodDiscItem.OfferId.StartsWith("PDIS") || periodDiscItem.OfferId.StartsWith("ED"))
+                        //{
+                        //    using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Tidak bisa akses ke menu ini karena sudah mendapat diskon", MessageBoxButtons.OK, MessageBoxIcon.Stop))
+                        //    {
+                        //        LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                        //        return;
+                        //    }
+                        //}
+
+                    }
+
+                }
+
+                CPDiscountItem cpDiscItem = new CPDiscountItem(localPosTransaction, localApplication, "", operationId);
+                cpDiscItem.ShowDialog();
+                RefreshGrid();
+            }
+            else
+            {
+                using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage("Please choose customer", MessageBoxButtons.OK, MessageBoxIcon.Stop)) //
+                {
+                    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                    return;
+                }
+
+            }    
         }
 
     }

@@ -29,7 +29,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -46,6 +46,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
             this.txtCustomer = new System.Windows.Forms.TextBox();
             this.btnCustomer = new System.Windows.Forms.Button();
             this.btnClearCust = new System.Windows.Forms.Button();
+            this.btnPDI = new System.Windows.Forms.Button();
+            this.btnPDIS = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -109,19 +111,19 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
             this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.dataGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
             this.dataGridView1.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(145)))), ((int)(((byte)(191)))));
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(145)))), ((int)(((byte)(191)))));
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.dataGridView1.ColumnHeadersHeight = 32;
             this.dataGridView1.Location = new System.Drawing.Point(14, 135);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.Size = new System.Drawing.Size(977, 483);
+            this.dataGridView1.Size = new System.Drawing.Size(977, 508);
             this.dataGridView1.TabIndex = 5;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView1_CellClick);
             // 
@@ -131,7 +133,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
             this.addBtn.FlatAppearance.BorderSize = 0;
             this.addBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.addBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.addBtn.Location = new System.Drawing.Point(14, 664);
+            this.addBtn.Location = new System.Drawing.Point(14, 697);
             this.addBtn.Name = "addBtn";
             this.addBtn.Size = new System.Drawing.Size(147, 53);
             this.addBtn.TabIndex = 13;
@@ -145,7 +147,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
             this.btnClose.FlatAppearance.BorderSize = 0;
             this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnClose.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnClose.Location = new System.Drawing.Point(844, 665);
+            this.btnClose.Location = new System.Drawing.Point(844, 698);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(147, 53);
             this.btnClose.TabIndex = 15;
@@ -159,7 +161,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
             this.clearBtn.FlatAppearance.BorderSize = 0;
             this.clearBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.clearBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.clearBtn.Location = new System.Drawing.Point(167, 664);
+            this.clearBtn.Location = new System.Drawing.Point(473, 698);
             this.clearBtn.Name = "clearBtn";
             this.clearBtn.Size = new System.Drawing.Size(147, 53);
             this.clearBtn.TabIndex = 14;
@@ -181,7 +183,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
             // 
             this.lblTotal.AutoSize = true;
             this.lblTotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTotal.Location = new System.Drawing.Point(686, 627);
+            this.lblTotal.Location = new System.Drawing.Point(686, 649);
             this.lblTotal.Name = "lblTotal";
             this.lblTotal.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.lblTotal.Size = new System.Drawing.Size(104, 17);
@@ -191,7 +193,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
             // txtTotal
             // 
             this.txtTotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtTotal.Location = new System.Drawing.Point(796, 627);
+            this.txtTotal.Location = new System.Drawing.Point(796, 649);
             this.txtTotal.Name = "txtTotal";
             this.txtTotal.ReadOnly = true;
             this.txtTotal.Size = new System.Drawing.Size(195, 23);
@@ -200,16 +202,16 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
             // lblCustomer
             // 
             this.lblCustomer.AutoSize = true;
-            this.lblCustomer.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCustomer.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCustomer.Location = new System.Drawing.Point(13, 106);
             this.lblCustomer.Name = "lblCustomer";
-            this.lblCustomer.Size = new System.Drawing.Size(76, 17);
+            this.lblCustomer.Size = new System.Drawing.Size(86, 17);
             this.lblCustomer.TabIndex = 19;
             this.lblCustomer.Text = "Customer :";
             // 
             // txtCustomer
             // 
-            this.txtCustomer.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtCustomer.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtCustomer.Location = new System.Drawing.Point(96, 106);
             this.txtCustomer.Name = "txtCustomer";
             this.txtCustomer.ReadOnly = true;
@@ -237,11 +239,41 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
             this.btnClearCust.UseVisualStyleBackColor = true;
             this.btnClearCust.Click += new System.EventHandler(this.btnClearCust_Click);
             // 
+            // btnPDI
+            // 
+            this.btnPDI.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(171)))), ((int)(((byte)(194)))), ((int)(((byte)(215)))));
+            this.btnPDI.FlatAppearance.BorderSize = 0;
+            this.btnPDI.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPDI.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPDI.Location = new System.Drawing.Point(167, 698);
+            this.btnPDI.Name = "btnPDI";
+            this.btnPDI.Size = new System.Drawing.Size(147, 53);
+            this.btnPDI.TabIndex = 23;
+            this.btnPDI.Text = "Add Promo Discount Item";
+            this.btnPDI.UseVisualStyleBackColor = false;
+            this.btnPDI.Click += new System.EventHandler(this.button5_Click);
+            // 
+            // btnPDIS
+            // 
+            this.btnPDIS.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(171)))), ((int)(((byte)(194)))), ((int)(((byte)(215)))));
+            this.btnPDIS.FlatAppearance.BorderSize = 0;
+            this.btnPDIS.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPDIS.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPDIS.Location = new System.Drawing.Point(320, 698);
+            this.btnPDIS.Name = "btnPDIS";
+            this.btnPDIS.Size = new System.Drawing.Size(147, 53);
+            this.btnPDIS.TabIndex = 24;
+            this.btnPDIS.Text = "Add Promo Struk";
+            this.btnPDIS.UseVisualStyleBackColor = false;
+            this.btnPDIS.Click += new System.EventHandler(this.btnPDIS_Click);
+            // 
             // PricingSimulator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1008, 761);
+            this.Controls.Add(this.btnPDIS);
+            this.Controls.Add(this.btnPDI);
             this.Controls.Add(this.btnClearCust);
             this.Controls.Add(this.btnCustomer);
             this.Controls.Add(this.txtCustomer);
@@ -290,5 +322,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator
         private TextBox txtCustomer;
         private Button btnCustomer;
         private Button btnClearCust;
+        private Button btnPDI;
+        private Button btnPDIS;
     }
 }
