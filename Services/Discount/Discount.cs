@@ -1616,7 +1616,7 @@ namespace Microsoft.Dynamics.Retail.Pos.DiscountService
                     //this region will only get executed when ISDISCOUNTCODEREQUIRED flag is set to true else will be skipped                    
                     tmpDiscountCode.Clear();
                     PeriodicDiscount cache = retailTransaction.PeriodicDiscount;
-                    tmpDiscountCode = cache.GetDiscountOfferDetails(offerId);
+                    tmpDiscountCode = cache.GetDiscountOfferDetails(offerId); 
 
                     //Match the discount codes avialble with the codes scanned at POS(stored in a List)
                     isDiscountValid = false;

@@ -134,6 +134,27 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
 
         protected override void OnLoad(EventArgs e)
         {
+
+            // Validate API availability first, before any initialization
+            string url = "";
+            try
+            {
+                APIAccess.APIAccessClass APIClass = new APIAccess.APIAccessClass();
+                url = APIClass.getURLAPIByFuncName("GetStatusPOTO");
+            }
+            catch (Exception ex)
+            {
+
+                //throw new Exception(ex.Message);
+                //MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage(ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error))
+                {
+                    LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                }
+                this.DialogResult = DialogResult.Cancel;
+                this.BeginInvoke(new Action(() => this.Close()));
+                return; // skip the rest of the initialization
+            }
             
             if (!this.DesignMode)
             {
@@ -161,9 +182,11 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             base.OnLoad(e);
             //<CP_POTOCancel>
             //check PO from API
-            string url = "";
-            APIAccess.APIAccessClass APIClass = new APIAccess.APIAccessClass();
-            url = APIClass.getURLAPIByFuncName("GetStatusPOTO");
+            
+            //string url = "";
+            //APIAccess.APIAccessClass APIClass = new APIAccess.APIAccessClass();
+            //url = APIClass.getURLAPIByFuncName("GetStatusPOTO");
+
             responseAPI = APIFunction.getPOAPI(url, ApplicationSettings.Database.DATAAREAID, txtPoNumber.Text.ToString()); 
 
             if (!string.IsNullOrEmpty(this.cpGetDataDocumentBuffer()))

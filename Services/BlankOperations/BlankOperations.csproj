@@ -251,6 +251,12 @@
     <Compile Include="CPPricingSimulator\ItemSearch.Designer.cs">
       <DependentUpon>ItemSearch.cs</DependentUpon>
     </Compile>
+    <Compile Include="CPSyncPriceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CPSyncPriceForm.Designer.cs">
+      <DependentUpon>CPSyncPriceForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="CP_IZone\CPIZone.cs">
       <SubType>Form</SubType>
     </Compile>

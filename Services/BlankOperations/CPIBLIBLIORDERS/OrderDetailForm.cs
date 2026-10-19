@@ -623,6 +623,8 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPIBLIBLIORDERS
                              //transaction.SetLoyaltyDiscAmount()
                              blibliPosTransaction.SetTotalDiscAmount(totalAdjustment);
                              blibliPosTransaction.Comment = "BliBliDiscount";
+
+                             APIAccess.APIAccessClass.posTransaction = blibliPosTransaction;
                              try
                              {
                                  PreTriggerResult preTriggerResult = new LSRetailPosis.POSProcesses.PreTriggerResult();
@@ -691,6 +693,10 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CPIBLIBLIORDERS
                          blibliPosTransaction.CalcTotals();
                          blibliPosTransaction.Save();
                          //37 dev //42 prod
+
+                         //move to here to prevent storing the value when not process - 22092026
+                         APIAccess.APIAccessClass.blibliOrderIdLong = lblOrderNo.Text;
+                         APIAccess.APIAccessClass.blibliOrderState = lblStatus.Text;
                          applicationLoc.RunOperation(PosisOperations.PayCustomerAccount, "42", blibliPosTransaction); 
 
                          

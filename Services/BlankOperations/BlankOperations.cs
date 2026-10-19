@@ -1059,7 +1059,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                         {
                             DE customer = ((RetailTransaction)posTransaction).Customer;
                             RetailTransaction transaction = posTransaction as RetailTransaction;
-
+                            
                             //GMT TenderID
                             string tenderId = "42"; //for DEV BliBli
                             string tenderIdDev = "37";
@@ -1892,6 +1892,71 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                         cpPricingSim.ShowDialog();
                         break;
                     }
+
+                     case "109":
+                    {
+                        try
+                        {
+                            using (CPSyncPriceForm form = new CPSyncPriceForm(Application,
+                                () => Application.TransactionServices.InvokeExtension(
+                                    "executeDistributionSchedule", LSRetailPosis.Settings.ApplicationSettings.Database.StoreID)))
+                            {
+                                LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(form);
+                            }
+                        }
+                        catch (System.Exception ex)
+                        {
+                            LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                            throw;
+                        }
+                        break;
+                    }
+
+                     case "110":
+                    {
+                        //Application.RunOperation(PosisOperations.VoidTransaction, posTransaction);
+
+                        posTransaction = null;
+
+                        IPosTransaction posTrans = posTransaction;
+                        break;
+                    }
+
+                    // case "109":
+                    //{
+                    //     try
+                    //    {
+                    //        ReadOnlyCollection<object> containerArray;
+                    //        containerArray = Application.TransactionServices.InvokeExtension("executeDistributionSchedule", "1020", "JTJDRN1ChannelDatabase");
+
+                    //        bool retValue = (bool)containerArray[1];
+                    //        string errorMessage = containerArray[2].ToString();
+                    //        string payout = containerArray[3].ToString();
+                    //        string comment = string.Empty;
+
+                    //        if (retValue)
+                    //        {
+                    //            comment = string.Format("Call succeeded.  Payout:   {0}", payout);
+                    //        }
+                    //        else
+                    //        {
+                    //            comment = string.Format("Call failed.  Error Message:     {0}", errorMessage);
+                    //        }
+
+                    //        using (LSRetailPosis.POSProcesses.frmMessage dialog = new LSRetailPosis.POSProcesses.frmMessage(comment.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error))
+                    //        {
+                    //            LSRetailPosis.POSProcesses.POSFormsManager.ShowPOSForm(dialog);
+                    //        }
+
+                    //    }
+                    //    catch (System.Exception ex)
+                    //    {
+                    //        LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                    //        throw;
+                    //    }
+                    //break;
+
+                    //}
                 //Application.RunOperation(PosisOperations.PayCard, string.Empty, posTransaction);
                 //CP_SalesOrderDetail cpSalesDetail = new CP_SalesOrderDetail(Application);
                 //cpSalesDetail.ShowDialog();
