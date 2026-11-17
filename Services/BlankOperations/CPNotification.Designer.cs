@@ -32,12 +32,13 @@
             this.btnSales = new System.Windows.Forms.Button();
             this.lblRTS = new System.Windows.Forms.Label();
             this.lblAPI = new System.Windows.Forms.Label();
+            this.btnClear = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnRefresh
             // 
             this.btnRefresh.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRefresh.Location = new System.Drawing.Point(96, 3);
+            this.btnRefresh.Location = new System.Drawing.Point(112, 3);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(82, 41);
             this.btnRefresh.TabIndex = 0;
@@ -49,7 +50,7 @@
             // btnSales
             // 
             this.btnSales.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSales.Location = new System.Drawing.Point(3, 3);
+            this.btnSales.Location = new System.Drawing.Point(107, 3);
             this.btnSales.Name = "btnSales";
             this.btnSales.Size = new System.Drawing.Size(87, 42);
             this.btnSales.TabIndex = 1;
@@ -77,10 +78,22 @@
             this.lblAPI.Text = "API Status";
             this.lblAPI.Visible = false;
             // 
+            // btnClear
+            // 
+            this.btnClear.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnClear.Location = new System.Drawing.Point(3, 3);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(98, 42);
+            this.btnClear.TabIndex = 4;
+            this.btnClear.Text = "Clear Transaction";
+            this.btnClear.UseVisualStyleBackColor = true;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            // 
             // CPNotification
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnClear);
             this.Controls.Add(this.lblAPI);
             this.Controls.Add(this.lblRTS);
             this.Controls.Add(this.btnSales);
@@ -97,5 +110,6 @@
         private System.Windows.Forms.Button btnSales;
         private System.Windows.Forms.Label lblRTS;
         private System.Windows.Forms.Label lblAPI;
+        private System.Windows.Forms.Button btnClear;
     }
 }

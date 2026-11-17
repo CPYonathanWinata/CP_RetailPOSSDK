@@ -183,7 +183,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(127, 40);
             this.btnRefresh.TabIndex = 29;
-            this.btnRefresh.Text = "Refresh";
+            this.btnRefresh.Text = "Clear Transaction";
             this.btnRefresh.UseVisualStyleBackColor = false;
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 

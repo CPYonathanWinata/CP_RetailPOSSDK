@@ -148,7 +148,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
 				string itemId = salesLine.ItemId.ToString(); //salesLine.Attributes["ItemId"].Value;
 				string salesQty = salesLine.QuantityOrdered.ToString();//salesLine.Attributes["SalesQty"].Value;
 				string itemName = salesLine.Description.ToString();
-				string unitItem = salesLine.lineItem.BackofficeSalesOrderUnitOfMeasure.ToString();
+				string unitItem = salesLine.lineItem.SalesOrderUnitOfMeasure.ToString();
 
 				//add line number - Yonathan 07012025
 				int lineNumber = salesLine.lineItem.LineId;

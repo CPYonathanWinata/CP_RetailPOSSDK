@@ -113,7 +113,7 @@ namespace Microsoft.Dynamics.Retail.Pos.SalesOrder.WinFormsTouch
         {
             this.Text      = LSRetailPosis.ApplicationLocalizer.Language.Translate(1571);  // "Order details"
             btnClear.Text  = LSRetailPosis.ApplicationLocalizer.Language.Translate(56327); // "Clear"
-            btnSave.Text   = LSRetailPosis.ApplicationLocalizer.Language.Translate(56318); // "Save"
+            btnSave.Text   = LSRetailPosis.ApplicationLocalizer.Language.Translate(56318); // "Save" 
             btnCancel.Text = LSRetailPosis.ApplicationLocalizer.Language.Translate(56319); // "Cancel"
         }
 

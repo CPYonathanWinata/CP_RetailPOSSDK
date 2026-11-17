@@ -411,22 +411,22 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
                                    
                                     //find the pricegroup that specified for the applied customer first yonathan 12/07/2024
 
-                                    List<string> result = findPriceAgreement(posTransaction, transaction.ChannelId, salesLine.ItemId, transaction.Customer.CustomerId, salesLine.BackofficeSalesOrderUnitOfMeasure, salesLine.Quantity);
+                                    List<string> result = findPriceAgreement(posTransaction, transaction.ChannelId, salesLine.ItemId, transaction.Customer.CustomerId, salesLine.SalesOrderUnitOfMeasure, salesLine.Quantity);
 
                                     //if not found, check the pricegroup that exist in the customers master data
                                     //calculate the pricegroup 
                                     //List<string> 
                                     if (result.Count == 0)
                                     {
-                                        result = findPriceAgreement(posTransaction, transaction.ChannelId, salesLine.ItemId, priceGroup, salesLine.BackofficeSalesOrderUnitOfMeasure, salesLine.Quantity);
+                                        result = findPriceAgreement(posTransaction, transaction.ChannelId, salesLine.ItemId, priceGroup, salesLine.SalesOrderUnitOfMeasure, salesLine.Quantity);
                                     }
                                     //calculate the discount                             
                                     //List<string> resultDisc = findDiscountAgreement(posTransaction, Application.Settings.Database.DataAreaID, salesLine.ItemId, lineDiscGroup, salesLine.BackofficeSalesOrderUnitOfMeasure);
 
-                                    List<string> resultDisc = findDiscountAgreement(posTransaction, transaction.ChannelId, salesLine.ItemId, transaction.Customer.CustomerId, salesLine.BackofficeSalesOrderUnitOfMeasure, salesLine.Quantity);
+                                    List<string> resultDisc = findDiscountAgreement(posTransaction, transaction.ChannelId, salesLine.ItemId, transaction.Customer.CustomerId, salesLine.SalesOrderUnitOfMeasure, salesLine.Quantity);
                                     if (resultDisc.Count == 0)
                                     {
-                                        resultDisc = findDiscountAgreement(posTransaction, transaction.ChannelId, salesLine.ItemId, lineDiscGroup, salesLine.BackofficeSalesOrderUnitOfMeasure, salesLine.Quantity);
+                                        resultDisc = findDiscountAgreement(posTransaction, transaction.ChannelId, salesLine.ItemId, lineDiscGroup, salesLine.SalesOrderUnitOfMeasure, salesLine.Quantity);
                                     }
                                     //query the B2B price from TA
 
@@ -605,8 +605,13 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
                             //Application.BusinessLogic.ItemSystem.CalculatePriceTaxDiscount(transaction);
                             //Application.BusinessLogic.ItemSystem.RecalcPriceTaxDiscount(transaction, true);
                             //Application.BusinessLogic.ItemSystem.RecalcPriceTaxDiscount(transaction, false);
+                            //transaction.AmountDue = transaction.NetAmountWithTax;
 
                             transaction.CalcTotals();
+
+                            // force the total, then AmountDue = NetAmountWithTax + MiscellaneousChargesTotal
+                            transaction.NetAmountWithTax = transaction.NetAmountWithTax; 
+
                             transaction.Save();
                         }
                     }
@@ -617,7 +622,7 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
                     //if (posisOperation == PosisOperations.ProcessInput || posisOperation == PosisOperations.VoidItem || posisOperation == PosisOperations.SetQty || posisOperation == PosisOperations.BlankOperation)
                     //{
                     RetailTransaction retailTransaction = posTransaction as RetailTransaction;
-
+                    
                     //prevent customer b2b/canvas/grab entering this rounding method
 
                     if (Rounding.CheckTableRounding(LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection) == true)
@@ -863,8 +868,8 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
             {
                 LSRetailPosis.POSControls.POSFormsManager.ShowPOSStatusPanelText(string.Empty);
             }
-            
 
+            
             
             switch (posisOperation)
             {
@@ -896,13 +901,14 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
             try
             {
 
-                string queryString = @"SELECT CT.ACCOUNTNUM,CT.CUSTGROUP, CG.CPPPNVALIDATE, CG.CPPPNDIBEBASKAN, CT.PRICEGROUP,CT.LINEDISC, B2BSETUP.CP_CUSTCLASSIFICATION,B2BSETUP.AUTOMATICRESERVE
+                string queryString = @"SELECT CT.DATAAREAID, CT.ACCOUNTNUM,CT.CUSTGROUP, CG.CPPPNVALIDATE, CG.CPPPNDIBEBASKAN, CT.PRICEGROUP,CT.LINEDISC, B2BSETUP.CP_CUSTCLASSIFICATION,B2BSETUP.AUTOMATICRESERVE
                                       FROM  [ax].[CUSTTABLE] CT
                                       LEFT JOIN AX.CP_CPCUSTORDERB2BSETUP B2BSETUP
                                       ON CT.ACCOUNTNUM = B2BSETUP.ACCOUNTNUM
                                       LEFT JOIN AX.CUSTGROUP CG
                                       ON CT.CUSTGROUP = CG.CUSTGROUP 
-                                      WHERE CT.ACCOUNTNUM = @CUSTACCOUNT";
+                                      WHERE CT.ACCOUNTNUM = @CUSTACCOUNT AND
+                                        CT.DATAAREAID = @DATAAREAID";
 
 
                 //RetailTransaction retailTransaction = (RetailTransaction)this.posTransaction;
@@ -911,7 +917,7 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
                 {
 
                     command.Parameters.AddWithValue("@CUSTACCOUNT", _custId);
-                    
+                    command.Parameters.AddWithValue("@DATAAREAID", LSRetailPosis.Settings.ApplicationSettings.Database.DATAAREAID);
 
                     if (connectionStore.State != ConnectionState.Open)
                     {

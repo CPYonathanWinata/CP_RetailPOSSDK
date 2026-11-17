@@ -150,84 +150,161 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
             }
         }
 
+//        public DataTable getQuery(DateTime date_from, DateTime date_to) //THIS IS THE OLD ONE
+//        {
+//            DataTable dataTable;
+//            SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+//            try
+//            {
+//                //change lookup tender to RETAILSTORETENDERTYPETABLE instead of CPNEWPAYMENTPOS - Yonathan 18122024
+//                /*string queryString = @" SELECT 
+//                                            a.CREATEDDATETIME AS [Date],
+//                                            a.STAFF as [Operator ID],
+//                                            a.TERMINAL as [Register],
+//                                            a.RECEIPTID as [Receipt], 
+//                                            'Sale' as [Type], 
+//                                            STR(GROSSAMOUNT * -1 ,16,0) AS [Amount] ,
+//                                            'Rp ' + REPLACE(CONVERT(VARCHAR, CONVERT(MONEY, c.AMOUNTMST), 1), '.00', '') AS [Payment Amount],
+//                                            b.NoReffTransaction as [Reference Number],
+//                                            CASE 
+//                                                WHEN c.TENDERTYPE = 1 THEN 'Cash'
+//                                                WHEN c.TENDERTYPE = 2 THEN 'Gift Card'
+//                                                WHEN c.TENDERTYPE = 3 THEN 'Cards'
+//                                                WHEN c.TENDERTYPE = 4 THEN 'Loyalty Card'
+//                                                WHEN c.TENDERTYPE = 5 THEN 'TenderPayment'
+//                                                WHEN c.TENDERTYPE = 6 THEN 'Other Card'
+//                                                WHEN c.TENDERTYPE = 14 THEN 'Ezeelink Card'
+//                                                ELSE
+//                                                    b.TenderName	
+//                                            END as [Tender Name],
+//                                            b.PurchaserName as [Purchaser Name]     
+//                                        FROM 
+//                                            AX.[RETAILTRANSACTIONTABLE] a
+//                                            LEFT JOIN AX.[CPNEWPAYMENTPOS] b ON a.TRANSACTIONID = b.TransactionID
+//                                            LEFT JOIN AX.[RETAILTRANSACTIONPAYMENTTRANS] c on a.TRANSACTIONID = c.TRANSACTIONID
+//                                        WHERE 
+//                                            a.RECEIPTID  != '' AND 
+//                                            TYPE = 2 AND
+//                                            a.TRANSDATE BETWEEN @from AND @to
+//                                        ORDER BY 
+//                                            a.CREATEDDATETIME DESC ";*/
+//                string queryString = @"
+//
+//                                     SELECT 
+//                                        a.CREATEDDATETIME AS [Date],
+//                                        a.STAFF as [Operator ID],
+//                                        a.TERMINAL as [Register],
+//                                        a.RECEIPTID as [Receipt], 
+//                                        'Sale' as [Type], 
+//                                        STR(GROSSAMOUNT * -1 ,16,0) AS [Amount] ,
+//                                        'Rp ' + REPLACE(CONVERT(VARCHAR, CONVERT(MONEY, c.AMOUNTMST), 1), '.00', '') AS [Payment Amount],
+//                                        b.NoReffTransaction as [Reference Number],
+//                                        d.NAME as [Tender Name]   ,
+//                                        b.PurchaserName as [Purchaser Name]     
+//                                    FROM 
+//                                    AX.[RETAILTRANSACTIONTABLE] a
+//                                        LEFT JOIN AX.[CPNEWPAYMENTPOS] b ON a.TRANSACTIONID = b.TransactionID
+//                                        LEFT JOIN AX.[RETAILTRANSACTIONPAYMENTTRANS] c on a.TRANSACTIONID = c.TRANSACTIONID
+//                                        LEFT JOIN AX.RETAILSTORETENDERTYPETABLE d on c.TENDERTYPE = d.TENDERTYPEID
+//                                    WHERE 
+//                                        a.RECEIPTID  != '' AND 
+//                                        TYPE = 2 AND
+//                                        d.CHANNEL = @channelId  AND
+//                                        a.TRANSDATE BETWEEN @from AND @to
+//                                    ORDER BY 
+//                                    a.CREATEDDATETIME DESC ";
+
+//                /*
+//                 CPNOORDER as [No Order],
+//                CPNAMEORDER as [Name Order],
+//                CPDATEORDER as [Date Order] 
+//                 */
+//                //    WHERE TRANSACTIONID =  @TRANSACTIONID  ";
+
+//                using (SqlCommand command = new SqlCommand(queryString, connection))
+//                {
+//                    command.Parameters.AddWithValue("@from", date_from.AddDays(-1));
+//                    command.Parameters.AddWithValue("@to", date_to);
+//                    command.Parameters.AddWithValue("@channelId", ApplicationSettings.Terminal.StorePrimaryId);
+//                    DataTable dataTable1 = new DataTable();
+//                    // command.Parameters.AddWithValue("@TRANSACTIONID", posTransaction.TransactionId);
+
+//                    if (connection.State != ConnectionState.Open)
+//                    {
+//                        connection.Open();
+//                    }
+//                    using (SqlDataReader reader = command.ExecuteReader())
+//                    {
+//                        dataTable1.Load(reader);
+                      
+//                        dataTable = dataTable1;
+//                    }
+//                }
+
+
+//            }
+//            catch (Exception ex)
+//            {
+//                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+//                throw;
+//            }
+//            finally
+//            {
+//                if (connection.State != ConnectionState.Closed)
+//                {
+//                    connection.Close();
+//                }
+//            }
+//            return dataTable;
+//        }
+
         public DataTable getQuery(DateTime date_from, DateTime date_to)
         {
             DataTable dataTable;
             SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
             try
             {
-                //change lookup tender to RETAILSTORETENDERTYPETABLE instead of CPNEWPAYMENTPOS - Yonathan 18122024
-                /*string queryString = @" SELECT 
-                                            a.CREATEDDATETIME AS [Date],
-                                            a.STAFF as [Operator ID],
-                                            a.TERMINAL as [Register],
-                                            a.RECEIPTID as [Receipt], 
-                                            'Sale' as [Type], 
-                                            STR(GROSSAMOUNT * -1 ,16,0) AS [Amount] ,
-                                            'Rp ' + REPLACE(CONVERT(VARCHAR, CONVERT(MONEY, c.AMOUNTMST), 1), '.00', '') AS [Payment Amount],
-	                                        b.NoReffTransaction as [Reference Number],
-	                                        CASE 
-		                                        WHEN c.TENDERTYPE = 1 THEN 'Cash'
-		                                        WHEN c.TENDERTYPE = 2 THEN 'Gift Card'
-		                                        WHEN c.TENDERTYPE = 3 THEN 'Cards'
-		                                        WHEN c.TENDERTYPE = 4 THEN 'Loyalty Card'
-		                                        WHEN c.TENDERTYPE = 5 THEN 'TenderPayment'
-		                                        WHEN c.TENDERTYPE = 6 THEN 'Other Card'
-                                                WHEN c.TENDERTYPE = 14 THEN 'Ezeelink Card'
-		                                        ELSE
-			                                        b.TenderName	
-	                                        END as [Tender Name],
-	                                        b.PurchaserName as [Purchaser Name]     
-                                        FROM 
-                                            AX.[RETAILTRANSACTIONTABLE] a
-                                            LEFT JOIN AX.[CPNEWPAYMENTPOS] b ON a.TRANSACTIONID = b.TransactionID
-	                                        LEFT JOIN AX.[RETAILTRANSACTIONPAYMENTTRANS] c on a.TRANSACTIONID = c.TRANSACTIONID
-                                        WHERE 
-                                            a.RECEIPTID  != '' AND 
-                                            TYPE = 2 AND
-                                            a.TRANSDATE BETWEEN @from AND @to
-                                        ORDER BY 
-                                            a.CREATEDDATETIME DESC ";*/
                 string queryString = @"
+            SELECT 
+                a.CREATEDDATETIME AS [Date],
+                a.STAFF as [Operator ID],
+                a.TERMINAL as [Register],
+                a.RECEIPTID as [Receipt], 
+                'Sale' as [Type], 
+                STR(GROSSAMOUNT * -1 ,16,0) AS [Amount] ,
+                'Rp ' + REPLACE(CONVERT(VARCHAR, CONVERT(MONEY, c.AMOUNTMST), 1), '.00', '') AS [Payment Amount],
+                b.NoReffTransaction as [Reference Number],
+                d.NAME as [Tender Name],
+                b.PurchaserName as [Purchaser Name]     
+            FROM 
+                AX.[RETAILTRANSACTIONTABLE] a
+                LEFT JOIN AX.[CPNEWPAYMENTPOS] b ON a.TRANSACTIONID = b.TransactionID
+                LEFT JOIN AX.[RETAILTRANSACTIONPAYMENTTRANS] c on a.TRANSACTIONID = c.TRANSACTIONID
+                LEFT JOIN AX.RETAILSTORETENDERTYPETABLE d on c.TENDERTYPE = d.TENDERTYPEID
+            WHERE \
+                a.RECEIPTID != '' AND 
+                TYPE = 2 AND
+                d.CHANNEL = @channelId AND
+                a.CREATEDDATETIME >= @fromUtc AND
+                a.CREATEDDATETIME < @toUtc
+            ORDER BY 
+                a.CREATEDDATETIME DESC";
 
-                                     SELECT 
-                                        a.CREATEDDATETIME AS [Date],
-                                        a.STAFF as [Operator ID],
-                                        a.TERMINAL as [Register],
-                                        a.RECEIPTID as [Receipt], 
-                                        'Sale' as [Type], 
-                                        STR(GROSSAMOUNT * -1 ,16,0) AS [Amount] ,
-                                        'Rp ' + REPLACE(CONVERT(VARCHAR, CONVERT(MONEY, c.AMOUNTMST), 1), '.00', '') AS [Payment Amount],
-                                        b.NoReffTransaction as [Reference Number],
-                                        d.NAME as [Tender Name]   ,
-                                        b.PurchaserName as [Purchaser Name]     
-                                    FROM 
-                                    AX.[RETAILTRANSACTIONTABLE] a
-                                        LEFT JOIN AX.[CPNEWPAYMENTPOS] b ON a.TRANSACTIONID = b.TransactionID
-                                        LEFT JOIN AX.[RETAILTRANSACTIONPAYMENTTRANS] c on a.TRANSACTIONID = c.TRANSACTIONID
-                                        LEFT JOIN AX.RETAILSTORETENDERTYPETABLE d on c.TENDERTYPE = d.TENDERTYPEID
-                                    WHERE 
-                                        a.RECEIPTID  != '' AND 
-                                        TYPE = 2 AND
-                                        d.CHANNEL = @channelId  AND
-                                        a.TRANSDATE BETWEEN @from AND @to
-                                    ORDER BY 
-                                    a.CREATEDDATETIME DESC ";
+                TimeZoneInfo localTz = TimeZoneInfo.Local;
 
-                /*
-                 CPNOORDER as [No Order],
-                CPNAMEORDER as [Name Order],
-                CPDATEORDER as [Date Order] 
-                 */
-                //    WHERE TRANSACTIONID =  @TRANSACTIONID  ";
+                // Local day boundaries -> UTC. [from 00:00 local, to next day 00:00 local)
+                DateTime fromLocal = DateTime.SpecifyKind(date_from.Date, DateTimeKind.Unspecified);
+                DateTime toLocal = DateTime.SpecifyKind(date_to.Date.AddDays(1), DateTimeKind.Unspecified);
+                DateTime fromUtc = TimeZoneInfo.ConvertTimeToUtc(fromLocal, localTz);
+                DateTime toUtc = TimeZoneInfo.ConvertTimeToUtc(toLocal, localTz);
 
                 using (SqlCommand command = new SqlCommand(queryString, connection))
                 {
-                    command.Parameters.AddWithValue("@from", date_from.AddDays(-1));
-                    command.Parameters.AddWithValue("@to", date_to);
+                    command.Parameters.AddWithValue("@fromUtc", fromUtc);
+                    command.Parameters.AddWithValue("@toUtc", toUtc);
                     command.Parameters.AddWithValue("@channelId", ApplicationSettings.Terminal.StorePrimaryId);
+
                     DataTable dataTable1 = new DataTable();
-                    // command.Parameters.AddWithValue("@TRANSACTIONID", posTransaction.TransactionId);
 
                     if (connection.State != ConnectionState.Open)
                     {
@@ -236,12 +313,20 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         dataTable1.Load(reader);
-                      
-                        dataTable = dataTable1;
                     }
+
+                    // Convert CREATEDDATETIME from UTC to the local Windows time zone
+                    foreach (DataRow row in dataTable1.Rows)
+                    {
+                        if (row["Date"] != DBNull.Value)
+                        {
+                            DateTime utc = DateTime.SpecifyKind((DateTime)row["Date"], DateTimeKind.Utc);
+                            row["Date"] = TimeZoneInfo.ConvertTimeFromUtc(utc, localTz);
+                        }
+                    }
+
+                    dataTable = dataTable1;
                 }
-
-
             }
             catch (Exception ex)
             {
@@ -257,7 +342,6 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
             }
             return dataTable;
         }
-
         public DataTable GetJournalData()
         {
             DataTable dataTable;

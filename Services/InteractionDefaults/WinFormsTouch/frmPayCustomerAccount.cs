@@ -2199,8 +2199,6 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
                                 }
 
                                 return;
-
-
                                 //btnOk.Enabled = false;
                                 
                             }

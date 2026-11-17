@@ -377,6 +377,12 @@
     <Compile Include="CP_PrintLabel\PrintLabel.Designer.cs">
       <DependentUpon>PrintLabel.cs</DependentUpon>
     </Compile>
+    <Compile Include="CP_PROMODISCNEW\CP_PromoDiscNew.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CP_PROMODISCNEW\CP_PromoDiscNew.Designer.cs">
+      <DependentUpon>CP_PromoDiscNew.cs</DependentUpon>
+    </Compile>
     <Compile Include="CP_SalesOrderDetail.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -559,6 +565,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CP_PrintLabel\PrintLabel.resx">
       <DependentUpon>PrintLabel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CP_PROMODISCNEW\CP_PromoDiscNew.resx">
+      <DependentUpon>CP_PromoDiscNew.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CP_SalesOrderDetail.resx">
       <DependentUpon>CP_SalesOrderDetail.cs</DependentUpon>

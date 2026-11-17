@@ -72,7 +72,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
         int Offset = 0;
 
         //add by Yonathan - 02092026D
-       
+
         private DataTable detailTempTable;   // <-- staging table for gvDetail lines, committed to DB later
         private string editingDetailLineId;  // non-null when a specific gvDetail row is selected for editing
         private const string ExpDateStatusField = "EXPDATESTATUS"; //placeholder
@@ -129,7 +129,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
         {
 
             InitializeComponent();
-            
+
         }
 
         protected override void OnLoad(EventArgs e)
@@ -155,7 +155,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                 this.BeginInvoke(new Action(() => this.Close()));
                 return; // skip the rest of the initialization
             }
-            
+
             if (!this.DesignMode)
             {
                 receiptData = new PurchaseOrderReceiptData(
@@ -169,7 +169,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                     ApplicationSettings.Terminal.TaxIncludedInPrice,
                     PurchaseOrderReceiving.InternalApplication.Services.Rounding);
 
-                ClearForm(); 
+                ClearForm();
 
                 PurchaseOrderReceiving.InternalApplication.Services.Peripherals.Scanner.ScannerMessageEvent -= new ScannerMessageEventHandler(OnBarcodeScan);
                 PurchaseOrderReceiving.InternalApplication.Services.Peripherals.Scanner.ScannerMessageEvent += new ScannerMessageEventHandler(OnBarcodeScan);
@@ -177,17 +177,17 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
 
             }
             DeleteTmpLine();
-            LoadReceiptLines(); 
+            LoadReceiptLines();
             TranslateLabels();
             base.OnLoad(e);
             //<CP_POTOCancel>
             //check PO from API
-            
+
             //string url = "";
             //APIAccess.APIAccessClass APIClass = new APIAccess.APIAccessClass();
             //url = APIClass.getURLAPIByFuncName("GetStatusPOTO");
 
-            responseAPI = APIFunction.getPOAPI(url, ApplicationSettings.Database.DATAAREAID, txtPoNumber.Text.ToString()); 
+            responseAPI = APIFunction.getPOAPI(url, ApplicationSettings.Database.DATAAREAID, txtPoNumber.Text.ToString());
 
             if (!string.IsNullOrEmpty(this.cpGetDataDocumentBuffer()))
             {
@@ -195,7 +195,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                 numPad1.Visible = false;
                 txtDelivery.Visible = false; //temp disable 22072024
                 txtDriver.Visible = false;
-                
+
                 //additional by Yonathan to enable the reprint button 23072024
                 btnReprint.Visible = true;
                 txtExpiredDate.Visible = false;
@@ -242,7 +242,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                 //btnReprint.Visible = false;
             }
 
-             if (printStat == 1 || printStat == 2)
+            if (printStat == 1 || printStat == 2)
             {
                 btnReprint.Text = "Reprint";
             }
@@ -263,8 +263,8 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             }
             //</CP_POTOCancel>
             this.gvInventory.RowClick += new DevExpress.XtraGrid.Views.Grid.RowClickEventHandler(this.GridView_RowClickEventHandler);
-            
-            
+
+
             //Add by Erwin 15 July 2019
             SetInputMode(NumPadMode.Quantity);
             btnEdit.Visible = false;
@@ -289,7 +289,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
 
         private void TranslateLabels()
         {
-            
+
 
             //
             // Get all text through the Translation function in the ApplicationLocalizer
@@ -630,7 +630,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
         //{
         //    //Add by Erwin 15 July 2019
 
-           
+
 
         //    DataRow row = GetCurrentRow();
         //    numPad1.Focus();
@@ -651,7 +651,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
         //            this.InventoryLookup(itemNumber);
         //            //original
 
-                    
+
         //        }
         //    }
 
@@ -701,7 +701,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
         //            RecalculateReceivedNow(itemNumber);
         //        }
         //    }
-           
+
         //}
         /*
         void numPad1_EnterButtonPressed()
@@ -872,7 +872,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             FilterDetailGridByItem(currentItemNumber);
         }
 
-        
+
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
@@ -918,7 +918,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                                    "     --------------" + Environment.NewLine;
                 //Offset = Offset + 260;
 
-                string sPrint = this.ReceiveDocumentFormat("REPRINT");
+                string sPrint = this.ReceiveDocumentFormat("REPRINT", false);
 
                 PrintDocument p = new PrintDocument();
                 PrintDialog pd = new PrintDialog();
@@ -980,7 +980,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
 
         //    string sHeader = "";
         //    string printerName = "";
-            
+
 
         //    printerName = LSRetailPosis.Settings.HardwareProfiles.Printer.DeviceName;
 
@@ -1138,7 +1138,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             PrintCheckReceive(printerName == "EPSON LX-310 ESC/P");
         }
 
-        private string BuildDetailLines(string itemNumber, string indent)
+        private string BuildDetailLines(string itemNumber, string indent, int qtyWidth)
         {
             string result = "";
 
@@ -1153,8 +1153,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                 decimal qty = detailRow.Field<decimal>(colReceiveDetail.FieldName);
                 DateTime expDate = detailRow.Field<DateTime>(colExpiredDate.FieldName);
 
-                result += indent + PurchaseOrderReceiving.InternalApplication.Services.Rounding.Round(qty, 3) +
-                          " - " + expDate.ToString("yyyy-MM-dd") + Environment.NewLine;
+                result += indent + expDate.ToString("dd-MM-yyyy") + FormatQty(PurchaseOrderReceiving.InternalApplication.Services.Rounding.Round(qty, 3)).PadLeft(qtyWidth) + Environment.NewLine;
             }
 
             return result;
@@ -1194,13 +1193,16 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                             : rawItemName.PadRight(24);
 
                         sPrint += "        " + itemNumber + "-" + itemName +
-                                  PurchaseOrderReceiving.InternalApplication.Services.Rounding.Round(qtyReceivedNow, 3) +
+                                  FormatQty(PurchaseOrderReceiving.InternalApplication.Services.Rounding.Round(qtyReceivedNow, 3)).PadLeft(6) +
                                   Environment.NewLine;
 
-                        sPrint += BuildDetailLines(itemNumber, "          ");
+                        // date first, then qty (right-aligned under the Terima column)
+                        sPrint += BuildDetailLines(itemNumber, "          ", 27);
+
+                        // separator after every item
+                        sPrint += "        ---------------------------------------" + Environment.NewLine;
                     }
 
-                    sPrint += "        ---------------------------------------" + Environment.NewLine;
                     sPrint += "        JIKA SUDAH BENAR, TEKAN TOMBOL COMMIT!" + Environment.NewLine;
 
                     normalFont = new Font("Courier New", 7);
@@ -1228,14 +1230,17 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                             : rawItemName.PadRight(37);
 
                         sPrint += "" + itemNumber.PadRight(a) + "   " +
-                                  PurchaseOrderReceiving.InternalApplication.Services.Rounding.Round(qtyReceivedNow, 3).ToString().PadLeft(b) +
+                                  FormatQty(PurchaseOrderReceiving.InternalApplication.Services.Rounding.Round(qtyReceivedNow, 3)).PadLeft(b) +
                                   Environment.NewLine;
                         sPrint += itemName + Environment.NewLine;
 
-                        sPrint += BuildDetailLines(itemNumber, "  ");
+                        // date first, then qty (right-aligned under the Terima column)
+                        sPrint += BuildDetailLines(itemNumber, " ", 21);
+
+                        // separator after every item
+                        sPrint += "----------------------------------" + Environment.NewLine;
                     }
 
-                    sPrint += "----------------------------------" + Environment.NewLine;
                     sPrint += " JIKA SUDAH BENAR, TEKAN COMMIT!" + Environment.NewLine;
 
                     normalFont = new Font("Lucida Console", 7);
@@ -1353,8 +1358,8 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                     }
 
 
-                    sPrint += "" + row.Field<string>(DataAccessConstants.ItemNumber).PadRight(a)+ "   " + PurchaseOrderReceiving.InternalApplication.Services.Rounding.Round(row.Field<decimal>(DataAccessConstants.QuantityReceivedNow), 3).ToString().PadLeft(b) + Environment.NewLine; 
-                    sPrint += itemName + Environment.NewLine; 
+                    sPrint += "" + row.Field<string>(DataAccessConstants.ItemNumber).PadRight(a) + "   " + PurchaseOrderReceiving.InternalApplication.Services.Rounding.Round(row.Field<decimal>(DataAccessConstants.QuantityReceivedNow), 3).ToString().PadLeft(b) + Environment.NewLine;
+                    sPrint += itemName + Environment.NewLine;
                 }
 
                 //
@@ -1448,7 +1453,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
 
                 tempDriverDetails = this.PONumber;
 
-               
+
                 if (printStat == 1 || printStat == 2)
                 {
                     PrintReceipt("REPRINT");
@@ -1514,7 +1519,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             }
         }
 
-      
+
         private void PrintReceipt(string printDocName)
         {
             string sHeader = "";
@@ -1525,12 +1530,12 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             if (printerName == "EPSON LX-310 ESC/P")
             {
                 sHeader = "\t** " + printDocName + " ** \r\n";
-                sPrint = this.ReceiveDocumentFormat(printDocName);
+                sPrint = this.ReceiveDocumentFormat(printDocName, false);
             }
             else
             {
                 sHeader = "   ** " + printDocName + " ** \r\n";
-                sPrint = this.ReceiveDocumentFormatThermal(printDocName);
+                sPrint = this.ReceiveDocumentFormat(printDocName, true);
             }
 
             PrintDocument p = new PrintDocument();
@@ -1599,10 +1604,10 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
 
         //    LoadReceiptLinesFromDB();
         //    Offset = 0;
-            
+
         //    //Add by Yonathan 11092025 to check if this is the first time print for PO receive via PDT
         //    //printStat = 1;
-            
+
         //    try
         //    {
         //        LoadReceiptLinesFromDB();
@@ -1628,7 +1633,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
         //        string sHeader="";
         //        string printerName = "";
         //        string sPrint = "";
-            
+
         //        printerName = LSRetailPosis.Settings.HardwareProfiles.Printer.DeviceName;
         //        if (printerName == "EPSON LX-310 ESC/P")
         //        {
@@ -1636,7 +1641,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
         //            //add here for reprint/print oricopy PDT
         //            if(printStat == 1)
         //                sPrint = this.ReceiveDocumentFormat(printDocName);
-                   
+
         //        }
         //        else
         //        {
@@ -1659,7 +1664,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
 
         //        bool isPrinterOffline = checkPrinterStatus(p);                
 
-                
+
 
         //        if (isPrinterOffline == false)
         //        {
@@ -1700,7 +1705,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
         //                POSFormsManager.ShowPOSForm(frm);
         //            }
         //        }
-                
+
 
         //    }
         //    finally
@@ -1778,7 +1783,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                 // Append lines to grid control
 
                 if (this.prType != Microsoft.Dynamics.Retail.Pos.Contracts.Services.PRCountingType.TransferIn)
-                { 
+                {
                     foreach (IPRDocumentLine newLine in poLines)
                     {
                         DataRow row = entryTable.NewRow();
@@ -1876,7 +1881,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             {
                 quantity = line.QtyOrdered;
             }
-            else 
+            else
             {
                 quantity = line.PurchQty;
             }
@@ -1896,7 +1901,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             row[DataAccessConstants.InventColorId] = line.InventColorId;
             row[DataAccessConstants.InventStyleId] = line.InventStyleId;
             row[DataAccessConstants.DeliveryMethod] = line.DeliveryMethod;
-           
+
             // Does not assign GUID. GUID cannot be used as PK because it will change every time on AX side
 
             //add by Yonathan to get receiptnumber from message line 22/07/2024
@@ -1966,7 +1971,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                 }
             }
 
-            return true; 
+            return true;
         }
 
         //add by Yonathan 2026
@@ -1980,7 +1985,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
 
                 string queryString = @" SELECT INVENTLOCATIONID, INVENTSITEID FROM AX.INVENTLOCATION
                             WHERE INVENTLOCATION.INVENTLOCATIONID = @INVENTLOCATIONID";
-                
+
 
                 using (SqlCommand command = new SqlCommand(queryString, connection))
                 {
@@ -1997,7 +2002,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                         if (reader.Read())
                         {
                             siteId = reader["INVENTSITEID"].ToString();
-                            
+
                         }
 
                     }
@@ -2044,13 +2049,13 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             }
             else if ((inputMode == NumPadMode.Quantity) && (saleLineItem != null) && !string.IsNullOrEmpty(numPad1.EnteredValue))
             {
-                 //add checkstock 2026 - Yonathan
-                 
-                if(APIAccessClass.isRetur)
+                //add checkstock 2026 - Yonathan
+
+                if (APIAccessClass.isRetur)
                 {
                     decimal qtyFromAx = 0;
                     string functionNameAX = "GetStockAX%"; // "GetStockAXPFMPOC"; //change to GetStockAX
-                   
+
                     APIAccess.APIFunction apiFunction = new APIAccess.APIFunction();
                     RetailTransaction transaction = posTransaction as RetailTransaction;
                     APIAccess.APIAccessClass APIClass = new APIAccess.APIAccessClass();
@@ -2080,21 +2085,21 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                             foreach (XmlNode node in itemNodes)
                             {
 
-                                 //qtyFromAx = ParseFlexibleDecimal(node.Attributes["QtyAvail"].ToString());
+                                //qtyFromAx = ParseFlexibleDecimal(node.Attributes["QtyAvail"].ToString());
                                 qtyFromAx = Convert.ToDecimal(node.Attributes["QtyAvail"].Value.Replace(",", "."), CultureInfo.InvariantCulture);
-                                if (Convert.ToDecimal( numPad1.EnteredValue) >  qtyFromAx) 
+                                if (Convert.ToDecimal(numPad1.EnteredValue) > qtyFromAx)
                                 {
                                     MessageBox.Show("Stok barang ini sisa " + qtyFromAx.ToString() + ".\nQty akan otomatis terinput sesuai stok tersedia.");
-                                    numPad1.EnteredValue = node.Attributes["QtyAvail"].Value; 
+                                    numPad1.EnteredValue = node.Attributes["QtyAvail"].Value;
                                 }
                                 //numPad1.EnteredValue = node.Attributes["QtyAvail"]; 
                                 //Convert.ToDecimal(node.Attributes["QtyAvail"].Value.Replace(",", "."), CultureInfo.InvariantCulture);
                             }
-                            
+
                             //end
                         }
                     }
-                    
+
                 }
 
                 // Add to list
@@ -2170,7 +2175,7 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
                 {
                     rowInEdit[DataAccessConstants.QuantityReceivedNow] = item.QuantityReceived;
                 }
-                
+
             }
             else
             {
@@ -2318,284 +2323,284 @@ namespace Microsoft.Dynamics.Retail.Pos.PurchaseOrderReceiving
             return StoreId.Substring(1);
         }
 
-//        private string ReceiveDocumentFormat(string statusReceipt)
-//        {
-//            int totalQty = 0;
-//            decimal totalQtyDec = 0;
-//            string s = "";
-//            string namatoko = "";
-//            string deliverynote = "";
-//            string receiptDate = "";
-//            string qtyString = "";
-//            string qtyStringMod = "";
-//            string itemName = "";
-//            string itemNumber = "";
-//            decimal qty = 0;
-//            ReadOnlyCollection<object> containerArray = null;
-//            //string sumUnit, ItemName, ItemNumber, QtyReceivedNow = "";
-//            string connectionString = GetSettingFromConfigFile();
-//            string storeid = GetStoreId();
-//            //start modification by Yonathan 11/10/2022 to ease when debugging the PO/TO Receipt format 
-//            int a, b, c, d, e, f = 0;
-//            a = 34;
-//            b = 10;
-//            c = 18;
-//            d = 12;
-//            e = 8;
-//            f = 0;
-//            // end 
-//            using (SqlConnection connection = new SqlConnection(connectionString))
-//            {
-//                try
-//                {
-//                    connection.Open();
-//                    SqlDataReader reader, reader2, reader3 = null;
-//                    SqlCommand command = new SqlCommand("Select ItemNumber, ItemName, Unit,QuantityReceived, QuantityReceivedNow from POSPURCHASEORDERRECEIPTLINE where PONumber = '" + this.PONumber + "'", connection);
-//                    SqlCommand command2 = new SqlCommand("Select RETAILSTORETABLE.StoreNumber, DIRADDRESSBOOK.Description from RETAILSTORETABLE inner join DIRADDRESSBOOK ON RETAILSTORETABLE.STORENUMBER = DIRADDRESSBOOK.name where RETAILSTORETABLE.StoreNumber = '" + storeid + "'", connection);
-//                    SqlCommand command3;
+        //        private string ReceiveDocumentFormat(string statusReceipt)
+        //        {
+        //            int totalQty = 0;
+        //            decimal totalQtyDec = 0;
+        //            string s = "";
+        //            string namatoko = "";
+        //            string deliverynote = "";
+        //            string receiptDate = "";
+        //            string qtyString = "";
+        //            string qtyStringMod = "";
+        //            string itemName = "";
+        //            string itemNumber = "";
+        //            decimal qty = 0;
+        //            ReadOnlyCollection<object> containerArray = null;
+        //            //string sumUnit, ItemName, ItemNumber, QtyReceivedNow = "";
+        //            string connectionString = GetSettingFromConfigFile();
+        //            string storeid = GetStoreId();
+        //            //start modification by Yonathan 11/10/2022 to ease when debugging the PO/TO Receipt format 
+        //            int a, b, c, d, e, f = 0;
+        //            a = 34;
+        //            b = 10;
+        //            c = 18;
+        //            d = 12;
+        //            e = 8;
+        //            f = 0;
+        //            // end 
+        //            using (SqlConnection connection = new SqlConnection(connectionString))
+        //            {
+        //                try
+        //                {
+        //                    connection.Open();
+        //                    SqlDataReader reader, reader2, reader3 = null;
+        //                    SqlCommand command = new SqlCommand("Select ItemNumber, ItemName, Unit,QuantityReceived, QuantityReceivedNow from POSPURCHASEORDERRECEIPTLINE where PONumber = '" + this.PONumber + "'", connection);
+        //                    SqlCommand command2 = new SqlCommand("Select RETAILSTORETABLE.StoreNumber, DIRADDRESSBOOK.Description from RETAILSTORETABLE inner join DIRADDRESSBOOK ON RETAILSTORETABLE.STORENUMBER = DIRADDRESSBOOK.name where RETAILSTORETABLE.StoreNumber = '" + storeid + "'", connection);
+        //                    SqlCommand command3;
 
-//                    command3 = new SqlCommand(@"SELECT TOP (1) LINE.PONUMBER, LINE.RECEIPTDATE, HEADER.DELIVERYNOTENUMBER  FROM POSPURCHASEORDERRECEIPT HEADER
-//JOIN POSPURCHASEORDERRECEIPTLINE LINE ON HEADER.PONUMBER = LINE.PONUMBER
-//where HEADER.PONumber = '" + this.PONumber + "'", connection);
-                     
-//                          //command3 = new SqlCommand("Select DeliveryNoteNumber from POSPURCHASEORDERRECEIPT where PONumber = '" + this.PONumber + "'", connection);
-                    
-                        
-//                    using (reader2 = command2.ExecuteReader())
-//                    {
-//                        while (reader2.Read())
-//                        {
-//                            namatoko = reader2["Description"].ToString();
-//                        }
-//                    }
+        //                    command3 = new SqlCommand(@"SELECT TOP (1) LINE.PONUMBER, LINE.RECEIPTDATE, HEADER.DELIVERYNOTENUMBER  FROM POSPURCHASEORDERRECEIPT HEADER
+        //JOIN POSPURCHASEORDERRECEIPTLINE LINE ON HEADER.PONUMBER = LINE.PONUMBER
+        //where HEADER.PONumber = '" + this.PONumber + "'", connection);
 
-//                    using (reader3 = command3.ExecuteReader())
-//                    {
-//                        while (reader3.Read())
-//                        {
-//                            deliverynote = reader3["DeliveryNoteNumber"].ToString();
-//                            receiptDate = reader3["RECEIPTDATE"].ToString();
-//                        }
-//                    }
-
-//                    if (deliverynote == string.Empty || receiptDate == string.Empty)
-//                    {
-//                        object[] parameterList = new object[] 
-//                            {
-//                                this.PONumber,
-//                                ApplicationSettings.Database.DATAAREAID.ToString()
-                                
-                                
-//                            };
-
-//                        try
-//                        {
-//                            //TODO add for PO RETUR REPRINT
-//                            if (APIAccessClass.isRetur)
-//                            {
-//                                 containerArray = PurchaseOrderReceiving.InternalApplication.TransactionServices.InvokeExtension("getPackingSlipInfoPORetur", parameterList);
-//                            }
-                            
-//                            else
-//                            {
-//                                 containerArray = PurchaseOrderReceiving.InternalApplication.TransactionServices.InvokeExtension("getPackingSlipInfoPO", parameterList);
-//                            }
-
-//                            if (containerArray[2].ToString() == "Success")
-//                            {
-//                                deliverynote = containerArray[3].ToString();
-//                                receiptDate = containerArray[4].ToString();
-//                            }
-
-//                        }
-//                        catch (Exception ex)
-//                        {
-//                            LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
-//                            throw;
-//                        }
-             
-//                    }
-//                    if (statusReceipt != "REPRINT") //additional code for reprint by Yonathan 16/07/2024
-//                    {
-//                        s += "             -----------------------------------" + Environment.NewLine;
-//                        s += "                          " + statusReceipt + Environment.NewLine;
-//                        s += "             -----------------------------------" + Environment.NewLine;
-//                    }
-//                    //s += "             -----------------------------------" + Environment.NewLine;
-//                    //s += "                          " + statusReceipt + Environment.NewLine;
-//                    //s += "             -----------------------------------" + Environment.NewLine;
-//                    if (statusReceipt == "REPRINT") //additional code for reprint by Yonathan 16/07/2024
-//                    {
-//                        s += "             Tgl Reprint  : " + DateTime.Now.ToString() + Environment.NewLine;
-//                    }
-//                    s += "             Keterangan   : " + namatoko + Environment.NewLine +
-//                         "             No. Terima   : " + this.ReceiptNumber + Environment.NewLine +
-//                         "             Tgl Terima   : " + receiptDate + Environment.NewLine + //DateTime.Now.ToString() 
-//                         "             No. PO/TO    : " + this.PONumber + Environment.NewLine +
-//                        //   "Tgl PO       :" + "Tanggal PO" + Environment.NewLine + //Custom field
-//                        //  "Supplier     :" + "Supplier" + Environment.NewLine + //Custom Field
-//                         "             DO No        : " + deliverynote + Environment.NewLine; //delivery note number
-                   
-
-//                    /*s += "-------------------------------------------------------" + Environment.NewLine +
-
-//                         "Kode Barang                       Unit              Qty " + Environment.NewLine +
-//                         "-------------------------------------------------------" + Environment.NewLine;*/
-
-//                    //       s += "------------------------------------------------" + Environment.NewLine;
-//                    s += "             -----------------------------------" + Environment.NewLine; // modif by Julius 14 07 2017
-//                    //s += "Kode Barang".PadRight(25) + "Unit".PadRight(5) + "Qty".PadLeft(4);
-//                    //s += "             Kode Barang".PadRight(32) + "Qty".PadLeft(10); //+ "Unit".PadLeft(5); modif by Yonathan 11/10/2022 disable Unit column
-//                    s += "             Kode Barang".PadRight(a) + "Qty".PadLeft(b); //+ "Unit".PadLeft(5); modif by Yonathan 11/10/2022 disable Unit column
-//                    //"Kode Barang                       Unit              Qty " 
-//                    s += Environment.NewLine;
-
-//                    reader = command.ExecuteReader();
-//                    //Offset = Offset + 160;
-//                    while (reader.Read())
-//                    {
-//                        //modif by Yonathan 18/10/2022
-//                        itemName = reader["ItemName"].ToString();
-//                        itemNumber = reader["ItemNumber"].ToString();
-
-//                        if (statusReceipt == "REPRINT")
-//                        {
-//                            qty = (Math.Truncate(Convert.ToDecimal(reader["QuantityReceived"]) * 1000m) / 1000m);
-//                        }
-//                        else
-//                        {
-//                            qty = (Math.Truncate(Convert.ToDecimal(reader["QuantityReceivedNow"]) * 1000m) / 1000m);
-//                        }
-//                        //mod by Yonathan 25/07/2023 to prevent item 0 qty receive to appear on the receipt.
-//                        if (qty != 0)
-//                        {
-//                            if (itemName.Length >= 18)
-//                            {
-//                                itemName = itemName.Substring(0, 18).PadRight(18, ' ');
-//                            }
-//                            else
-//                            {
-//                                itemName = itemName;
-//                                int countItemName = itemName.Length;
-//                                int addSpace = 18 - countItemName;
-//                                for (int i = 0; i < addSpace; i++)
-//                                {
-//                                    itemName += " ";
-//                                }
-//                            }
-//                            s += "             " + itemNumber + "-" + itemName;
-//                            //end add
-//                            /*
-//                            if (reader["ItemName"].ToString().Length > c)
-//                                s += "             " + reader["ItemNumber"].ToString() + "-" + reader["ItemName"].ToString().Substring(0, c).PadRight(d);
-//                            else
-//                                s += "             " + reader["ItemNumber"].ToString() + "-" + reader["ItemName"].ToString().PadRight(d);*/
-//                            //Modify by heron 140817- change the sequence
-
-//                            /*s += reader["Unit"].ToString().PadRight(5);
-//                            s += Convert.ToInt32(reader["QuantityReceivedNow"]).ToString().PadLeft(4) + Environment.NewLine;*/
-//                            /*decimal m = 199.123000000000m;
-//                            m = Math.Truncate(m * 1000m) / 1000m;
-//                            Console.WriteLine(m);*/
-//                            //add by Yonathan 17/10/2022
-
-//                            qtyStringMod = qty.ToString();
-//                            if (qty.ToString().Length == 7)
-//                            {
-//                                qtyString = qty.ToString();
-//                            }
-//                            else
-//                            {
-//                                qtyString = qty.ToString();
-//                                int stringCount = qty.ToString().Length;
-//                                int spaceToBeAdded = 7 - stringCount;
-//                                for (int i = 0; i < spaceToBeAdded; i++)
-//                                {
-//                                    qtyString += " ";
-//                                }
-//                            }
-//                            //end
-
-//                            //s += (Math.Truncate(Convert.ToDecimal(reader["QuantityReceivedNow"]) * 1000m) / 1000m).ToString().PadLeft(e) + Environment.NewLine;
-//                            s += qtyString.PadLeft(e) + Environment.NewLine;
-//                            //s += reader["QuantityReceivedNow"].ToString().PadLeft(4); //Convert.ToInt32(reader["QuantityReceivedNow"]).ToString().PadLeft(4);  disable by Yonathan 10/10/2022 because qty supports decimal
-//                            //s += reader["Unit"].ToString().PadLeft(4) + Environment.NewLine; modif by Yonathan 11/10/2022 disable Unit column
-
-//                            //End Modify by heron 140817- change the sequence
+        //                          //command3 = new SqlCommand("Select DeliveryNoteNumber from POSPURCHASEORDERRECEIPT where PONumber = '" + this.PONumber + "'", connection);
 
 
+        //                    using (reader2 = command2.ExecuteReader())
+        //                    {
+        //                        while (reader2.Read())
+        //                        {
+        //                            namatoko = reader2["Description"].ToString();
+        //                        }
+        //                    }
 
-//                            // Convert.ToInt32(reader["QuantityReceivedNow"]); disable by Yonathan 10/10/2022 because qty supports decimal
-//                            totalQtyDec += qty; //(Math.Truncate(Convert.ToDecimal(reader["QuantityReceivedNow"]) * 1000m) / 1000m);
-//                            Offset = Offset + 13;
-//                        }
-                        
-//                    }
+        //                    using (reader3 = command3.ExecuteReader())
+        //                    {
+        //                        while (reader3.Read())
+        //                        {
+        //                            deliverynote = reader3["DeliveryNoteNumber"].ToString();
+        //                            receiptDate = reader3["RECEIPTDATE"].ToString();
+        //                        }
+        //                    }
 
-//                    //     s += "------------------------------------------------" + Environment.NewLine;
-//                    s += "             -----------------------------------" + Environment.NewLine; // modif by Julius 14 07 2017
-//                    //s += "Total Qty    :".PadRight(27) + totalQty.ToString().PadLeft(7) + Environment.NewLine;
-//                    //s += "             Total Qty    :".PadRight(22) + totalQty.ToString().PadLeft(7) + Environment.NewLine; //disable by Yonathan to add support for decimal
-//                    s += "             Total Qty    :".PadRight(22) + totalQtyDec.ToString().PadLeft(15) + Environment.NewLine; //newly modified by yonathan 10/10/2022
-//                    //     s += "------------------------------------------------" + Environment.NewLine;
-//                    s += "             -----------------------------------" + Environment.NewLine; // modif by Julius 14 07 2017
-//                    s += Environment.NewLine + Environment.NewLine + Environment.NewLine;
+        //                    if (deliverynote == string.Empty || receiptDate == string.Empty)
+        //                    {
+        //                        object[] parameterList = new object[] 
+        //                            {
+        //                                this.PONumber,
+        //                                ApplicationSettings.Database.DATAAREAID.ToString()
 
-//                    s += "             Diterima Oleh     Diserahkan Oleh";
-//                    s += Environment.NewLine + Environment.NewLine + Environment.NewLine + Environment.NewLine;
 
-//                    s += "             (_____________)   (_____________)";
-//                    //s += Environment.NewLine + Environment.NewLine + Environment.NewLine + Environment.NewLine +
-//                    //     Environment.NewLine + Environment.NewLine + Environment.NewLine + Environment.NewLine +
-//                    //     Environment.NewLine + Environment.NewLine + Environment.NewLine + Environment.NewLine;
-//                    Offset = Offset + 260;
-//                }
-//                catch (SqlException ex)
-//                {
-//                    throw new Exception("Format Error", ex);
-//                }
-//            }
-//            return s;
-//        }
-        private string ReceiveDocumentFormat(string statusReceipt)
+        //                            };
+
+        //                        try
+        //                        {
+        //                            //TODO add for PO RETUR REPRINT
+        //                            if (APIAccessClass.isRetur)
+        //                            {
+        //                                 containerArray = PurchaseOrderReceiving.InternalApplication.TransactionServices.InvokeExtension("getPackingSlipInfoPORetur", parameterList);
+        //                            }
+
+        //                            else
+        //                            {
+        //                                 containerArray = PurchaseOrderReceiving.InternalApplication.TransactionServices.InvokeExtension("getPackingSlipInfoPO", parameterList);
+        //                            }
+
+        //                            if (containerArray[2].ToString() == "Success")
+        //                            {
+        //                                deliverynote = containerArray[3].ToString();
+        //                                receiptDate = containerArray[4].ToString();
+        //                            }
+
+        //                        }
+        //                        catch (Exception ex)
+        //                        {
+        //                            LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+        //                            throw;
+        //                        }
+
+        //                    }
+        //                    if (statusReceipt != "REPRINT") //additional code for reprint by Yonathan 16/07/2024
+        //                    {
+        //                        s += "             -----------------------------------" + Environment.NewLine;
+        //                        s += "                          " + statusReceipt + Environment.NewLine;
+        //                        s += "             -----------------------------------" + Environment.NewLine;
+        //                    }
+        //                    //s += "             -----------------------------------" + Environment.NewLine;
+        //                    //s += "                          " + statusReceipt + Environment.NewLine;
+        //                    //s += "             -----------------------------------" + Environment.NewLine;
+        //                    if (statusReceipt == "REPRINT") //additional code for reprint by Yonathan 16/07/2024
+        //                    {
+        //                        s += "             Tgl Reprint  : " + DateTime.Now.ToString() + Environment.NewLine;
+        //                    }
+        //                    s += "             Keterangan   : " + namatoko + Environment.NewLine +
+        //                         "             No. Terima   : " + this.ReceiptNumber + Environment.NewLine +
+        //                         "             Tgl Terima   : " + receiptDate + Environment.NewLine + //DateTime.Now.ToString() 
+        //                         "             No. PO/TO    : " + this.PONumber + Environment.NewLine +
+        //                        //   "Tgl PO       :" + "Tanggal PO" + Environment.NewLine + //Custom field
+        //                        //  "Supplier     :" + "Supplier" + Environment.NewLine + //Custom Field
+        //                         "             DO No        : " + deliverynote + Environment.NewLine; //delivery note number
+
+
+        //                    /*s += "-------------------------------------------------------" + Environment.NewLine +
+
+        //                         "Kode Barang                       Unit              Qty " + Environment.NewLine +
+        //                         "-------------------------------------------------------" + Environment.NewLine;*/
+
+        //                    //       s += "------------------------------------------------" + Environment.NewLine;
+        //                    s += "             -----------------------------------" + Environment.NewLine; // modif by Julius 14 07 2017
+        //                    //s += "Kode Barang".PadRight(25) + "Unit".PadRight(5) + "Qty".PadLeft(4);
+        //                    //s += "             Kode Barang".PadRight(32) + "Qty".PadLeft(10); //+ "Unit".PadLeft(5); modif by Yonathan 11/10/2022 disable Unit column
+        //                    s += "             Kode Barang".PadRight(a) + "Qty".PadLeft(b); //+ "Unit".PadLeft(5); modif by Yonathan 11/10/2022 disable Unit column
+        //                    //"Kode Barang                       Unit              Qty " 
+        //                    s += Environment.NewLine;
+
+        //                    reader = command.ExecuteReader();
+        //                    //Offset = Offset + 160;
+        //                    while (reader.Read())
+        //                    {
+        //                        //modif by Yonathan 18/10/2022
+        //                        itemName = reader["ItemName"].ToString();
+        //                        itemNumber = reader["ItemNumber"].ToString();
+
+        //                        if (statusReceipt == "REPRINT")
+        //                        {
+        //                            qty = (Math.Truncate(Convert.ToDecimal(reader["QuantityReceived"]) * 1000m) / 1000m);
+        //                        }
+        //                        else
+        //                        {
+        //                            qty = (Math.Truncate(Convert.ToDecimal(reader["QuantityReceivedNow"]) * 1000m) / 1000m);
+        //                        }
+        //                        //mod by Yonathan 25/07/2023 to prevent item 0 qty receive to appear on the receipt.
+        //                        if (qty != 0)
+        //                        {
+        //                            if (itemName.Length >= 18)
+        //                            {
+        //                                itemName = itemName.Substring(0, 18).PadRight(18, ' ');
+        //                            }
+        //                            else
+        //                            {
+        //                                itemName = itemName;
+        //                                int countItemName = itemName.Length;
+        //                                int addSpace = 18 - countItemName;
+        //                                for (int i = 0; i < addSpace; i++)
+        //                                {
+        //                                    itemName += " ";
+        //                                }
+        //                            }
+        //                            s += "             " + itemNumber + "-" + itemName;
+        //                            //end add
+        //                            /*
+        //                            if (reader["ItemName"].ToString().Length > c)
+        //                                s += "             " + reader["ItemNumber"].ToString() + "-" + reader["ItemName"].ToString().Substring(0, c).PadRight(d);
+        //                            else
+        //                                s += "             " + reader["ItemNumber"].ToString() + "-" + reader["ItemName"].ToString().PadRight(d);*/
+        //                            //Modify by heron 140817- change the sequence
+
+        //                            /*s += reader["Unit"].ToString().PadRight(5);
+        //                            s += Convert.ToInt32(reader["QuantityReceivedNow"]).ToString().PadLeft(4) + Environment.NewLine;*/
+        //                            /*decimal m = 199.123000000000m;
+        //                            m = Math.Truncate(m * 1000m) / 1000m;
+        //                            Console.WriteLine(m);*/
+        //                            //add by Yonathan 17/10/2022
+
+        //                            qtyStringMod = qty.ToString();
+        //                            if (qty.ToString().Length == 7)
+        //                            {
+        //                                qtyString = qty.ToString();
+        //                            }
+        //                            else
+        //                            {
+        //                                qtyString = qty.ToString();
+        //                                int stringCount = qty.ToString().Length;
+        //                                int spaceToBeAdded = 7 - stringCount;
+        //                                for (int i = 0; i < spaceToBeAdded; i++)
+        //                                {
+        //                                    qtyString += " ";
+        //                                }
+        //                            }
+        //                            //end
+
+        //                            //s += (Math.Truncate(Convert.ToDecimal(reader["QuantityReceivedNow"]) * 1000m) / 1000m).ToString().PadLeft(e) + Environment.NewLine;
+        //                            s += qtyString.PadLeft(e) + Environment.NewLine;
+        //                            //s += reader["QuantityReceivedNow"].ToString().PadLeft(4); //Convert.ToInt32(reader["QuantityReceivedNow"]).ToString().PadLeft(4);  disable by Yonathan 10/10/2022 because qty supports decimal
+        //                            //s += reader["Unit"].ToString().PadLeft(4) + Environment.NewLine; modif by Yonathan 11/10/2022 disable Unit column
+
+        //                            //End Modify by heron 140817- change the sequence
+
+
+
+        //                            // Convert.ToInt32(reader["QuantityReceivedNow"]); disable by Yonathan 10/10/2022 because qty supports decimal
+        //                            totalQtyDec += qty; //(Math.Truncate(Convert.ToDecimal(reader["QuantityReceivedNow"]) * 1000m) / 1000m);
+        //                            Offset = Offset + 13;
+        //                        }
+
+        //                    }
+
+        //                    //     s += "------------------------------------------------" + Environment.NewLine;
+        //                    s += "             -----------------------------------" + Environment.NewLine; // modif by Julius 14 07 2017
+        //                    //s += "Total Qty    :".PadRight(27) + totalQty.ToString().PadLeft(7) + Environment.NewLine;
+        //                    //s += "             Total Qty    :".PadRight(22) + totalQty.ToString().PadLeft(7) + Environment.NewLine; //disable by Yonathan to add support for decimal
+        //                    s += "             Total Qty    :".PadRight(22) + totalQtyDec.ToString().PadLeft(15) + Environment.NewLine; //newly modified by yonathan 10/10/2022
+        //                    //     s += "------------------------------------------------" + Environment.NewLine;
+        //                    s += "             -----------------------------------" + Environment.NewLine; // modif by Julius 14 07 2017
+        //                    s += Environment.NewLine + Environment.NewLine + Environment.NewLine;
+
+        //                    s += "             Diterima Oleh     Diserahkan Oleh";
+        //                    s += Environment.NewLine + Environment.NewLine + Environment.NewLine + Environment.NewLine;
+
+        //                    s += "             (_____________)   (_____________)";
+        //                    //s += Environment.NewLine + Environment.NewLine + Environment.NewLine + Environment.NewLine +
+        //                    //     Environment.NewLine + Environment.NewLine + Environment.NewLine + Environment.NewLine +
+        //                    //     Environment.NewLine + Environment.NewLine + Environment.NewLine + Environment.NewLine;
+        //                    Offset = Offset + 260;
+        //                }
+        //                catch (SqlException ex)
+        //                {
+        //                    throw new Exception("Format Error", ex);
+        //                }
+        //            }
+        //            return s;
+        //        }
+        // One receipt layout for both printers.
+        // thermal = true  -> narrow thermal roll (layout like "Contoh Struk PO")
+        // thermal = false -> dot matrix (EPSON LX-310 ESC/P)
+        private string ReceiveDocumentFormat(string statusReceipt, bool thermal)
         {
-            int totalQty = 0;
             decimal totalQtyDec = 0;
             string s = "";
             string namatoko = "";
+            string vendorName = "";
             string deliverynote = "";
             string receiptDate = "";
-            string qtyString = "";
-            string qtyStringMod = "";
-            string itemName = "";
-            string itemNumber = "";
-            decimal qty = 0;
             ReadOnlyCollection<object> containerArray = null;
             string connectionString = GetSettingFromConfigFile();
             string storeid = GetStoreId();
-            int a, b, c, d, e, f = 0;
-            a = 34;
-            b = 10;
-            c = 18;
-            d = 12;
-            e = 8;
-            f = 0;
+
+            // Layout settings (the only differences between thermal and dot matrix)
+            string indent = thermal ? "" : new string(' ', 13);
+            string separator = indent + new string('-', thermal ? 34 : 35);
+            string statusIndent = indent + new string(' ', 13);
+            string detailIndent = thermal ? " " : new string(' ', 15);
+            int detailQtyWidth = thermal ? 13 : 23;   // right-aligned qty column of the EXP.Date lines
+            int itemCodeWidth = thermal ? 23 : 34;
+            int itemNameWidth = thermal ? 35 : 18;
+            int vendorWidth = thermal ? 22 : 30;
+            int totalQtyWidth = thermal ? 10 : 15;
+            const int labelWidth = 15;                 // "Nama Vendor  : "
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 try
                 {
                     connection.Open();
-                    SqlDataReader reader, reader2, reader3 = null;
                     SqlCommand command = new SqlCommand("Select ItemNumber, ItemName, Unit,QuantityReceived, QuantityReceivedNow from POSPURCHASEORDERRECEIPTLINE where PONumber = '" + this.PONumber + "'", connection);
                     SqlCommand command2 = new SqlCommand("Select RETAILSTORETABLE.StoreNumber, DIRADDRESSBOOK.Description from RETAILSTORETABLE inner join DIRADDRESSBOOK ON RETAILSTORETABLE.STORENUMBER = DIRADDRESSBOOK.name where RETAILSTORETABLE.StoreNumber = '" + storeid + "'", connection);
-                    SqlCommand command3;
-
-                    command3 = new SqlCommand(@"SELECT TOP (1) LINE.PONUMBER, LINE.RECEIPTDATE, HEADER.DELIVERYNOTENUMBER  FROM POSPURCHASEORDERRECEIPT HEADER
+                    SqlCommand command3 = new SqlCommand(@"SELECT TOP (1) LINE.PONUMBER, LINE.RECEIPTDATE, HEADER.DELIVERYNOTENUMBER, HEADER.ORIGIN_ORDER_NAME FROM POSPURCHASEORDERRECEIPT HEADER
 JOIN POSPURCHASEORDERRECEIPTLINE LINE ON HEADER.PONUMBER = LINE.PONUMBER
 where HEADER.PONumber = '" + this.PONumber + "'", connection);
 
-                    using (reader2 = command2.ExecuteReader())
+                    using (SqlDataReader reader2 = command2.ExecuteReader())
                     {
                         while (reader2.Read())
                         {
@@ -2603,22 +2608,23 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
                         }
                     }
 
-                    using (reader3 = command3.ExecuteReader())
+                    using (SqlDataReader reader3 = command3.ExecuteReader())
                     {
                         while (reader3.Read())
                         {
                             deliverynote = reader3["DeliveryNoteNumber"].ToString();
                             receiptDate = reader3["RECEIPTDATE"].ToString();
+                            vendorName = reader3["ORIGIN_ORDER_NAME"].ToString();
                         }
                     }
 
                     if (deliverynote == string.Empty || receiptDate == string.Empty)
                     {
                         object[] parameterList = new object[]
-                    {
-                        this.PONumber,
-                        ApplicationSettings.Database.DATAAREAID.ToString()
-                    };
+                        {
+                            this.PONumber,
+                            ApplicationSettings.Database.DATAAREAID.ToString()
+                        };
 
                         try
                         {
@@ -2644,489 +2650,49 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
                         }
                     }
 
+                    receiptDate = FormatReceiptDate(receiptDate);
+
+                    // ---- Header ----
                     if (statusReceipt != "REPRINT")
                     {
-                        s += "             -----------------------------------" + Environment.NewLine;
-                        s += "                          " + statusReceipt + Environment.NewLine;
-                        s += "             -----------------------------------" + Environment.NewLine;
+                        s += separator + Environment.NewLine;
+                        s += statusIndent + statusReceipt + Environment.NewLine;
+                        s += separator + Environment.NewLine;
                     }
-                    if (statusReceipt == "REPRINT")
+                    else
                     {
-                        s += "             Tgl Reprint  : " + DateTime.Now.ToString() + Environment.NewLine;
+                        s += indent + "Tgl Reprint  : " + DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss") + Environment.NewLine;
                     }
 
-                    s += "             Keterangan   : " + namatoko + Environment.NewLine +
-                         "             No. Terima   : " + this.ReceiptNumber + Environment.NewLine +
-                         "             Tgl Terima   : " + receiptDate + Environment.NewLine +
-                         "             No. PO/TO    : " + this.PONumber + Environment.NewLine +
-                         "             DO No        : " + deliverynote + Environment.NewLine;
+                    s += indent + "Keterangan   : " + namatoko + Environment.NewLine +
+                         indent + "No. Terima   : " + this.ReceiptNumber + Environment.NewLine +
+                         indent + "Tgl Terima   : " + receiptDate + Environment.NewLine +
+                         indent + "No. PO/TO    : " + this.PONumber + Environment.NewLine +
+                         indent + "DO No        : " + deliverynote + Environment.NewLine;
 
-                    s += "             -----------------------------------" + Environment.NewLine;
-                    s += "             Kode Barang".PadRight(a) + "Qty".PadLeft(b);
+                    // Vendor name (ORIGIN_ORDER_NAME), wrapped under the value column
+                    List<string> vendorLines = WrapText(vendorName, vendorWidth);
+                    for (int i = 0; i < vendorLines.Count; i++)
+                    {
+                        s += indent + (i == 0 ? "Nama Vendor  : " : new string(' ', labelWidth)) + vendorLines[i] + Environment.NewLine;
+                        Offset = Offset + 13;
+                    }
+
+                    s += separator + Environment.NewLine;
+                    s += (indent + "Kode Barang").PadRight(itemCodeWidth) + "Qty".PadLeft(thermal ? 3 : 10);
+                    if (thermal)
+                    {
+                        s += "Unit".PadLeft(7);
+                    }
                     s += Environment.NewLine;
-
-                    List<Tuple<string, string, decimal, decimal>> itemRows =
-                        new List<Tuple<string, string, decimal, decimal>>();
-
-                    using (reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            itemRows.Add(Tuple.Create(
-                                reader["ItemNumber"].ToString(),
-                                reader["ItemName"].ToString(),
-                                Convert.ToDecimal(reader["QuantityReceived"]),
-                                Convert.ToDecimal(reader["QuantityReceivedNow"])));
-                        }
-                    }
-
-                    foreach (var itemRow in itemRows)
-                    {
-                        itemNumber = itemRow.Item1;
-                        itemName = itemRow.Item2;
-
-                        if (statusReceipt == "REPRINT")
-                        {
-                            qty = Math.Truncate(itemRow.Item3 * 1000m) / 1000m;
-                        }
-                        else
-                        {
-                            qty = Math.Truncate(itemRow.Item4 * 1000m) / 1000m;
-                        }
-
-                        if (qty != 0)
-                        {
-                            if (itemName.Length >= 18)
-                            {
-                                itemName = itemName.Substring(0, 18).PadRight(18, ' ');
-                            }
-                            else
-                            {
-                                int countItemName = itemName.Length;
-                                int addSpace = 18 - countItemName;
-                                for (int i = 0; i < addSpace; i++)
-                                {
-                                    itemName += " ";
-                                }
-                            }
-                            s += "             " + itemNumber + "-" + itemName;
-
-                            qtyStringMod = qty.ToString();
-                            if (qty.ToString().Length == 7)
-                            {
-                                qtyString = qty.ToString();
-                            }
-                            else
-                            {
-                                qtyString = qty.ToString();
-                                int stringCount = qty.ToString().Length;
-                                int spaceToBeAdded = 7 - stringCount;
-                                for (int i = 0; i < spaceToBeAdded; i++)
-                                {
-                                    qtyString += " ";
-                                }
-                            }
-
-                            s += qtyString.PadLeft(e) + Environment.NewLine;
-
-                            // New: this item's qty/expiry sub-lines from the detail table
-                            s += BuildDetailSubLines(connection, itemNumber, "               ");
-
-                            totalQtyDec += qty;
-                            Offset = Offset + 13;
-                        }
-                    }
-
-                    s += "             -----------------------------------" + Environment.NewLine;
-                    s += "             Total Qty    :".PadRight(22) + totalQtyDec.ToString().PadLeft(15) + Environment.NewLine;
-                    s += "             -----------------------------------" + Environment.NewLine;
-                    s += Environment.NewLine + Environment.NewLine + Environment.NewLine;
-
-                    s += "             Diterima Oleh     Diserahkan Oleh";
-                    s += Environment.NewLine + Environment.NewLine + Environment.NewLine + Environment.NewLine;
-
-                    s += "             (_____________)   (_____________)";
-                    Offset = Offset + 260;
-                }
-                catch (SqlException ex)
-                {
-                    throw new Exception("Format Error", ex);
-                }
-            }
-            return s;
-        }
-
-//        private string ReceiveDocumentFormatThermal(string statusReceipt)
-//        {
-//            int totalQty = 0;
-//            decimal totalQtyDec = 0;
-//            string s = "";
-//            string namatoko = "";
-//            string deliverynote = "";
-//            string receiptDate = "";
-//            string qtyString = "";
-//            string qtyStringMod = "";
-//            string itemName = "";
-//            string itemNumber = "";
-//            string unit = "";
-//            decimal qty = 0;
-//            ReadOnlyCollection<object> containerArray = null;
-
-//            //string sumUnit, ItemName, ItemNumber, QtyReceivedNow = "";
-//            string connectionString = GetSettingFromConfigFile();
-//            string storeid = GetStoreId();
-//            //start modification by Yonathan 11/10/2022 to ease when debugging the PO/TO Receipt format 
-//            int a, b, c, d, e, f = 0;
-//            /*a = 25;
-//            b = 1;
-//            c = 18;
-//            d = 12;
-//            e = 4;
-//            f = 0;*/
-//            a = 23; // Width for "Kode Barang"
-//            b = 3;  // Moves "Qty" closer
-//            c = 7;  // Moves "Unit" properly
-//            d = 12;
-//            e = 3;  // Aligns "Qty" data correctly
-//            f = 0;
-
-//            // end 
-//            using (SqlConnection connection = new SqlConnection(connectionString))
-//            {
-//                try
-//                {
-//                    connection.Open();
-//                    SqlDataReader reader, reader2, reader3 = null;
-//                    SqlCommand command = new SqlCommand("Select ItemNumber, ItemName, Unit,QuantityReceived, QuantityReceivedNow from POSPURCHASEORDERRECEIPTLINE where PONumber = '" + this.PONumber + "'", connection);
-//                    SqlCommand command2 = new SqlCommand("Select RETAILSTORETABLE.StoreNumber, DIRADDRESSBOOK.Description from RETAILSTORETABLE inner join DIRADDRESSBOOK ON RETAILSTORETABLE.STORENUMBER = DIRADDRESSBOOK.name where RETAILSTORETABLE.StoreNumber = '" + storeid + "'", connection);
-//                    SqlCommand command3;
-
-//                    command3 = new SqlCommand(@"SELECT TOP (1) LINE.PONUMBER, LINE.RECEIPTDATE, HEADER.DELIVERYNOTENUMBER  FROM POSPURCHASEORDERRECEIPT HEADER
-//JOIN POSPURCHASEORDERRECEIPTLINE LINE ON HEADER.PONUMBER = LINE.PONUMBER
-//where HEADER.PONumber = '" + this.PONumber + "'", connection);
-
-//                    //command3 = new SqlCommand("Select DeliveryNoteNumber from POSPURCHASEORDERRECEIPT where PONumber = '" + this.PONumber + "'", connection);
-
-
-//                    using (reader2 = command2.ExecuteReader())
-//                    {
-//                        while (reader2.Read())
-//                        {
-//                            namatoko = reader2["Description"].ToString();
-//                        }
-//                    }
-
-//                    using (reader3 = command3.ExecuteReader())
-//                    {
-//                        while (reader3.Read())
-//                        {
-//                            deliverynote = reader3["DeliveryNoteNumber"].ToString();
-//                            receiptDate = reader3["RECEIPTDATE"].ToString();
-//                        }
-//                    }
-
-//                    if (deliverynote == string.Empty || receiptDate == string.Empty)
-//                    {
-//                        object[] parameterList = new object[] 
-//                            {
-//                                this.PONumber,
-//                                ApplicationSettings.Database.DATAAREAID.ToString()
-                                
-                                
-//                            };
-
-//                        try
-//                        {
-//                            if (APIAccessClass.isRetur)
-//                            {
-//                                containerArray = PurchaseOrderReceiving.InternalApplication.TransactionServices.InvokeExtension("getPackingSlipInfoPORetur", parameterList);
-//                            }
-
-//                            else
-//                            {
-//                                containerArray = PurchaseOrderReceiving.InternalApplication.TransactionServices.InvokeExtension("getPackingSlipInfoPO", parameterList);
-//                            }
-
-//                            if (containerArray[2].ToString() == "Success")
-//                            {
-//                                deliverynote = containerArray[3].ToString();
-//                                receiptDate = containerArray[4].ToString();
-//                            }
-
-//                        }
-//                        catch (Exception ex)
-//                        {
-//                            LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
-//                            throw;
-//                        }
-
-//                    }
-//                    //"=========================="
-//                    if (statusReceipt != "REPRINT") //additional code for reprint by Yonathan 16/07/2024
-//                    {
-//                        s += "------------------------------" + Environment.NewLine;
-//                        s += "             " + statusReceipt + Environment.NewLine;
-//                        s += "------------------------------" + Environment.NewLine;
-//                    }
-//                    //s += "             -----------------------------------" + Environment.NewLine;
-//                    //s += "                          " + statusReceipt + Environment.NewLine;
-//                    //s += "             -----------------------------------" + Environment.NewLine;
-//                    if (statusReceipt == "REPRINT") //additional code for reprint by Yonathan 16/07/2024
-//                    {
-//                        s += "Tgl Reprint  : " + DateTime.Now.ToString() + Environment.NewLine;
-//                    }
-//                    s += "Keterangan   : " + namatoko + Environment.NewLine +
-//                         "No. Terima   : " + this.ReceiptNumber + Environment.NewLine +
-//                         "Tgl Terima   : " + receiptDate + Environment.NewLine + //DateTime.Now.ToString() 
-//                         "No. PO/TO    : " + this.PONumber + Environment.NewLine +
-//                        //   "Tgl PO       :" + "Tanggal PO" + Environment.NewLine + //Custom field
-//                        //  "Supplier     :" + "Supplier" + Environment.NewLine + //Custom Field
-//                         "DO No        : " + deliverynote + Environment.NewLine; //delivery note number
-
-
-//                    /*s += "-------------------------------------------------------" + Environment.NewLine +
-
-//                         "Kode Barang                       Unit              Qty " + Environment.NewLine +
-//                         "-------------------------------------------------------" + Environment.NewLine;*/
-
-//                    //       s += "------------------------------------------------" + Environment.NewLine;
-//                    s += "------------------------------" + Environment.NewLine; // modif by Julius 14 07 2017
-//                    //s += "Kode Barang".PadRight(25) + "Unit".PadRight(5) + "Qty".PadLeft(4);
-//                    //s += "             Kode Barang".PadRight(32) + "Qty".PadLeft(10); //+ "Unit".PadLeft(5); modif by Yonathan 11/10/2022 disable Unit column
-//                    //s += "Kode Barang".PadRight(a) + "Qty".PadLeft(b,' ') + "Unit".PadLeft(7); //modif by Yonathan 11/10/2022 disable Unit column
-//                    s += "Kode Barang".PadRight(a) + "Qty".PadLeft(b, ' ') + "Unit".PadLeft(c);
-//                    //"Kode Barang                       Unit              Qty " 
-//                    s += Environment.NewLine;
-//                    s += "------------------------------" + Environment.NewLine; 
-//                    reader = command.ExecuteReader();
-//                    //Offset = Offset + 160;
-//                    while (reader.Read())
-//                    {
-//                        //modif by Yonathan 18/10/2022
-//                        itemName = reader["ItemName"].ToString();
-//                        itemNumber = reader["ItemNumber"].ToString();
-//                        unit = reader["Unit"].ToString();
-//                        if (statusReceipt == "REPRINT" ) //|| statusReceipt == "ORIGINAL" || statusReceipt == "COPY") //FIXED 27102025 
-//                        {
-
-//                            if (APIAccessClass.isRetur) //if retur then as is
-//                            {
-//                                qty = Math.Truncate(Convert.ToDecimal(reader["QuantityReceived"]) * 1000m) / 1000m;
-//                            }
-//                            else
-//                            {
-//                                qty = Math.Abs(Math.Truncate(Convert.ToDecimal(reader["QuantityReceived"]) * 1000m) / 1000m);
-//                            }
-                            
-//                        }
-//                        else
-//                        {
-//                            if (APIAccessClass.isRetur) //if retur then as is
-//                            {
-//                                qty =Math.Truncate(Convert.ToDecimal(reader["QuantityReceivedNow"]) * 1000m) / 1000m;
-//                            }
-//                            else
-//                            {
-//                                qty = Math.Abs(Math.Truncate(Convert.ToDecimal(reader["QuantityReceivedNow"]) * 1000m) / 1000m);
-//                            }
-//                        }
-//                        //mod by Yonathan 25/07/2023 to prevent item 0 qty receive to appear on the receipt.
-//                        if (qty != 0)
-//                        {
-//                            if (itemName.Length >= 35)
-//                            {
-//                                itemName = itemName.Substring(0, 35).PadRight(35, ' ');
-//                            }
-//                            else
-//                            {
-//                                itemName = itemName;
-//                                int countItemName = itemName.Length;
-//                                int addSpace = 35 - countItemName;
-//                                for (int i = 0; i < addSpace; i++)
-//                                {
-//                                    itemName += " ";
-//                                }
-//                            }
-//                            s += "" + itemNumber.PadRight(a);// +Environment.NewLine;
-                            
-                          
-
-//                            qtyStringMod = qty.ToString();
-//                            if (qty.ToString().Length == 7)
-//                            {
-//                                qtyString = qty.ToString();
-//                            }
-//                            else
-//                            {
-//                                qtyString = qty.ToString();
-//                                int stringCount = qty.ToString().Length;
-//                                int spaceToBeAdded = 7 - stringCount;
-//                                for (int i = 0; i < spaceToBeAdded; i++)
-//                                {
-//                                    qtyString += " ";
-//                                }
-//                            }
-//                            //end
-
-//                            //s += (Math.Truncate(Convert.ToDecimal(reader["QuantityReceivedNow"]) * 1000m) / 1000m).ToString().PadLeft(e) + Environment.NewLine;
-//                            s += qtyString.PadLeft(1) + unit.PadLeft(0) + Environment.NewLine;
-//                            s += itemName + Environment.NewLine;
-//                            //s += reader["QuantityReceivedNow"].ToString().PadLeft(4); //Convert.ToInt32(reader["QuantityReceivedNow"]).ToString().PadLeft(4);  disable by Yonathan 10/10/2022 because qty supports decimal
-//                            //s += reader["Unit"].ToString().PadLeft(4) + Environment.NewLine; modif by Yonathan 11/10/2022 disable Unit column
-
-//                            //End Modify by heron 140817- change the sequence
-
-
-
-//                            // Convert.ToInt32(reader["QuantityReceivedNow"]); disable by Yonathan 10/10/2022 because qty supports decimal
-//                            totalQtyDec += qty; //(Math.Truncate(Convert.ToDecimal(reader["QuantityReceivedNow"]) * 1000m) / 1000m);
-//                            Offset = Offset + 13;
-//                        }
-
-//                    }
-
-//                    //     s += "------------------------------------------------" + Environment.NewLine;
-//                    s += "------------------------------" + Environment.NewLine; // modif by Julius 14 07 2017
-//                    //s += "Total Qty    :".PadRight(27) + totalQty.ToString().PadLeft(7) + Environment.NewLine;
-//                    //s += "             Total Qty    :".PadRight(22) + totalQty.ToString().PadLeft(7) + Environment.NewLine; //disable by Yonathan to add support for decimal
-//                    s += "Total Qty    :".PadRight(10) + totalQtyDec.ToString().PadLeft(11) + Environment.NewLine; //newly modified by yonathan 10/10/2022
-//                    //     s += "------------------------------------------------" + Environment.NewLine;
-//                    s += "------------------------------" + Environment.NewLine; // modif by Julius 14 07 2017
-//                    s += Environment.NewLine + Environment.NewLine + Environment.NewLine;
-
-//                    s += "Diterima Oleh  Diserahkan Oleh";
-//                    s += Environment.NewLine + Environment.NewLine + Environment.NewLine + Environment.NewLine;
-
-//                    s += "(__________)   (___________)";
-//                    //s += Environment.NewLine + Environment.NewLine + Environment.NewLine + Environment.NewLine +
-//                    //     Environment.NewLine + Environment.NewLine + Environment.NewLine + Environment.NewLine +
-//                    //     Environment.NewLine + Environment.NewLine + Environment.NewLine + Environment.NewLine;
-//                    Offset = Offset + 260;
-//                }
-//                catch (SqlException ex)
-//                {
-//                    throw new Exception("Format Error", ex);
-//                }
-//            }
-//            return s;
-//        }
-
-        private string ReceiveDocumentFormatThermal(string statusReceipt)
-        {
-            int totalQty = 0;
-            decimal totalQtyDec = 0;
-            string s = "";
-            string namatoko = "";
-            string deliverynote = "";
-            string receiptDate = "";
-            string qtyString = "";
-            string qtyStringMod = "";
-            string itemName = "";
-            string itemNumber = "";
-            string unit = "";
-            decimal qty = 0;
-            ReadOnlyCollection<object> containerArray = null;
-
-            string connectionString = GetSettingFromConfigFile();
-            string storeid = GetStoreId();
-            int a, b, c, d, e, f = 0;
-            a = 23;
-            b = 3;
-            c = 7;
-            d = 12;
-            e = 3;
-            f = 0;
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                try
-                {
-                    connection.Open();
-                    SqlDataReader reader, reader2, reader3 = null;
-                    SqlCommand command = new SqlCommand("Select ItemNumber, ItemName, Unit,QuantityReceived, QuantityReceivedNow from POSPURCHASEORDERRECEIPTLINE where PONumber = '" + this.PONumber + "'", connection);
-                    SqlCommand command2 = new SqlCommand("Select RETAILSTORETABLE.StoreNumber, DIRADDRESSBOOK.Description from RETAILSTORETABLE inner join DIRADDRESSBOOK ON RETAILSTORETABLE.STORENUMBER = DIRADDRESSBOOK.name where RETAILSTORETABLE.StoreNumber = '" + storeid + "'", connection);
-                    SqlCommand command3;
-
-                    command3 = new SqlCommand(@"SELECT TOP (1) LINE.PONUMBER, LINE.RECEIPTDATE, HEADER.DELIVERYNOTENUMBER  FROM POSPURCHASEORDERRECEIPT HEADER
-JOIN POSPURCHASEORDERRECEIPTLINE LINE ON HEADER.PONUMBER = LINE.PONUMBER
-where HEADER.PONumber = '" + this.PONumber + "'", connection);
-
-                    using (reader2 = command2.ExecuteReader())
-                    {
-                        while (reader2.Read())
-                        {
-                            namatoko = reader2["Description"].ToString();
-                        }
-                    }
-
-                    using (reader3 = command3.ExecuteReader())
-                    {
-                        while (reader3.Read())
-                        {
-                            deliverynote = reader3["DeliveryNoteNumber"].ToString();
-                            receiptDate = reader3["RECEIPTDATE"].ToString();
-                        }
-                    }
-
-                    if (deliverynote == string.Empty || receiptDate == string.Empty)
-                    {
-                        object[] parameterList = new object[]
-                    {
-                        this.PONumber,
-                        ApplicationSettings.Database.DATAAREAID.ToString()
-                    };
-
-                        try
-                        {
-                            if (APIAccessClass.isRetur)
-                            {
-                                containerArray = PurchaseOrderReceiving.InternalApplication.TransactionServices.InvokeExtension("getPackingSlipInfoPORetur", parameterList);
-                            }
-                            else
-                            {
-                                containerArray = PurchaseOrderReceiving.InternalApplication.TransactionServices.InvokeExtension("getPackingSlipInfoPO", parameterList);
-                            }
-
-                            if (containerArray[2].ToString() == "Success")
-                            {
-                                deliverynote = containerArray[3].ToString();
-                                receiptDate = containerArray[4].ToString();
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
-                            throw;
-                        }
-                    }
-
-                    if (statusReceipt != "REPRINT")
-                    {
-                        s += "------------------------------" + Environment.NewLine;
-                        s += "             " + statusReceipt + Environment.NewLine;
-                        s += "------------------------------" + Environment.NewLine;
-                    }
-                    if (statusReceipt == "REPRINT")
-                    {
-                        s += "Tgl Reprint  : " + DateTime.Now.ToString() + Environment.NewLine;
-                    }
-                    s += "Keterangan   : " + namatoko + Environment.NewLine +
-                         "No. Terima   : " + this.ReceiptNumber + Environment.NewLine +
-                         "Tgl Terima   : " + receiptDate + Environment.NewLine +
-                         "No. PO/TO    : " + this.PONumber + Environment.NewLine +
-                         "DO No        : " + deliverynote + Environment.NewLine;
-
-                    s += "------------------------------" + Environment.NewLine;
-                    s += "Kode Barang".PadRight(a) + "Qty".PadLeft(b, ' ') + "Unit".PadLeft(c);
-                    s += Environment.NewLine;
-                    s += "------------------------------" + Environment.NewLine;
+                    s += separator + Environment.NewLine;
 
                     // Buffer all item rows first - the reader must be closed before we
                     // run per-item detail sub-line queries on the same connection below
                     List<Tuple<string, string, string, decimal, decimal>> itemRows =
                         new List<Tuple<string, string, string, decimal, decimal>>();
 
-                    using (reader = command.ExecuteReader())
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
@@ -3139,78 +2705,66 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
                         }
                     }
 
+                    // ---- Items ----
                     foreach (var itemRow in itemRows)
                     {
-                        itemNumber = itemRow.Item1;
-                        itemName = itemRow.Item2;
-                        unit = itemRow.Item3;
+                        string itemNumber = itemRow.Item1;
+                        string itemName = itemRow.Item2;
+                        string unit = itemRow.Item3;
 
-                        if (statusReceipt == "REPRINT")
+                        decimal received = (statusReceipt == "REPRINT") ? itemRow.Item4 : itemRow.Item5;
+                        decimal qty = APIAccessClass.isRetur
+                            ? Math.Truncate(received * 1000m) / 1000m
+                            : Math.Abs(Math.Truncate(received * 1000m) / 1000m);
+
+                        if (qty == 0)
                         {
-                            qty = APIAccessClass.isRetur
-                                ? Math.Truncate(itemRow.Item4 * 1000m) / 1000m
-                                : Math.Abs(Math.Truncate(itemRow.Item4 * 1000m) / 1000m);
+                            continue;
+                        }
+
+                        itemName = itemName.Length >= itemNameWidth
+                            ? itemName.Substring(0, itemNameWidth)
+                            : itemName.PadRight(itemNameWidth);
+
+                        string qtyString = FormatQty(qty).PadRight(7);
+
+                        if (thermal)
+                        {
+                            s += itemNumber.PadRight(itemCodeWidth) + qtyString + unit + Environment.NewLine;
+                            s += itemName + Environment.NewLine;
                         }
                         else
                         {
-                            qty = APIAccessClass.isRetur
-                                ? Math.Truncate(itemRow.Item5 * 1000m) / 1000m
-                                : Math.Abs(Math.Truncate(itemRow.Item5 * 1000m) / 1000m);
+                            s += indent + itemNumber + "-" + itemName + qtyString.PadLeft(8) + Environment.NewLine;
                         }
 
-                        if (qty != 0)
-                        {
-                            if (itemName.Length >= 35)
-                            {
-                                itemName = itemName.Substring(0, 35).PadRight(35, ' ');
-                            }
-                            else
-                            {
-                                int countItemName = itemName.Length;
-                                int addSpace = 35 - countItemName;
-                                for (int i = 0; i < addSpace; i++)
-                                {
-                                    itemName += " ";
-                                }
-                            }
-                            s += "" + itemNumber.PadRight(a);
+                        // EXP.Date first, then its qty
+                        s += BuildDetailSubLines(connection, itemNumber, detailIndent, detailQtyWidth);
 
-                            qtyStringMod = qty.ToString();
-                            if (qty.ToString().Length == 7)
-                            {
-                                qtyString = qty.ToString();
-                            }
-                            else
-                            {
-                                qtyString = qty.ToString();
-                                int stringCount = qty.ToString().Length;
-                                int spaceToBeAdded = 7 - stringCount;
-                                for (int i = 0; i < spaceToBeAdded; i++)
-                                {
-                                    qtyString += " ";
-                                }
-                            }
+                        // separator after every item
+                        s += separator + Environment.NewLine;
 
-                            s += qtyString.PadLeft(1) + unit.PadLeft(0) + Environment.NewLine;
-                            s += itemName + Environment.NewLine;
-
-                            // New: this item's qty/expiry sub-lines from the detail table
-                            s += BuildDetailSubLines(connection, itemNumber, "  ");
-
-                            totalQtyDec += qty;
-                            Offset = Offset + 13;
-                        }
+                        totalQtyDec += qty;
+                        Offset = Offset + 26;
                     }
 
-                    s += "------------------------------" + Environment.NewLine;
-                    s += "Total Qty    :".PadRight(10) + totalQtyDec.ToString().PadLeft(11) + Environment.NewLine;
-                    s += "------------------------------" + Environment.NewLine;
-                    s += Environment.NewLine + Environment.NewLine + Environment.NewLine;
+                    // ---- Footer ----
+                    s += (indent + "Total Qty    :") + FormatQty(totalQtyDec).PadLeft(totalQtyWidth) + Environment.NewLine;
+                    s += separator + Environment.NewLine;
+                    //s += Environment.NewLine + Environment.NewLine + Environment.NewLine;
 
-                    s += "Diterima Oleh  Diserahkan Oleh";
-                    s += Environment.NewLine + Environment.NewLine + Environment.NewLine + Environment.NewLine;
-
-                    s += "(__________)   (___________)";
+                    if (thermal)
+                    {
+                        s += "Diterima Oleh    Diserahkan Oleh";
+                        s += Environment.NewLine + Environment.NewLine + Environment.NewLine + Environment.NewLine;
+                        s += "(__________)       (___________)";
+                    }
+                    else
+                    {
+                        s += "             Diterima Oleh     Diserahkan Oleh";
+                        s += Environment.NewLine + Environment.NewLine + Environment.NewLine + Environment.NewLine;
+                        s += "             (_____________)   (_____________)";
+                    }
                     Offset = Offset + 260;
                 }
                 catch (SqlException ex)
@@ -3220,6 +2774,322 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
             }
             return s;
         }
+
+        // Receipt date as DD-MM-YYYY (+ time when there is one); unparsable text is left untouched
+        private static string FormatReceiptDate(string raw)
+        {
+            DateTime dt;
+            if (DateTime.TryParse(raw, out dt))
+            {
+                return dt.TimeOfDay == TimeSpan.Zero
+                    ? dt.ToString("dd-MM-yyyy")
+                    : dt.ToString("dd-MM-yyyy HH:mm:ss");
+            }
+            return raw;
+        }
+
+        // Quantity without trailing zeros: 5.000 -> "5", 2.500 -> "2.5" (current culture decimal separator)
+        private static string FormatQty(decimal qty)
+        {
+            return qty.ToString("0.###");
+        }
+
+        // Word-wrap text into lines of at most 'width' characters (overlong words are split)
+        private static List<string> WrapText(string text, int width)
+        {
+            List<string> lines = new List<string>();
+            string current = "";
+
+            foreach (string word in (text ?? "").Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                string w = word;
+                while (w.Length > width)
+                {
+                    if (current.Length > 0)
+                    {
+                        lines.Add(current);
+                        current = "";
+                    }
+                    lines.Add(w.Substring(0, width));
+                    w = w.Substring(width);
+                }
+
+                if (current.Length == 0)
+                {
+                    current = w;
+                }
+                else if (current.Length + 1 + w.Length <= width)
+                {
+                    current += " " + w;
+                }
+                else
+                {
+                    lines.Add(current);
+                    current = w;
+                }
+            }
+
+            if (current.Length > 0 || lines.Count == 0)
+            {
+                lines.Add(current);
+            }
+            return lines;
+        }
+
+        //        private string ReceiveDocumentFormatThermal(string statusReceipt)
+        //        {
+        //            int totalQty = 0;
+        //            decimal totalQtyDec = 0;
+        //            string s = "";
+        //            string namatoko = "";
+        //            string deliverynote = "";
+        //            string receiptDate = "";
+        //            string qtyString = "";
+        //            string qtyStringMod = "";
+        //            string itemName = "";
+        //            string itemNumber = "";
+        //            string unit = "";
+        //            decimal qty = 0;
+        //            ReadOnlyCollection<object> containerArray = null;
+
+        //            //string sumUnit, ItemName, ItemNumber, QtyReceivedNow = "";
+        //            string connectionString = GetSettingFromConfigFile();
+        //            string storeid = GetStoreId();
+        //            //start modification by Yonathan 11/10/2022 to ease when debugging the PO/TO Receipt format 
+        //            int a, b, c, d, e, f = 0;
+        //            /*a = 25;
+        //            b = 1;
+        //            c = 18;
+        //            d = 12;
+        //            e = 4;
+        //            f = 0;*/
+        //            a = 23; // Width for "Kode Barang"
+        //            b = 3;  // Moves "Qty" closer
+        //            c = 7;  // Moves "Unit" properly
+        //            d = 12;
+        //            e = 3;  // Aligns "Qty" data correctly
+        //            f = 0;
+
+        //            // end 
+        //            using (SqlConnection connection = new SqlConnection(connectionString))
+        //            {
+        //                try
+        //                {
+        //                    connection.Open();
+        //                    SqlDataReader reader, reader2, reader3 = null;
+        //                    SqlCommand command = new SqlCommand("Select ItemNumber, ItemName, Unit,QuantityReceived, QuantityReceivedNow from POSPURCHASEORDERRECEIPTLINE where PONumber = '" + this.PONumber + "'", connection);
+        //                    SqlCommand command2 = new SqlCommand("Select RETAILSTORETABLE.StoreNumber, DIRADDRESSBOOK.Description from RETAILSTORETABLE inner join DIRADDRESSBOOK ON RETAILSTORETABLE.STORENUMBER = DIRADDRESSBOOK.name where RETAILSTORETABLE.StoreNumber = '" + storeid + "'", connection);
+        //                    SqlCommand command3;
+
+        //                    command3 = new SqlCommand(@"SELECT TOP (1) LINE.PONUMBER, LINE.RECEIPTDATE, HEADER.DELIVERYNOTENUMBER  FROM POSPURCHASEORDERRECEIPT HEADER
+        //JOIN POSPURCHASEORDERRECEIPTLINE LINE ON HEADER.PONUMBER = LINE.PONUMBER
+        //where HEADER.PONumber = '" + this.PONumber + "'", connection);
+
+        //                    //command3 = new SqlCommand("Select DeliveryNoteNumber from POSPURCHASEORDERRECEIPT where PONumber = '" + this.PONumber + "'", connection);
+
+
+        //                    using (reader2 = command2.ExecuteReader())
+        //                    {
+        //                        while (reader2.Read())
+        //                        {
+        //                            namatoko = reader2["Description"].ToString();
+        //                        }
+        //                    }
+
+        //                    using (reader3 = command3.ExecuteReader())
+        //                    {
+        //                        while (reader3.Read())
+        //                        {
+        //                            deliverynote = reader3["DeliveryNoteNumber"].ToString();
+        //                            receiptDate = reader3["RECEIPTDATE"].ToString();
+        //                        }
+        //                    }
+
+        //                    if (deliverynote == string.Empty || receiptDate == string.Empty)
+        //                    {
+        //                        object[] parameterList = new object[] 
+        //                            {
+        //                                this.PONumber,
+        //                                ApplicationSettings.Database.DATAAREAID.ToString()
+
+
+        //                            };
+
+        //                        try
+        //                        {
+        //                            if (APIAccessClass.isRetur)
+        //                            {
+        //                                containerArray = PurchaseOrderReceiving.InternalApplication.TransactionServices.InvokeExtension("getPackingSlipInfoPORetur", parameterList);
+        //                            }
+
+        //                            else
+        //                            {
+        //                                containerArray = PurchaseOrderReceiving.InternalApplication.TransactionServices.InvokeExtension("getPackingSlipInfoPO", parameterList);
+        //                            }
+
+        //                            if (containerArray[2].ToString() == "Success")
+        //                            {
+        //                                deliverynote = containerArray[3].ToString();
+        //                                receiptDate = containerArray[4].ToString();
+        //                            }
+
+        //                        }
+        //                        catch (Exception ex)
+        //                        {
+        //                            LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+        //                            throw;
+        //                        }
+
+        //                    }
+        //                    //"=========================="
+        //                    if (statusReceipt != "REPRINT") //additional code for reprint by Yonathan 16/07/2024
+        //                    {
+        //                        s += "------------------------------" + Environment.NewLine;
+        //                        s += "             " + statusReceipt + Environment.NewLine;
+        //                        s += "------------------------------" + Environment.NewLine;
+        //                    }
+        //                    //s += "             -----------------------------------" + Environment.NewLine;
+        //                    //s += "                          " + statusReceipt + Environment.NewLine;
+        //                    //s += "             -----------------------------------" + Environment.NewLine;
+        //                    if (statusReceipt == "REPRINT") //additional code for reprint by Yonathan 16/07/2024
+        //                    {
+        //                        s += "Tgl Reprint  : " + DateTime.Now.ToString() + Environment.NewLine;
+        //                    }
+        //                    s += "Keterangan   : " + namatoko + Environment.NewLine +
+        //                         "No. Terima   : " + this.ReceiptNumber + Environment.NewLine +
+        //                         "Tgl Terima   : " + receiptDate + Environment.NewLine + //DateTime.Now.ToString() 
+        //                         "No. PO/TO    : " + this.PONumber + Environment.NewLine +
+        //                        //   "Tgl PO       :" + "Tanggal PO" + Environment.NewLine + //Custom field
+        //                        //  "Supplier     :" + "Supplier" + Environment.NewLine + //Custom Field
+        //                         "DO No        : " + deliverynote + Environment.NewLine; //delivery note number
+
+
+        //                    /*s += "-------------------------------------------------------" + Environment.NewLine +
+
+        //                         "Kode Barang                       Unit              Qty " + Environment.NewLine +
+        //                         "-------------------------------------------------------" + Environment.NewLine;*/
+
+        //                    //       s += "------------------------------------------------" + Environment.NewLine;
+        //                    s += "------------------------------" + Environment.NewLine; // modif by Julius 14 07 2017
+        //                    //s += "Kode Barang".PadRight(25) + "Unit".PadRight(5) + "Qty".PadLeft(4);
+        //                    //s += "             Kode Barang".PadRight(32) + "Qty".PadLeft(10); //+ "Unit".PadLeft(5); modif by Yonathan 11/10/2022 disable Unit column
+        //                    //s += "Kode Barang".PadRight(a) + "Qty".PadLeft(b,' ') + "Unit".PadLeft(7); //modif by Yonathan 11/10/2022 disable Unit column
+        //                    s += "Kode Barang".PadRight(a) + "Qty".PadLeft(b, ' ') + "Unit".PadLeft(c);
+        //                    //"Kode Barang                       Unit              Qty " 
+        //                    s += Environment.NewLine;
+        //                    s += "------------------------------" + Environment.NewLine; 
+        //                    reader = command.ExecuteReader();
+        //                    //Offset = Offset + 160;
+        //                    while (reader.Read())
+        //                    {
+        //                        //modif by Yonathan 18/10/2022
+        //                        itemName = reader["ItemName"].ToString();
+        //                        itemNumber = reader["ItemNumber"].ToString();
+        //                        unit = reader["Unit"].ToString();
+        //                        if (statusReceipt == "REPRINT" ) //|| statusReceipt == "ORIGINAL" || statusReceipt == "COPY") //FIXED 27102025 
+        //                        {
+
+        //                            if (APIAccessClass.isRetur) //if retur then as is
+        //                            {
+        //                                qty = Math.Truncate(Convert.ToDecimal(reader["QuantityReceived"]) * 1000m) / 1000m;
+        //                            }
+        //                            else
+        //                            {
+        //                                qty = Math.Abs(Math.Truncate(Convert.ToDecimal(reader["QuantityReceived"]) * 1000m) / 1000m);
+        //                            }
+
+        //                        }
+        //                        else
+        //                        {
+        //                            if (APIAccessClass.isRetur) //if retur then as is
+        //                            {
+        //                                qty =Math.Truncate(Convert.ToDecimal(reader["QuantityReceivedNow"]) * 1000m) / 1000m;
+        //                            }
+        //                            else
+        //                            {
+        //                                qty = Math.Abs(Math.Truncate(Convert.ToDecimal(reader["QuantityReceivedNow"]) * 1000m) / 1000m);
+        //                            }
+        //                        }
+        //                        //mod by Yonathan 25/07/2023 to prevent item 0 qty receive to appear on the receipt.
+        //                        if (qty != 0)
+        //                        {
+        //                            if (itemName.Length >= 35)
+        //                            {
+        //                                itemName = itemName.Substring(0, 35).PadRight(35, ' ');
+        //                            }
+        //                            else
+        //                            {
+        //                                itemName = itemName;
+        //                                int countItemName = itemName.Length;
+        //                                int addSpace = 35 - countItemName;
+        //                                for (int i = 0; i < addSpace; i++)
+        //                                {
+        //                                    itemName += " ";
+        //                                }
+        //                            }
+        //                            s += "" + itemNumber.PadRight(a);// +Environment.NewLine;
+
+
+
+        //                            qtyStringMod = qty.ToString();
+        //                            if (qty.ToString().Length == 7)
+        //                            {
+        //                                qtyString = qty.ToString();
+        //                            }
+        //                            else
+        //                            {
+        //                                qtyString = qty.ToString();
+        //                                int stringCount = qty.ToString().Length;
+        //                                int spaceToBeAdded = 7 - stringCount;
+        //                                for (int i = 0; i < spaceToBeAdded; i++)
+        //                                {
+        //                                    qtyString += " ";
+        //                                }
+        //                            }
+        //                            //end
+
+        //                            //s += (Math.Truncate(Convert.ToDecimal(reader["QuantityReceivedNow"]) * 1000m) / 1000m).ToString().PadLeft(e) + Environment.NewLine;
+        //                            s += qtyString.PadLeft(1) + unit.PadLeft(0) + Environment.NewLine;
+        //                            s += itemName + Environment.NewLine;
+        //                            //s += reader["QuantityReceivedNow"].ToString().PadLeft(4); //Convert.ToInt32(reader["QuantityReceivedNow"]).ToString().PadLeft(4);  disable by Yonathan 10/10/2022 because qty supports decimal
+        //                            //s += reader["Unit"].ToString().PadLeft(4) + Environment.NewLine; modif by Yonathan 11/10/2022 disable Unit column
+
+        //                            //End Modify by heron 140817- change the sequence
+
+
+
+        //                            // Convert.ToInt32(reader["QuantityReceivedNow"]); disable by Yonathan 10/10/2022 because qty supports decimal
+        //                            totalQtyDec += qty; //(Math.Truncate(Convert.ToDecimal(reader["QuantityReceivedNow"]) * 1000m) / 1000m);
+        //                            Offset = Offset + 13;
+        //                        }
+
+        //                    }
+
+        //                    //     s += "------------------------------------------------" + Environment.NewLine;
+        //                    s += "------------------------------" + Environment.NewLine; // modif by Julius 14 07 2017
+        //                    //s += "Total Qty    :".PadRight(27) + totalQty.ToString().PadLeft(7) + Environment.NewLine;
+        //                    //s += "             Total Qty    :".PadRight(22) + totalQty.ToString().PadLeft(7) + Environment.NewLine; //disable by Yonathan to add support for decimal
+        //                    s += "Total Qty    :".PadRight(10) + totalQtyDec.ToString().PadLeft(11) + Environment.NewLine; //newly modified by yonathan 10/10/2022
+        //                    //     s += "------------------------------------------------" + Environment.NewLine;
+        //                    s += "------------------------------" + Environment.NewLine; // modif by Julius 14 07 2017
+        //                    s += Environment.NewLine + Environment.NewLine + Environment.NewLine;
+
+        //                    s += "Diterima Oleh  Diserahkan Oleh";
+        //                    s += Environment.NewLine + Environment.NewLine + Environment.NewLine + Environment.NewLine;
+
+        //                    s += "(__________)   (___________)";
+        //                    //s += Environment.NewLine + Environment.NewLine + Environment.NewLine + Environment.NewLine +
+        //                    //     Environment.NewLine + Environment.NewLine + Environment.NewLine + Environment.NewLine +
+        //                    //     Environment.NewLine + Environment.NewLine + Environment.NewLine + Environment.NewLine;
+        //                    Offset = Offset + 260;
+        //                }
+        //                catch (SqlException ex)
+        //                {
+        //                    throw new Exception("Format Error", ex);
+        //                }
+        //            }
+        //            return s;
+        //        }
 
         //void gvInventory_CustomColumnDisplayText(object sender, DevExpress.XtraGrid.Views.Base.CustomColumnDisplayTextEventArgs e)
         //{
@@ -3271,8 +3141,8 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
             decimal totalQty = 0;
             foreach (DataRow row in entryTable.Rows)
             {
-                
-                decimal quantity = Math.Abs( row.Field<decimal>(DataAccessConstants.QuantityOrdered) ) - Math.Abs( row.Field<decimal>(DataAccessConstants.QuantityReceivedNow));
+
+                decimal quantity = Math.Abs(row.Field<decimal>(DataAccessConstants.QuantityOrdered)) - Math.Abs(row.Field<decimal>(DataAccessConstants.QuantityReceivedNow));
 
                 if (quantity < 0)
                 {
@@ -3413,7 +3283,7 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
                 //string queryString2 = @"SELECT ID.INVENTDIMID, ITEMID, CONFIGID FROM INVENTDIM ID JOIN INVENTITEMBARCODE IB ON ID.INVENTDIMID = IB.INVENTDIMID
                 //                         WHERE ITEMID = @ITEMID";
 
-                
+
 
             }
             catch (Exception ex)
@@ -3545,7 +3415,7 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
 
             }
             if (quantityTotal == 0)
-            { 
+            {
                 throw new Exception("There is no quantity to received, please click receive all");
             }
         }
@@ -3732,9 +3602,9 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
                                 xmlRoot.ToString(SaveOptions.DisableFormatting)
                             };
 
-                            ReadOnlyCollection<object> containerArray = PurchaseOrderReceiving.InternalApplication.TransactionServices.InvokeExtension("updatePurchOrderQtyExp", xmlRoot.ToString());
-                            //Application.TransactionServices.InvokeExtension("updatePurchOrderQtyExp", parameterList);
-                        }
+                                ReadOnlyCollection<object> containerArray = PurchaseOrderReceiving.InternalApplication.TransactionServices.InvokeExtension("updatePurchOrderQtyExp", xmlRoot.ToString());
+                                //Application.TransactionServices.InvokeExtension("updatePurchOrderQtyExp", parameterList);
+                            }
                             //end
 
                             string s = "";
@@ -3745,11 +3615,11 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
                             printerName = LSRetailPosis.Settings.HardwareProfiles.Printer.DeviceName;
                             if (printerName == "EPSON LX-310 ESC/P")
                             {
-                                s = this.ReceiveDocumentFormat("ORIGINAL");
+                                s = this.ReceiveDocumentFormat("ORIGINAL", false);
                             }
                             else
                             {
-                                s = this.ReceiveDocumentFormatThermal("ORIGINAL");
+                                s = this.ReceiveDocumentFormat("ORIGINAL", true);
                             }
 
 
@@ -3792,19 +3662,19 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
                                 }
 
                                 //add by Erwin 23 October 2019 print copy receipt
-                                string sCopy = "";//= this.ReceiveDocumentFormat("COPY");
+                                string sCopy = "";//= this.ReceiveDocumentFormat("COPY", false);
 
 
                                 printerName = LSRetailPosis.Settings.HardwareProfiles.Printer.DeviceName;
                                 if (printerName == "EPSON LX-310 ESC/P")
                                 {
 
-                                    sCopy = this.ReceiveDocumentFormat("COPY");
+                                    sCopy = this.ReceiveDocumentFormat("COPY", false);
                                 }
                                 else
                                 {
 
-                                    sCopy = this.ReceiveDocumentFormatThermal("COPY");
+                                    sCopy = this.ReceiveDocumentFormat("COPY", true);
                                 }
 
                                 PrintDocument pCopy = new PrintDocument();
@@ -3931,9 +3801,9 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
 
             }
 
-            
 
-            
+
+
         }
 
         private void btnPgDown_Click(object sender, EventArgs e)
@@ -4132,7 +4002,7 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
 
             }
             //end add
-            
+
             //int unitDecimals = uomData.GetUnitDecimals(item.Unit); //add by Yonathan 14 Oct 2022
 
             if ((unitDecimals == 0) && ((item.QuantityReceived - (int)item.QuantityReceived) != 0))
@@ -4379,7 +4249,7 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
 
             //ReadOnlyCollection<object> containerArray2 = PurchaseOrderReceiving.InternalApplication.TransactionServices.InvokeExtension("getStockOnHand", parameterList);
 
-            
+
             try
             {
                 if (APIAccessClass.isRetur == false)
@@ -4396,15 +4266,15 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
                 {
                     deliveryNote = containerArray[3].ToString();
                 }
-                    
+
             }
             catch (Exception ex)
             {
                 LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
                 throw;
             }
-             
-            
+
+
 
             return deliveryNote;
         }
@@ -4419,7 +4289,7 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
 
             SqlConnection connection = new SqlConnection(connectionString); //LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
 
-            
+
             try
             {
                 string queryString = @" SELECT DOCUMENTID FROM NECI_POSDocumentBuffer
@@ -4531,9 +4401,9 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
                     }
                 }
             }
-            
 
-           
+
+
         }
         //add by Yonathan 13/07/2023
         private void searchBox_Enter(object sender, EventArgs e)
@@ -4833,7 +4703,7 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
             }
         }
 
-        private string BuildDetailSubLines(SqlConnection connection, string itemNumber, string indent)
+        private string BuildDetailSubLines(SqlConnection connection, string itemNumber, string indent, int qtyWidth)
         {
             string result = "";
 
@@ -4853,8 +4723,7 @@ where HEADER.PONumber = '" + this.PONumber + "'", connection);
                         decimal detailQty = Convert.ToDecimal(detailReader["QTY"]);
                         DateTime detailExpDate = Convert.ToDateTime(detailReader["EXPDATE"]);
 
-                        result += indent + PurchaseOrderReceiving.InternalApplication.Services.Rounding.Round(detailQty, 3) +
-                                  " - " + detailExpDate.ToString("yyyy-MM-dd") + Environment.NewLine;
+                        result += indent + detailExpDate.ToString("dd-MM-yyyy") + FormatQty(detailQty).PadLeft(qtyWidth) + Environment.NewLine;
                     }
                 }
             }

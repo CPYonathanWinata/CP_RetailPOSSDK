@@ -272,6 +272,8 @@ C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Bl
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPDiscountPayment.resources
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPIBLIBLIORDERS.BlibliOrderList.resources
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPIBLIBLIORDERS.OrderDetailForm.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator.PricingSimulator.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator.ItemSearch.resources
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPIZone.resources
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPLoveRemittTPT.resources
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPNotification.resources
@@ -292,6 +294,7 @@ C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Bl
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel.Infolog.resources
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel.ItemSearch.resources
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel.MainFormPrintLabel.resources
+C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PROMODISCNEW.CP_PromoDiscNew.resources
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_SalesOrderDetail.resources
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.frmShowNotification.resources
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPLoveInquiry.resources
@@ -306,5 +309,3 @@ C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\Bl
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\aa\BlankOperations.resources.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\BlankOperations.dll
 C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\BlankOperations.pdb
-C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator.PricingSimulator.resources
-C:\Users\yonathan.winata\Documents\GitHub\Production\CP_RetailPOSSDK\Services\BlankOperations\obj\Debug\Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator.ItemSearch.resources

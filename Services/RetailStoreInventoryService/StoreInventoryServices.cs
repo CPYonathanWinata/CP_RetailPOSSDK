@@ -24,6 +24,7 @@ using LSRetailPosis.Settings;
 using Microsoft.Dynamics.Retail.Pos.Contracts;
 using Microsoft.Dynamics.Retail.Pos.Contracts.Services;
 using APIAccess;
+using System.Data.SqlClient;
 
 namespace Microsoft.Dynamics.Retail.Pos.StoreInventoryServices
 {
@@ -299,6 +300,9 @@ namespace Microsoft.Dynamics.Retail.Pos.StoreInventoryServices
         public string DeliveryDate { get; set; }
         public string DeliveryMethod { get; set; }
 
+        public string OrderAccount { get; set; }   // custom: ORIGIN_ORDER_ACCOUNT
+        public string OrderName { get; set; }      // custom: ORIGIN_ORDER_NAME
+
         /// <summary>
         /// Gets or sets the type of the retail status.  Maps to AX enum HHTRetailStatusTypeBase
         /// </summary>
@@ -320,6 +324,10 @@ namespace Microsoft.Dynamics.Retail.Pos.StoreInventoryServices
                 this.DeliveryDate = PRDocumentLine.GetAttributeValue(poDocument, "DeliveryDate");
                 this.DeliveryMethod = PRDocumentLine.GetAttributeValue(poDocument, "DlvMode");
                 this.RetailStatusType = PRDocumentLine.GetAttributeValue(poDocument, "PurchStatus");
+
+                //add new member - Yonathan 22102026
+                this.OrderAccount = PRDocumentLine.GetAttributeValue(poDocument, "OrderAccount");
+                this.OrderName = PRDocumentLine.GetAttributeValue(poDocument, "OrderName");
             }
         }
 
@@ -1322,6 +1330,9 @@ namespace Microsoft.Dynamics.Retail.Pos.StoreInventoryServices
                          
                         // Insert receipt into DB if it is not already existing
                         int result = prData.InsertReceipt(doc.OrderType, doc.RecId, doc.PurchId, posStatus, doc.DeliveryMethod);
+
+                        //add by Yonathan to addd order account 22102026
+                        UpdateOriginOrder(doc as PRDocument);
                     }
 
                     //Gather receipt documents per each document type
@@ -1763,5 +1774,54 @@ namespace Microsoft.Dynamics.Retail.Pos.StoreInventoryServices
                 throw;
             }
         }
+
+        //add by Yonathan - 22102026
+            // Requires: using System.Data.SqlClient;
+            /// <summary>
+            /// Fill ORIGIN_ORDER_ACCOUNT / ORIGIN_ORDER_NAME after PurchaseOrderReceiptData.InsertReceipt
+            /// </summary>
+            private static void UpdateOriginOrder(PRDocument doc)
+            {
+                // Only PO documents carry these values (TR / picking list leave them empty)
+                if (doc == null || (string.IsNullOrEmpty(doc.OrderAccount) && string.IsNullOrEmpty(doc.OrderName)))
+                {
+                    return;
+                }
+
+                const string sql = @"
+                                    UPDATE [dbo].[POSPURCHASEORDERRECEIPT]
+                                    SET [ORIGIN_ORDER_ACCOUNT] = @OrderAccount,
+                                        [ORIGIN_ORDER_NAME]    = @OrderName
+                                    WHERE [PONUMBER] = @PurchId          -- adjust to the key column(s) InsertReceipt fills
+                                     
+                                      AND (ISNULL([ORIGIN_ORDER_ACCOUNT], '') <> @OrderAccount
+                                        OR ISNULL([ORIGIN_ORDER_NAME], '')    <> @OrderName)";
+
+                SqlConnection connection = ApplicationSettings.Database.LocalConnection;
+                bool wasClosed = connection.State != ConnectionState.Open;
+
+                try
+                {
+                    if (wasClosed) { connection.Open(); }
+
+                    using (SqlCommand cmd = new SqlCommand(sql, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@OrderAccount", doc.OrderAccount ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@OrderName", doc.OrderName ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@PurchId", doc.PurchId ?? string.Empty);
+                        
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Don't break receipt sync because of the extra columns
+                    LSRetailPosis.ApplicationExceptionHandler.HandleException("StoreInventoryServices.UpdateOriginOrder", ex);
+                }
+                finally
+                {
+                    if (wasClosed && connection.State == ConnectionState.Open) { connection.Close(); }
+                }
+            }
     }
 }

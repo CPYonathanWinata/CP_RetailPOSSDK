@@ -66,7 +66,8 @@ namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
         
    //     private ICardInfo cardInfo;
    //     private IEFTV2 eftV2;
-           
+
+        private bool voidTransactionAfterPromoPayment; //add by Yonathan - CPPROMODISCNEW 17112026
         int amount;
 
         #region Constructor - Destructor
@@ -899,9 +900,28 @@ namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
         /// <param name="preTriggerResult"></param>
         /// <param name="posTransaction"></param>
         /// <param name="lineId"> </param>
+        //public void PreVoidPayment(IPreTriggerResult preTriggerResult, IPosTransaction posTransaction, int lineId)
+        //{
+        //    LSRetailPosis.ApplicationLog.Log("PaymentTriggers.PreVoidPayment", "Before the void payment operation...", LSRetailPosis.LogTraceLevel.Trace);
+        //}
+
         public void PreVoidPayment(IPreTriggerResult preTriggerResult, IPosTransaction posTransaction, int lineId)
         {
             LSRetailPosis.ApplicationLog.Log("PaymentTriggers.PreVoidPayment", "Before the void payment operation...", LSRetailPosis.LogTraceLevel.Trace);
+
+            voidTransactionAfterPromoPayment = false;
+
+            RetailTransaction retailTransaction = posTransaction as RetailTransaction;
+            if (retailTransaction == null) return;
+
+            foreach (var tenderLine in retailTransaction.TenderLines)
+            {
+                if (tenderLine.LineId == lineId && IsPromoPaymentTender(tenderLine.TenderTypeId))
+                {
+                    voidTransactionAfterPromoPayment = true;   // handled in PostVoidPayment
+                    break;
+                }
+            }
         }
 
         /// <summary>
@@ -909,9 +929,57 @@ namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
         /// </summary>
         /// <param name="posTransaction"></param>
         /// <param name="lineId"> </param>
+        //public void PostVoidPayment(IPosTransaction posTransaction, int lineId)
+        //{
+        //    LSRetailPosis.ApplicationLog.Log("PaymentTriggers.PostVoidPayment", "After the void payment operation...", LSRetailPosis.LogTraceLevel.Trace);
+        //}
         public void PostVoidPayment(IPosTransaction posTransaction, int lineId)
         {
             LSRetailPosis.ApplicationLog.Log("PaymentTriggers.PostVoidPayment", "After the void payment operation...", LSRetailPosis.LogTraceLevel.Trace);
+
+            if (!voidTransactionAfterPromoPayment) return;
+            voidTransactionAfterPromoPayment = false;
+
+            // a promo payment was removed: the whole transaction must be voided
+            Application.RunOperation(PosisOperations.VoidTransaction, "", posTransaction);
+        }
+
+        // The tender is a promo payment tender when it is mapped to a customer in CPCUSTTENDERMAPTABLE
+        private bool IsPromoPaymentTender(string tenderId)
+        {
+            SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+            try
+            {
+                string queryString = @"SELECT TOP 1 1 FROM ax.CPCUSTTENDERMAPTABLE
+                                       WHERE TENDERTYPEID = @TENDERTYPEID AND DATAAREAID = @DATAAREAID";
+
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+                    command.Parameters.AddWithValue("@TENDERTYPEID", tenderId);
+                    command.Parameters.AddWithValue("@DATAAREAID", LSRetailPosis.Settings.ApplicationSettings.Database.DATAAREAID);
+
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+                    }
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        return reader.Read();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                return false;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+                }
+            }
         }
 
         /// <summary>

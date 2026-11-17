@@ -929,5 +929,10 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 			//SalesOrder.WinFormsTouch.frmSalesOrder form = new SalesOrder.WinFormsTouch.frmSalesOrder();
 			//form.ShowDialog();
 		}
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            Application.RunOperation(PosisOperations.BlankOperation, "ClearTransaction");
+        }
 	}
 }

@@ -193,57 +193,57 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction.WinFormsTouch
                         barcodeInfo.VariantId = this.ViewModel.VariantId;
                         //add custom by Yonathan 21/10/2022 for custom Stock Positive
                         
-                        if (this.ViewModel.VariantId != "")
-                        {
-                            string variantId = "";
-                            SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
-                            //var retailTransaction = posTransaction as RetailTransaction;
-                            try
-                            {
+//                        if (this.ViewModel.VariantId != "")
+//                        {
+//                            string variantId = "";
+//                            SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+//                            //var retailTransaction = posTransaction as RetailTransaction;
+//                            try
+//                            {
 
                                 
 
-                                string queryString2 = @"SELECT ITEMID, RETAILVARIANTID FROM [ax].[INVENTITEMBARCODE]
-                                         WHERE ITEMID =  @ITEMID";
-                                using (SqlCommand command = new SqlCommand(queryString2, connection))
-                                {
-                                    command.Parameters.AddWithValue("@ITEMID", this.ViewModel.ItemNumber);
+//                                string queryString2 = @"SELECT ITEMID, RETAILVARIANTID FROM [ax].[INVENTITEMBARCODE]
+//                                         WHERE ITEMID =  @ITEMID";
+//                                using (SqlCommand command = new SqlCommand(queryString2, connection))
+//                                {
+//                                    command.Parameters.AddWithValue("@ITEMID", this.ViewModel.ItemNumber);
 
-                                    if (connection.State != ConnectionState.Open)
-                                    {
-                                        connection.Open();
+//                                    if (connection.State != ConnectionState.Open)
+//                                    {
+//                                        connection.Open();
 
-                                    }
-                                    using (SqlDataReader reader = command.ExecuteReader())
-                                    {
-                                        if (reader.Read())
-                                        {
-                                            //configId = reader["CONFIGID"].ToString();
-                                            variantId = reader["RETAILVARIANTID"].ToString();
-                                        }
+//                                    }
+//                                    using (SqlDataReader reader = command.ExecuteReader())
+//                                    {
+//                                        if (reader.Read())
+//                                        {
+//                                            //configId = reader["CONFIGID"].ToString();
+//                                            variantId = reader["RETAILVARIANTID"].ToString();
+//                                        }
 
-                                    }
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
-                                throw;
-                            }
-                            finally
-                            {
-                                if (connection.State != ConnectionState.Closed)
-                                {
-                                    connection.Close();
-                                }
-                            }
+//                                    }
+//                                }
+//                            }
+//                            catch (Exception ex)
+//                            {
+//                                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+//                                throw;
+//                            }
+//                            finally
+//                            {
+//                                if (connection.State != ConnectionState.Closed)
+//                                {
+//                                    connection.Close();
+//                                }
+//                            }
 
-                            if (barcodeInfo.VariantId != variantId)
-                            {
-                                barcodeInfo.VariantId = variantId;
-                            }
-                        }
-                        //end custom
+//                            if (barcodeInfo.VariantId != variantId)
+//                            {
+//                                barcodeInfo.VariantId = variantId;
+//                            }
+//                        }
+//                        //end custom
                          
                         barcodeInfo.UnitId = this.ViewModel.UnitOfMeasure;
                         barcodeInfo.InternalType = BarcodeInternalType.Item;

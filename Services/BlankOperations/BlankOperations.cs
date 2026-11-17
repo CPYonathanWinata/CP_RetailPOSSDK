@@ -60,6 +60,9 @@ using System.Text.RegularExpressions;
 using System.Drawing.Printing;
 using System.Drawing;
 using Microsoft.Dynamics.Retail.Pos.BlankOperations.CPPricingSimulator;
+using LSRetailPosis.DataAccess;
+using Microsoft.Dynamics.Retail.Pos.Contracts.Settings;
+using Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PROMODISCNEW;
 
 
 
@@ -1893,7 +1896,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                         break;
                     }
 
-                     case "109":
+                     case "PriceSync":
                     {
                         try
                         {
@@ -1912,16 +1915,62 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                         break;
                     }
 
-                     case "110":
+                     case "ClearTransaction":
                     {
                         //Application.RunOperation(PosisOperations.VoidTransaction, posTransaction);
 
-                        posTransaction = null;
+                        //posTransaction = null;
+                        
+                        //IPosTransaction posTrans = posTransaction;
 
-                        IPosTransaction posTrans = posTransaction;
+                        
+
+                        //new TransactionData(((ISettingsV1)PosApplication.Instance.Settings).Database.Connection, ((ISettingsV1)PosApplication.Instance.Settings).Database.DataAreaID, (IApplication)PosApplication.Instance).ClearSerializedTransaction(posTransaction.StoreId, posTransaction.TerminalId);
+                        //  posTransaction = (PosTransaction) null;
+                        //  // ISSUE: reference to a compiler-generated method
+                        //  ((IServicesV1) PosApplication.Instance.Services).Peripherals.LineDisplay.DisplayText(ApplicationSettings.Terminal.CustomerDisplayText1, ApplicationSettings.Terminal.CustomerDisplayText2);
+                        //  POSFormsManager.ShowPOSStatusPanelText(string.Empty);
+                        PosTransaction tx = posTransaction as PosTransaction;
+                        RetailTransaction retail = posTransaction as RetailTransaction;
+                        if (tx == null) return;
+
+                        // Guard: a clear with no audit trail must never hit a real, paid sale.
+                        if (retail != null)
+                        {
+                            foreach (var tender in retail.TenderLines)
+                            {
+                                if (!tender.Voided)
+                                {
+                                    using (frmMessage msg = new frmMessage("Remove payments first.", MessageBoxButtons.OK, MessageBoxIcon.Error))
+                                        POSFormsManager.ShowPOSForm(msg);
+                                    ((IBlankOperationInfoV2)operationInfo).OperationHandled = true;
+                                    return;
+                                }
+                            }
+                        }
+                    
+                        using (frmMessage confirm = new frmMessage("Clear this test transaction without saving it?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
+                        {
+                            POSFormsManager.ShowPOSForm(confirm);
+                            if (confirm.DialogResult != DialogResult.Yes)
+                            {
+                                ((IBlankOperationInfoV2)operationInfo).OperationHandled = true;
+                                return;
+                            }
+                        }
+
+                        tx.EntryStatus = (PosTransaction.TransactionStatus)4;   // ResultCallback -> ClearTransaction, nothing written  // ResultCallback -> ClearTransaction, nothing written
+                        ((IBlankOperationInfoV2)operationInfo).OperationHandled = true;
                         break;
                     }
+                     case "PromoDiscNew": //for reprint last transaction BCA 30/03/2023 Yonathan
+                    {
+                        CP_PROMODISCNEW.CP_PromoDiscNew promoDiscNew = new CP_PromoDiscNew(posTransaction, Application, "","");
 
+                        promoDiscNew.ShowDialog();
+                         
+                        break;
+                    }
                     // case "109":
                     //{
                     //     try
