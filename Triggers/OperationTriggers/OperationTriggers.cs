@@ -51,7 +51,85 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
         
 
 		#region IOperationTriggersV1 Members
+        // CPPROMODISCNEW: marker the promo forms put in transaction.Comment while ItemSale runs ("AddItem-[PROMOID]")
+        private const string ItemAddMarkerPrefix = "AddItem-";
 
+        // promo id -> is it a promo id in CPPROMODISCOUNTHEADER (cached, so not every operation hits the database)
+        private static readonly Dictionary<string, bool> promoIdCache = new Dictionary<string, bool>();
+
+        // True when a promo (item or payment, old or new version) is applied to this transaction.
+        private bool IsPromoApplied(RetailTransaction transaction)
+        {
+            // older promo versions
+            if (transaction.Comment == "PAYMENTDISCOUNT" || transaction.Comment == "PROMOPDI" || transaction.Comment == "PROMOPDIS") return true;
+
+            // CPPROMODISCNEW: the promo id is in transaction.Comment (item promos: also in the comment of each promo line)
+            List<string> candidates = new List<string>();
+
+            string tc = transaction.Comment ?? string.Empty;
+            if (tc.StartsWith(ItemAddMarkerPrefix, StringComparison.Ordinal)) tc = tc.Substring(ItemAddMarkerPrefix.Length);
+            if (tc.Length > 0) candidates.Add(tc);
+
+            foreach (SaleLineItem line in transaction.SaleItems)
+            {
+                if (!line.Voided && !string.IsNullOrEmpty(line.Comment) && !candidates.Contains(line.Comment))
+                    candidates.Add(line.Comment);
+            }
+
+            foreach (string id in candidates)
+            {
+                if (IsPromoId(id)) return true;
+            }
+            return false;
+        }
+
+        // Is this id a promo id of CPPROMODISCOUNTHEADER? Cached per id.
+        private bool IsPromoId(string id)
+        {
+            lock (promoIdCache)
+            {
+                bool cached;
+                if (promoIdCache.TryGetValue(id, out cached)) return cached;
+            }
+
+            bool found = false;
+            SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+            try
+            {
+                string queryString = @"SELECT TOP 1 1 FROM ax.CPPROMODISCOUNTHEADER
+                                       WHERE PROMOID = @PROMOID AND DATAAREAID = @DATAAREAID";
+
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+                    command.Parameters.AddWithValue("@PROMOID", id);
+                    command.Parameters.AddWithValue("@DATAAREAID", LSRetailPosis.Settings.ApplicationSettings.Database.DATAAREAID);
+
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+                    }
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        found = reader.Read();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                return false;   // not cached, tried again on the next operation
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+                }
+            }
+
+            lock (promoIdCache) { promoIdCache[id] = found; }
+            return found;
+        }
 		/// <summary>
 		/// Before the operation is processed this trigger is called.
 		/// </summary>
@@ -87,19 +165,22 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
                             }
  
                 }
+                
 
-
+                //disable 
+                 
+                 /*
 
                 if (transaction.Comment == "PAYMENTDISCOUNT" || transaction.Comment == "PROMOPDI" || transaction.Comment == "PROMOPDIS") //if (transaction.Comment == "PAYMENTDISCOUNT" || transaction.Comment == "PROMOED" || transaction.Comment == "PROMORCPT") //
                 {
 
-                    /*
-                     * yang boleh = 
-                     * - Pay
-                     * - Void
-                     * - Display total
-                     * - 
-                     */
+                    
+                     //* yang boleh = 
+                   //  * - Pay
+                    // * - Void
+                    // * - Display total
+                    // * - 
+                    // 
 
                     //24042026 - Yonathan - Add Pay gift card to support payment after promo buy 1 get 1
                     if (posisOperation != PosisOperations.PayCustomerAccount && posisOperation != PosisOperations.PayCash && posisOperation != PosisOperations.PayCard && posisOperation != PosisOperations.PayGiftCertificate && posisOperation != PosisOperations.VoidTransaction && posisOperation != PosisOperations.ChangeBack && posisOperation != PosisOperations.DisplayTotal && posisOperation != PosisOperations.BlankOperation && posisOperation != PosisOperations.ItemSale)//bukan itemsale dan bukan PROMOED) )
@@ -125,7 +206,61 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
                     transaction.SaleItems.Last().IsInfoCodeItem = false;
                     
                     
+                }*/
+
+                // CPPROMODISCNEW: cheap check first. isPromoDiscTrans is false in a normal transaction, so nothing else runs.
+                // CPPROMODISCNEW: cheap check first. isPromoDiscTrans is false in a normal transaction, so nothing else runs.
+                bool promoLocked = transaction.Comment == "PAYMENTDISCOUNT" || transaction.Comment == "PROMOPDI" || transaction.Comment == "PROMOPDIS";   // older promo versions
+
+                if (!promoLocked && APIAccess.APIAccessClass.isPromoDiscTrans)
+                //if (!promoLocked && (APIAccess.APIAccessClass.isPromoDiscTrans || !string.IsNullOrEmpty(transaction.Comment)))   // optional: also lock a recalled suspended promo transaction
+                {
+                    // the flag is terminal-wide: make sure THIS transaction really has a promo (cached lookup)
+                    promoLocked = IsPromoApplied(transaction);
+                    if (!promoLocked) APIAccess.APIAccessClass.isPromoDiscTrans = false;   // stale flag from an earlier transaction
                 }
+
+                if (promoLocked)
+                {
+
+                    /*
+                     * yang boleh = 
+                     * - Pay
+                     * - Void
+                     * - Display total
+                     * - Semua langkah tambah item dari form promo (ItemSale, SetQty, dst) -> transaction.Comment = "AddItem-[PROMOID]"
+                     *
+                     * ItemSale dan SetQty sengaja TIDAK ada di daftar: scan item dan set qty manual dari menu POS diblok.
+                     */
+
+                    // the promo form puts "AddItem-[PROMOID]" in transaction.Comment while it runs ItemSale (+ its SetQty step)
+                    bool addingPromoItem = transaction.Comment != null
+                        && transaction.Comment.StartsWith(ItemAddMarkerPrefix, StringComparison.Ordinal);
+
+                    //24042026 - Yonathan - Add Pay gift card to support payment after promo buy 1 get 1
+                    if (!addingPromoItem && posisOperation != PosisOperations.PayCustomerAccount && posisOperation != PosisOperations.PayCash && posisOperation != PosisOperations.PayCard && posisOperation != PosisOperations.PayGiftCertificate && posisOperation != PosisOperations.VoidTransaction && posisOperation != PosisOperations.ChangeBack && posisOperation != PosisOperations.DisplayTotal && posisOperation != PosisOperations.BlankOperation)
+                    {
+
+                        if (posisOperation == PosisOperations.LinkedItemsAdd && transaction.SaleItems.Last().IsInfoCodeItem == true)
+                        {
+                            transaction.SaleItems.Last().IsInfoCodeItem = false;
+                        }
+                        else
+                        {
+                            using (frmMessage dialog = new frmMessage("Fungsi ini dibatasi ketika sudah apply discount PROMO. Silakan tambah item promo, lanjut ke menu pembayaran, atau batalkan sepenuhnya (void) transaksi ini", MessageBoxButtons.OK, MessageBoxIcon.Error))
+                            {
+                                POSFormsManager.ShowPOSForm(dialog);
+                                posTransaction.OperationCancelled = true;
+                                preTriggerResult.ContinueOperation = false;
+                                return;
+                            }
+                        }
+
+                    }
+
+                    if (transaction.SaleItems.Count > 0) transaction.SaleItems.Last().IsInfoCodeItem = false;
+                }
+                
             }
            
            
@@ -625,7 +760,8 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
                     
                     //prevent customer b2b/canvas/grab entering this rounding method
 
-                    if (Rounding.CheckTableRounding(LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection) == true)
+                    //if (Rounding.CheckTableRounding(LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection) == true)
+                    if (Rounding.CheckTableRounding(new SqlConnection(LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection.ConnectionString)) == true) //fix - Yonathan 18112026
                     {
 
 
@@ -646,7 +782,7 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
                                         //APIAccess.APIParameter.RoundingRule roundingRules =  
                                         if (discountLine.Amount != 0) //this is discount amount
                                         {
-                                            decimal roundedAmount = Rounding.GetRoundedAmount((discountLine.EffectiveAmount), out lastTwoDigits, LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection);
+                                            decimal roundedAmount = Rounding.GetRoundedAmount((discountLine.EffectiveAmount), out lastTwoDigits, new SqlConnection(LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection.ConnectionString));
 
                                             //decimal roundedAmount = Rounding.GetRoundedAmount(discountLine.Amount, out lastTwoDigits, LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection);
                                             //decimal roundedAmount = APIAccess.APIFunction.GetRoundedAmount(discountLine.Amount, out lastTwoDigits, LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection);
@@ -695,7 +831,7 @@ namespace Microsoft.Dynamics.Retail.Pos.OperationTriggers
                                             //discountLine.EffectiveAmount = (roundedAmount * salelineitems.Quantity);
                                             //discountLine.Percentage = 0;
 
-                                            decimal roundedAmount = Rounding.GetRoundedAmount((discountLine.EffectiveAmount), out lastTwoDigits, LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection);
+                                            decimal roundedAmount = Rounding.GetRoundedAmount((discountLine.EffectiveAmount), out lastTwoDigits, new SqlConnection(LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection.ConnectionString));
 
                                             //decimal roundedAmount = Rounding.GetRoundedAmount(discountLine.Amount, out lastTwoDigits, LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection);
                                             //decimal roundedAmount = APIAccess.APIFunction.GetRoundedAmount(discountLine.Amount, out lastTwoDigits, LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection);

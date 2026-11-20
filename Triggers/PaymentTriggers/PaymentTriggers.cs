@@ -157,6 +157,22 @@ namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
 
                 return;
             }
+
+            //CPPROMODISCNEW: an item promo in the cart must be paid with the payment method(s) set for it - Yonathan 19112026
+            //in CPPROMODISCOUNTPAYMENTMETHOD
+            string promoPaymentMessage;
+            if (retailTransaction != null && !IsTenderAllowedForPromo(retailTransaction, tenderId, out promoPaymentMessage))
+            {
+                using (frmMessage dialog = new frmMessage(promoPaymentMessage, MessageBoxButtons.OK, MessageBoxIcon.Stop))
+                {
+                    POSFormsManager.ShowPOSForm(dialog);
+                }
+
+                preTriggerResult.ContinueOperation = false;
+
+                return;
+            }
+
             ////add grab discount 24032025 - Yonathan
             //RetailTransaction transaction = posTransaction as RetailTransaction;
             //foreach(var itemLines in transaction.CalculableSalesLines)
@@ -465,6 +481,104 @@ namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
 
             // If the string is already of the desired length, return the original string
             return input;
+        }
+
+
+        // CPPROMODISCNEW: payment method validation for item promos. - Yonathan 19112026
+        // The promo id is read from the non-voided cart lines (CP_PromoDiscNew tags every promo line with the
+        // promo id in line.Comment, so a promo whose lines were all voided no longer restricts the payment).
+        // CPPROMODISCOUNTPAYMENTMETHOD holds the allowed payment methods of a promo; a promo without rows
+        // ("Semua Metode") can be paid with any tender. Returns false with the message to show when the tender
+        // is not one of them. A database error is logged and does not block the payment.
+        private bool IsTenderAllowedForPromo(RetailTransaction transaction, string tenderId, out string message)
+        {
+            message = string.Empty;
+
+            List<string> promoIds = transaction.SaleItems
+                .Where(l => !l.Voided && !string.IsNullOrEmpty(l.Comment))
+                .Select(l => l.Comment)
+                .Distinct()
+                .ToList();
+            if (promoIds.Count == 0) return true;
+
+            // per promo: allowed tenders as (PAYMENTMETHODID, tender name)
+            Dictionary<string, List<KeyValuePair<string, string>>> methodsByPromo =
+                new Dictionary<string, List<KeyValuePair<string, string>>>();
+
+            SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+            try
+            {
+                string[] names = new string[promoIds.Count];
+                for (int i = 0; i < promoIds.Count; i++) names[i] = "@P" + i;
+
+                string queryString = @"SELECT pm.PROMOID, pm.PAYMENTMETHODID, t.NAME AS TENDERNAME
+                                       FROM ax.CPPROMODISCOUNTPAYMENTMETHOD pm
+                                       JOIN ax.CPPROMODISCOUNTHEADER h
+                                         ON h.PROMOID = pm.PROMOID AND h.DATAAREAID = pm.DATAAREAID
+                                       OUTER APPLY (SELECT TOP 1 tt.NAME
+                                                    FROM ax.RETAILSTORETENDERTYPETABLE tt
+                                                    WHERE tt.TENDERTYPEID = pm.PAYMENTMETHODID
+                                                      AND tt.DATAAREAID = pm.DATAAREAID
+                                                    ORDER BY CASE WHEN tt.CHANNEL = (SELECT TOP 1 ch.RECID
+                                                                                     FROM ax.RETAILCHANNELTABLE ch
+                                                                                     WHERE ch.INVENTLOCATION = @INVENTLOCATION)
+                                                                  THEN 0 ELSE 1 END,
+                                                             tt.CHANNEL) t
+                                       WHERE pm.DATAAREAID = @DATAAREAID
+                                         AND h.DISCOUNTTYPE = 1
+                                         AND pm.PROMOID IN (" + string.Join(", ", names) + ")";
+
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+                    command.Parameters.AddWithValue("@DATAAREAID", LSRetailPosis.Settings.ApplicationSettings.Database.DATAAREAID);
+                    command.Parameters.AddWithValue("@INVENTLOCATION", LSRetailPosis.Settings.ApplicationSettings.Terminal.InventLocationId ?? string.Empty);
+                    for (int i = 0; i < promoIds.Count; i++) command.Parameters.AddWithValue(names[i], promoIds[i]);
+
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+                    }
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string promoId = reader["PROMOID"].ToString();
+                            string id = reader["PAYMENTMETHODID"].ToString().Trim();
+                            string name = reader["TENDERNAME"] == DBNull.Value ? string.Empty : reader["TENDERNAME"].ToString().Trim();
+                            if (name.Length == 0) name = id;   // no name found: show the id
+
+                            if (!methodsByPromo.ContainsKey(promoId)) methodsByPromo[promoId] = new List<KeyValuePair<string, string>>();
+                            methodsByPromo[promoId].Add(new KeyValuePair<string, string>(id, name));
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                return true;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+                }
+            }
+
+            string tender = (tenderId ?? string.Empty).Trim();
+            foreach (KeyValuePair<string, List<KeyValuePair<string, string>>> promo in methodsByPromo)
+            {
+                bool allowed = promo.Value.Any(m => string.Equals(m.Key, tender, StringComparison.OrdinalIgnoreCase));
+                if (!allowed)
+                {
+                    message = "Diskon ini harus bayar dengan menggunakan "
+                        + string.Join(", ", promo.Value.Select(m => m.Value).Distinct().ToArray());
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private string checkPositiveStatus(string _itemId)
@@ -909,19 +1023,19 @@ namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
         {
             LSRetailPosis.ApplicationLog.Log("PaymentTriggers.PreVoidPayment", "Before the void payment operation...", LSRetailPosis.LogTraceLevel.Trace);
 
-            voidTransactionAfterPromoPayment = false;
+            //voidTransactionAfterPromoPayment = false;
 
-            RetailTransaction retailTransaction = posTransaction as RetailTransaction;
-            if (retailTransaction == null) return;
+            //RetailTransaction retailTransaction = posTransaction as RetailTransaction;
+            //if (retailTransaction == null) return;
 
-            foreach (var tenderLine in retailTransaction.TenderLines)
-            {
-                if (tenderLine.LineId == lineId && IsPromoPaymentTender(tenderLine.TenderTypeId))
-                {
-                    voidTransactionAfterPromoPayment = true;   // handled in PostVoidPayment
-                    break;
-                }
-            }
+            //foreach (var tenderLine in retailTransaction.TenderLines)
+            //{
+            //    if (tenderLine.LineId == lineId && IsPromoPaymentTender(tenderLine.TenderTypeId))
+            //    {
+            //        voidTransactionAfterPromoPayment = true;   // handled in PostVoidPayment
+            //        break;
+            //    }
+            //}
         }
 
         /// <summary>
@@ -937,50 +1051,45 @@ namespace Microsoft.Dynamics.Retail.Pos.PaymentTriggers
         {
             LSRetailPosis.ApplicationLog.Log("PaymentTriggers.PostVoidPayment", "After the void payment operation...", LSRetailPosis.LogTraceLevel.Trace);
 
-            if (!voidTransactionAfterPromoPayment) return;
-            voidTransactionAfterPromoPayment = false;
-
-            // a promo payment was removed: the whole transaction must be voided
-            Application.RunOperation(PosisOperations.VoidTransaction, "", posTransaction);
         }
 
-        // The tender is a promo payment tender when it is mapped to a customer in CPCUSTTENDERMAPTABLE
-        private bool IsPromoPaymentTender(string tenderId)
-        {
-            SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
-            try
-            {
-                string queryString = @"SELECT TOP 1 1 FROM ax.CPCUSTTENDERMAPTABLE
-                                       WHERE TENDERTYPEID = @TENDERTYPEID AND DATAAREAID = @DATAAREAID";
+//        // The tender is a promo payment tender when it is mapped to a customer in CPCUSTTENDERMAPTABLE
+//        private bool IsPromoPaymentTender(string tenderId)
+//        {
+//            SqlConnection connection = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
+//            try
+//            {
+//                string queryString = @"SELECT TOP 1 1 FROM ax.CPCUSTTENDERMAPTABLE
+//                                       WHERE TENDERTYPEID = @TENDERTYPEID AND DATAAREAID = @DATAAREAID";
 
-                using (SqlCommand command = new SqlCommand(queryString, connection))
-                {
-                    command.Parameters.AddWithValue("@TENDERTYPEID", tenderId);
-                    command.Parameters.AddWithValue("@DATAAREAID", LSRetailPosis.Settings.ApplicationSettings.Database.DATAAREAID);
+//                using (SqlCommand command = new SqlCommand(queryString, connection))
+//                {
+//                    command.Parameters.AddWithValue("@TENDERTYPEID", tenderId);
+//                    command.Parameters.AddWithValue("@DATAAREAID", LSRetailPosis.Settings.ApplicationSettings.Database.DATAAREAID);
 
-                    if (connection.State != ConnectionState.Open)
-                    {
-                        connection.Open();
-                    }
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        return reader.Read();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
-                return false;
-            }
-            finally
-            {
-                if (connection.State != ConnectionState.Closed)
-                {
-                    connection.Close();
-                }
-            }
-        }
+//                    if (connection.State != ConnectionState.Open)
+//                    {
+//                        connection.Open();
+//                    }
+//                    using (SqlDataReader reader = command.ExecuteReader())
+//                    {
+//                        return reader.Read();
+//                    }
+//                }
+//            }
+//            catch (Exception ex)
+//            {
+//                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+//                return false;
+//            }
+//            finally
+//            {
+//                if (connection.State != ConnectionState.Closed)
+//                {
+//                    connection.Close();
+//                }
+//            }
+//        }
 
         /// <summary>
         /// Triggered before registering cash payment.

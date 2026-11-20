@@ -1572,9 +1572,57 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
                 pressCancel = "1";
                 timerCount.Stop();
             }
+
+            //START CUSTOM CPPROMODISCNEW - YONATHAN  18112026
+            if (APIAccess.APIAccessClass.isPromoDiscTrans)
+            {
+                // promo discount transaction: the payment cannot be cancelled,
+                // the whole transaction must be voided (same approach as Blibli)
+                pressCancel = "1";
+                 
+
+                while (true)
+                {
+                    // payment screen was cancelled
+                    if (ConfirmCancelTransaction())
+                    {
+                        ClearPromoTransaction();
+                        break;
+                    }
+                    // No: message shown, the confirmation is asked again
+                }
+            }
+            //END
+            else
+            {
+                pressCancel = "1";
+                
+            }
+ 
 		}
 
-		
+        //START CUSTOM CPPROMODISCNEW - YONATHAN  18112026
+        private bool ConfirmCancelTransaction()
+        {
+            using (frmMessage confirm = new frmMessage("Batalkan transaksi ini?", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+            {
+                POSFormsManager.ShowPOSForm(confirm);
+                if (confirm.DialogResult == DialogResult.Yes)
+                    return true;
+            }
+
+            using (frmMessage msg = new frmMessage("Harus batalkan transaksi jika ingin membatalkan pembayaran", MessageBoxButtons.OK, MessageBoxIcon.Stop))
+            {
+                POSFormsManager.ShowPOSForm(msg);
+            }
+            return false;
+        }
+
+        private void ClearPromoTransaction()
+        {
+            PosApplication.Instance.RunOperation(PosisOperations.BlankOperation, "ClearTransactionNoConfirm");
+        }
+        //END
 
 		void OnKeyDown(object sender, KeyEventArgs e)
 		{
@@ -2006,26 +2054,39 @@ namespace Microsoft.Dynamics.Retail.Pos.Interaction
 				SqlConnection connectionID = LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection;
 				try
 				{
-					string queryStringID = @"
-											SELECT TOP 1 REPLICATIONCOUNTERFROMORIGIN FROM AX.[CPNEWPAYMENTPOS] ORDER BY REPLICATIONCOUNTERFROMORIGIN DESC";
+                    //FIX ERROR for new ID insert - Yonathan 18112026
+                    string queryStringID = @"
+                    SELECT ISNULL(MAX(ID), 0)
+                    FROM AX.[CPNEWPAYMENTPOS]
+                    WHERE [DATAAREAID] = @DataAreaID AND [PARTITION] = 1";
 
-					RetailTransaction retailTransaction = (RetailTransaction)this.posTransaction;
+                    using (SqlCommand command = new SqlCommand(queryStringID, connectionID))
+                    {
+                        command.Parameters.AddWithValue("@DataAreaID", dataArea);
+                        if (connectionID.State != ConnectionState.Open) connectionID.Open();
+                        id = Convert.ToInt32(command.ExecuteScalar());
+                    }
+                    //OLD CODE
+//                    string queryStringID = @"
+//											SELECT TOP 1 REPLICATIONCOUNTERFROMORIGIN FROM AX.[CPNEWPAYMENTPOS] ORDER BY REPLICATIONCOUNTERFROMORIGIN DESC";
 
-					using (SqlCommand command = new SqlCommand(queryStringID, connectionID))
-					{
+//                    RetailTransaction retailTransaction = (RetailTransaction)this.posTransaction;
 
-						if (connectionID.State != ConnectionState.Open)
-						{
-							connectionID.Open();
-						}
-						using (SqlDataReader reader = command.ExecuteReader())
-						{
-							if (reader.Read())
-							{
-								id = (int)reader[0];
-							}
-						}
-					}
+//                    using (SqlCommand command = new SqlCommand(queryStringID, connectionID))
+//                    {
+
+//                        if (connectionID.State != ConnectionState.Open)
+//                        {
+//                            connectionID.Open();
+//                        }
+//                        using (SqlDataReader reader = command.ExecuteReader())
+//                        {
+//                            if (reader.Read())
+//                            {
+//                                id = (int)reader[0];
+//                            }
+//                        }
+//                    }
 				}
 				catch (Exception ex)
 				{

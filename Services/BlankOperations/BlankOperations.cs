@@ -1917,19 +1917,43 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
 
                      case "ClearTransaction":
                     {
-                        //Application.RunOperation(PosisOperations.VoidTransaction, posTransaction);
-
-                        //posTransaction = null;
                         
-                        //IPosTransaction posTrans = posTransaction;
+                        PosTransaction tx = posTransaction as PosTransaction;
+                        RetailTransaction retail = posTransaction as RetailTransaction;
+                        if (tx == null) return;
 
-                        
+                        // Guard: a clear with no audit trail must never hit a real, paid sale.
+                        if (retail != null)
+                        {
+                            foreach (var tender in retail.TenderLines)
+                            {
+                                if (!tender.Voided)
+                                {
+                                    using (frmMessage msg = new frmMessage("Batalkan pembayaran terlebih dahulu", MessageBoxButtons.OK, MessageBoxIcon.Error))
+                                        POSFormsManager.ShowPOSForm(msg);
+                                    ((IBlankOperationInfoV2)operationInfo).OperationHandled = true;
+                                    return;
+                                }
+                            }
+                        }
+                    
+                        using (frmMessage confirm = new frmMessage("Batalkan transaksi?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
+                        {
+                            POSFormsManager.ShowPOSForm(confirm);
+                            if (confirm.DialogResult != DialogResult.Yes)
+                            {
+                                ((IBlankOperationInfoV2)operationInfo).OperationHandled = true;
+                                return;
+                            }
+                        }
 
-                        //new TransactionData(((ISettingsV1)PosApplication.Instance.Settings).Database.Connection, ((ISettingsV1)PosApplication.Instance.Settings).Database.DataAreaID, (IApplication)PosApplication.Instance).ClearSerializedTransaction(posTransaction.StoreId, posTransaction.TerminalId);
-                        //  posTransaction = (PosTransaction) null;
-                        //  // ISSUE: reference to a compiler-generated method
-                        //  ((IServicesV1) PosApplication.Instance.Services).Peripherals.LineDisplay.DisplayText(ApplicationSettings.Terminal.CustomerDisplayText1, ApplicationSettings.Terminal.CustomerDisplayText2);
-                        //  POSFormsManager.ShowPOSStatusPanelText(string.Empty);
+                        tx.EntryStatus = (PosTransaction.TransactionStatus)4;   // ResultCallback -> ClearTransaction, nothing written  // ResultCallback -> ClearTransaction, nothing written
+                        ((IBlankOperationInfoV2)operationInfo).OperationHandled = true;
+                        break;
+                    }
+                     case "ClearTransactionNoConfirm":
+                    {
+
                         PosTransaction tx = posTransaction as PosTransaction;
                         RetailTransaction retail = posTransaction as RetailTransaction;
                         if (tx == null) return;
@@ -1948,16 +1972,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations
                                 }
                             }
                         }
-                    
-                        using (frmMessage confirm = new frmMessage("Clear this test transaction without saving it?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
-                        {
-                            POSFormsManager.ShowPOSForm(confirm);
-                            if (confirm.DialogResult != DialogResult.Yes)
-                            {
-                                ((IBlankOperationInfoV2)operationInfo).OperationHandled = true;
-                                return;
-                            }
-                        }
+
 
                         tx.EntryStatus = (PosTransaction.TransactionStatus)4;   // ResultCallback -> ClearTransaction, nothing written  // ResultCallback -> ClearTransaction, nothing written
                         ((IBlankOperationInfoV2)operationInfo).OperationHandled = true;

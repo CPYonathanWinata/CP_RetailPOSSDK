@@ -933,7 +933,9 @@ namespace Microsoft.Dynamics.Retail.Pos.RoundingService
                 {
                     command.Parameters.AddWithValue("@TableName", tableName);
 
-                    connection.Open();
+                    
+                    // FIX error open connection- Yonathan 19112026
+                    if (connection.State != ConnectionState.Open) { connection.Open(); }
                     int count = (int)command.ExecuteScalar();
                     if (count == 0)
                     {
@@ -972,7 +974,8 @@ namespace Microsoft.Dynamics.Retail.Pos.RoundingService
 
             try
             {
-                connection.Open();
+                // FIX - Yonathan 19112026
+                if (connection.State != ConnectionState.Open) { connection.Open(); }
 
                 //check table exist
                 using (SqlCommand cmdCheckTable = new SqlCommand(

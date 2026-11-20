@@ -45,6 +45,7 @@ using LSRetailPosis.Transaction.Line.SaleItem;
 using LSRetailPosis.Settings;
 using System.Drawing.Printing;
 using System.Drawing;
+using APIAccess;
 
 namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 {
@@ -801,9 +802,11 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 		{
 			string source = "TransactionTriggers.PostVoidTransaction";
 			string value = "After voiding the transaction...";
+            APIAccess.APIFunction APIFunction = new APIAccess.APIFunction();
 			LSRetailPosis.ApplicationLog.Log(source, value, LSRetailPosis.LogTraceLevel.Trace);
 			LSRetailPosis.ApplicationLog.WriteAuditEntry(source, value);
-            //clearRetailTransExtended();
+            //START CUSTOM CPPROMODISCNEW - YONATHAN  [18112026]
+            APIFunction.clearRetailTransExtended();
 		}
 
 		public void PreReturnTransaction(IPreTriggerResult preTriggerResult, IRetailTransaction originalTransaction, IPosTransaction posTransaction)
@@ -1579,42 +1582,53 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
             {
                 try
                 {
-                    //add type, number, gender, country - yonathan 17012025
+//                    //add type, number, gender, country - yonathan 17012025
+//                    string queryString = @"
+//											INSERT INTO AX.CPNEWPAYMENTPOS (
+//																			ID,
+//																			TransactionID, 
+//																			ReceiptID, 
+//																			PaymentAmount, 
+//																			NoReffTransaction, 
+//																			TenderID, 
+//																			TenderName, 
+//																			PurchaserName, 
+//																			PurchaserPhone, 
+//																			Store, 
+//																			TransDate,                                                                             
+//																			[DATAAREAID],
+//																			[PARTITION]
+//																			)
+//											VALUES (
+//													@ID,
+//													@TransactionID,
+//													@ReceiptID, 
+//													@PaymentAmount, 
+//													@NoReffTransaction, 
+//													@TenderID, 
+//													@TenderName, 
+//													@PurchaserName, 
+//													@PurchaserPhone, 
+//													@Store, 
+//													@TransDate,                                                    
+//													@DataAreaID,
+//													@Partition
+//													)";
                     string queryString = @"
-											INSERT INTO AX.CPNEWPAYMENTPOS (
-																			ID,
-																			TransactionID, 
-																			ReceiptID, 
-																			PaymentAmount, 
-																			NoReffTransaction, 
-																			TenderID, 
-																			TenderName, 
-																			PurchaserName, 
-																			PurchaserPhone, 
-																			Store, 
-																			TransDate,                                                                             
-																			[DATAAREAID],
-																			[PARTITION]
-																			)
-											VALUES (
-													@ID,
-													@TransactionID,
-													@ReceiptID, 
-													@PaymentAmount, 
-													@NoReffTransaction, 
-													@TenderID, 
-													@TenderName, 
-													@PurchaserName, 
-													@PurchaserPhone, 
-													@Store, 
-													@TransDate,                                                    
-													@DataAreaID,
-													@Partition
-													)";
+                        INSERT INTO AX.CPNEWPAYMENTPOS (
+                            ID, TransactionID, ReceiptID, PaymentAmount, NoReffTransaction, TenderID,
+                            TenderName, PurchaserName, PurchaserPhone, Store, TransDate, [DATAAREAID], [PARTITION]
+                        )
+                        SELECT
+                            ISNULL(MAX(ID), 0) + 1,
+                            @TransactionID, @ReceiptID, @PaymentAmount, @NoReffTransaction, @TenderID,
+                            @TenderName, @PurchaserName, @PurchaserPhone, @Store, @TransDate, @DataAreaID, @Partition
+                        FROM AX.CPNEWPAYMENTPOS WITH (UPDLOCK, HOLDLOCK)
+                        WHERE [DATAAREAID] = @DataAreaID AND [PARTITION] = @Partition";
 
                     using (SqlCommand command = new SqlCommand(queryString, connection))
                     {
-                        command.Parameters.AddWithValue("@ID", id);
+                        //command.Parameters.AddWithValue("@ID", id);
                         command.Parameters.AddWithValue("@TransactionID", transactionID); 
                         command.Parameters.AddWithValue("@ReceiptID", receiptID);
                         command.Parameters.AddWithValue("@PaymentAmount", PaymentAmount);
@@ -1641,6 +1655,12 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
 
                         command.ExecuteNonQuery();
                     }
+
+                    // delete TMP only after the insert succeeded
+                    using (SqlCommand commandDelete = new SqlCommand("DELETE FROM AX.[CPNEWPAYMENTPOSTMP]", connection))
+                    {
+                        commandDelete.ExecuteNonQuery();
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -1649,31 +1669,31 @@ namespace Microsoft.Dynamics.Retail.Pos.TransactionTriggers
                 }
                 finally
                 {
-                    try
-                    {
-                        string queryStringDelete = @"DELETE FROM AX.[CPNEWPAYMENTPOSTMP]";
+                    //try
+                    //{
+                    //    string queryStringDelete = @"DELETE FROM AX.[CPNEWPAYMENTPOSTMP]";
 
-                        SqlCommand commandDelete = new SqlCommand(queryStringDelete, connection);
+                    //    SqlCommand commandDelete = new SqlCommand(queryStringDelete, connection);
 
-                        if (connection.State != ConnectionState.Open)
-                        {
-                            connection.Open();
-                        }
+                    //    if (connection.State != ConnectionState.Open)
+                    //    {
+                    //        connection.Open();
+                    //    }
 
-                        commandDelete.ExecuteNonQuery();
-                    }
-                    catch (Exception ex)
-                    {
-                        LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
-                        throw;
-                    }
-                    finally
-                    {
+                    //    commandDelete.ExecuteNonQuery();
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                    //    throw;
+                    //}
+                    //finally
+                    //{
                         if (connection.State != ConnectionState.Closed)
                         {
                             connection.Close();
                         }
-                    }
+                    //}
                 }
             }
 

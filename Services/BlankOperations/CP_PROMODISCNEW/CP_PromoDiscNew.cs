@@ -4,14 +4,19 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using LSRetailPosis.POSProcesses;
 using LSRetailPosis.Settings;
 using LSRetailPosis.Transaction;
+using LSRetailPosis.Transaction.Line.Discount;   // PeriodicDiscountItem, DiscountItem
+using LSRetailPosis.Transaction.Line.SaleItem;    // SaleLineItem
 using Microsoft.Dynamics.Retail.Pos.Contracts;
 using Microsoft.Dynamics.Retail.Pos.Contracts.DataEntity;
+using Microsoft.Dynamics.Retail.Pos.SystemCore;
+using Microsoft.Dynamics.Retail.Pos.Contracts.Triggers;
 
 namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PROMODISCNEW
 {
@@ -35,6 +40,11 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PROMODISCNEW
         private const string ItemButtonText = "Lihat Item";
         private const string CategoryButtonText = "Lihat Kategori";   // other value of CATSCOPE: "Semua kategori" = plain label
 
+        // Marker put in the transaction comment while ItemSale runs: "AddItem-" + promo id
+        // (the old CPDiscountItem used the fixed "AddItem-PDI"). After the items are added,
+        // transaction.Comment is replaced by the plain promo id.
+        private const string ItemAddMarkerPrefix = "AddItem-";
+
         private const int EM_SETCUEBANNER = 0x1501;
         private static readonly CultureInfo IdCulture = new CultureInfo("id-ID");
 
@@ -52,7 +62,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PROMODISCNEW
 
         // Item-mode columns (built in code so the designer never has to serialize unattached columns)
         private DataGridViewCheckBoxColumn colIChk;
-        private DataGridViewTextBoxColumn colIId, colIName, colIUnit, colICategory, colIPrice, colIDisc,
+        private DataGridViewTextBoxColumn colIId, colIName, colIUnit, colICategory, colIPrice, colIDiscPrice, colIDisc,
                                           colIPct, colIInclTax, colIMax, colIMaxStruk, colISold, colIQty;
 
         // Results, read by the caller after DialogResult.OK
@@ -109,7 +119,18 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PROMODISCNEW
             txtSearch.TextChanged += txtSearch_TextChanged;
 
             cbDiscType.Items.AddRange(new object[] { "Pembayaran", "Item" });
-            cbDiscType.SelectedIndex = 0;   // triggers cbDiscType_SelectedIndexChanged -> loads data
+
+            // An item promo is already applied to this cart: open straight on the Item type and do not let the
+            // cashier switch to the payment type (the journal list is also locked to that promo, see LoadJournal).
+            if (GetAppliedItemPromoId() != null)
+            {
+                cbDiscType.SelectedIndex = 1;   // triggers cbDiscType_SelectedIndexChanged -> loads data
+                cbDiscType.Enabled = false;
+            }
+            else
+            {
+                cbDiscType.SelectedIndex = 0;   // triggers cbDiscType_SelectedIndexChanged -> loads data
+            }
         }
 
         // ---------- setup ----------
@@ -163,21 +184,30 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PROMODISCNEW
             colIChk.HeaderText = string.Empty;          // header checkbox is painted in Grid_CellPainting
             colIChk.DataPropertyName = "SEL";
             colIChk.FillWeight = 4F;
+            colIChk.SortMode = DataGridViewColumnSortMode.NotSortable;   // header click = mark all, never sort (a sort drops the pending edit of the first row)
 
             colIId = NewTextColumn("colIId", "ID", "ID", 9F, false, true);
-            colIName = NewTextColumn("colIName", "Nama Item", "NAME", 18F, false, true);
+            colIName = NewTextColumn("colIName", "Nama Item", "NAME", 16F, false, true);
             colIUnit = NewTextColumn("colIUnit", "Unit", "UNITID", 5F, false, true);
             colICategory = NewTextColumn("colICategory", "Kategori", "CATEGORYNAME", 12F, false, true);
-            colIPrice = NewTextColumn("colIPrice", "Harga", "PRICE", 8F, true, true);
+            colIPrice = NewTextColumn("colIPrice", "Harga Normal", "PRICE", 9F, true, true);
             colIPrice.DefaultCellStyle.Format = "N0";
             colIPrice.DefaultCellStyle.FormatProvider = IdCulture;
+            colIDiscPrice = NewTextColumn("colIDiscPrice", "Harga Diskon", "DISCPRICE", 9F, true, true);   // price after the promo discount
+            colIDiscPrice.DefaultCellStyle.Format = "N0";
+            colIDiscPrice.DefaultCellStyle.FormatProvider = IdCulture;
             colIDisc = NewTextColumn("colIDisc", "Potongan", "DISCAMOUNT", 9F, true, true);
+            colIDisc.DefaultCellStyle.Format = "N0";
+            colIDisc.DefaultCellStyle.FormatProvider = IdCulture;
             colIPct = NewTextColumn("colIPct", "Diskon %", "DISCPERCENTAGE", 8F, true, true);
             colIPct.DefaultCellStyle.Format = "0.##";
             colIInclTax = NewTextColumn("colIInclTax", "Disc Incl Tax", "DISCINCLTAX", 11F, true, true);
+            colIInclTax.DefaultCellStyle.Format = "N0";
+            colIInclTax.DefaultCellStyle.FormatProvider = IdCulture;
             colIMax = NewTextColumn("colIMax", "Max", "MAXQTY", 6F, true, true);
             colIMaxStruk = NewTextColumn("colIMaxStruk", "Max/Struk", "MAXQTYPERSTRUK", 8F, true, true);
             colISold = NewTextColumn("colISold", "Terjual", "SOLD", 7F, true, true);
+            colISold.DefaultCellStyle.Format = "0.##";
             colIQty = NewTextColumn("colIQty", "Jumlah", "QTY", 8F, true, false);   // the only editable box
         }
 
@@ -192,7 +222,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PROMODISCNEW
             else
                 dataGridDetails.Columns.AddRange(new DataGridViewColumn[] {
                     colIChk, colIId, colIName, colIUnit, colICategory, colIPrice,
-                    colIDisc, colIPct, colIInclTax, colIMax, colIMaxStruk, colISold, colIQty });
+                    colIDisc, colIPct, colIInclTax, colIDiscPrice, colIMax, colIMaxStruk, colISold, colIQty });
 
             pnlItemFooter.Visible = !isPayment;   // "0 dipilih" + Hapus/Simpan Pilihan
             ApplyGridFonts();
@@ -368,6 +398,10 @@ ORDER BY h.VALIDFROM, h.PROMOID";
                 new SqlParameter("@STATUS", STATUS_ACTIVE),
                 new SqlParameter("@TODAY", SqlDbType.Date) { Value = DateTime.Today });
 
+            // An item promo is already applied to this cart: only that promo may be used, so the other
+            // promos are not listed at all (the cashier can only add more items to the same promo).
+            if (CurrentDiscType == DISCTYPE_ITEM) KeepOnlyAppliedPromo(_journalTable);
+
             txtJournalSearch.Text = string.Empty;
             _journalSearchTimer.Stop();   // a freshly loaded journal starts unfiltered
             _loadingJournal = true;
@@ -428,12 +462,23 @@ ORDER BY pm.PAYMENTMETHODID";
 SELECT CAST(0 AS bit) AS SEL,
        l.ITEMID AS ID, ISNULL(pn.NAME, l.DESCRIPTION) AS NAME, l.UNITID,
        ISNULL(cat.NAME, '') AS CATEGORYNAME,
-       CAST(0 AS decimal(18, 0)) AS PRICE,      -- TODO: Harga (price lookup not in these tables)
+       CAST(0 AS decimal(18, 0)) AS PRICE,      -- placeholder, filled by FillItemPrices (price service)
+       CAST(0 AS decimal(18, 0)) AS DISCPRICE,  -- placeholder, filled by FillDiscountedPrices
        l.DISCAMOUNT, l.DISCPERCENTAGE, l.DISCINCLTAX,
        l.MAXQTY, l.MAXQTYPERSTRUK,
-       CAST(0 AS int) AS SOLD,                  -- TODO: Terjual (qty already sold under this promo)
+       -- Terjual: qty already sold under this promo (same rule as the old CPDiscountItem):
+       -- finished receipts, line comment = promo id, this store, inside the promo period, not a voided/open transaction
+       (SELECT ISNULL(ABS(SUM(S.QTY)), 0)
+        FROM RETAILTRANSACTIONSALESTRANS S
+        WHERE S.RECEIPTID != ''
+          AND S.COMMENT = l.PROMOID
+          AND S.STORE = @STOREID
+          AND S.ITEMID = l.ITEMID
+          AND S.TRANSDATE BETWEEN h.VALIDFROM AND h.VALIDTO
+          AND S.TRANSACTIONSTATUS != 1) AS SOLD,
        CAST(1 AS int) AS QTY
 FROM ax.CPPROMODISCOUNTLINE l
+JOIN ax.CPPROMODISCOUNTHEADER h ON h.PROMOID = l.PROMOID AND h.DATAAREAID = l.DATAAREAID
 OUTER APPLY (
     -- category-based line: use l.CATEGORY; item line: the item's category (first hierarchy)
     SELECT TOP 1 c.NAME
@@ -461,7 +506,15 @@ ORDER BY l.ITEMID";
                 new SqlParameter("@PROMOID", _selectedPromoId),
                 new SqlParameter("@DATAAREAID", ApplicationSettings.Database.DATAAREAID),
                 new SqlParameter("@LANGUAGEID", CultureInfo.CurrentUICulture.Name),
-                new SqlParameter("@INVENTLOCATION", ApplicationSettings.Terminal.InventLocationId ?? string.Empty));
+                new SqlParameter("@INVENTLOCATION", ApplicationSettings.Terminal.InventLocationId ?? string.Empty),
+                new SqlParameter("@STOREID", posTransaction.StoreId ?? string.Empty));
+
+            if (CurrentDiscType == DISCTYPE_ITEM)
+            {
+                RemoveItemsBlockedByCart(_detailTable);
+                FillItemPrices(_detailTable);        // Harga Normal column
+                FillDiscountedPrices(_detailTable);  // Harga Diskon column
+            }
 
             dataGridDetails.DataSource = _detailTable.DefaultView;
             UpdateSelectedCount();
@@ -473,6 +526,14 @@ ORDER BY l.ITEMID";
         {
             RetailTransaction transaction = posTransaction as RetailTransaction;
             return transaction == null ? 0m : transaction.NetAmountWithTax;
+        }
+
+        // True when there is no transaction yet or it has no non-voided item.
+        private bool IsCartEmpty()
+        {
+            RetailTransaction transaction = posTransaction as RetailTransaction;
+            if (transaction == null) return true;
+            return !transaction.SaleItems.Any(l => !l.Voided);
         }
 
         // Minimum purchase validation. Returns true when the cart total reaches the selected journal's
@@ -495,12 +556,23 @@ ORDER BY l.ITEMID";
             decimal total = GetCartTotal();
             if (total >= minimum) return true;
 
-            using (CP_PromoWarningPopup dlg = new CP_PromoWarningPopup(
-                "Pembayaran minimum belum terpenuhi",
-                "Keranjang tidak memenuhi pembayaran minimum untuk jurnal ini.",
-                "Total keranjang " + total.ToString("N0", IdCulture)
-                    + " kurang dari pembayaran minimum sebesar " + minimum.ToString("N0", IdCulture) + ".",
-                "Kembali ke item"))
+            string title, description, detail;
+            if (IsCartEmpty())
+            {
+                // no transaction yet, or no (non-voided) item in the cart
+                title = "Keranjang masih kosong";
+                description = "Belum ada barang di keranjang.";
+                detail = "Minimal transaksi " + minimum.ToString("N0", IdCulture) + ".";
+            }
+            else
+            {
+                title = "Pembayaran minimum belum terpenuhi";
+                description = "Keranjang tidak memenuhi pembayaran minimum untuk jurnal ini.";
+                detail = "Total keranjang " + total.ToString("N0", IdCulture)
+                    + " kurang dari pembayaran minimum sebesar " + minimum.ToString("N0", IdCulture) + ".";
+            }
+
+            using (CP_PromoWarningPopup dlg = new CP_PromoWarningPopup(title, description, detail, "Kembali ke item"))
             {
                 dlg.ShowDialog(this);
             }
@@ -745,16 +817,48 @@ ORDER BY l.ITEMID",
             try
             {
                 AddMappedCustomerToTransaction(custAccount);
+                ApplyPromoTotalDiscount();
+                APIAccess.APIAccessClass.isPromoDiscTrans = true;
 
                 RetailTransaction retailTransaction = posTransaction as RetailTransaction;
                 int tenderCountBefore = retailTransaction != null ? retailTransaction.TenderLines.Count : 0;
+                decimal tenderSumBefore = retailTransaction != null ? SumActiveTenders(retailTransaction) : 0m;
+                string txIdBefore = retailTransaction != null ? retailTransaction.TransactionId : null;
 
                 application.RunOperation(PosisOperations.PayCustomerAccount, tenderId, posTransaction);
 
-                // No tender line was added = the cashier cancelled the payment.
-                // A promo payment must not stay open, so void the whole transaction (back to the start screen).
-                if (retailTransaction != null && retailTransaction.TenderLines.Count == tenderCountBefore)
-                    application.RunOperation(PosisOperations.VoidTransaction, "", posTransaction);
+                //while (true)
+                //{
+                //    application.RunOperation(PosisOperations.PayCustomerAccount, tenderId, posTransaction);
+
+                //    if (retailTransaction == null) break;
+
+                //    bool paid =
+                //           retailTransaction.TenderLines.Count != tenderCountBefore
+                //        || SumActiveTenders(retailTransaction) != tenderSumBefore
+                //        || retailTransaction.EntryStatus != PosTransaction.TransactionStatus.Normal
+                //        || retailTransaction.TransactionId != txIdBefore
+                //        || retailTransaction.AmountDue <= 0m;
+
+                //    LSRetailPosis.ApplicationLog.Log("PromoPay",
+                //        string.Format("paid={0} tenders={1}/{2} sum={3}/{4} status={5} txId={6}/{7} amountDue={8}",
+                //            paid, retailTransaction.TenderLines.Count, tenderCountBefore,
+                //            SumActiveTenders(retailTransaction), tenderSumBefore,
+                //            retailTransaction.EntryStatus, retailTransaction.TransactionId, txIdBefore, retailTransaction.AmountDue),
+                //        LSRetailPosis.LogTraceLevel.Trace);
+
+                //    if (paid) break;                                    // payment done, nothing to enforce
+                //    if (HasActiveTender(retailTransaction)) break;      // real payments already exist: never clear a paid sale
+
+                //    // payment screen was cancelled
+                //    if (ConfirmCancelTransaction())
+                //    {
+                //        ClearPromoTransaction();
+                //        break;
+                //    }
+                //    // No: message shown, loop reopens the payment screen
+                //}
+
             }
             catch (Exception ex)
             {
@@ -762,6 +866,88 @@ ORDER BY l.ITEMID",
             }
         }
 
+        private decimal SumActiveTenders(RetailTransaction retail)
+        {
+            decimal sum = 0m;
+            foreach (var tender in retail.TenderLines)
+                if (!tender.Voided) sum += tender.Amount;
+            return sum;
+        }
+
+        // Applies the selected promo as a total discount on the transaction (before PayCustomerAccount).
+        // Diskon %  -> percentage of NetAmountWithTax, capped by Mak. Diskon
+        // Potongan  -> fixed amount
+        // (only one of the two has a value)
+        private void ApplyPromoTotalDiscount()
+        {
+            RetailTransaction transaction = posTransaction as RetailTransaction;
+            if (transaction == null) return;
+
+            decimal baseAmount = transaction.NetAmountWithTax;
+            decimal discount = 0m;
+
+            if (SelectedDiscPercentage > 0m)
+            {
+                discount = baseAmount * SelectedDiscPercentage / 100m;
+
+                // discount limit: never above Mak. Diskon (when it is set)
+                if (SelectedMaxValue > 0 && discount > SelectedMaxValue)
+                    discount = SelectedMaxValue;
+            }
+            else if (SelectedDiscAmount > 0)
+            {
+                discount = SelectedDiscAmount;
+            }
+
+            if (discount > baseAmount) discount = baseAmount;     // never discount more than the cart
+            discount = Math.Round(discount, 0, MidpointRounding.AwayFromZero);
+            if (discount <= 0m) return;
+
+            transaction.SetTotalDiscAmount(discount);
+            transaction.Comment = SelectedPromoId;
+
+            try
+            {
+                PosApplication.Instance.Triggers.Invoke<IDiscountTrigger>(
+                    (Action<IDiscountTrigger>)(t => t.PostTotalDiscountAmount(transaction)));
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+            }
+
+            application.BusinessLogic.ItemSystem.CalculatePriceTaxDiscount(transaction);
+            transaction.CalcTotals();
+        }
+        // "Batalkan transaksi ini?" Yes/No; on No show the reminder (OK only) and return false
+        private bool ConfirmCancelTransaction()
+        {
+            using (frmMessage confirm = new frmMessage("Batalkan transaksi ini?", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+            {
+                POSFormsManager.ShowPOSForm(confirm);
+                if (confirm.DialogResult == DialogResult.Yes)
+                    return true;
+            }
+
+            using (frmMessage msg = new frmMessage("Harus batalkan transaksi jika ingin membatalkan pembayaran", MessageBoxButtons.OK, MessageBoxIcon.Stop))
+            {
+                POSFormsManager.ShowPOSForm(msg);
+            }
+            return false;
+        }
+
+        private bool HasActiveTender(RetailTransaction retail)
+        {
+            foreach (var tender in retail.TenderLines)
+                if (!tender.Voided) return true;
+            return false;
+        }
+
+        // Same clear as your blank operation code (ResultCallback -> ClearTransaction, nothing written)
+        private void ClearPromoTransaction()
+        {
+            application.RunOperation(PosisOperations.BlankOperation, "ClearTransactionNoConfirm");
+        }
         // Categories shown by the "Lihat Kategori" popup:
         // CPPROMODISCOUNTLINE.CATEGORY -> ECORESCATEGORY.RECID, shown as ECORESCATEGORY.NAME
         private List<string> LoadCategories(string promoId)
@@ -873,17 +1059,52 @@ WHERE TENDERTYPEID = @TENDERTYPEID AND DATAAREAID = @DATAAREAID",
                 ToggleAll(!_allSelected);
         }
 
-        private void ToggleAll(bool value)
+        // Commits the cell being edited AND the edit the grid keeps open on the current row. The current row
+        // is the first record, which is why mark all skipped it: its new value only lived in that pending edit,
+        // so the grid showed it as checked but the DataTable (count, Simpan Pilihan) still had it unchecked.
+        private void CommitGridEdit()
         {
             dataGridDetails.EndEdit();
+            if (dataGridDetails.DataSource == null) return;
+
+            CurrencyManager manager = dataGridDetails.BindingContext[dataGridDetails.DataSource] as CurrencyManager;
+            if (manager != null) manager.EndCurrentEdit();
+        }
+
+        // Rows of the item list that are ticked (also the ones hidden by the search filter, as before)
+        private List<DataRow> GetCheckedRows()
+        {
+            List<DataRow> list = new List<DataRow>();
+            if (_detailTable == null || !_detailTable.Columns.Contains("SEL")) return list;
+
+            CommitGridEdit();
+            foreach (DataRow r in _detailTable.Rows)
+            {
+                if (r.RowState != DataRowState.Deleted && r["SEL"] is bool && (bool)r["SEL"]) list.Add(r);
+            }
+            return list;
+        }
+
+        private void ToggleAll(bool value)
+        {
             if (_detailTable == null || !_detailTable.Columns.Contains("SEL")) return;
+
+            CommitGridEdit();
 
             DataView view = _detailTable.DefaultView;          // respects the search filter
             DataRowView[] rows = new DataRowView[view.Count];
             view.CopyTo(rows, 0);
-            foreach (DataRowView drv in rows) drv["SEL"] = value;
+            foreach (DataRowView drv in rows)
+            {
+                DataRow r = drv.Row;
+                r.BeginEdit();
+                r["SEL"] = value;
+                r.EndEdit();   // committed to the row itself, whatever the grid is doing with it
+            }
 
+            CommitGridEdit();
             UpdateSelectedCount();
+            dataGridDetails.Refresh();
         }
 
         private void UpdateSelectedCount()
@@ -893,7 +1114,10 @@ WHERE TENDERTYPEID = @TENDERTYPEID AND DATAAREAID = @DATAAREAID",
 
             if (_detailTable != null && _detailTable.Columns.Contains("SEL"))
             {
-                count = _detailTable.Select("SEL = true").Length;
+                foreach (DataRow r in _detailTable.Rows)
+                {
+                    if (r.RowState != DataRowState.Deleted && r["SEL"] is bool && (bool)r["SEL"]) count++;
+                }
 
                 DataView view = _detailTable.DefaultView;
                 all = view.Count > 0;
@@ -915,11 +1139,10 @@ WHERE TENDERTYPEID = @TENDERTYPEID AND DATAAREAID = @DATAAREAID",
 
         private void btnSaveSelection_Click(object sender, EventArgs e)
         {
-            dataGridDetails.EndEdit();
             if (_detailTable == null || !_detailTable.Columns.Contains("SEL")) return;
 
             DataTable selected = _detailTable.Clone();
-            foreach (DataRow r in _detailTable.Select("SEL = true")) selected.ImportRow(r);
+            foreach (DataRow r in GetCheckedRows()) selected.ImportRow(r);   // GetCheckedRows commits the grid edit first
 
             if (selected.Rows.Count == 0)
             {
@@ -927,16 +1150,448 @@ WHERE TENDERTYPEID = @TENDERTYPEID AND DATAAREAID = @DATAAREAID",
                 return;
             }
 
+            RetailTransaction transaction = posTransaction as RetailTransaction;
+
+            // No transaction yet (empty cart) counts as total 0, so this shows "Belum ada barang di keranjang,
+            // minimal transaksi [Min. Bayar]". Same check for a cart that is below the promo's "Min. Bayar".
             if (!CheckMinimumPurchase()) return;
+
+            if (transaction == null)
+            {
+                // promo without a minimum but still no transaction: there is no cart to add the items to
+                ShowStopMessage("Belum ada barang di keranjang.");
+                return;
+            }
+
+            if (!ValidateItemQuantities(selected)) return;   // Jumlah vs Max / Max per struk / Terjual
 
             SelectedDiscType = CurrentDiscType;
             SelectedPromoId = _selectedPromoId;
             SelectedItems = selected;
 
-            // TODO: apply the discount for each row of SelectedItems (QTY = Jumlah) to the cart,
-            // or let the caller do it using SelectedItems.
+            APIAccess.APIAccessClass.isPromoDiscTrans = true;
+
+            try
+            {
+                AddSelectedItemsToCart(transaction, selected);
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+                return;   // stay on the form
+            }
+
             DialogResult = DialogResult.OK;
             Close();
+
+            try
+            {
+                application.RunOperation(PosisOperations.DisplayTotal, "");   // same as the old CPDiscountItem
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+            }
+        }
+
+        // ---------- item promo: validation + add to cart (logic of the old CPDiscountItem) ----------
+
+        private static decimal ToDecimal(object value)
+        {
+            return value == null || value == DBNull.Value ? 0m : Convert.ToDecimal(value);
+        }
+
+        private void ShowStopMessage(string message)
+        {
+            using (frmMessage dialog = new frmMessage(message, MessageBoxButtons.OK, MessageBoxIcon.Stop))
+            {
+                POSFormsManager.ShowPOSForm(dialog);
+            }
+        }
+
+        // Quantity rules of the old dataGridResult_CellContentClick, applied to every checked row:
+        //   Jumlah > Max/Struk            -> blocked (old: only for the per-receipt promo)
+        //   Jumlah > Max - Terjual        -> blocked
+        // A limit of 0 means "no limit" (the list can hold promos that only use one of the two limits).
+        private bool ValidateItemQuantities(DataTable selected)
+        {
+            foreach (DataRow row in selected.Rows)
+            {
+                string itemId = Convert.ToString(row["ID"]);
+                string label = itemId + " - " + Convert.ToString(row["NAME"]);
+                decimal qty = ToDecimal(row["QTY"]);
+                decimal maxQty = ToDecimal(row["MAXQTY"]);
+                decimal maxStruk = ToDecimal(row["MAXQTYPERSTRUK"]);
+                decimal sold = ToDecimal(row["SOLD"]);
+
+                if (string.IsNullOrEmpty(itemId) || itemId == "0")
+                {
+                    ShowStopMessage("Baris promo ini tidak memiliki item, tidak bisa dimasukkan ke keranjang.");
+                    return false;
+                }
+
+                if (qty <= 0)
+                {
+                    ShowStopMessage(label + "\nJumlah barang harus lebih dari 0.");
+                    return false;
+                }
+
+                if (maxStruk > 0 && qty > maxStruk)
+                {
+                    ShowStopMessage(label + "\nJumlah barang melebihi quantity maksimum\nper struk pada promo ini. Jumlah barang per struk = "
+                        + maxStruk.ToString("N2", IdCulture));
+                    return false;
+                }
+
+                if (maxQty > 0 && qty > maxQty - sold)
+                {
+                    ShowStopMessage(label + "\nJumlah barang melebihi quantity maksimum pada promo ini.\nSisa barang yang mendapat promo ini = "
+                        + Math.Max(0m, maxQty - sold).ToString("N2", IdCulture));
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        // Promo id of the item promo already applied to the cart, or null when there is none.
+        // AddSelectedItemsToCart tags every promo line with the promo id (line.Comment); a line that was
+        // voided no longer counts, so voiding all promo lines releases the lock.
+        private string GetAppliedItemPromoId()
+        {
+            RetailTransaction transaction = posTransaction as RetailTransaction;
+            if (transaction == null) return null;
+
+            HashSet<string> itemPromoIds = LoadItemPromoIds();
+            foreach (SaleLineItem line in transaction.SaleItems)
+            {
+                if (line.Voided || string.IsNullOrEmpty(line.Comment)) continue;
+                if (itemPromoIds.Contains(line.Comment)) return line.Comment;
+            }
+            return null;
+        }
+
+        // Removes every promo except the applied one from the journal table. When the applied promo is not in
+        // the table (for example it expired meanwhile) nothing is removed, so the cashier is never left
+        // with an empty list.
+        private void KeepOnlyAppliedPromo(DataTable journal)
+        {
+            if (journal == null || journal.Rows.Count == 0) return;
+
+            string applied = GetAppliedItemPromoId();
+            if (string.IsNullOrEmpty(applied)) return;
+
+            bool found = false;
+            foreach (DataRow r in journal.Rows)
+            {
+                if (Convert.ToString(r["PROMOID"]) == applied) { found = true; break; }
+            }
+            if (!found) return;
+
+            for (int i = journal.Rows.Count - 1; i >= 0; i--)
+            {
+                if (Convert.ToString(journal.Rows[i]["PROMOID"]) != applied) journal.Rows[i].Delete();
+            }
+            journal.AcceptChanges();
+        }
+
+        // All promo ids of item promos (any period / status): used to tell "promo line" from "regular line".
+        private HashSet<string> LoadItemPromoIds()
+        {
+            DataTable dt = Query(
+                "SELECT PROMOID FROM ax.CPPROMODISCOUNTHEADER WHERE DATAAREAID = @DATAAREAID AND DISCOUNTTYPE = @DISCOUNTTYPE",
+                new SqlParameter("@DATAAREAID", ApplicationSettings.Database.DATAAREAID),
+                new SqlParameter("@DISCOUNTTYPE", DISCTYPE_ITEM));
+
+            HashSet<string> ids = new HashSet<string>();
+            foreach (DataRow r in dt.Rows) ids.Add(Convert.ToString(r["PROMOID"]));
+            return ids;
+        }
+
+        // Old CPDiscountItem.LoadData: an item that is already in the cart is NOT offered when its line has
+        // no periodic discount, or a discount that does not come from an item promo. (The old code told the two
+        // apart by the offer id prefix "PDI"/"PDIS"; the new promo ids have no prefix, so the ids of the item
+        // promos in CPPROMODISCOUNTHEADER are used instead.)
+        private void RemoveItemsBlockedByCart(DataTable table)
+        {
+            RetailTransaction transaction = posTransaction as RetailTransaction;
+            if (transaction == null || table == null || table.Rows.Count == 0) return;
+
+            HashSet<string> itemPromoIds = LoadItemPromoIds();
+            HashSet<string> blocked = new HashSet<string>();
+
+            foreach (var line in transaction.CalculableSalesLines)
+            {
+                if (line.PeriodicDiscountLines.Count == 0)
+                {
+                    blocked.Add(line.ItemId);
+                    continue;
+                }
+
+                foreach (var discountLine in line.PeriodicDiscountLines)
+                {
+                    PeriodicDiscountItem periodic = discountLine as PeriodicDiscountItem;
+                    if (periodic == null || !itemPromoIds.Contains(periodic.OfferId))
+                        blocked.Add(line.ItemId);
+                }
+            }
+
+            if (blocked.Count == 0) return;
+
+            for (int i = table.Rows.Count - 1; i >= 0; i--)
+            {
+                if (blocked.Contains(Convert.ToString(table.Rows[i]["ID"]))) table.Rows[i].Delete();
+            }
+            table.AcceptChanges();
+        }
+
+        // Transaction the price service needs to price items. With a real transaction it is a clone with the
+        // lines emptied (so customer etc. are kept but the real cart is untouched); with no transaction yet
+        // (empty cart, posTransaction is not a RetailTransaction) a dummy one is created. Before this, the
+        // price lookup was skipped when posTransaction was not a RetailTransaction, so Harga Normal stayed 0.
+        private RetailTransaction CreatePricingTransaction()
+        {
+            RetailTransaction tx = null;
+
+            RetailTransaction current = posTransaction as RetailTransaction;
+            if (current != null)
+            {
+                // real transaction exists: clone it and empty the lines
+                tx = current.CloneTransaction() as RetailTransaction;
+                if (tx != null) tx.SaleItems.Clear();
+            }
+
+            if (tx == null)
+            {
+                // no transaction yet: create a dummy one
+                tx = new RetailTransaction(
+                    ApplicationSettings.Terminal.StoreId,
+                    ApplicationSettings.Terminal.StoreCurrency,
+                    ApplicationSettings.Terminal.TaxIncludedInPrice,
+                    application.Services.Rounding);
+
+                tx.TerminalId = ApplicationSettings.Terminal.TerminalId;
+                tx.OperatorId = ApplicationSettings.Terminal.TerminalOperator.OperatorId;   // check these in autocomplete
+            }
+
+            return tx;
+        }
+
+        // Harga column: price of every listed item from the POS price service (same call the item search
+        // screen uses: Services.Price.GetItemPrices, then Rounding.RoundForDisplay). A pricing failure must not
+        // block the screen, so on any error the prices simply stay 0.
+        private void FillItemPrices(DataTable table)
+        {
+            if (table == null || table.Rows.Count == 0) return;
+
+            try
+            {
+                // transaction used only to price the items (never the real cart, never saved)
+                RetailTransaction transaction = CreatePricingTransaction();
+
+                // one line per row; LineId = row index + 1 is the key to map the answer back to the row
+                List<SaleLineItem> items = new List<SaleLineItem>();
+                for (int i = 0; i < table.Rows.Count; i++)
+                {
+                    SaleLineItem line = new SaleLineItem(transaction.StoreCurrencyCode, transaction.IRounding, (PosTransaction)transaction);
+                    line.ItemId = Convert.ToString(table.Rows[i]["ID"]);
+                    line.Quantity = 1;
+                    line.LineId = i + 1;
+
+                    // unit of measure of the promo line (Unit column = UNITID); when empty the item's default unit is used
+                    string unitId = Convert.ToString(table.Rows[i]["UNITID"]);
+                    if (!string.IsNullOrEmpty(unitId)) line.SalesOrderUnitOfMeasure = unitId;
+
+                    items.Add(line);
+                }
+
+                // Obtain prices for the items and put them in the Harga column.
+                var pricedItems = application.Services.Price.GetItemPrices(items, null).ToDictionary(p => p.LineId);
+
+                for (int i = 0; i < table.Rows.Count; i++)
+                {
+                    if (pricedItems.ContainsKey(i + 1))
+                        table.Rows[i]["PRICE"] = application.Services.Rounding.RoundForDisplay(pricedItems[i + 1].Price, true, false);
+                }
+                table.AcceptChanges();
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+            }
+        }
+
+        // Harga Diskon column: unit price after the promo discount, using the same priority as
+        // ApplyItemPromoDiscount (first non-zero one wins):
+        //   Potongan (DISCAMOUNT)     -> Harga Normal - Potongan
+        //   Diskon % (DISCPERCENTAGE) -> Harga Normal - Harga Normal x %
+        //   Disc Incl Tax             -> Harga Normal - Disc Incl Tax (a nominal discount, tax included)
+        // never below 0. Without a normal price (Harga Normal = 0) the result is 0.
+        private void FillDiscountedPrices(DataTable table)
+        {
+            if (table == null || table.Rows.Count == 0) return;
+
+            try
+            {
+                foreach (DataRow row in table.Rows)
+                {
+                    decimal price = ToDecimal(row["PRICE"]);
+                    decimal amtDisc = ToDecimal(row["DISCAMOUNT"]);
+                    decimal pctDisc = ToDecimal(row["DISCPERCENTAGE"]);
+                    decimal discInclTax = ToDecimal(row["DISCINCLTAX"]);
+
+                    decimal discounted;
+                    if (amtDisc != 0) discounted = price - amtDisc;
+                    else if (pctDisc != 0) discounted = price - (price * pctDisc / 100m);
+                    else if (discInclTax != 0) discounted = price - discInclTax;
+                    else discounted = price;   // promo line without a discount value
+
+                    if (discounted < 0m) discounted = 0m;
+                    row["DISCPRICE"] = application.Services.Rounding.RoundForDisplay(discounted, true, false);
+                }
+                table.AcceptChanges();
+            }
+            catch (Exception ex)
+            {
+                LSRetailPosis.ApplicationExceptionHandler.HandleException(this.ToString(), ex);
+            }
+        }
+
+        private DataRow FindJournalRow(string promoId)
+        {
+            if (_journalTable == null) return null;
+            foreach (DataRow r in _journalTable.Rows)
+            {
+                if (Convert.ToString(r["PROMOID"]) == promoId) return r;
+            }
+            return null;
+        }
+
+        // For every checked row: put the item in the cart with the typed Jumlah, tag the line with the promo id,
+        // then give those lines the promo discount.
+        //   * item already in the cart (it can only be there as a promo line, see RemoveItemsBlockedByCart):
+        //     its quantity is REPLACED by Jumlah (the old code did the same, it did not add to it)
+        //   * item not in the cart: added with ItemSale like the old code
+        // line.Comment      = promo id  -> this is what the "Terjual" query counts (RETAILTRANSACTIONSALESTRANS.COMMENT)
+        // transaction.Comment = promo id (requested)
+        private void AddSelectedItemsToCart(RetailTransaction transaction, DataTable selected)
+        {
+            string promoId = _selectedPromoId;
+            List<string> notAdded = new List<string>();
+
+            try
+            {
+                foreach (DataRow row in selected.Rows)
+                {
+                    string itemId = Convert.ToString(row["ID"]);
+                    decimal qty = ToDecimal(row["QTY"]);
+
+                    SaleLineItem existing = transaction.SaleItems.FirstOrDefault(l => l.ItemId == itemId && !l.Voided);
+                    if (existing != null)
+                    {
+                        existing.QuantityOrdered = qty;
+                        existing.Quantity = existing.QuantityOrdered;
+                        existing.Comment = promoId;
+                    }
+                    else
+                    {
+                        int linesBefore = transaction.SaleItems.Count;
+
+                        ItemSale iSale = new ItemSale();
+                        iSale.OperationID = PosisOperations.ItemSale;
+                        iSale.OperationInfo = new LSRetailPosis.POSProcesses.OperationInfo();
+                        iSale.Barcode = itemId;
+                        iSale.IsInfocodeItem = true;
+                        iSale.OperationInfo.NumpadQuantity = qty;
+                        iSale.POSTransaction = (PosTransaction)posTransaction;
+                        iSale.POSTransaction.Comment = ItemAddMarkerPrefix + promoId;   // e.g. AddItem-CPDUMMY002: lets ItemSale + SetQty pass the promo lock
+                        iSale.RunOperation();
+
+                        // only tag the line when ItemSale really added this item (it can be cancelled / blocked)
+                        SaleLineItem added = transaction.SaleItems.Count > linesBefore ? transaction.SaleItems.Last.Value : null;
+                        if (added != null && added.ItemId == itemId)
+                            added.Comment = promoId;
+                        else
+                            notAdded.Add(itemId);
+                    }
+                }
+
+                ApplyItemPromoDiscount(transaction, promoId, selected);
+            }
+            finally
+            {
+                transaction.Comment = promoId;   // always replace the "AddItem-" marker by the promo id, also when something failed
+            }
+
+            transaction.CalcTotals();
+
+            DataRow journal = FindJournalRow(promoId);
+            POSFormsManager.ShowPOSStatusPanelText("Added item discount " + (journal == null ? promoId : Convert.ToString(journal["DISCNAME"])));
+
+            if (notAdded.Count > 0)
+                ShowStopMessage("Item berikut tidak berhasil ditambahkan ke keranjang:\n" + string.Join(", ", notAdded.ToArray()));
+        }
+
+        // Port of calculateAllLinesPromo: every cart line tagged with the promo id gets a PeriodicDiscountItem.
+        //   Potongan (DISCAMOUNT)     -> Amount
+        //   Diskon % (DISCPERCENTAGE) -> Percentage
+        //   Disc Incl Tax             -> DealPrice
+        // (first non-zero one wins, same order as the old code). Existing discount lines of the line (e.g. a
+        // regular promo) are removed first, as before. The values come from the checked rows, the period and
+        // the name from the selected journal row, so nothing is read from the DB again.
+        private void ApplyItemPromoDiscount(RetailTransaction transaction, string promoId, DataTable selected)
+        {
+            Dictionary<string, DataRow> rowsByItem = new Dictionary<string, DataRow>();
+            foreach (DataRow r in selected.Rows) rowsByItem[Convert.ToString(r["ID"])] = r;
+
+            DataRow journal = FindJournalRow(promoId);
+            string promoName = journal == null ? promoId : Convert.ToString(journal["DISCNAME"]);
+            DateTime fromDate = journal == null || journal["VALIDFROM"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(journal["VALIDFROM"]);
+            DateTime toDate = journal == null || journal["VALIDTO"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(journal["VALIDTO"]);
+
+            foreach (SaleLineItem line in transaction.SaleItems.Where(l => l.Comment == promoId && !l.Voided).ToList())
+            {
+                DataRow values;
+                if (!rowsByItem.TryGetValue(line.ItemId, out values)) continue;   // earlier promo line that was not re-selected: keep as is
+
+                decimal pctDisc = ToDecimal(values["DISCPERCENTAGE"]);
+                decimal amtDisc = ToDecimal(values["DISCAMOUNT"]);
+                decimal discInclTax = ToDecimal(values["DISCINCLTAX"]);
+
+                line.IsInfoCodeItem = false;
+
+                foreach (var discountLine in line.DiscountLines.ToList())
+                {
+                    line.DiscountLines.Remove(discountLine);
+                }
+
+                DiscountItem discItem = new PeriodicDiscountItem();
+                discItem.Amount = 0;
+                discItem.Percentage = 0;
+                discItem.DealPrice = 0;
+                discItem.EffectiveAmount = 0;
+
+                if (amtDisc != 0)
+                {
+                    discItem.Amount = amtDisc;
+                }
+                else if (pctDisc != 0)
+                {
+                    discItem.Percentage = pctDisc;
+                }
+                else if (discInclTax != 0)
+                {
+                    discItem.DealPrice = discInclTax;   // nominal discount including tax
+                }
+
+                PeriodicDiscountItem periodDiscItem = discItem as PeriodicDiscountItem;
+                periodDiscItem.OfferId = promoId;
+                periodDiscItem.OfferName = promoName;
+                periodDiscItem.QuantityDiscounted = 1;
+                periodDiscItem.BeginDateTime = fromDate;
+                periodDiscItem.EndDateTime = toDate;
+
+                line.DiscountLines.AddFirst(discItem);
+            }
         }
 
         // "Lihat Metode" button of an item promo: list the payment methods it is limited to

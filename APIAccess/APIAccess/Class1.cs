@@ -93,6 +93,9 @@ namespace APIAccess
         public static Dictionary<string, string> localExpiredStatusByRecId = new Dictionary<string, string>();
         //
 
+        //CPPROMODISCOUNT NEW 18112026
+        public static bool isPromoDiscTrans = false;
+
         public string getURLAPIByFuncName(string _funcName)
         {
             string URL = "";

@@ -1,5 +1,9 @@
 ﻿using LSRetailPosis.Settings;
+using LSRetailPosis.Transaction;
+using LSRetailPosis.Transaction.Line.Discount;
 using Microsoft.Dynamics.Retail.Pos.Contracts;
+using Microsoft.Dynamics.Retail.Pos.Contracts.DataEntity;
+using Microsoft.Dynamics.Retail.Pos.RoundingService;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,6 +22,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
         
 
         public IApplication Application { get; set; }
+        public IPosTransaction posTransaction { get; set; }
         public event EventHandler<ItemSelectedEventArgs> ItemSelected;
         private System.Windows.Forms.Timer timer;
         private string currentText = string.Empty;
@@ -45,11 +50,12 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
 
             }
         }
-        public ItemSearch(IApplication application)
+        public ItemSearch(IApplication application, IPosTransaction posTransaction)
         
         
         {
             this.Application = application;
+            this.posTransaction = posTransaction;
             InitializeComponent();
             //this.FormBorderStyle = FormBorderStyle.None;
             //this.ControlBox = false;
@@ -184,6 +190,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
         private void submitBtn_Click(object sender, EventArgs e)
         {
             // Get the selected SKU from the selected row
+            int lastTwoDigits = 0;
             if (itemGrid.SelectedRows.Count > 0)
             {
                 string selectedDiscFrom, selectedDiscTo;
@@ -193,6 +200,9 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
                 string selectedUnitId = itemGrid.SelectedRows[0].Cells["Unit Id"].Value.ToString();
                 decimal selectedPrice = Application.Services.Price.GetItemPrice(selectedSKU, selectedUnitId);
                 decimal selectedDisc = getDiscount(selectedSKU, selectedPrice, out selectedDiscFrom, out selectedDiscTo);
+
+                decimal roundedAmount = Rounding.GetRoundedAmount((selectedDisc), out lastTwoDigits, LSRetailPosis.Settings.ApplicationSettings.Database.LocalConnection);
+                selectedDisc = selectedPrice - roundedAmount;
                 if (ItemSelected != null)
                 {
                     ItemSelected(this, new ItemSelectedEventArgs(selectedSKU, selectedBarang, selectedBarcode, selectedUnitId, selectedPrice, selectedDisc, selectedDiscFrom, selectedDiscTo));
@@ -202,6 +212,115 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
 
             // Close the form or perform any other necessary actions
            // this.Close();
+        }
+
+        // field or parameter: the current POS transaction passed into this form
+        // private IPosTransaction posTransaction;
+
+        private decimal getDiscount(string itemId, decimal price, out string discFrom, out string discTo)
+        {
+            discFrom = string.Empty;
+            discTo = string.Empty;
+            
+            try
+            {
+                RetailTransaction tx;
+
+                var current = posTransaction as RetailTransaction;
+                if (current != null)
+                {
+                    // real transaction exists: clone it and empty the lines
+                    tx = current.CloneTransaction() as RetailTransaction;
+                    tx.SaleItems.Clear();
+                }
+                else
+                {
+                    // no transaction yet: create a dummy one
+                    tx = new RetailTransaction(
+                        ApplicationSettings.Terminal.StoreId,
+                        ApplicationSettings.Terminal.StoreCurrency,
+                        ApplicationSettings.Terminal.TaxIncludedInPrice,
+                        Application.Services.Rounding);
+
+                    tx.TerminalId = ApplicationSettings.Terminal.TerminalId;
+                    tx.OperatorId = ApplicationSettings.Terminal.TerminalOperator.OperatorId;   // check these in autocomplete
+                }
+               
+                // 2. Add the item to the clone with quantity 1
+                var iSale = new LSRetailPosis.POSProcesses.ItemSale();
+                iSale.OperationID = PosisOperations.ItemSale;
+                iSale.OperationInfo = new LSRetailPosis.POSProcesses.OperationInfo();
+                iSale.OperationInfo.NumpadQuantity = 1;
+                iSale.Barcode = itemId;
+                iSale.POSTransaction = tx;                    // the clone, NOT posTransaction
+                iSale.RunOperation();
+
+                // 3. Run the default discount calculator
+                Application.Services.Discount.CalculateDiscount(tx);
+
+                // 4. Read the discount from the line
+                var line = tx.SaleItems.FirstOrDefault(l => l.ItemId == itemId);
+                if (line == null || line.DiscountLines == null) return 0m;
+
+                decimal discount = 0m;
+                string offerId = string.Empty;
+
+                foreach (var d in line.DiscountLines)
+                {
+                    discount += d.Amount + (d.Percentage / 100.0M * line.Price);
+
+                    var pd = d as PeriodicDiscountItem;
+                    if (pd != null && offerId == string.Empty) offerId = pd.OfferId;
+                }
+                if (offerId != string.Empty)
+                    GetOfferDates(offerId, out discFrom, out discTo);
+
+                return discount;     // per unit, quantity is 1
+            }
+            catch (Exception ex)
+            {
+                Exception inner = ex;
+                while (inner.InnerException != null) inner = inner.InnerException;
+                System.Diagnostics.Debug.WriteLine(inner.GetType() + ": " + inner.Message + "\n" + inner.StackTrace);
+                return 0m;
+            }
+        }
+
+        private void GetOfferDates(string offerId, out string from, out string to)
+        {
+            from = string.Empty;
+            to = string.Empty;
+
+            SqlConnection connection = Application.Settings.Database.Connection;
+            string dataAreaId = Application.Settings.Database.DataAreaID;
+
+            const string query = @"
+        SELECT TOP 1 VALIDFROM, VALIDTO
+        FROM RETAILPERIODICDISCOUNTSFLATTENED
+        WHERE OFFERID = @OFFERID";
+
+            using (SqlCommand command = new SqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@OFFERID", offerId);
+
+                bool wasClosed = connection.State != ConnectionState.Open;
+                if (wasClosed) connection.Open();
+                try
+                {
+                    using (SqlDataReader r = command.ExecuteReader())
+                    {
+                        if (r.Read())
+                        {
+                            from = ((DateTime)r["VALIDFROM"]).ToString("yyyy-MM-dd");
+                            to = ((DateTime)r["VALIDTO"]).ToString("yyyy-MM-dd");
+                        }
+                    }
+                }
+                finally
+                {
+                    if (wasClosed) connection.Close();
+                }
+            }
         }
 
 //        public decimal getDiscount(string selectedSKU, decimal selectedPrice, out string validFrom, out string validTo)
@@ -295,7 +414,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
 //                return 0; 
 //            }
 //        }
-        public decimal getDiscount(string selectedSKU, decimal selectedPrice, out string validFrom, out string validTo)
+        public decimal getDiscountOld(string selectedSKU, decimal selectedPrice, out string validFrom, out string validTo)
         {
 
             decimal pctDisc = 0;

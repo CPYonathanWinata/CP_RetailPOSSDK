@@ -1070,6 +1070,7 @@ namespace APIAccess
             APIAccess.APIAccessClass.receiptIzone = "";
             APIAccess.APIAccessClass.isRetur = false;
             APIAccess.APIAccessClass.blibliOrderIdLong = "";
+            APIAccess.APIAccessClass.isPromoDiscTrans = false;
            
         }
         public void LogErrorToEventViewer(string errorDetails)

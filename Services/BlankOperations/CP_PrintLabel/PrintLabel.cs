@@ -264,7 +264,7 @@ namespace Microsoft.Dynamics.Retail.Pos.BlankOperations.CP_PrintLabel
         private void addBtn_Click(object sender, EventArgs e)
         {
             // Open ItemSearch form
-            ItemSearch itemSearchForm = new ItemSearch(application);
+            ItemSearch itemSearchForm = new ItemSearch(application, posTransaction);
             itemSearchForm.ItemSelected += ItemSearchForm_ItemSelected;
             //itemSearchForm.ShowDialog();
  
